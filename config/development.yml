@@ -1,0 +1,72 @@
+server:
+  port: 8877
+
+logs:
+  directory: logs
+
+security:
+  ssl:
+    active: false
+    key: privatekey.pem
+    ca: COMODORSADomainValidationSecureServerCA.crt
+    cert: finviet.com.vn.crt
+
+  rateLlmit:
+    maxRequest: 0
+    resetAfter: 3600000
+
+  requestTracker:
+    maxCache: 10
+
+jwt:
+  secret: loyalty_secret_dev
+
+activemq:
+  client:
+  server:
+    host: 10.11.30.30
+    port: 61613
+    login: admin
+    passcode: admin
+  queues:
+    ewalletNotification: /topic/EWALLET_NOTIFY
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ''
+  expireIn: 300
+
+addon:
+  fvBackend:
+    api: http://sandbox.finviet.com.vn:3980
+    version: 2.0
+
+database:
+- name: "default"
+  type: "mysql"
+  logging: true
+  synchronize: false
+  entities:
+  - "dist/entities/*.entity.{js,ts}"
+  replication:
+    master:
+      host: "localhost"
+      port: 3306
+      username: "root"
+      password: "root"
+      database: "loan_referral"
+    slaves:
+    - host: "localhost"
+      port: 3306
+      username: "root"
+      password: "root"
+      database: "loan_referral"
+
+upload:
+  backendUrl: http://sandbox.finviet.com.vn:3000/upload
+  backendUser: loan_referral-user
+
+download:
+  backendUrl: http://sandbox.finviet.com.vn:3000/download
+  backendUser: loan_referral-user

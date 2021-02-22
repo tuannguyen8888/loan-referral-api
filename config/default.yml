@@ -1,0 +1,55 @@
+server:
+  port: 8877
+
+logs:
+  directory: logs
+
+security:
+  ssl:
+    active: false
+    key: privatekey.pem
+    ca: COMODORSADomainValidationSecureServerCA.crt
+    cert: finviet.com.vn.crt
+
+  rateLlmit:
+    maxRequest: 0
+    resetAfter: 3600000
+
+  requestTracker:
+    maxCache: 5000
+
+jwt:
+  secret: loyalty_secret_dev
+
+activemq:
+  client:
+  server:
+    host:
+    port: 61613
+    login: admin
+    passcode: admin
+  queues:
+    ewalletNotification:
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ''
+  expireIn: 300
+
+addon:
+  mongodb:
+    queryConnectionString: mongodb://localhost:27017/finviet
+    mutationConnectionString: mongodb://localhost:27017/finviet
+
+  fvBackend:
+    api: http://sandbox.finviet.com.vn:3980
+    version: 2.0
+
+upload:
+  backendUrl: http://sandbox.finviet.com.vn:3000/upload
+  backendUser: loyalty-user
+
+download:
+  backendUrl: http://sandbox.finviet.com.vn:3000/download
+  backendUser: loyalty-user

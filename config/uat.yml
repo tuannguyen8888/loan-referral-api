@@ -1,0 +1,105 @@
+server:
+  port: 443
+
+logs:
+  directory: logs
+
+security:
+  ssl:
+    active: true
+    key: privatekey.pem
+    ca: intermediate-ca.pem
+    cert: certificate.pem
+
+  rateLlmit:
+    maxRequest: 1000
+    resetAfter: 3600000
+
+  requestTracker:
+    maxCache: 5000
+
+service:
+  user:
+    name: user
+    package: loyalty_module_user
+    host: 0.0.0.0
+    port: 50051
+
+jwt:
+  secret: loyalty_secret_uat
+
+activemq:
+  client: loyalty-gateway-uat
+  server:
+    host: 10.11.30.30
+    port: 61613
+    login: admin
+    passcode: admin
+  queues:
+    ewalletNotification: /topic/EWALLET_NOTIFY
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: 'password'
+  expireIn: 300
+
+pin:
+  timeOut: 300
+  redirectUrl: http://sandbox.finviet.com.vn:9080/page
+
+otp:
+  timeOut: 300
+
+addon:
+  fvBackend:
+    api: http://sandbox.finviet.com.vn:3980
+    version: 2.0
+
+database:
+- name: "default"
+  type: "mysql"
+  logging: true
+  synchronize: false
+  entities:
+  - "dist/entities/masterdb/*.entity.{js,ts}"
+  - "dist/entities/tenantdb/*.entity.{js,ts}"
+  replication:
+    master:
+      host: "localhost"
+      port: 3306
+      username: "root"
+      password: "root"
+      database: "loyalty_master"
+    slaves:
+    - host: "localhost"
+      port: 3306
+      username: "root"
+      password: "root"
+      database: "loyalty_master"
+- name: "loyalty_finviet"
+  type: "mysql"
+  logging: true
+  synchronize: false
+  entities:
+  - "dist/entities/tenantdb/*.entity.{js,ts}"
+  replication:
+    master:
+      host: "localhost"
+      port: 3306
+      username: "root"
+      password: "root"
+      database: "loyalty_finviet"
+    slaves:
+    - host: "localhost"
+      port: 3306
+      username: "root"
+      password: "root"
+      database: "loyalty_finviet"
+upload:
+  backendUrl: http://sandbox.finviet.com.vn:3000/upload
+  backendUser: loyalty-user
+
+download:
+  backendUrl: http://sandbox.finviet.com.vn:3000/download
+  backendUser: loyalty-user

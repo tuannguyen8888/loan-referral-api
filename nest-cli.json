@@ -1,0 +1,8 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "assets": ["i18n/**/*", "grpc/protobufs/**/*", "../cert/**/*"],
+    "plugins": ["@nestjs/swagger/plugin"]
+  }
+}
