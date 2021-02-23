@@ -19,7 +19,7 @@ export class BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient
   ) {
-      this.connection = getConnectionManager().get("default");
+    this.connection = getConnectionManager().get("default");
   }
 
   protected connection: Connection;

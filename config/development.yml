@@ -51,16 +51,16 @@ database:
   - "dist/entities/*.entity.{js,ts}"
   replication:
     master:
-      host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
+      host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
       database: "loan_referral"
     slaves:
-    - host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
+    - host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
       database: "loan_referral"
 
 upload:

@@ -1,25 +1,35 @@
-import {IsString, IsNotEmpty, IsNumber, IsOptional, IsDefined, Min, Max, IsNumberString, IsJSON} from "class-validator";
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsDefined,
+  Min,
+  Max,
+  IsNumberString,
+  IsJSON
+} from "class-validator";
 
 export class BaseRequestDto {
-    @IsDefined()
-    export: boolean;
+  @IsDefined()
+  export: boolean;
 
-    @IsDefined()
-    exportView: boolean;
+  @IsDefined()
+  exportView: boolean;
 
-    @IsDefined()
-    @IsString()
-    keyword: string;
+  @IsDefined()
+  @IsString()
+  keyword: string;
 
-    @IsDefined()
-    @IsNumber()
-    page: number;
+  @IsDefined()
+  @IsNumber()
+  page: number;
 
-    @IsDefined()
-    @IsNumber()
-    pagesize: number;
+  @IsDefined()
+  @IsNumber()
+  pagesize: number;
 
-    @IsDefined()
-    @IsJSON()
-    sort: any;
+  @IsDefined()
+  @IsJSON()
+  sort: any;
 }

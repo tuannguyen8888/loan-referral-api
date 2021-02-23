@@ -1,10 +1,16 @@
-import {IsString, IsNotEmpty, IsNumber, IsOptional, IsDefined, Min} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
-import {LoanProfileDto} from "./loan-profile.dto";
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsDefined,
+  Min
+} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { LoanProfileDto } from "./loan-profile.dto";
 
 export class LoanProfilesResponseDto {
+  rows: LoanProfileDto[];
 
-    rows: LoanProfileDto[];
-
-    count: number
+  count: number;
 }
