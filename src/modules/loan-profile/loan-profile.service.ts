@@ -29,16 +29,19 @@ export class LoanProfileService extends BaseService {
       deletedAt: IsNull()
     };
     if (dto.partner_id) {
-      where["partner_id"] = dto.partner_id;
+      where["partnerId"] = dto.partner_id;
     }
     if (dto.fv_status) {
-      where["partner_id"] = dto.partner_id;
+      where["fvStatus"] = dto.fv_status;
     }
-    if (dto.partner_id) {
-      where["fv_status"] = dto.fv_status;
+    if (dto.loan_no) {
+      where["loanNo"] = dto.loan_no;
     }
-    if (dto.partner_id) {
-      where["partner_id"] = dto.partner_id;
+    if (dto.loan_status) {
+      where["loanStatus"] = dto.loan_status;
+    }
+    if (dto.name) {
+      where["name"] = name;
     }
 
     const result = new LoanProfilesResponseDto();
@@ -83,6 +86,7 @@ export class LoanProfileService extends BaseService {
     }
     return dto;
   }
+
   private convertDto2Entity(dto) {
     let entity = new LoanProfile();
     let entityKeys = Object.keys(entity);
@@ -128,6 +132,7 @@ export class LoanProfileService extends BaseService {
     let response = this.convertEntity2Dto(member);
     return response;
   }
+
   async updateLoanProfile(dto: LoanProfileDto) {
     let entity = this.convertDto2Entity(dto);
     this.logger.verbose(`entity = ${entity}`);
@@ -138,6 +143,7 @@ export class LoanProfileService extends BaseService {
     let response = this.convertEntity2Dto(member);
     return response;
   }
+
   async deleteLoanProfile(dto: LoanProfileDto) {
     let entity = this.convertDto2Entity(dto);
     this.logger.verbose(`entity = ${entity}`);
