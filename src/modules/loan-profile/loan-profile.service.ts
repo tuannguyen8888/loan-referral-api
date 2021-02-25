@@ -26,7 +26,7 @@ export class LoanProfileService extends BaseService {
   async getAllLoanProfiles(dto: GetLoanProfilesRequestDto) {
     const repo = this.connection.getCustomRepository(LoanProfileRepository);
     const where = {
-      deleted_at: IsNull()
+      deletedAt: IsNull()
     };
     if (dto.partner_id) {
       where["partner_id"] = dto.partner_id;
@@ -120,6 +120,26 @@ export class LoanProfileService extends BaseService {
   async createLoanProfile(dto: LoanProfileDto) {
     let entity = this.convertDto2Entity(dto);
     // entity.status = "ACTIVE";
+    this.logger.verbose(`entity = ${entity}`);
+    let member = await this.connection
+      .getCustomRepository(LoanProfileRepository)
+      .save(entity);
+    this.logger.verbose(`insertResult = ${member}`);
+    let response = this.convertEntity2Dto(member);
+    return response;
+  }
+  async updateLoanProfile(dto: LoanProfileDto) {
+    let entity = this.convertDto2Entity(dto);
+    this.logger.verbose(`entity = ${entity}`);
+    let member = await this.connection
+      .getCustomRepository(LoanProfileRepository)
+      .save(entity);
+    this.logger.verbose(`insertResult = ${member}`);
+    let response = this.convertEntity2Dto(member);
+    return response;
+  }
+  async deleteLoanProfile(dto: LoanProfileDto) {
+    let entity = this.convertDto2Entity(dto);
     this.logger.verbose(`entity = ${entity}`);
     let member = await this.connection
       .getCustomRepository(LoanProfileRepository)

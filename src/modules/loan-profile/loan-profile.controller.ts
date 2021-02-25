@@ -5,7 +5,8 @@ import {
   Get,
   Param,
   Post,
-  Put
+  Put,
+  Delete
 } from "@nestjs/common";
 import { ApiTags, ApiSecurity } from "@nestjs/swagger";
 import { LoanProfileService } from "./loan-profile.service";
@@ -36,10 +37,24 @@ export class LoanProfileController {
   }
 
   @Post("/")
-  registration(
+  createLoanProfile(
     @Headers() headers,
     @Body() dto: LoanProfileDto
   ): Promise<LoanProfileDto> {
     return this.service.createLoanProfile(dto);
+  }
+  @Put("/")
+  updateLoanProfile(
+    @Headers() headers,
+    @Body() dto: LoanProfileDto
+  ): Promise<LoanProfileDto> {
+    return this.service.updateLoanProfile(dto);
+  }
+  @Delete("/")
+  deleteLoanProfile(
+    @Headers() headers,
+    @Body() dto: LoanProfileDto
+  ): Promise<LoanProfileDto> {
+    return this.service.deleteLoanProfile(dto);
   }
 }

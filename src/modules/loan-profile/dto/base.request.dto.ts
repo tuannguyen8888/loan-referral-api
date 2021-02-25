@@ -30,6 +30,5 @@ export class BaseRequestDto {
   pagesize: number;
 
   @IsDefined()
-  @IsJSON()
   sort: any;
 }
