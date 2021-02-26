@@ -10,7 +10,7 @@ import {
   LoanProfilesResponseDto
 } from "./dto";
 import { LoanProfileRepository } from "../../repositories";
-import { IsNull } from "typeorm";
+import {IsNull, Like} from "typeorm";
 import { LoanProfile } from "../../entities";
 
 @Injectable({ scope: Scope.REQUEST })
@@ -41,7 +41,7 @@ export class LoanProfileService extends BaseService {
       where["loanStatus"] = dto.loan_status;
     }
     if (dto.name) {
-      where["name"] = name;
+      where["inFname"] = Like(`%${dto.name}%`);
     }
 
     const result = new LoanProfilesResponseDto();
