@@ -35,7 +35,10 @@ export class LoanProfileController {
   getLoanProfile(@Headers() headers, @Param() params): Promise<LoanProfileDto> {
     return this.service.getLoanProfile(params.loan_profile_id);
   }
-
+  @Get("/check-customer-info/:searchVal")
+  checkCustomerInfo(@Headers() headers, @Param() params): Promise<any> {
+      return this.service.checkCustomerInfo(params.searchVal);
+  }
   @Post("/")
   createLoanProfile(
     @Headers() headers,

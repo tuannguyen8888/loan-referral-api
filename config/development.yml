@@ -63,6 +63,10 @@ database:
       password: "yVREMIiso8BYPBAptGS8"
       database: "loan_referral"
 
+mafc_api:
+  url: 'https://apigw.mafc.vn/uat'
+  partner_code: 'FIV'
+
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
   backendUser: loan_referral-user
