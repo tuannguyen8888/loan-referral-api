@@ -159,10 +159,27 @@ export class LoanProfileService extends BaseService {
     }
 
     async checkCustomerInfo(searchVal) {
-     let mafc_api_config = config.get("mafc_api");
+        let mafc_api_config = config.get("mafc_api");
         let response = await this.requestUtil.post(mafc_api_config.url+'/check-customer-info',{
             searchVal: searchVal,
             partner: mafc_api_config.partner_code
+        });
+        return response;
+    }
+    async checkingS37(customerNationalId) {
+        let mafc_api_config = config.get("mafc_api");
+        let response = await this.requestUtil.post(mafc_api_config.cic_url+'/submit-s37',{
+            id_value: customerNationalId,
+            vendor_code: mafc_api_config.partner_code
+        });
+        return response;
+    }
+    async pollingS37(customerNationalId, requestId) {
+        let mafc_api_config = config.get("mafc_api");
+        let response = await this.requestUtil.post(mafc_api_config.cic_url+'/polling-s37',{
+            request_id: requestId,
+            id_value: customerNationalId,
+            vendor_code: mafc_api_config.partner_code
         });
         return response;
     }

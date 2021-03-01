@@ -66,6 +66,9 @@ database:
 mafc_api:
   url: 'https://apigw.mafc.vn/uat'
   partner_code: 'FIV'
+  cic_url: 'https://apigw-staging.mafc.vn/cic'
+  username: 'mirae-3p'
+  password: '123456'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
