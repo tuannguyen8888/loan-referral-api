@@ -48,20 +48,27 @@ database:
   logging: true
   synchronize: false
   entities:
-  - "dist/entities/*.entity.{js,ts}"
+  - "dist/entities/*.{js,ts}"
   replication:
     master:
-      host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
+      host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
       database: "loan_referral"
     slaves:
-    - host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
+    - host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
       database: "loan_referral"
+
+mafc_api:
+  url: 'https://apigw.mafc.vn/uat'
+  partner_code: 'FIV'
+  cic_url: 'https://apigw-staging.mafc.vn/cic'
+  username: 'mirae-3p'
+  password: '123456'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload

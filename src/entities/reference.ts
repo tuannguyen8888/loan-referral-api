@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("reference", { schema: "loan_referral" })
+@Entity("reference")
 export class Reference {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
