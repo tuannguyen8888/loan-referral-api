@@ -8,13 +8,14 @@ import {
     Put,
     Delete
 } from "@nestjs/common";
-import {ApiTags, ApiSecurity, ApiOperation} from "@nestjs/swagger";
+import {ApiTags, ApiSecurity, ApiOperation, ApiBody, ApiResponse} from "@nestjs/swagger";
 import {LoanProfileService} from "./loan-profile.service";
 import {
     GetLoanProfilesRequestDto,
     LoanProfilesResponseDto,
-    LoanProfileDto
+    LoanProfileDto, AttachFileDto
 } from "./dto";
+import {UploadStatusF1RequestDto} from "../receive-result/dto";
 
 @ApiTags("Loan profile")
 @ApiSecurity("api-key")
@@ -73,6 +74,24 @@ export class LoanProfileController {
         @Body() dto: LoanProfileDto
     ): Promise<LoanProfileDto> {
         return this.service.updateLoanProfile(dto);
+    }
+    @Put("/update-attach-files")
+    @ApiOperation({summary: "Update file đính kèm cho hồ sơ vay"})
+    @ApiBody({ type: [AttachFileDto]})
+    @ApiResponse({ type: [AttachFileDto]})
+    updateAttachFiles(
+        @Headers() headers,
+        @Body() dtos: AttachFileDto[]
+    ): Promise<AttachFileDto[]> {
+        return this.service.updateAttachFiles(dtos);
+    }
+    @Delete("/remove-attach-files/:attach_file_id/:user_id")
+    @ApiOperation({summary: "Xóa file đính kèm cho hồ sơ vay"})
+    removeAttachFiles(
+        @Headers() headers,
+        @Param() params
+    ): Promise<boolean> {
+        return this.service.removeAttachFiles(params.attach_file_id, params.user_id);
     }
 
     @Delete("/")

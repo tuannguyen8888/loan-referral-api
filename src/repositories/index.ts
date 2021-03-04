@@ -5,3 +5,4 @@ export * from "./partner.repository";
 export * from "./process.repository";
 export * from "./reference.repository";
 export * from "./loan-profile-defer.repository";
+export * from "./attach-file.repository";
