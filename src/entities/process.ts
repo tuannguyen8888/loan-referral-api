@@ -5,8 +5,8 @@ export class Process {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Column("int", { name: "loan_profile" })
-  loanProfile: number;
+  @Column("int", { name: "loan_profile_id" })
+  loanProfileId: number;
 
   @Column("varchar", { name: "process_status", length: 45 })
   processStatus: string;

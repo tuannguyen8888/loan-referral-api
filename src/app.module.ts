@@ -18,11 +18,12 @@ import { Logger } from "./common/loggers";
 import { PartnerRepository } from "./repositories";
 import { LoanProfileModule } from "./modules/loan-profile/loan-profile.module";
 import { MasterDataModule } from './modules/master-data/master-data.module';
+import { ReceiveResultModule } from './modules/receive-result/receive-result.module';
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
 console.log("databaseConfig", databaseConfig);
-const imports = [RouterModule.forRoutes(ROUTES), LoanProfileModule, MasterDataModule];
+const imports = [RouterModule.forRoutes(ROUTES), LoanProfileModule, MasterDataModule, ReceiveResultModule];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));
 });

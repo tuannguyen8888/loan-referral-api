@@ -4,3 +4,4 @@ export * from "./loan-profile-change-log.repository";
 export * from "./partner.repository";
 export * from "./process.repository";
 export * from "./reference.repository";
+export * from "./loan-profile-defer.repository";

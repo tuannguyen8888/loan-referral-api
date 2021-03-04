@@ -4,3 +4,4 @@ export * from "./loan-profile-change-log";
 export * from "./partner";
 export * from "./process";
 export * from "./reference";
+export * from "./loan-profile-defer";
