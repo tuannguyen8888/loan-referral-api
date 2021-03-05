@@ -10,7 +10,7 @@ import {
 } from "class-validator";
 import { BaseRequestDto } from "./base.request.dto";
 
-export class CheckCustomerInfoRequestDto{
+export class CheckCustomerInfoRequestDto {
   @IsNumberString()
   customer_national_id: string;
 
