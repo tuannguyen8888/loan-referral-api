@@ -1,14 +1,10 @@
-import {
-    IsString,
-    IsNotEmpty,
-    IsDateString
-} from "class-validator";
-import {UploadDeferRequestDto} from ".";
+import { IsString, IsNotEmpty, IsDateString } from "class-validator";
+import { UploadDeferRequestDto } from ".";
 
 export class UploadDeferReponseDto {
-    data: UploadDeferRequestDto;
+  data: UploadDeferRequestDto;
 
-    status: string; // SUCCESS | ERROR
+  status: string; // SUCCESS | ERROR
 
-    message?: string;
+  message?: string;
 }

@@ -1,16 +1,20 @@
-import * as axios from 'axios';
-import * as FormData from 'form-data';
-import { HttpService, Inject, Injectable } from '@nestjs/common';
-import {DownloadFileResParam} from "../interfaces/response";
+import * as axios from "axios";
+import * as FormData from "form-data";
+import { HttpService, Inject, Injectable } from "@nestjs/common";
+import { DownloadFileResParam } from "../interfaces/response";
 
 @Injectable()
 export class RequestUtil {
   constructor(
-    @Inject(HttpService) private readonly httpService: HttpService,
-    // @Inject(FVBackendConfigProvider) private readonly config: FVBackendConfig,
-  ) {}
+    @Inject(HttpService) private readonly httpService: HttpService
+  ) // @Inject(FVBackendConfigProvider) private readonly config: FVBackendConfig,
+  {}
 
-  async post<T>(url: string, body: unknown, config?: axios.AxiosRequestConfig): Promise<T> {
+  async post<T>(
+    url: string,
+    body: unknown,
+    config?: axios.AxiosRequestConfig
+  ): Promise<T> {
     try {
       const { data } = await this.httpService
         .post<T>(url, body, config)
@@ -37,7 +41,7 @@ export class RequestUtil {
     token: string,
     initiator: string,
     fileName: string,
-    config?: axios.AxiosRequestConfig,
+    config?: axios.AxiosRequestConfig
   ): Promise<DownloadFileResParam> {
     try {
       const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
