@@ -1,6 +1,5 @@
 stages:
   - deploy
-
 deploy-loan-uat-api:
   tags:
     - loan-uat-api
