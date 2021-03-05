@@ -52,11 +52,11 @@ export class LoanProfileController {
     );
   }
 
-  @Get("/checking-s37/:customer_national_id")
-  @ApiOperation({ summary: "Kiểm tra lịch sử tín dụng" })
-  checkingS37(@Headers() headers, @Param() params): Promise<any> {
-    return this.service.checkingS37(params.customer_national_id);
-  }
+  // @Get("/checking-s37/:customer_national_id")
+  // @ApiOperation({ summary: "Kiểm tra lịch sử tín dụng" })
+  // checkingS37(@Headers() headers, @Param() params): Promise<any> {
+  //   return this.service.checkingS37(params.customer_national_id);
+  // }
 
   @Get("/polling-s37/:customer_national_id")
   @ApiOperation({ summary: "Lấy kết quả kiểm tra lịch sử tín dụng" })
