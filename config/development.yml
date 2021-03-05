@@ -65,7 +65,8 @@ database:
 
 mafc_api:
   url: 'https://apigw.mafc.vn/uat'
-  partner_code: 'FIV'
+  url_check_customer_info: 'https://apigw-staging.mafc.vn/3p/v2/check-customer'
+  partner_code: 'EXT_VFS'
   cic_url: 'https://apigw-staging.mafc.vn/cic'
   username: 'mirae-3p'
   password: '123456'
