@@ -7,7 +7,7 @@ deploy-loan-dev-api:
     - cd /app/
   script:
     - sudo sh loanapi.sh
-    - echo "LOAN has been deployed to dev env!!"
+    - echo "LoAN has been deployed to dev env!!"
   stage: deploy
   only:
     - dev
