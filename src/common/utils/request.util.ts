@@ -6,9 +6,8 @@ import { DownloadFileResParam } from "../interfaces/response";
 @Injectable()
 export class RequestUtil {
   constructor(
-    @Inject(HttpService) private readonly httpService: HttpService
-  ) // @Inject(FVBackendConfigProvider) private readonly config: FVBackendConfig,
-  {}
+    @Inject(HttpService) private readonly httpService: HttpService // @Inject(FVBackendConfigProvider) private readonly config: FVBackendConfig,
+  ) {}
 
   async post<T>(
     url: string,
@@ -16,11 +15,12 @@ export class RequestUtil {
     config?: axios.AxiosRequestConfig
   ): Promise<T> {
     try {
-      if(config){
-          config = {};
+      if (!config) {
+        config = {};
       }
-      config.timeout = 60*1000;
-      config.timeoutErrorMessage = 'Timeout roi cha noi, api gi ma cham qua vay';
+      config.timeout = 60 * 1000;
+      config.timeoutErrorMessage =
+        "Timeout roi cha noi, api gi ma cham qua vay";
       const { data } = await this.httpService
         .post<T>(url, body, config)
         .toPromise();
