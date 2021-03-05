@@ -49,7 +49,8 @@ export class AppModule implements NestModule {
       consumer.apply(SetHeadersMiddleware).forRoutes("*");
     } else {
       consumer
-        .apply(SetHeadersMiddleware, CheckPartnerMiddleware)
+          .apply(SetHeadersMiddleware)
+        // .apply(SetHeadersMiddleware, CheckPartnerMiddleware)
         // .exclude(
         //   { path: 'page/checkout', method: RequestMethod.ALL },
         // )
