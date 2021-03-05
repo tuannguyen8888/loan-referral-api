@@ -16,6 +16,11 @@ export class RequestUtil {
     config?: axios.AxiosRequestConfig
   ): Promise<T> {
     try {
+      if(config){
+          config = {};
+      }
+      config.timeout = 60*1000;
+      config.timeoutErrorMessage = 'Timeout roi cha noi, api gi ma cham qua vay';
       const { data } = await this.httpService
         .post<T>(url, body, config)
         .toPromise();
