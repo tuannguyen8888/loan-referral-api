@@ -5,9 +5,10 @@ import {
   IsOptional,
   IsDateString
 } from "class-validator";
+import {AddressDto} from "./address.dto";
 
 export class LoanProfileDto {
-  id: number;
+  id?: number;
   partner_id: number;
   loan_no: string;
   fv_status: string;
@@ -85,4 +86,7 @@ export class LoanProfileDto {
   @IsDateString()
   deleted_at: string;
   deleted_by: number;
+
+  address: AddressDto[];
+  references: any[];
 }
