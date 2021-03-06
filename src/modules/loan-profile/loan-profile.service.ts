@@ -80,7 +80,8 @@ export class LoanProfileService extends BaseService {
                     dtoKey
                         .toLowerCase()
                         .split("_")
-                        .join("") == entityKey.toLowerCase()
+                        .join("") == entityKey.toLowerCase().split("_")
+                        .join("")
                 ) {
                     dto[dtoKey] = entity[entityKey];
                     break;
@@ -100,7 +101,8 @@ export class LoanProfileService extends BaseService {
                     dtoKey
                         .toLowerCase()
                         .split("_")
-                        .join("") == entityKey.toLowerCase()
+                        .join("") == entityKey.toLowerCase().split("_")
+                        .join("")
                 ) {
                     entity[entityKey] = dto[dtoKey];
                     break;
