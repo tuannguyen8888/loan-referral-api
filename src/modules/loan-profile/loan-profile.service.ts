@@ -298,7 +298,7 @@ export class LoanProfileService extends BaseService {
 
     async checkCustomerInfo(customerNationalId, phone, taxCode = null) {
         let mafc_api_config = config.get("mafc_api");
-        let response = await this.requestUtil.post(
+        let response:any = await this.requestUtil.post(
             mafc_api_config.url_check_customer_info,
             {
                 cmnd: customerNationalId,
@@ -313,12 +313,17 @@ export class LoanProfileService extends BaseService {
                 }
             }
         );
+        if(response.success){
+            response.statusCode = 200;
+        }else{
+            response.statusCode = 400;
+        }
         return response;
     }
 
     async checkingS37(customerNationalId) {
         let mafc_api_config = config.get("mafc_api");
-        let response = await this.requestUtil.post(
+        let response:any = await this.requestUtil.post(
             mafc_api_config.cic_url + "/submit-s37",
             {
                 id_value: customerNationalId,
@@ -331,12 +336,17 @@ export class LoanProfileService extends BaseService {
                 }
             }
         );
+        if(response.success){
+            response.statusCode = 200;
+        }else{
+            response.statusCode = 400;
+        }
         return response;
     }
 
     async pollingS37(customerNationalId) {
         let mafc_api_config = config.get("mafc_api");
-        let response = await this.requestUtil.post(
+        let response:any = await this.requestUtil.post(
             mafc_api_config.cic_url + "/polling-s37",
             {
                 request_id: null,
@@ -350,6 +360,11 @@ export class LoanProfileService extends BaseService {
                 }
             }
         );
+        if(response.success){
+            response.statusCode = 200;
+        }else{
+            response.statusCode = 400;
+        }
         return response;
     }
 }
