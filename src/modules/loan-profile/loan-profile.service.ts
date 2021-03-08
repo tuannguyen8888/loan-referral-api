@@ -5,9 +5,11 @@ import {BaseService} from "../../common/services";
 import {Logger} from "../../common/loggers";
 import {RedisClient} from "../../common/shared";
 import {
+    AddressDto,
     GetLoanProfilesRequestDto,
     LoanProfileDto,
-    LoanProfilesResponseDto
+    LoanProfilesResponseDto,
+    LoanProfileResponseDto, LoanProfileDeferDto, LoanProfileChangeLogDto
 } from "./dto";
 import {
     AddressRepository,
@@ -22,6 +24,7 @@ import {RequestUtil} from "../../common/utils";
 import * as config from "config";
 import {AttachFileDto} from "./dto/attach-file.dto";
 import * as moment from "moment";
+import {ReferenceDto} from "./dto/reference.dto";
 
 @Injectable({scope: Scope.REQUEST})
 export class LoanProfileService extends BaseService {
@@ -70,7 +73,7 @@ export class LoanProfileService extends BaseService {
         const data = await repo.find(options);
         if (data && data.length) {
             data.forEach(item => {
-                let lp = this.convertEntity2Dto(item);
+                let lp = this.convertEntity2Dto(item, LoanProfileDto);
                 // lp = Object.assign(lp, item);
                 result.rows.push(lp);
             });
@@ -78,8 +81,8 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
-    private convertEntity2Dto(entity) {
-        let dto = new LoanProfileDto();
+    private convertEntity2Dto(entity, dtoClassName) {
+        let dto = new dtoClassName();
         let dtoKeys = Object.keys(dto);
         let entityKeys = Object.keys(entity);
         for (let dtoKey of dtoKeys) {
@@ -101,7 +104,13 @@ export class LoanProfileService extends BaseService {
         dto.deleted_at = entity.deletedAt ? moment(entity.deletedAt).format('YYYY-MM-DD HH:mm:ss') : null;
         return dto;
     }
-
+    private convertEntities2Dtos(entities, dtoClassName) {
+        let dtos = [];
+        if(entities && entities.length){
+            entities.forEach(entity=>dtos.push(this.convertEntity2Dto(entity, dtoClassName)));
+        }
+        return dtos;
+    }
     private convertDto2Entity(dto) {
         let entity = new LoanProfile();
         let entityKeys = Object.keys(entity);
@@ -228,7 +237,13 @@ export class LoanProfileService extends BaseService {
                         loanProfileId: loanProfile.id
                     }});
 
-            let result = this.convertEntity2Dto(loanProfile);
+            let result: LoanProfileResponseDto = this.convertEntity2Dto(loanProfile, LoanProfileResponseDto);
+            result.address = this.convertEntities2Dtos(address, AddressDto);
+            result.references = this.convertEntities2Dtos(references, ReferenceDto);
+            result.attach_files = this.convertEntities2Dtos(attachFiles, AttachFileDto);
+            result.process = this.convertEntities2Dtos(process, AttachFileDto);
+            result.defers = this.convertEntities2Dtos(defers, LoanProfileDeferDto);
+            result.change_logs = this.convertEntities2Dtos(changeLogs, LoanProfileChangeLogDto);
             return result;
         } else {
             throw new BadRequestException([
@@ -247,7 +262,7 @@ export class LoanProfileService extends BaseService {
             .getCustomRepository(LoanProfileRepository)
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
-        let response = this.convertEntity2Dto(result);
+        let response = this.convertEntity2Dto(result, LoanProfileDto);
         return response;
     }
 
@@ -258,7 +273,7 @@ export class LoanProfileService extends BaseService {
             .getCustomRepository(LoanProfileRepository)
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
-        let response = this.convertEntity2Dto(result);
+        let response = this.convertEntity2Dto(result, LoanProfileDto);
         return response;
     }
     async updateAttachFiles(dtos: AttachFileDto[]) {
