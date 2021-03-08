@@ -10,11 +10,11 @@ import {ReferenceDto} from "./reference.dto";
 
 export class LoanProfileDto {
   id?: number;
-  partner_id: number;
-  loan_no: string;
-  fv_status: string;
-  loan_status: string;
-  in_channel: string;
+  partner_id?: number;
+  loan_no?: string;
+  fv_status?: string;
+  loan_status?: string;
+  in_channel?: string;
   in_schemeid: number;
   in_downpayment: number;
   in_totalloanamountreq: number;
