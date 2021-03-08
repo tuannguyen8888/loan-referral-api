@@ -12,10 +12,10 @@ import {
 import { ApiTags, ApiSecurity, ApiOperation, ApiBody, ApiResponse } from "@nestjs/swagger";
 import { LoanProfileService } from "./loan-profile.service";
 import {
-  GetLoanProfilesRequestDto,
-  LoanProfilesResponseDto,
-  LoanProfileDto,
-  CheckCustomerInfoRequestDto
+    GetLoanProfilesRequestDto,
+    LoanProfilesResponseDto,
+    LoanProfileDto,
+    CheckCustomerInfoRequestDto, LoanProfileResponseDto
 } from "./dto";
 import {AttachFileDto} from "./dto/attach-file.dto";
 
@@ -37,7 +37,7 @@ export class LoanProfileController {
 
   @Get("/:loan_profile_id")
   @ApiOperation({ summary: "Lấy chi tiết hồ sơ vay" })
-  getLoanProfile(@Headers() headers, @Param() params): Promise<LoanProfileDto> {
+  getLoanProfile(@Headers() headers, @Param() params): Promise<LoanProfileResponseDto> {
     return this.service.getLoanProfile(params.loan_profile_id);
   }
 

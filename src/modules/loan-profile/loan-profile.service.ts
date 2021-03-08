@@ -364,9 +364,9 @@ export class LoanProfileService extends BaseService {
         let response:any = await this.requestUtil.post(
             mafc_api_config.cic_url + "/polling-s37",
             {
-                request_id: null,
-                id_value: customerNationalId,
-                vendor_code: mafc_api_config.partner_code
+                requestId: '',
+                idValue: customerNationalId,
+                vendorCode: mafc_api_config.partner_code
             },
             {
                 auth: {
