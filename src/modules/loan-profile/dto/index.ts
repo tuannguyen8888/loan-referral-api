@@ -10,3 +10,4 @@ export * from "./loan-profile-defer.dto";
 export * from "./loan-profiles.response.dto";
 export * from "./process.dto";
 export * from "./reference.dto";
+export * from "./input-qde.dto";

@@ -263,11 +263,94 @@ export class LoanProfileService extends BaseService {
     }
 
     async createLoanProfile(dto: LoanProfileDto) {
+        let mafc_api_config = config.get("mafc_api");
+        // await this.requestUtil.post(
+        //     mafc_api_config.url+'/finnApi/applicants/VDE/inputQDE',
+        //     {
+        //         in_channel
+        //         in_schemeid
+        //         in_downpayment
+        //         in_totalloanamountreq
+        //         in_tenure
+        //         in_sourcechannel
+        //         in_salesofficer
+        //         in_loanpurpose
+        //         in_creditofficercode
+        //         in_bankbranchcode
+        //         in_laa_app_ins_applicable
+        //         in_possipbranch
+        //         in_priority_c
+        //         in_userid
+        //         in_title
+        //         in_fname
+        //         in_mname
+        //         in_lname
+        //         in_gender
+        //         in_nationalid
+        //         in_dob
+        //         in_constid
+        //         address
+        //             {
+        //                 in_addresstype
+        //                 in_propertystatus
+        //                 in_address1stline
+        //                 in_country
+        //                 in_city
+        //                 in_district
+        //                 in_ward
+        //                 in_roomno
+        //                 in_stayduratcuradd_y
+        //                 in_stayduratcuradd_m
+        //                 in_mailingaddress
+        //                 in_mobile
+        //                 in_landlord
+        //                 in_landmark
+        //                 in_email
+        //                 In_fixphone
+        //             }
+        //         in_tax_code
+        //         in_presentjobyear
+        //         in_presentjobmth
+        //         in_previousjobyear
+        //         in_previousjobmth
+        //         in_referalgroup
+        //         in_addresstype
+        //         in_addressline
+        //         in_country
+        //         in_city
+        //         in_district
+        //         in_ward
+        //         in_phone
+        //         in_others
+        //         in_position
+        //         in_natureofbuss
+        //         reference
+        //             {
+        //                 in_title
+        //                 in_refereename
+        //                 in_refereerelation
+        //                 in_phone_1
+        //             }
+        //         in_head
+        //         in_frequency
+        //         in_amount
+        //         in_accountbank
+        //         in_debit_credit
+        //         in_per_cont
+        //
+        //     },
+        //     {
+        //         auth: {
+        //             username: mafc_api_config.username,
+        //             password: mafc_api_config.password
+        //         }
+        //     }
+        // );
+
         let entity = this.convertDto2Entity(dto, LoanProfile);
         // entity.status = "ACTIVE";
-        // let mafc_api_config = config.get("mafc_api");
         entity.partnerId = 2; //MAFC
-        this.logger.verbose(`entity = ${entity}`);
+        this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
         let result = await this.connection
             .getCustomRepository(LoanProfileRepository)
             .save(entity);
@@ -283,22 +366,6 @@ export class LoanProfileService extends BaseService {
         let response:LoanProfileDto = this.convertEntity2Dto(result, LoanProfileDto);
         response.address = this.convertEntities2Dtos(address, AddressDto);
         response.references = this.convertEntities2Dtos(references, ReferenceDto);
-
-        // await this.requestUtil.post(
-        //     mafc_api_config.url,
-        //     {
-        //         cmnd: customerNationalId,
-        //         phone: phone,
-        //         taxCode: taxCode,
-        //         partner: mafc_api_config.partner_code
-        //     },
-        //     {
-        //         auth: {
-        //             username: mafc_api_config.username,
-        //             password: mafc_api_config.password
-        //         }
-        //     }
-        // );
 
         return response;
     }
