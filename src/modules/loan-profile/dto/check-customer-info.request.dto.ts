@@ -17,7 +17,6 @@ export class CheckCustomerInfoRequestDto {
   @IsNumberString()
   phone: string;
 
-  @IsNumberString()
   @IsOptional()
   tax_code?: string;
 }

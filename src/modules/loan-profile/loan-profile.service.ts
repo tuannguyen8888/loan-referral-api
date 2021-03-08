@@ -9,7 +9,13 @@ import {
     LoanProfileDto,
     LoanProfilesResponseDto
 } from "./dto";
-import {LoanProfileRepository} from "../../repositories";
+import {
+    AddressRepository,
+    AttachFileRepository,
+    LoanProfileRepository,
+    ProcessRepository,
+    ReferenceRepository
+} from "../../repositories";
 import {IsNull, Like} from "typeorm";
 import {LoanProfile} from "../../entities";
 import {RequestUtil} from "../../common/utils";
@@ -117,6 +123,31 @@ export class LoanProfileService extends BaseService {
             .getCustomRepository(LoanProfileRepository)
             .findOneOrFail(loanProfileId);
         if (loanProfile) {
+            const address = await this.connection
+                .getCustomRepository(AddressRepository)
+                .find({where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfile.id
+                    }});
+            const references = await this.connection
+                .getCustomRepository(ReferenceRepository)
+                .find({where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfile.id
+                    }});
+            const attachFiles = await this.connection
+                .getCustomRepository(AttachFileRepository)
+                .find({where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfile.id
+                    }});
+            const process = await this.connection
+                .getCustomRepository(ProcessRepository)
+                .find({where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfile.id
+                    }});
+
             let result = this.convertEntity2Dto(loanProfile);
             return result;
         } else {
