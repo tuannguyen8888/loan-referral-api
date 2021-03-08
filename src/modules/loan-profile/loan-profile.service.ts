@@ -19,7 +19,7 @@ import {
     ReferenceRepository
 } from "../../repositories";
 import {IsNull, Like} from "typeorm";
-import {AttachFile, LoanProfile} from "../../entities";
+import {Address, AttachFile, LoanProfile, Reference} from "../../entities";
 import {RequestUtil} from "../../common/utils";
 import * as config from "config";
 import {AttachFileDto} from "./dto/attach-file.dto";
@@ -87,13 +87,7 @@ export class LoanProfileService extends BaseService {
         let entityKeys = Object.keys(entity);
         for (let dtoKey of dtoKeys) {
             for (let entityKey of entityKeys) {
-                if (
-                    dtoKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("") == entityKey.toLowerCase().split("_")
-                        .join("")
-                ) {
+                if (dtoKey.toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("")) {
                     dto[dtoKey] = entity[entityKey];
                     break;
                 }
@@ -104,24 +98,23 @@ export class LoanProfileService extends BaseService {
         dto.deleted_at = entity.deletedAt ? moment(entity.deletedAt).format('YYYY-MM-DD HH:mm:ss') : null;
         return dto;
     }
+
     private convertEntities2Dtos(entities, dtoClassName) {
         let dtos = [];
-        if(entities && entities.length){
-            entities.forEach(entity=>dtos.push(this.convertEntity2Dto(entity, dtoClassName)));
+        if (entities && entities.length) {
+            entities.forEach(entity => dtos.push(this.convertEntity2Dto(entity, dtoClassName)));
         }
         return dtos;
     }
-    private convertDto2Entity(dto) {
-        let entity = new LoanProfile();
+
+    private convertDto2Entity(dto, entityClassName) {
+        let entity = new entityClassName();
         let entityKeys = Object.keys(entity);
         let dtoKeys = Object.keys(dto);
         for (let entityKey of entityKeys) {
             for (let dtoKey of dtoKeys) {
                 if (
-                    dtoKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("") == entityKey.toLowerCase()
+                    dtoKey.toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("")
                 ) {
                     entity[entityKey] = dto[dtoKey];
                     break;
@@ -134,6 +127,13 @@ export class LoanProfileService extends BaseService {
         return entity;
     }
 
+    private convertDtos2Entities(dtos, entityClassName) {
+        let entities = [];
+        if (dtos && dtos.length) {
+            dtos.forEach(dto => entities.push(this.convertDto2Entity(dto, entityClassName)));
+        }
+        return entities;
+    }
     private convertAttachFileEntity2Dto(entity: AttachFile) {
         let dto = new AttachFileDto();
         let dtoKeys = Object.keys(dto);
@@ -142,9 +142,7 @@ export class LoanProfileService extends BaseService {
             for (let entityKey of entityKeys) {
                 if (
                     dtoKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("") == entityKey.toLowerCase()
+                        .toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("")
                 ) {
                     dto[dtoKey] = entity[entityKey];
                     break;
@@ -156,6 +154,7 @@ export class LoanProfileService extends BaseService {
         dto.deleted_at = entity.deletedAt ? moment(entity.deletedAt).format('YYYY-MM-DD HH:mm:ss') : null;
         return dto;
     }
+
     private convertAttachFileDto2Entity(dto: AttachFileDto) {
         let entity = new AttachFile();
         let entityKeys = Object.keys(entity);
@@ -164,9 +163,7 @@ export class LoanProfileService extends BaseService {
             for (let dtoKey of dtoKeys) {
                 if (
                     dtoKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("") == entityKey.toLowerCase()
+                        .toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("")
                 ) {
                     entity[entityKey] = dto[dtoKey];
                     break;
@@ -181,15 +178,16 @@ export class LoanProfileService extends BaseService {
 
     private convertAttachFileDtos2Entities(dtos: AttachFileDto[]) {
         let entities = [];
-        if(dtos && dtos.length){
-            dtos.forEach(dto=>entities.push(this.convertAttachFileDto2Entity(dto)));
+        if (dtos && dtos.length) {
+            dtos.forEach(dto => entities.push(this.convertAttachFileDto2Entity(dto)));
         }
         return entities;
     }
+
     private convertAttachFileEntities2Dtos(entities: AttachFile[]) {
         let dtos: AttachFileDto[] = [];
-        if(entities && entities.length){
-            entities.forEach(entity=>dtos.push(this.convertAttachFileEntity2Dto(entity)));
+        if (entities && entities.length) {
+            entities.forEach(entity => dtos.push(this.convertAttachFileEntity2Dto(entity)));
         }
         return dtos;
     }
@@ -201,41 +199,53 @@ export class LoanProfileService extends BaseService {
         if (loanProfile) {
             const address = await this.connection
                 .getCustomRepository(AddressRepository)
-                .find({where: {
+                .find({
+                    where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id
-                    }});
+                    }
+                });
             const references = await this.connection
                 .getCustomRepository(ReferenceRepository)
-                .find({where: {
+                .find({
+                    where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id
-                    }});
+                    }
+                });
             const attachFiles = await this.connection
                 .getCustomRepository(AttachFileRepository)
-                .find({where: {
+                .find({
+                    where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id
-                    }});
+                    }
+                });
             const process = await this.connection
                 .getCustomRepository(ProcessRepository)
-                .find({where: {
+                .find({
+                    where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id
-                    }});
+                    }
+                });
             const defers = await this.connection
                 .getCustomRepository(LoanProfileDeferRepository)
-                .find({where: {
+                .find({
+                    where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id,
                         status: 'NEW'
-                    }});
+                    }
+                });
             const changeLogs = await this.connection
                 .getCustomRepository(LoanProfileChangeLogRepository)
-                .find({where: {
+                .find({
+                    where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id
-                    }});
+                    }
+                });
 
             let result: LoanProfileResponseDto = this.convertEntity2Dto(loanProfile, LoanProfileResponseDto);
             result.address = this.convertEntities2Dtos(address, AddressDto);
@@ -253,10 +263,48 @@ export class LoanProfileService extends BaseService {
     }
 
     async createLoanProfile(dto: LoanProfileDto) {
-        let entity = this.convertDto2Entity(dto);
+        let entity = this.convertDto2Entity(dto, LoanProfile);
         // entity.status = "ACTIVE";
-        let mafc_api_config = config.get("mafc_api");
-        entity.partnerId = mafc_api_config.partner_code;
+        // let mafc_api_config = config.get("mafc_api");
+        entity.partnerId = 2; //MAFC
+        this.logger.verbose(`entity = ${entity}`);
+        let result = await this.connection
+            .getCustomRepository(LoanProfileRepository)
+            .save(entity);
+        this.logger.verbose(`insertResult = ${result}`);
+        let address = this.convertDtos2Entities(dto.address, Address);
+        address = await this.connection
+            .getCustomRepository(AddressRepository)
+            .save(address);
+        let references = this.convertDtos2Entities(dto.references, Reference);
+        references = await this.connection
+            .getCustomRepository(ReferenceRepository)
+            .save(references);
+        let response:LoanProfileDto = this.convertEntity2Dto(result, LoanProfileDto);
+        response.address = this.convertEntities2Dtos(address, AddressDto);
+        response.references = this.convertEntities2Dtos(references, ReferenceDto);
+
+        // await this.requestUtil.post(
+        //     mafc_api_config.url,
+        //     {
+        //         cmnd: customerNationalId,
+        //         phone: phone,
+        //         taxCode: taxCode,
+        //         partner: mafc_api_config.partner_code
+        //     },
+        //     {
+        //         auth: {
+        //             username: mafc_api_config.username,
+        //             password: mafc_api_config.password
+        //         }
+        //     }
+        // );
+
+        return response;
+    }
+
+    async updateLoanProfile(dto: LoanProfileDto) {
+        let entity = this.convertDto2Entity(dto, LoanProfile);
         this.logger.verbose(`entity = ${entity}`);
         let result = await this.connection
             .getCustomRepository(LoanProfileRepository)
@@ -266,16 +314,6 @@ export class LoanProfileService extends BaseService {
         return response;
     }
 
-    async updateLoanProfile(dto: LoanProfileDto) {
-        let entity = this.convertDto2Entity(dto);
-        this.logger.verbose(`entity = ${entity}`);
-        let result = await this.connection
-            .getCustomRepository(LoanProfileRepository)
-            .save(entity);
-        this.logger.verbose(`insertResult = ${result}`);
-        let response = this.convertEntity2Dto(result, LoanProfileDto);
-        return response;
-    }
     async updateAttachFiles(dtos: AttachFileDto[]) {
         let entities = this.convertAttachFileDtos2Entities(dtos);
         let results = await this.connection
@@ -289,15 +327,16 @@ export class LoanProfileService extends BaseService {
     async removeAttachFiles(attchFileId: number, userId) {
         let repo = this.connection.getCustomRepository(AttachFileRepository);
         let entity = await repo.findOneOrFail(attchFileId);
-        if(entity){
+        if (entity) {
             entity.deletedAt = new Date();
             entity.deletedBy = userId;
             await repo.save(entity);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
+
     async deleteLoanProfile(loanProfileId: number, userId) {
         let repo = this.connection.getCustomRepository(LoanProfileRepository);
         let entity = await repo.findOne(loanProfileId);
@@ -313,7 +352,7 @@ export class LoanProfileService extends BaseService {
 
     async checkCustomerInfo(customerNationalId, phone, taxCode = null) {
         let mafc_api_config = config.get("mafc_api");
-        let response:any = await this.requestUtil.post(
+        let response: any = await this.requestUtil.post(
             mafc_api_config.url_check_customer_info,
             {
                 cmnd: customerNationalId,
@@ -328,9 +367,9 @@ export class LoanProfileService extends BaseService {
                 }
             }
         );
-        if(response.success){
+        if (response.success) {
             response.statusCode = 200;
-        }else{
+        } else {
             response.statusCode = 400;
         }
         return response;
@@ -338,11 +377,11 @@ export class LoanProfileService extends BaseService {
 
     async checkingS37(customerNationalId) {
         let mafc_api_config = config.get("mafc_api");
-        let response:any = await this.requestUtil.post(
+        let response: any = await this.requestUtil.post(
             mafc_api_config.cic_url + "/submit-s37",
             {
-                id_value: customerNationalId,
-                vendor_code: mafc_api_config.partner_code
+                idValue: customerNationalId,
+                vendorCode: mafc_api_config.partner_code
             },
             {
                 auth: {
@@ -351,9 +390,9 @@ export class LoanProfileService extends BaseService {
                 }
             }
         );
-        if(response.success){
+        if (response.success) {
             response.statusCode = 200;
-        }else{
+        } else {
             response.statusCode = 400;
         }
         return response;
@@ -361,7 +400,7 @@ export class LoanProfileService extends BaseService {
 
     async pollingS37(customerNationalId) {
         let mafc_api_config = config.get("mafc_api");
-        let response:any = await this.requestUtil.post(
+        let response: any = await this.requestUtil.post(
             mafc_api_config.cic_url + "/polling-s37",
             {
                 requestId: '',
@@ -375,9 +414,9 @@ export class LoanProfileService extends BaseService {
                 }
             }
         );
-        if(response.success){
+        if (response.success) {
             response.statusCode = 200;
-        }else{
+        } else {
             response.statusCode = 400;
         }
         return response;
