@@ -11,7 +11,7 @@ import {
 } from "./dto";
 import {
     AddressRepository,
-    AttachFileRepository,
+    AttachFileRepository, LoanProfileChangeLogRepository, LoanProfileDeferRepository,
     LoanProfileRepository,
     ProcessRepository,
     ReferenceRepository
@@ -143,6 +143,19 @@ export class LoanProfileService extends BaseService {
                     }});
             const process = await this.connection
                 .getCustomRepository(ProcessRepository)
+                .find({where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfile.id
+                    }});
+            const defers = await this.connection
+                .getCustomRepository(LoanProfileDeferRepository)
+                .find({where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfile.id,
+                        status: 'NEW'
+                    }});
+            const changeLogs = await this.connection
+                .getCustomRepository(LoanProfileChangeLogRepository)
                 .find({where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id
