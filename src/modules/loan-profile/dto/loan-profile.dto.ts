@@ -6,6 +6,7 @@ import {
   IsDateString
 } from "class-validator";
 import {AddressDto} from "./address.dto";
+import {ReferenceDto} from "./reference.dto";
 
 export class LoanProfileDto {
   id?: number;
@@ -88,5 +89,5 @@ export class LoanProfileDto {
   deleted_by: number;
 
   address: AddressDto[];
-  references: any[];
+  references: ReferenceDto[];
 }
