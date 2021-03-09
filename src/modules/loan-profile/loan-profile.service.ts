@@ -12,7 +12,11 @@ import {
   LoanProfileResponseDto,
   LoanProfileDeferDto,
   LoanProfileChangeLogDto,
-  ProcessDto
+  ProcessDto,
+  InputQdeDto,
+  InputQdeAddressDto,
+  InputQdeReferenceDto,
+  InputDdeDto
 } from "./dto";
 import {
   AddressRepository,
@@ -103,8 +107,23 @@ export class LoanProfileService extends BaseService {
     for (let dtoKey of dtoKeys) {
       for (let entityKey of entityKeys) {
         if (
-            dtoKey.toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("") ||
-            dtoKey.toLowerCase().split("_").join("") == 'in' + entityKey.toLowerCase().split("_").join("")
+          dtoKey
+            .toLowerCase()
+            .split("_")
+            .join("") ==
+            entityKey
+              .toLowerCase()
+              .split("_")
+              .join("") ||
+          dtoKey
+            .toLowerCase()
+            .split("_")
+            .join("") ==
+            "in" +
+              entityKey
+                .toLowerCase()
+                .split("_")
+                .join("")
         ) {
           dto[dtoKey] = entity[entityKey];
           break;
@@ -144,8 +163,23 @@ export class LoanProfileService extends BaseService {
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (
-            dtoKey.toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("") ||
-            dtoKey.toLowerCase().split("_").join("") == 'in' + entityKey.toLowerCase().split("_").join("")
+          dtoKey
+            .toLowerCase()
+            .split("_")
+            .join("") ==
+            entityKey
+              .toLowerCase()
+              .split("_")
+              .join("") ||
+          dtoKey
+            .toLowerCase()
+            .split("_")
+            .join("") ==
+            "in" +
+              entityKey
+                .toLowerCase()
+                .split("_")
+                .join("")
         ) {
           entity[entityKey] = dto[dtoKey];
           break;
@@ -345,90 +379,8 @@ export class LoanProfileService extends BaseService {
   }
 
   async createLoanProfile(dto: LoanProfileDto) {
-    let mafc_api_config = config.get("mafc_api");
-    // await this.requestUtil.post(
-    //     mafc_api_config.url+'/finnApi/applicants/VDE/inputQDE',
-    //     {
-    //         in_channel
-    //         in_schemeid
-    //         in_downpayment
-    //         in_totalloanamountreq
-    //         in_tenure
-    //         in_sourcechannel
-    //         in_salesofficer
-    //         in_loanpurpose
-    //         in_creditofficercode
-    //         in_bankbranchcode
-    //         in_laa_app_ins_applicable
-    //         in_possipbranch
-    //         in_priority_c
-    //         in_userid
-    //         in_title
-    //         in_fname
-    //         in_mname
-    //         in_lname
-    //         in_gender
-    //         in_nationalid
-    //         in_dob
-    //         in_constid
-    //         address
-    //             {
-    //                 in_addresstype
-    //                 in_propertystatus
-    //                 in_address1stline
-    //                 in_country
-    //                 in_city
-    //                 in_district
-    //                 in_ward
-    //                 in_roomno
-    //                 in_stayduratcuradd_y
-    //                 in_stayduratcuradd_m
-    //                 in_mailingaddress
-    //                 in_mobile
-    //                 in_landlord
-    //                 in_landmark
-    //                 in_email
-    //                 In_fixphone
-    //             }
-    //         in_tax_code
-    //         in_presentjobyear
-    //         in_presentjobmth
-    //         in_previousjobyear
-    //         in_previousjobmth
-    //         in_referalgroup
-    //         in_addresstype
-    //         in_addressline
-    //         in_country
-    //         in_city
-    //         in_district
-    //         in_ward
-    //         in_phone
-    //         in_others
-    //         in_position
-    //         in_natureofbuss
-    //         reference
-    //             {
-    //                 in_title
-    //                 in_refereename
-    //                 in_refereerelation
-    //                 in_phone_1
-    //             }
-    //         in_head
-    //         in_frequency
-    //         in_amount
-    //         in_accountbank
-    //         in_debit_credit
-    //         in_per_cont
-    //
-    //     },
-    //     {
-    //         auth: {
-    //             username: mafc_api_config.username,
-    //             password: mafc_api_config.password
-    //         }
-    //     }
-    // );
-
+    let qdeResult = await this.sendData_inputQDE(dto);
+    console.log("qdeResult = ", qdeResult);
     let entity = this.convertDto2Entity(dto, LoanProfile);
     // entity.status = "ACTIVE";
     entity.partnerId = 2; //MAFC
@@ -460,6 +412,174 @@ export class LoanProfileService extends BaseService {
     );
 
     return response;
+  }
+
+  private async sendData_inputQDE(dto: LoanProfileDto) {
+    let mafc_api_config = config.get("mafc_api");
+    let inputQdeDto = new InputQdeDto();
+    inputQdeDto.in_channel = mafc_api_config.partner_code;
+    inputQdeDto.in_schemeid = dto.in_schemeid;
+    inputQdeDto.in_downpayment = dto.in_downpayment;
+    inputQdeDto.in_totalloanamountreq = dto.in_totalloanamountreq;
+    inputQdeDto.in_tenure = dto.in_tenure;
+    inputQdeDto.in_sourcechannel = "ADVT"; //dto.in_sourcechannel;
+    inputQdeDto.in_salesofficer = dto.in_salesofficer;
+    inputQdeDto.in_loanpurpose = dto.in_loanpurpose;
+    inputQdeDto.in_creditofficercode = "EXT_FIV";
+    inputQdeDto.in_bankbranchcode = dto.in_bankbranchcode;
+    inputQdeDto.in_laa_app_ins_applicable = dto.in_laa_app_ins_applicable;
+    inputQdeDto.in_possipbranch = dto.in_possipbranch;
+    inputQdeDto.in_priority_c = dto.in_priority_c;
+    inputQdeDto.in_userid = "EXT_FIV"; //dto.in_userid;
+    inputQdeDto.in_title = dto.in_title;
+    inputQdeDto.in_fname = dto.in_fname;
+    inputQdeDto.in_mname = dto.in_mname;
+    inputQdeDto.in_lname = dto.in_lname;
+    inputQdeDto.in_gender = dto.in_gender;
+    inputQdeDto.in_nationalid = dto.in_nationalid;
+    inputQdeDto.in_dob = dto.in_dob;
+    inputQdeDto.in_constid = dto.in_constid;
+    inputQdeDto.in_tax_code = dto.in_tax_code;
+    inputQdeDto.in_presentjobyear = dto.in_presentjobyear;
+    inputQdeDto.in_presentjobmth = dto.in_presentjobmth;
+    inputQdeDto.in_previousjobyear = dto.in_previousjobyear;
+    inputQdeDto.in_previousjobmth = dto.in_previousjobmth;
+    inputQdeDto.in_referalgroup = dto.in_referalgroup;
+    inputQdeDto.in_addresstype = dto.in_addresstype;
+    inputQdeDto.in_addressline = dto.in_addressline;
+    inputQdeDto.in_country = dto.in_country;
+    inputQdeDto.in_city = dto.in_city;
+    inputQdeDto.in_district = dto.in_district;
+    inputQdeDto.in_ward = dto.in_ward;
+    inputQdeDto.in_phone = dto.in_phone;
+    inputQdeDto.in_others = dto.in_others;
+    inputQdeDto.in_position = dto.in_position;
+    inputQdeDto.in_natureofbuss = dto.in_natureofbuss;
+    inputQdeDto.in_head = dto.in_head;
+    inputQdeDto.in_frequency = dto.in_frequency;
+    inputQdeDto.in_amount = dto.in_amount;
+    inputQdeDto.in_accountbank = dto.in_accountbank;
+    inputQdeDto.in_debit_credit = dto.in_debit_credit;
+    inputQdeDto.in_per_cont = dto.in_per_cont;
+    inputQdeDto.address = [];
+    if (dto.address && dto.address.length) {
+      dto.address.forEach(item => {
+        let address = new InputQdeAddressDto();
+        address.in_addresstype = item.address_type;
+        address.in_propertystatus = item.property_status;
+        address.in_address1stline = item.address_1st_line;
+        address.in_country = item.country;
+        address.in_city = item.city;
+        address.in_district = item.district;
+        address.in_ward = item.ward;
+        address.in_roomno = item.roomno;
+        address.in_stayduratcuradd_y = item.stayduratcuradd_y;
+        address.in_stayduratcuradd_m = item.stayduratcuradd_m;
+        address.in_mailingaddress = item.mailing_address;
+        address.in_mobile = item.mobile;
+        address.in_landlord = item.landlord;
+        address.in_landmark = item.landmark;
+        address.in_email = item.email;
+        address.In_fixphone = item.fixphone;
+        inputQdeDto.address.push(address);
+      });
+    }
+    if (dto.references && dto.references.length) {
+      dto.references.forEach(item => {
+        let refer = new InputQdeReferenceDto();
+        refer.in_title = item.title;
+        refer.in_refereename = item.referee_name;
+        refer.in_refereerelation = item.referee_relation;
+        refer.in_phone_1 = item.phone_1;
+        inputQdeDto.reference.push(refer);
+      });
+    }
+    let qdeResult = await this.requestUtil.post(
+      mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+      inputQdeDto,
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
+    );
+    return qdeResult;
+  }
+  private async sendData_procQDEChangeState(loanNo: string) {
+    let mafc_api_config = config.get("mafc_api");
+    let result = await this.requestUtil.post(
+      mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
+      {
+        p_appid: loanNo,
+        in_userid: "EXT_FIV",
+        in_channel: "FIV",
+        msgName: "procQDEChangeState"
+      },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
+    );
+    return result;
+  }
+  private async sendData_inputDDE(dto: LoanProfileDto) {
+    let mafc_api_config = config.get("mafc_api");
+    let inputDdeDto = new InputDdeDto();
+    inputDdeDto.in_channel = mafc_api_config.partner_code;
+    inputDdeDto.in_userid = "EXT_FIV";
+    inputDdeDto.in_appid = dto.loan_no;
+    inputDdeDto.in_maritalstatus = dto.loan_no;
+    inputDdeDto.in_qualifyingyear = dto.loan_no;
+    inputDdeDto.in_eduqualify = dto.loan_no;
+    inputDdeDto.in_noofdependentin = dto.loan_no;
+    inputDdeDto.in_paymentchannel = dto.loan_no;
+    inputDdeDto.in_nationalidissuedate = dto.loan_no;
+    inputDdeDto.in_familybooknumber = dto.loan_no;
+    inputDdeDto.in_idissuer = dto.loan_no;
+    inputDdeDto.in_spousename = dto.loan_no;
+    inputDdeDto.in_spouse_id_c = dto.loan_no;
+    inputDdeDto.in_categoryid = dto.loan_no;
+    inputDdeDto.in_bankname = dto.loan_no;
+    inputDdeDto.in_bankbranch = dto.loan_no;
+    inputDdeDto.in_acctype = dto.loan_no;
+    inputDdeDto.in_accno = dto.loan_no;
+    inputDdeDto.in_dueday = dto.loan_no;
+    inputDdeDto.in_notecode = dto.loan_no;
+    inputDdeDto.in_notedetails = dto.loan_no;
+
+    let qdeResult = await this.requestUtil.post(
+      mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+      inputDdeDto,
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
+    );
+    return qdeResult;
+  }
+  private async sendData_procDDEChangeState(loanNo: string) {
+    let mafc_api_config = config.get("mafc_api");
+    let result = await this.requestUtil.post(
+      mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
+      {
+        p_appid: loanNo,
+        in_userid: "EXT_FIV",
+        in_channel: "FIV",
+        msgName: "procDDEChangeState"
+      },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
+    );
+    return result;
   }
 
   async updateLoanProfile(dto: LoanProfileDto) {

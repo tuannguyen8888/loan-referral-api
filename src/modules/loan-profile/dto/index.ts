@@ -11,3 +11,4 @@ export * from "./loan-profiles.response.dto";
 export * from "./process.dto";
 export * from "./reference.dto";
 export * from "./input-qde.dto";
+export * from "./input-dde.dto";

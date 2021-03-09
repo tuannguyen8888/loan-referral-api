@@ -35,7 +35,7 @@ export class LoanProfileDto {
   in_gender: string = null;
   in_nationalid: string = null;
   in_dob: string = null;
-  in_constid: string = null;
+  in_constid: number = null;
   in_tax_code: string = null;
   in_presentjobyear: number = null;
   in_presentjobmth: number = null;

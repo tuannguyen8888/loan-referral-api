@@ -18,8 +18,8 @@ export class AddressDto {
   district: string = null;
   ward: string = null;
   roomno: string = null;
-  stayduratcuradd_y: string = null;
-  stayduratcuradd_m: string = null;
+  stayduratcuradd_y: number = null;
+  stayduratcuradd_m: number = null;
   mailing_address: string = null;
   mobile: string = null;
   landlord: string = null;

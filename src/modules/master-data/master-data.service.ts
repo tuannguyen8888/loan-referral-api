@@ -21,64 +21,119 @@ export class MasterDataService extends BaseService {
   async getBanks() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getBank",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getBank" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
+
   async getSchemes() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getSchemes",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getSchemes" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
+
   async getSaleOffice() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getSaleOffice",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getSaleOffice" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
+
   async getSecUser() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getSecUser",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getSecUser" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
+
   async getCity() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getCity",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getCity" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
+
   async getDistrict() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getDistrict",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getDistrict" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
+
   async getWard() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getWard",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getWard" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
+
   async getLoanCategory() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
-      mafc_api_config.url + "/finnApi/applicants/getLoanCategory",
-      {}
+      mafc_api_config.url + "/masterdatamci",
+      { msgName: "getLoanCategory" },
+      {
+        auth: {
+          username: mafc_api_config.username,
+          password: mafc_api_config.password
+        }
+      }
     );
     return response;
   }
