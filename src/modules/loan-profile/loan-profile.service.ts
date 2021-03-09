@@ -87,8 +87,8 @@ export class LoanProfileService extends BaseService {
 
   private convertEntity2Dto(entity, dtoModelObject) {
     let dto = Object.assign({}, dtoModelObject);
-    let dtoKeys = Object.keys(dto);
-    let entityKeys = Object.keys(entity);
+    let dtoKeys = Object.getOwnPropertyNames(dtoModelObject);
+    let entityKeys = Object.getOwnPropertyNames(entity);
     for (let dtoKey of dtoKeys) {
       for (let entityKey of entityKeys) {
         if (
@@ -122,9 +122,7 @@ export class LoanProfileService extends BaseService {
     let dtos = [];
     if (entities && entities.length) {
       entities.forEach(entity =>
-        dtos.push(
-          this.convertEntity2Dto(entity, Object.assign({}, dtoModelObject))
-        )
+        dtos.push(this.convertEntity2Dto(entity, dtoModelObject))
       );
     }
     return dtos;
@@ -132,8 +130,8 @@ export class LoanProfileService extends BaseService {
 
   private convertDto2Entity(dto, entityModelObject) {
     let entity = Object.assign({}, entityModelObject);
-    let entityKeys = Object.keys(entity);
-    let dtoKeys = Object.keys(dto);
+    let entityKeys = Object.getOwnPropertyNames(entityModelObject);
+    let dtoKeys = Object.getOwnPropertyNames(dto);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (
@@ -161,17 +159,15 @@ export class LoanProfileService extends BaseService {
     let entities = [];
     if (dtos && dtos.length) {
       dtos.forEach(dto =>
-        entities.push(
-          this.convertDto2Entity(dto, Object.assign({}, entityModelObject))
-        )
+        entities.push(this.convertDto2Entity(dto, entityModelObject))
       );
     }
     return entities;
   }
   private convertAttachFileEntity2Dto(entity: AttachFile) {
     let dto = new AttachFileDto();
-    let dtoKeys = Object.keys(dto);
-    let entityKeys = Object.keys(entity);
+    let dtoKeys = Object.getOwnPropertyNames(dto);
+    let entityKeys = Object.getOwnPropertyNames(entity);
     for (let dtoKey of dtoKeys) {
       for (let entityKey of entityKeys) {
         if (
@@ -203,8 +199,8 @@ export class LoanProfileService extends BaseService {
 
   private convertAttachFileDto2Entity(dto: AttachFileDto) {
     let entity = new AttachFile();
-    let entityKeys = Object.keys(entity);
-    let dtoKeys = Object.keys(dto);
+    let entityKeys = Object.getOwnPropertyNames(entity);
+    let dtoKeys = Object.getOwnPropertyNames(dto);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (
