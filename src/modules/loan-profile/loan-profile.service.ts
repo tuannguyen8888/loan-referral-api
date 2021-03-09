@@ -128,9 +128,9 @@ export class LoanProfileService extends BaseService {
         return dtos;
     }
 
-    private convertDto2Entity(dto, entityModelObject) {
-        let entity = Object.assign({}, entityModelObject);
-        let entityKeys = this.connection.getMetadata(entity.constructor.name).ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
+    private convertDto2Entity(dto, entityClass) {
+        let entity = new entityClass();
+        let entityKeys = this.connection.getMetadata(entityClass).ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
         console.log('entityKeys = ', entityKeys);
         let dtoKeys = Object.getOwnPropertyNames(dto);
         console.log('dtoKeys = ', dtoKeys);
@@ -157,11 +157,11 @@ export class LoanProfileService extends BaseService {
         return entity;
     }
 
-    private convertDtos2Entities(dtos, entityModelObject) {
+    private convertDtos2Entities(dtos, entityClass) {
         let entities = [];
         if (dtos && dtos.length) {
             dtos.forEach(dto =>
-                entities.push(this.convertDto2Entity(dto, entityModelObject))
+                entities.push(this.convertDto2Entity(dto, entityClass))
             );
         }
         return entities;
@@ -415,7 +415,7 @@ export class LoanProfileService extends BaseService {
         //     }
         // );
 
-        let entity = this.convertDto2Entity(dto, new LoanProfile());
+        let entity = this.convertDto2Entity(dto, LoanProfile);
         // entity.status = "ACTIVE";
         entity.partnerId = 2; //MAFC
         this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
@@ -423,11 +423,11 @@ export class LoanProfileService extends BaseService {
             .getCustomRepository(LoanProfileRepository)
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
-        let address = this.convertDtos2Entities(dto.address, new Address());
+        let address = this.convertDtos2Entities(dto.address, Address);
         address = await this.connection
             .getCustomRepository(AddressRepository)
             .save(address);
-        let references = this.convertDtos2Entities(dto.references, new Reference());
+        let references = this.convertDtos2Entities(dto.references, Reference);
         references = await this.connection
             .getCustomRepository(ReferenceRepository)
             .save(references);
@@ -442,7 +442,7 @@ export class LoanProfileService extends BaseService {
     }
 
     async updateLoanProfile(dto: LoanProfileDto) {
-        let entity = this.convertDto2Entity(dto, new LoanProfile());
+        let entity = this.convertDto2Entity(dto, LoanProfile);
         this.logger.verbose(`entity = ${entity}`);
         let result = await this.connection
             .getCustomRepository(LoanProfileRepository)
