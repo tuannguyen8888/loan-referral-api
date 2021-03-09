@@ -1,24 +1,24 @@
 import { IsDateString, IsOptional } from "class-validator";
 
 export class LoanProfileDeferDto {
-  id: number;
-  loan_profile_id: number;
-  id_f1: string;
-  client_name: string;
-  defer_code: string;
-  defer_note: string;
-  defer_time: Date;
-  status: string;
+  id: number = null;
+  loan_profile_id: number = null;
+  id_f1: string = null;
+  client_name: string = null;
+  defer_code: string = null;
+  defer_note: string = null;
+  defer_time: Date = null;
+  status: string = null;
   @IsOptional()
   @IsDateString()
-  created_at: string;
-  created_by: number;
+  created_at: string = null;
+  created_by: number = null;
   @IsOptional()
   @IsDateString()
-  updated_at: string;
-  updated_by: number;
+  updated_at: string = null;
+  updated_by: number = null;
   @IsOptional()
   @IsDateString()
-  deleted_at: string;
-  deleted_by: number;
+  deleted_at: string = null;
+  deleted_by: number = null;
 }

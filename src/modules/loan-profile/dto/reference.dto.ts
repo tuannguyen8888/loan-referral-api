@@ -9,22 +9,22 @@ import {
 import { Column, PrimaryGeneratedColumn } from "typeorm";
 
 export class ReferenceDto {
-  id?: number;
-  title: string;
-  referee_name: string;
-  referee_relation: string;
-  phone_1: string;
+  id?: number = null;
+  title: string = null;
+  referee_name: string = null;
+  referee_relation: string = null;
+  phone_1: string = null;
 
   @IsOptional()
   @IsDateString()
-  created_at: string;
-  created_by: number;
+  created_at: string = null;
+  created_by: number = null;
   @IsOptional()
   @IsDateString()
-  updated_at?: string;
-  updated_by?: number;
+  updated_at?: string = null;
+  updated_by?: number = null;
   @IsOptional()
   @IsDateString()
-  deleted_at?: string;
-  deleted_by?: number;
+  deleted_at?: string = null;
+  deleted_by?: number = null;
 }
