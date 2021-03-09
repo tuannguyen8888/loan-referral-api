@@ -7,17 +7,24 @@ import {
   Post,
   Put,
   Delete,
-    HttpCode
+  HttpCode
 } from "@nestjs/common";
-import { ApiTags, ApiSecurity, ApiOperation, ApiBody, ApiResponse } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiSecurity,
+  ApiOperation,
+  ApiBody,
+  ApiResponse
+} from "@nestjs/swagger";
 import { LoanProfileService } from "./loan-profile.service";
 import {
-    GetLoanProfilesRequestDto,
-    LoanProfilesResponseDto,
-    LoanProfileDto,
-    CheckCustomerInfoRequestDto, LoanProfileResponseDto
+  GetLoanProfilesRequestDto,
+  LoanProfilesResponseDto,
+  LoanProfileDto,
+  CheckCustomerInfoRequestDto,
+  LoanProfileResponseDto
 } from "./dto";
-import {AttachFileDto} from "./dto/attach-file.dto";
+import { AttachFileDto } from "./dto/attach-file.dto";
 
 @ApiTags("Loan profile")
 @ApiSecurity("api-key")
@@ -37,7 +44,10 @@ export class LoanProfileController {
 
   @Get("/:loan_profile_id")
   @ApiOperation({ summary: "Lấy chi tiết hồ sơ vay" })
-  getLoanProfile(@Headers() headers, @Param() params): Promise<LoanProfileResponseDto> {
+  getLoanProfile(
+    @Headers() headers,
+    @Param() params
+  ): Promise<LoanProfileResponseDto> {
     return this.service.getLoanProfile(params.loan_profile_id);
   }
 
@@ -77,32 +87,32 @@ export class LoanProfileController {
     return this.service.createLoanProfile(dto);
   }
 
-    @Put("/")
-    @ApiOperation({summary: "Sửa thông tin hồ sơ vay"})
-    updateLoanProfile(
-        @Headers() headers,
-        @Body() dto: LoanProfileDto
-    ): Promise<LoanProfileDto> {
-        return this.service.updateLoanProfile(dto);
-    }
-    @Put("/update-attach-files")
-    @ApiOperation({summary: "Update file đính kèm cho hồ sơ vay"})
-    @ApiBody({ type: [AttachFileDto]})
-    @ApiResponse({ type: [AttachFileDto]})
-    updateAttachFiles(
-        @Headers() headers,
-        @Body() dtos: AttachFileDto[]
-    ): Promise<AttachFileDto[]> {
-        return this.service.updateAttachFiles(dtos);
-    }
-    @Delete("/remove-attach-files/:attach_file_id/:user_id")
-    @ApiOperation({summary: "Xóa file đính kèm cho hồ sơ vay"})
-    removeAttachFiles(
-        @Headers() headers,
-        @Param() params
-    ): Promise<boolean> {
-        return this.service.removeAttachFiles(params.attach_file_id, params.user_id);
-    }
+  @Put("/")
+  @ApiOperation({ summary: "Sửa thông tin hồ sơ vay" })
+  updateLoanProfile(
+    @Headers() headers,
+    @Body() dto: LoanProfileDto
+  ): Promise<LoanProfileDto> {
+    return this.service.updateLoanProfile(dto);
+  }
+  @Put("/update-attach-files")
+  @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
+  @ApiBody({ type: [AttachFileDto] })
+  @ApiResponse({ type: [AttachFileDto] })
+  updateAttachFiles(
+    @Headers() headers,
+    @Body() dtos: AttachFileDto[]
+  ): Promise<AttachFileDto[]> {
+    return this.service.updateAttachFiles(dtos);
+  }
+  @Delete("/remove-attach-files/:attach_file_id/:user_id")
+  @ApiOperation({ summary: "Xóa file đính kèm cho hồ sơ vay" })
+  removeAttachFiles(@Headers() headers, @Param() params): Promise<boolean> {
+    return this.service.removeAttachFiles(
+      params.attach_file_id,
+      params.user_id
+    );
+  }
 
   @Delete("/:loan_profile_id/:user_id")
   @ApiOperation({ summary: "Xóa hồ sơ vay" })

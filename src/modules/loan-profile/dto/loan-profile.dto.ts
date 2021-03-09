@@ -5,8 +5,8 @@ import {
   IsOptional,
   IsDateString
 } from "class-validator";
-import {AddressDto} from "./address.dto";
-import {ReferenceDto} from "./reference.dto";
+import { AddressDto } from "./address.dto";
+import { ReferenceDto } from "./reference.dto";
 
 export class LoanProfileDto {
   id?: number;

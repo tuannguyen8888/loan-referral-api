@@ -6,7 +6,7 @@ import {
   IsDateString,
   IsDefined
 } from "class-validator";
-import {Column, PrimaryGeneratedColumn} from "typeorm";
+import { Column, PrimaryGeneratedColumn } from "typeorm";
 
 export class ReferenceDto {
   id?: number;
