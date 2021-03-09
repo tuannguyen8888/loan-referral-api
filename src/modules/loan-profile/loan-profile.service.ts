@@ -11,7 +11,7 @@ import {
     LoanProfilesResponseDto,
     LoanProfileResponseDto,
     LoanProfileDeferDto,
-    LoanProfileChangeLogDto
+    LoanProfileChangeLogDto, ProcessDto
 } from "./dto";
 import {
     AddressRepository,
@@ -23,7 +23,7 @@ import {
     ReferenceRepository
 } from "../../repositories";
 import {IsNull, Like} from "typeorm";
-import {Address, AttachFile, LoanProfile, Reference} from "../../entities";
+import {Address, AttachFile, LoanProfile, Process, Reference, LoanProfileDefer, LoanProfileChangeLog} from "../../entities";
 import {RequestUtil} from "../../common/utils";
 import * as config from "config";
 import {AttachFileDto} from "./dto/attach-file.dto";
@@ -77,7 +77,7 @@ export class LoanProfileService extends BaseService {
         const data = await repo.find(options);
         if (data && data.length) {
             data.forEach(item => {
-                let lp = this.convertEntity2Dto(item, new LoanProfileDto());
+                let lp = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
                 // lp = Object.assign(lp, item);
                 result.rows.push(lp);
             });
@@ -85,10 +85,10 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
-    private convertEntity2Dto(entity, dtoModelObject) {
-        let dto = Object.assign({}, dtoModelObject);
-        let dtoKeys = Object.getOwnPropertyNames(dtoModelObject);
-        let entityKeys = this.connection.getMetadata(entity.constructor.name).ownColumns.map(column => column.propertyName);// Object.getOwnPropertyNames(entity);
+    private convertEntity2Dto(entity, entityClass, dtoClass) {
+        let dto = new dtoClass();
+        let dtoKeys = Object.getOwnPropertyNames(dto);
+        let entityKeys = this.connection.getMetadata(entityClass).ownColumns.map(column => column.propertyName);// Object.getOwnPropertyNames(entity);
         for (let dtoKey of dtoKeys) {
             for (let entityKey of entityKeys) {
                 if (
@@ -118,11 +118,11 @@ export class LoanProfileService extends BaseService {
         return dto;
     }
 
-    private convertEntities2Dtos(entities, dtoModelObject) {
+    private convertEntities2Dtos(entities, entityClass, dtoClass) {
         let dtos = [];
         if (entities && entities.length) {
             entities.forEach(entity =>
-                dtos.push(this.convertEntity2Dto(entity, dtoModelObject))
+                dtos.push(this.convertEntity2Dto(entity, entityClass, dtoClass))
             );
         }
         return dtos;
@@ -302,24 +302,29 @@ export class LoanProfileService extends BaseService {
 
             let result: LoanProfileResponseDto = this.convertEntity2Dto(
                 loanProfile,
-                new LoanProfileResponseDto()
+                LoanProfile,
+                LoanProfileResponseDto
             );
-            result.address = this.convertEntities2Dtos(address, new AddressDto());
+            result.address = this.convertEntities2Dtos(address, Address, new AddressDto());
             result.references = this.convertEntities2Dtos(
                 references,
+                Reference,
                 new ReferenceDto()
             );
             result.attach_files = this.convertEntities2Dtos(
                 attachFiles,
+                AttachFile,
                 new AttachFileDto()
             );
-            result.process = this.convertEntities2Dtos(process, new AttachFileDto());
+            result.process = this.convertEntities2Dtos(process, Process, new ProcessDto());
             result.defers = this.convertEntities2Dtos(
                 defers,
+                LoanProfileDefer,
                 new LoanProfileDeferDto()
             );
             result.change_logs = this.convertEntities2Dtos(
                 changeLogs,
+                LoanProfileChangeLog,
                 new LoanProfileChangeLogDto()
             );
             return result;
@@ -433,10 +438,11 @@ export class LoanProfileService extends BaseService {
             .save(references);
         let response: LoanProfileDto = this.convertEntity2Dto(
             result,
-            new LoanProfileDto()
+            LoanProfile,
+            LoanProfileDto
         );
-        response.address = this.convertEntities2Dtos(address, AddressDto);
-        response.references = this.convertEntities2Dtos(references, ReferenceDto);
+        response.address = this.convertEntities2Dtos(address,Address, AddressDto);
+        response.references = this.convertEntities2Dtos(references, ReferenceDto, ReferenceDto);
 
         return response;
     }
@@ -448,7 +454,7 @@ export class LoanProfileService extends BaseService {
             .getCustomRepository(LoanProfileRepository)
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
-        let response = this.convertEntity2Dto(result, new LoanProfileDto());
+        let response = this.convertEntity2Dto(result,LoanProfile, LoanProfileDto);
         return response;
     }
 
