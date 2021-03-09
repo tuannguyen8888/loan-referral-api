@@ -103,14 +103,8 @@ export class LoanProfileService extends BaseService {
     for (let dtoKey of dtoKeys) {
       for (let entityKey of entityKeys) {
         if (
-          dtoKey
-            .toLowerCase()
-            .split("_")
-            .join("") ==
-          entityKey
-            .toLowerCase()
-            .split("_")
-            .join("")
+            dtoKey.toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("") ||
+            dtoKey.toLowerCase().split("_").join("") == 'in' + entityKey.toLowerCase().split("_").join("")
         ) {
           dto[dtoKey] = entity[entityKey];
           break;
@@ -150,14 +144,8 @@ export class LoanProfileService extends BaseService {
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (
-          dtoKey
-            .toLowerCase()
-            .split("_")
-            .join("") ==
-          entityKey
-            .toLowerCase()
-            .split("_")
-            .join("")
+            dtoKey.toLowerCase().split("_").join("") == entityKey.toLowerCase().split("_").join("") ||
+            dtoKey.toLowerCase().split("_").join("") == 'in' + entityKey.toLowerCase().split("_").join("")
         ) {
           entity[entityKey] = dto[dtoKey];
           break;
