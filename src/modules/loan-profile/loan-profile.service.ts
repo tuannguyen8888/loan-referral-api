@@ -463,6 +463,7 @@ export class LoanProfileService extends BaseService {
             inputQdeDto.in_accountbank = dto.in_accountbank;
             inputQdeDto.in_debit_credit = dto.in_debit_credit;
             inputQdeDto.in_per_cont = dto.in_per_cont;
+            inputQdeDto.msgName = 'inputQDE';
             inputQdeDto.address = [];
             if (dto.address && dto.address.length) {
                 dto.address.forEach(item => {
@@ -496,21 +497,21 @@ export class LoanProfileService extends BaseService {
                     inputQdeDto.reference.push(refer);
                 });
             }
-            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+            console.log('call api MAFC: ', [mafc_api_config.input_data_entry.url,
                 inputQdeDto,
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             qdeResult = await this.requestUtil.post(
-                mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                mafc_api_config.mafc_api_config.input_data_entry.url,
                 inputQdeDto,
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }
             );
@@ -519,13 +520,13 @@ export class LoanProfileService extends BaseService {
             qdeResult = e;
         }finally {
             let log = new SendDataLog();
-            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE";
-            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+            log.apiUrl = "inputQDE";
+            log.data = JSON.stringify([mafc_api_config.input_data_entry.url,
                 inputQdeDto,
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             log.result = JSON.stringify(qdeResult);
@@ -539,7 +540,7 @@ export class LoanProfileService extends BaseService {
         let mafc_api_config = config.get("mafc_api");
         let result;
         try {
-            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
+            console.log('call api MAFC: ', [mafc_api_config.input_data_entry.url,
                 {
                     p_appid: loanNo,
                     in_userid: "EXT_FIV",
@@ -548,12 +549,12 @@ export class LoanProfileService extends BaseService {
                 },
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             result = await this.requestUtil.post(
-                mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
+                mafc_api_config.input_data_entry.url,
                 {
                     p_appid: loanNo,
                     in_userid: "EXT_FIV",
@@ -562,8 +563,8 @@ export class LoanProfileService extends BaseService {
                 },
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }
             );
@@ -572,8 +573,8 @@ export class LoanProfileService extends BaseService {
             result = e;
         }finally {
             let log = new SendDataLog();
-            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState";
-            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
+            log.apiUrl = "procQDEChangeState";
+            log.data = JSON.stringify([mafc_api_config.input_data_entry.url,
                 {
                     p_appid: loanNo,
                     in_userid: "EXT_FIV",
@@ -582,8 +583,8 @@ export class LoanProfileService extends BaseService {
                 },
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             log.result = JSON.stringify(result);
@@ -620,22 +621,22 @@ export class LoanProfileService extends BaseService {
             inputDdeDto.in_dueday = dto.loan_no;
             inputDdeDto.in_notecode = dto.loan_no;
             inputDdeDto.in_notedetails = dto.loan_no;
-
-            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+            inputDdeDto.msgName = 'inputDDE';
+            console.log('call api MAFC: ', [mafc_api_config.input_data_entry.url,
                 inputDdeDto,
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             ddeResult = await this.requestUtil.post(
-                mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                mafc_api_config.input_data_entry.url,
                 inputDdeDto,
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }
             );
@@ -644,13 +645,13 @@ export class LoanProfileService extends BaseService {
             ddeResult = e;
         }finally {
             let log = new SendDataLog();
-            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE";
-            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+            log.apiUrl = "inputQDE";
+            log.data = JSON.stringify([mafc_api_config.input_data_entry.url,
                 inputDdeDto,
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             log.result = JSON.stringify(ddeResult);
@@ -664,7 +665,7 @@ export class LoanProfileService extends BaseService {
         let mafc_api_config = config.get("mafc_api");
         let result;
         try {
-            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
+            console.log('call api MAFC: ', [mafc_api_config.input_data_entry.url,
                 {
                     p_appid: loanNo,
                     in_userid: "EXT_FIV",
@@ -673,12 +674,12 @@ export class LoanProfileService extends BaseService {
                 },
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             let result = await this.requestUtil.post(
-                mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
+                mafc_api_config.input_data_entry.url,
                 {
                     p_appid: loanNo,
                     in_userid: "EXT_FIV",
@@ -687,8 +688,8 @@ export class LoanProfileService extends BaseService {
                 },
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }
             );
@@ -697,8 +698,8 @@ export class LoanProfileService extends BaseService {
             result = e;
         }finally {
             let log = new SendDataLog();
-            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState";
-            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
+            log.apiUrl = "procDDEChangeState";
+            log.data = JSON.stringify([mafc_api_config.input_data_entry.url,
                 {
                     p_appid: loanNo,
                     in_userid: "EXT_FIV",
@@ -707,8 +708,8 @@ export class LoanProfileService extends BaseService {
                 },
                 {
                     auth: {
-                        username: mafc_api_config.username,
-                        password: mafc_api_config.password
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
                     }
                 }]);
             log.result = JSON.stringify(result);
