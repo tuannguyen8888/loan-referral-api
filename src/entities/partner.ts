@@ -15,24 +15,28 @@ export class Partner {
   @Column("varchar", { name: "secret_key", nullable: true, length: 255 })
   secretKey: string | null;
 
-  @Column("timestamp", {
-    name: "created_at",
-    default: () => "CURRENT_TIMESTAMP"
-  })
-  createdAt: Date;
+    @Column("timestamp", {
+        name: "created_at",
+        default: () => "CURRENT_TIMESTAMP"
+    })
+    createdAt: Date;
 
-  @Column("int", { name: "created_by", nullable: true })
-  createdBy: number | null;
+    @Column("varchar", {
+        name: "created_by",
+        nullable: true, length: 255,
+        comment: "user id who create "
+    })
+    createdBy: string;
 
-  @Column("timestamp", { name: "updated_at", nullable: true })
-  updatedAt: Date | null;
+    @Column("timestamp", { name: "updated_at", nullable: true })
+    updatedAt: Date | null;
 
-  @Column("int", { name: "updated_by", nullable: true })
-  updatedBy: number | null;
+    @Column("varchar", { name: "updated_by", nullable: true, length: 255 })
+    updatedBy: string;
 
-  @Column("timestamp", { name: "deleted_at", nullable: true })
-  deletedAt: Date | null;
+    @Column("timestamp", { name: "deleted_at", nullable: true })
+    deletedAt: Date | null;
 
-  @Column("int", { name: "deleted_by", nullable: true })
-  deletedBy: number | null;
+    @Column("varchar", { name: "deleted_by", nullable: true, length: 255})
+    deletedBy: string;
 }

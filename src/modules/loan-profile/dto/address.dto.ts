@@ -30,13 +30,13 @@ export class AddressDto {
   @IsOptional()
   @IsDateString()
   created_at: string = null;
-  created_by: number = null;
+  created_by: string = null;
   @IsOptional()
   @IsDateString()
   updated_at?: string = null;
-  updated_by?: number = null;
+  updated_by?: string = null;
   @IsOptional()
   @IsDateString()
   deleted_at?: string = null;
-  deleted_by?: number = null;
+  deleted_by?: string = null;
 }
