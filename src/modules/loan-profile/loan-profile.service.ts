@@ -25,7 +25,7 @@ import {
     LoanProfileDeferRepository,
     LoanProfileRepository,
     ProcessRepository,
-    ReferenceRepository
+    ReferenceRepository, SendDataLogRepository
 } from "../../repositories";
 import {IsNull, Like} from "typeorm";
 import {
@@ -35,7 +35,7 @@ import {
     Process,
     Reference,
     LoanProfileDefer,
-    LoanProfileChangeLog
+    LoanProfileChangeLog, SendDataLog
 } from "../../entities";
 import {RequestUtil} from "../../common/utils";
 import * as config from "config";
@@ -417,215 +417,304 @@ export class LoanProfileService extends BaseService {
     private async sendData_inputQDE(dto: LoanProfileDto) {
         let mafc_api_config = config.get("mafc_api");
         let inputQdeDto = new InputQdeDto();
-        inputQdeDto.in_channel = mafc_api_config.partner_code;
-        inputQdeDto.in_schemeid = dto.in_schemeid;
-        inputQdeDto.in_downpayment = dto.in_downpayment;
-        inputQdeDto.in_totalloanamountreq = dto.in_totalloanamountreq;
-        inputQdeDto.in_tenure = dto.in_tenure;
-        inputQdeDto.in_sourcechannel = "ADVT"; //dto.in_sourcechannel;
-        inputQdeDto.in_salesofficer = dto.in_salesofficer;
-        inputQdeDto.in_loanpurpose = dto.in_loanpurpose;
-        inputQdeDto.in_creditofficercode = "EXT_FIV";
-        inputQdeDto.in_bankbranchcode = dto.in_bankbranchcode;
-        inputQdeDto.in_laa_app_ins_applicable = dto.in_laa_app_ins_applicable;
-        inputQdeDto.in_possipbranch = dto.in_possipbranch;
-        inputQdeDto.in_priority_c = dto.in_priority_c;
-        inputQdeDto.in_userid = "EXT_FIV"; //dto.in_userid;
-        inputQdeDto.in_title = dto.in_title;
-        inputQdeDto.in_fname = dto.in_fname;
-        inputQdeDto.in_mname = dto.in_mname;
-        inputQdeDto.in_lname = dto.in_lname;
-        inputQdeDto.in_gender = dto.in_gender;
-        inputQdeDto.in_nationalid = dto.in_nationalid;
-        inputQdeDto.in_dob = dto.in_dob;
-        inputQdeDto.in_constid = dto.in_constid;
-        inputQdeDto.in_tax_code = dto.in_tax_code;
-        inputQdeDto.in_presentjobyear = dto.in_presentjobyear;
-        inputQdeDto.in_presentjobmth = dto.in_presentjobmth;
-        inputQdeDto.in_previousjobyear = dto.in_previousjobyear;
-        inputQdeDto.in_previousjobmth = dto.in_previousjobmth;
-        inputQdeDto.in_referalgroup = dto.in_referalgroup;
-        inputQdeDto.in_addresstype = dto.in_addresstype;
-        inputQdeDto.in_addressline = dto.in_addressline;
-        inputQdeDto.in_country = dto.in_country;
-        inputQdeDto.in_city = dto.in_city;
-        inputQdeDto.in_district = dto.in_district;
-        inputQdeDto.in_ward = dto.in_ward;
-        inputQdeDto.in_phone = dto.in_phone;
-        inputQdeDto.in_others = dto.in_others;
-        inputQdeDto.in_position = dto.in_position;
-        inputQdeDto.in_natureofbuss = dto.in_natureofbuss;
-        inputQdeDto.in_head = dto.in_head;
-        inputQdeDto.in_frequency = dto.in_frequency;
-        inputQdeDto.in_amount = dto.in_amount;
-        inputQdeDto.in_accountbank = dto.in_accountbank;
-        inputQdeDto.in_debit_credit = dto.in_debit_credit;
-        inputQdeDto.in_per_cont = dto.in_per_cont;
-        inputQdeDto.address = [];
-        if (dto.address && dto.address.length) {
-            dto.address.forEach(item => {
-                let address = new InputQdeAddressDto();
-                address.in_addresstype = item.address_type;
-                address.in_propertystatus = item.property_status;
-                address.in_address1stline = item.address_1st_line;
-                address.in_country = item.country;
-                address.in_city = item.city;
-                address.in_district = item.district;
-                address.in_ward = item.ward;
-                address.in_roomno = item.roomno;
-                address.in_stayduratcuradd_y = item.stayduratcuradd_y;
-                address.in_stayduratcuradd_m = item.stayduratcuradd_m;
-                address.in_mailingaddress = item.mailing_address;
-                address.in_mobile = item.mobile;
-                address.in_landlord = item.landlord;
-                address.in_landmark = item.landmark;
-                address.in_email = item.email;
-                address.In_fixphone = item.fixphone;
-                inputQdeDto.address.push(address);
-            });
-        }
-        if (dto.references && dto.references.length) {
-            dto.references.forEach(item => {
-                let refer = new InputQdeReferenceDto();
-                refer.in_title = item.title;
-                refer.in_refereename = item.referee_name;
-                refer.in_refereerelation = item.referee_relation;
-                refer.in_phone_1 = item.phone_1;
-                inputQdeDto.reference.push(refer);
-            });
-        }
-        console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
-            inputQdeDto,
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
-                }
-            }]);
-        let qdeResult = await this.requestUtil.post(
-            mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
-            inputQdeDto,
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
-                }
+        let qdeResult;
+        try {
+            inputQdeDto.in_channel = mafc_api_config.partner_code;
+            inputQdeDto.in_schemeid = dto.in_schemeid;
+            inputQdeDto.in_downpayment = dto.in_downpayment;
+            inputQdeDto.in_totalloanamountreq = dto.in_totalloanamountreq;
+            inputQdeDto.in_tenure = dto.in_tenure;
+            inputQdeDto.in_sourcechannel = "ADVT"; //dto.in_sourcechannel;
+            inputQdeDto.in_salesofficer = dto.in_salesofficer;
+            inputQdeDto.in_loanpurpose = dto.in_loanpurpose;
+            inputQdeDto.in_creditofficercode = "EXT_FIV";
+            inputQdeDto.in_bankbranchcode = dto.in_bankbranchcode;
+            inputQdeDto.in_laa_app_ins_applicable = dto.in_laa_app_ins_applicable;
+            inputQdeDto.in_possipbranch = dto.in_possipbranch;
+            inputQdeDto.in_priority_c = dto.in_priority_c;
+            inputQdeDto.in_userid = "EXT_FIV"; //dto.in_userid;
+            inputQdeDto.in_title = dto.in_title;
+            inputQdeDto.in_fname = dto.in_fname;
+            inputQdeDto.in_mname = dto.in_mname;
+            inputQdeDto.in_lname = dto.in_lname;
+            inputQdeDto.in_gender = dto.in_gender;
+            inputQdeDto.in_nationalid = dto.in_nationalid;
+            inputQdeDto.in_dob = dto.in_dob;
+            inputQdeDto.in_constid = dto.in_constid;
+            inputQdeDto.in_tax_code = dto.in_tax_code;
+            inputQdeDto.in_presentjobyear = dto.in_presentjobyear;
+            inputQdeDto.in_presentjobmth = dto.in_presentjobmth;
+            inputQdeDto.in_previousjobyear = dto.in_previousjobyear;
+            inputQdeDto.in_previousjobmth = dto.in_previousjobmth;
+            inputQdeDto.in_referalgroup = dto.in_referalgroup;
+            inputQdeDto.in_addresstype = dto.in_addresstype;
+            inputQdeDto.in_addressline = dto.in_addressline;
+            inputQdeDto.in_country = dto.in_country;
+            inputQdeDto.in_city = dto.in_city;
+            inputQdeDto.in_district = dto.in_district;
+            inputQdeDto.in_ward = dto.in_ward;
+            inputQdeDto.in_phone = dto.in_phone;
+            inputQdeDto.in_others = dto.in_others;
+            inputQdeDto.in_position = dto.in_position;
+            inputQdeDto.in_natureofbuss = dto.in_natureofbuss;
+            inputQdeDto.in_head = dto.in_head;
+            inputQdeDto.in_frequency = dto.in_frequency;
+            inputQdeDto.in_amount = dto.in_amount;
+            inputQdeDto.in_accountbank = dto.in_accountbank;
+            inputQdeDto.in_debit_credit = dto.in_debit_credit;
+            inputQdeDto.in_per_cont = dto.in_per_cont;
+            inputQdeDto.address = [];
+            if (dto.address && dto.address.length) {
+                dto.address.forEach(item => {
+                    let address = new InputQdeAddressDto();
+                    address.in_addresstype = item.address_type;
+                    address.in_propertystatus = item.property_status;
+                    address.in_address1stline = item.address_1st_line;
+                    address.in_country = item.country;
+                    address.in_city = item.city;
+                    address.in_district = item.district;
+                    address.in_ward = item.ward;
+                    address.in_roomno = item.roomno;
+                    address.in_stayduratcuradd_y = item.stayduratcuradd_y;
+                    address.in_stayduratcuradd_m = item.stayduratcuradd_m;
+                    address.in_mailingaddress = item.mailing_address;
+                    address.in_mobile = item.mobile;
+                    address.in_landlord = item.landlord;
+                    address.in_landmark = item.landmark;
+                    address.in_email = item.email;
+                    address.In_fixphone = item.fixphone;
+                    inputQdeDto.address.push(address);
+                });
             }
-        );
+            if (dto.references && dto.references.length) {
+                dto.references.forEach(item => {
+                    let refer = new InputQdeReferenceDto();
+                    refer.in_title = item.title;
+                    refer.in_refereename = item.referee_name;
+                    refer.in_refereerelation = item.referee_relation;
+                    refer.in_phone_1 = item.phone_1;
+                    inputQdeDto.reference.push(refer);
+                });
+            }
+            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                inputQdeDto,
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            qdeResult = await this.requestUtil.post(
+                mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                inputQdeDto,
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }
+            );
+        }catch (e) {
+            console.log(e);
+            qdeResult = e;
+        }finally {
+            let log = new SendDataLog();
+            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE";
+            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                inputQdeDto,
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            log.result = JSON.stringify(qdeResult);
+            log.createdAt = new Date();
+            await this.connection.getCustomRepository(SendDataLogRepository).save(log);
+        }
         return qdeResult;
     }
 
     private async sendData_procQDEChangeState(loanNo: string) {
         let mafc_api_config = config.get("mafc_api");
-
-        console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
-            {
-                p_appid: loanNo,
-                in_userid: "EXT_FIV",
-                in_channel: "FIV",
-                msgName: "procQDEChangeState"
-            },
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
+        let result;
+        try {
+            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "procQDEChangeState"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            result = await this.requestUtil.post(
+                mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "procQDEChangeState"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
                 }
-            }]);
-        let result = await this.requestUtil.post(
-            mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
-            {
-                p_appid: loanNo,
-                in_userid: "EXT_FIV",
-                in_channel: "FIV",
-                msgName: "procQDEChangeState"
-            },
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
-                }
-            }
-        );
+            );
+        }catch (e) {
+            console.log(e);
+            result = e;
+        }finally {
+            let log = new SendDataLog();
+            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState";
+            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/procQDEChangeState",
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "procQDEChangeState"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            log.result = JSON.stringify(result);
+            log.createdAt = new Date();
+            await this.connection.getCustomRepository(SendDataLogRepository).save(log);
+        }
         return result;
     }
 
     private async sendData_inputDDE(dto: LoanProfileDto) {
         let mafc_api_config = config.get("mafc_api");
         let inputDdeDto = new InputDdeDto();
-        inputDdeDto.in_channel = mafc_api_config.partner_code;
-        inputDdeDto.in_userid = "EXT_FIV";
-        inputDdeDto.in_appid = dto.loan_no;
-        inputDdeDto.in_maritalstatus = dto.loan_no;
-        inputDdeDto.in_qualifyingyear = dto.loan_no;
-        inputDdeDto.in_eduqualify = dto.loan_no;
-        inputDdeDto.in_noofdependentin = dto.loan_no;
-        inputDdeDto.in_paymentchannel = dto.loan_no;
-        inputDdeDto.in_nationalidissuedate = dto.loan_no;
-        inputDdeDto.in_familybooknumber = dto.loan_no;
-        inputDdeDto.in_idissuer = dto.loan_no;
-        inputDdeDto.in_spousename = dto.loan_no;
-        inputDdeDto.in_spouse_id_c = dto.loan_no;
-        inputDdeDto.in_categoryid = dto.loan_no;
-        inputDdeDto.in_bankname = dto.loan_no;
-        inputDdeDto.in_bankbranch = dto.loan_no;
-        inputDdeDto.in_acctype = dto.loan_no;
-        inputDdeDto.in_accno = dto.loan_no;
-        inputDdeDto.in_dueday = dto.loan_no;
-        inputDdeDto.in_notecode = dto.loan_no;
-        inputDdeDto.in_notedetails = dto.loan_no;
+        let ddeResult;
+        try {
 
-        console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
-            inputDdeDto,
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
+            inputDdeDto.in_channel = mafc_api_config.partner_code;
+            inputDdeDto.in_userid = "EXT_FIV";
+            inputDdeDto.in_appid = dto.loan_no;
+            inputDdeDto.in_maritalstatus = dto.loan_no;
+            inputDdeDto.in_qualifyingyear = dto.loan_no;
+            inputDdeDto.in_eduqualify = dto.loan_no;
+            inputDdeDto.in_noofdependentin = dto.loan_no;
+            inputDdeDto.in_paymentchannel = dto.loan_no;
+            inputDdeDto.in_nationalidissuedate = dto.loan_no;
+            inputDdeDto.in_familybooknumber = dto.loan_no;
+            inputDdeDto.in_idissuer = dto.loan_no;
+            inputDdeDto.in_spousename = dto.loan_no;
+            inputDdeDto.in_spouse_id_c = dto.loan_no;
+            inputDdeDto.in_categoryid = dto.loan_no;
+            inputDdeDto.in_bankname = dto.loan_no;
+            inputDdeDto.in_bankbranch = dto.loan_no;
+            inputDdeDto.in_acctype = dto.loan_no;
+            inputDdeDto.in_accno = dto.loan_no;
+            inputDdeDto.in_dueday = dto.loan_no;
+            inputDdeDto.in_notecode = dto.loan_no;
+            inputDdeDto.in_notedetails = dto.loan_no;
+
+            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                inputDdeDto,
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            ddeResult = await this.requestUtil.post(
+                mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                inputDdeDto,
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
                 }
-            }]);
-        let qdeResult = await this.requestUtil.post(
-            mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
-            inputDdeDto,
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
-                }
-            }
-        );
-        return qdeResult;
+            );
+        }catch (e) {
+            console.log(e);
+            ddeResult = e;
+        }finally {
+            let log = new SendDataLog();
+            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE";
+            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/inputQDE",
+                inputDdeDto,
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            log.result = JSON.stringify(ddeResult);
+            log.createdAt = new Date();
+            await this.connection.getCustomRepository(SendDataLogRepository).save(log);
+        }
+        return ddeResult;
     }
 
     private async sendData_procDDEChangeState(loanNo: string) {
         let mafc_api_config = config.get("mafc_api");
-
-        console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
-            {
-                p_appid: loanNo,
-                in_userid: "EXT_FIV",
-                in_channel: "FIV",
-                msgName: "procDDEChangeState"
-            },
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
+        let result;
+        try {
+            console.log('call api MAFC: ', [mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "procDDEChangeState"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            let result = await this.requestUtil.post(
+                mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "procDDEChangeState"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
                 }
-            }]);
-        let result = await this.requestUtil.post(
-            mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
-            {
-                p_appid: loanNo,
-                in_userid: "EXT_FIV",
-                in_channel: "FIV",
-                msgName: "procDDEChangeState"
-            },
-            {
-                auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
-                }
-            }
-        );
+            );
+        }catch (e) {
+            console.log(e);
+            result = e;
+        }finally {
+            let log = new SendDataLog();
+            log.apiUrl = mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState";
+            log.data = JSON.stringify([mafc_api_config.url + "/finnApi/applicants/VDE/procDDEChangeState",
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "procDDEChangeState"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.username,
+                        password: mafc_api_config.password
+                    }
+                }]);
+            log.result = JSON.stringify(result);
+            log.createdAt = new Date();
+            await this.connection.getCustomRepository(SendDataLogRepository).save(log);
+        }
         return result;
     }
 
