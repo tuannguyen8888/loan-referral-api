@@ -343,32 +343,32 @@ export class LoanProfileService extends BaseService {
             result.address = this.convertEntities2Dtos(
                 address,
                 Address,
-                new AddressDto()
+                AddressDto
             );
             result.references = this.convertEntities2Dtos(
                 references,
                 Reference,
-                new ReferenceDto()
+                ReferenceDto
             );
             result.attach_files = this.convertEntities2Dtos(
                 attachFiles,
                 AttachFile,
-                new AttachFileDto()
+                AttachFileDto
             );
             result.process = this.convertEntities2Dtos(
                 process,
                 Process,
-                new ProcessDto()
+                ProcessDto
             );
             result.defers = this.convertEntities2Dtos(
                 defers,
                 LoanProfileDefer,
-                new LoanProfileDeferDto()
+                LoanProfileDeferDto
             );
             result.change_logs = this.convertEntities2Dtos(
                 changeLogs,
                 LoanProfileChangeLog,
-                new LoanProfileChangeLogDto()
+                LoanProfileChangeLogDto
             );
             return result;
         } else {
