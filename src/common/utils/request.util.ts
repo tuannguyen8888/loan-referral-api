@@ -13,7 +13,7 @@ export class RequestUtil {
     url: string,
     body: unknown,
     config?: axios.AxiosRequestConfig
-  ): Promise<T> {
+  ): Promise<any> {
     try {
       if (!config) {
         config = {};
@@ -23,9 +23,10 @@ export class RequestUtil {
         "Timeout roi cha noi, api gi ma cham qua vay";
       console.log("call partner api: ", url);
       console.log("body = ", body);
-      const { data } = await this.httpService
+      const data = await this.httpService
         .post<T>(url, body, config)
         .toPromise();
+      console.log("api resutl data = ", data);
       return data;
     } catch (error) {
       console.error(error);
