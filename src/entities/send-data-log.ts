@@ -5,14 +5,14 @@ export class SendDataLog {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-    @Column("varchar", { name: "api_url", length: 255 })
-    apiUrl: string;
+  @Column("varchar", { name: "api_url", length: 255 })
+  apiUrl: string;
 
-    @Column("text", { name: "data"})
-    data: string;
+  @Column("text", { name: "data" })
+  data: string;
 
-    @Column("text", { name: "result"})
-    result: string;
+  @Column("text", { name: "result" })
+  result: string;
 
   @Column("timestamp", {
     name: "created_at",

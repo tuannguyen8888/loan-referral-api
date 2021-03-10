@@ -117,7 +117,8 @@ export class Address {
 
   @Column("varchar", {
     name: "created_by",
-    nullable: true, length: 255,
+    nullable: true,
+    length: 255,
     comment: "user id who create "
   })
   createdBy: string;
@@ -131,6 +132,6 @@ export class Address {
   @Column("timestamp", { name: "deleted_at", nullable: true })
   deletedAt: Date | null;
 
-  @Column("varchar", { name: "deleted_by", nullable: true, length: 255})
+  @Column("varchar", { name: "deleted_by", nullable: true, length: 255 })
   deletedBy: string;
 }
