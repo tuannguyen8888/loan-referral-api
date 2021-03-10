@@ -769,7 +769,7 @@ export class LoanProfileService extends BaseService {
     async checkCustomerInfo(customerNationalId, phone, taxCode = null) {
         let mafc_api_config = config.get("mafc_api");
         let response: any = await this.requestUtil.post(
-            mafc_api_config.url_check_customer_info,
+            mafc_api_config.check_customer_info.url,
             {
                 cmnd: customerNationalId,
                 phone: phone,
@@ -778,8 +778,8 @@ export class LoanProfileService extends BaseService {
             },
             {
                 auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
+                    username: mafc_api_config.check_customer_info.username,
+                    password: mafc_api_config.check_customer_info.password
                 }
             }
         );
@@ -794,15 +794,15 @@ export class LoanProfileService extends BaseService {
     async checkingS37(customerNationalId) {
         let mafc_api_config = config.get("mafc_api");
         let response: any = await this.requestUtil.post(
-            mafc_api_config.cic_url + "/submit-s37",
+            mafc_api_config.cic.url + "/submit-s37",
             {
                 idValue: customerNationalId,
                 vendorCode: mafc_api_config.partner_code
             },
             {
                 auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
+                    username: mafc_api_config.cic.username,
+                    password: mafc_api_config.cic.password
                 }
             }
         );
