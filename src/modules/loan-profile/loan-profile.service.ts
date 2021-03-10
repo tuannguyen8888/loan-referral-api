@@ -202,83 +202,83 @@ export class LoanProfileService extends BaseService {
         return entities;
     }
 
-    private convertAttachFileEntity2Dto(entity: AttachFile) {
-        let dto = new AttachFileDto();
-        let dtoKeys = Object.getOwnPropertyNames(dto);
-        let entityKeys = Object.getOwnPropertyNames(entity);
-        for (let dtoKey of dtoKeys) {
-            for (let entityKey of entityKeys) {
-                if (
-                    dtoKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("") ==
-                    entityKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("")
-                ) {
-                    dto[dtoKey] = entity[entityKey];
-                    break;
-                }
-            }
-        }
-        dto.created_at = entity.createdAt
-            ? moment(entity.createdAt).format("YYYY-MM-DD HH:mm:ss")
-            : null;
-        dto.updated_at = entity.updatedAt
-            ? moment(entity.updatedAt).format("YYYY-MM-DD HH:mm:ss")
-            : null;
-        dto.deleted_at = entity.deletedAt
-            ? moment(entity.deletedAt).format("YYYY-MM-DD HH:mm:ss")
-            : null;
-        return dto;
-    }
+    // private convertAttachFileEntity2Dto(entity: AttachFile) {
+    //     let dto = new AttachFileDto();
+    //     let dtoKeys = Object.getOwnPropertyNames(dto);
+    //     let entityKeys = Object.getOwnPropertyNames(entity);
+    //     for (let dtoKey of dtoKeys) {
+    //         for (let entityKey of entityKeys) {
+    //             if (
+    //                 dtoKey
+    //                     .toLowerCase()
+    //                     .split("_")
+    //                     .join("") ==
+    //                 entityKey
+    //                     .toLowerCase()
+    //                     .split("_")
+    //                     .join("")
+    //             ) {
+    //                 dto[dtoKey] = entity[entityKey];
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     dto.created_at = entity.createdAt
+    //         ? moment(entity.createdAt).format("YYYY-MM-DD HH:mm:ss")
+    //         : null;
+    //     dto.updated_at = entity.updatedAt
+    //         ? moment(entity.updatedAt).format("YYYY-MM-DD HH:mm:ss")
+    //         : null;
+    //     dto.deleted_at = entity.deletedAt
+    //         ? moment(entity.deletedAt).format("YYYY-MM-DD HH:mm:ss")
+    //         : null;
+    //     return dto;
+    // }
 
-    private convertAttachFileDto2Entity(dto: AttachFileDto) {
-        let entity = new AttachFile();
-        let entityKeys = Object.getOwnPropertyNames(entity);
-        let dtoKeys = Object.getOwnPropertyNames(dto);
-        for (let entityKey of entityKeys) {
-            for (let dtoKey of dtoKeys) {
-                if (
-                    dtoKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("") ==
-                    entityKey
-                        .toLowerCase()
-                        .split("_")
-                        .join("")
-                ) {
-                    entity[entityKey] = dto[dtoKey];
-                    break;
-                }
-            }
-        }
-        entity.createdAt = dto.created_at ? new Date(dto.created_at) : null;
-        entity.updatedAt = dto.updated_at ? new Date(dto.updated_at) : null;
-        entity.deletedAt = dto.deleted_at ? new Date(dto.deleted_at) : null;
-        return entity;
-    }
+    // private convertAttachFileDto2Entity(dto: AttachFileDto) {
+    //     let entity = new AttachFile();
+    //     let entityKeys = Object.getOwnPropertyNames(entity);
+    //     let dtoKeys = Object.getOwnPropertyNames(dto);
+    //     for (let entityKey of entityKeys) {
+    //         for (let dtoKey of dtoKeys) {
+    //             if (
+    //                 dtoKey
+    //                     .toLowerCase()
+    //                     .split("_")
+    //                     .join("") ==
+    //                 entityKey
+    //                     .toLowerCase()
+    //                     .split("_")
+    //                     .join("")
+    //             ) {
+    //                 entity[entityKey] = dto[dtoKey];
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     entity.createdAt = dto.created_at ? new Date(dto.created_at) : null;
+    //     entity.updatedAt = dto.updated_at ? new Date(dto.updated_at) : null;
+    //     entity.deletedAt = dto.deleted_at ? new Date(dto.deleted_at) : null;
+    //     return entity;
+    // }
 
-    private convertAttachFileDtos2Entities(dtos: AttachFileDto[]) {
-        let entities = [];
-        if (dtos && dtos.length) {
-            dtos.forEach(dto => entities.push(this.convertAttachFileDto2Entity(dto)));
-        }
-        return entities;
-    }
-
-    private convertAttachFileEntities2Dtos(entities: AttachFile[]) {
-        let dtos: AttachFileDto[] = [];
-        if (entities && entities.length) {
-            entities.forEach(entity =>
-                dtos.push(this.convertAttachFileEntity2Dto(entity))
-            );
-        }
-        return dtos;
-    }
+    // private convertAttachFileDtos2Entities(dtos: AttachFileDto[]) {
+    //     let entities = [];
+    //     if (dtos && dtos.length) {
+    //         dtos.forEach(dto => entities.push(this.convertAttachFileDto2Entity(dto)));
+    //     }
+    //     return entities;
+    // }
+    //
+    // private convertAttachFileEntities2Dtos(entities: AttachFile[]) {
+    //     let dtos: AttachFileDto[] = [];
+    //     if (entities && entities.length) {
+    //         entities.forEach(entity =>
+    //             dtos.push(this.convertAttachFileEntity2Dto(entity))
+    //         );
+    //     }
+    //     return dtos;
+    // }
 
     async getLoanProfile(loanProfileId: number) {
         const loanProfile = await this.connection
@@ -641,14 +641,12 @@ export class LoanProfileService extends BaseService {
     }
 
     async updateAttachFiles(dtos: AttachFileDto[]) {
-        let entities = this.convertAttachFileDtos2Entities(dtos);
+        let entities = this.convertDtos2Entities(dtos, AttachFile);
         let results = await this.connection
             .getCustomRepository(AttachFileRepository)
             .save(entities);
         this.logger.verbose(`insertResult = ${results}`);
-        let response: AttachFileDto[] = this.convertAttachFileEntities2Dtos(
-            results
-        );
+        let response: AttachFileDto[] = this.convertEntities2Dtos(results, AttachFile, AttachFileDto);
         return response;
     }
 
