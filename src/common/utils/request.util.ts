@@ -18,7 +18,7 @@ export class RequestUtil {
       if (!config) {
         config = {};
       }
-      config.timeout = 3 * 60 * 1000;
+      config.timeout = 60 * 1000;
       config.timeoutErrorMessage =
         "Timeout roi cha noi, api gi ma cham qua vay";
       console.log("call partner api: ", url);
@@ -26,7 +26,7 @@ export class RequestUtil {
       const data = await this.httpService
         .post<T>(url, body, config)
         .toPromise();
-      console.log("api resutl data = ", data);
+      console.log("api result data = ", data);
       return data;
     } catch (error) {
       console.error(error);

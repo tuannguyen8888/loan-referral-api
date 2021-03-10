@@ -14,7 +14,7 @@ export class MasterDataController {
     summary:
       "Dành cho Vendor/3rd system gọi để lấy thông tin ngân hàng của MAFC"
   })
-  checkCustomerInfo(@Headers() headers, @Param() params): Promise<any> {
+  getBanks(@Headers() headers, @Param() params): Promise<any> {
     return this.service.getBanks();
   }
   @Get("/get-schemes")

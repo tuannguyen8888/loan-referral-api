@@ -30,7 +30,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 
   async getSchemes() {
@@ -45,7 +45,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 
   async getSaleOffice() {
@@ -60,7 +60,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 
   async getSecUser() {
@@ -75,7 +75,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 
   async getCity() {
@@ -90,7 +90,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 
   async getDistrict() {
@@ -105,7 +105,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 
   async getWard() {
@@ -120,7 +120,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 
   async getLoanCategory() {
@@ -135,6 +135,6 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    return response;
+    return response.data;
   }
 }
