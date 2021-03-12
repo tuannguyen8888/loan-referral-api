@@ -21,7 +21,7 @@ export class InputQdeDto {
   in_nationalid?: string = null;
   in_dob?: string = null;
   in_constid?: number = null;
-  address?: InputQdeAddressDto[] = null;
+  address?: InputQdeAddressDto[] = [];
   in_tax_code?: string = null;
   in_presentjobyear?: number = null;
   in_presentjobmth?: number = null;
@@ -38,7 +38,7 @@ export class InputQdeDto {
   in_others?: string = null;
   in_position?: string = null;
   in_natureofbuss?: string = null;
-  reference: InputQdeReferenceDto[] = null;
+  reference: InputQdeReferenceDto[] = [];
   in_head?: string = null;
   in_frequency?: string = null;
   in_amount?: number = null;

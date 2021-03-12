@@ -503,6 +503,7 @@ export class LoanProfileService extends BaseService {
                     inputQdeDto.address.push(address);
                 });
             }
+            inputQdeDto.reference = [];
             if (dto.references && dto.references.length) {
                 dto.references.forEach(item => {
                     let refer = new InputQdeReferenceDto();
