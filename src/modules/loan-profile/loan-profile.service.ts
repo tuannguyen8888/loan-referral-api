@@ -411,6 +411,7 @@ export class LoanProfileService extends BaseService {
             .save(address);
         let references = this.convertDtos2Entities(dto.references, Reference);
         references.forEach(item => (item.loanProfileId = result.id));
+
         references = await this.connection
             .getCustomRepository(ReferenceRepository)
             .save(references);
@@ -830,7 +831,7 @@ export class LoanProfileService extends BaseService {
         } else {
             response.statusCode = 400;
         }
-        return response;
+        return response.data;
     }
 
     async checkingS37(customerNationalId) {
@@ -853,7 +854,7 @@ export class LoanProfileService extends BaseService {
         } else {
             response.statusCode = 400;
         }
-        return response;
+        return response.data;
     }
 
     async pollingS37(customerNationalId) {
@@ -877,6 +878,6 @@ export class LoanProfileService extends BaseService {
         } else {
             response.statusCode = 400;
         }
-        return response;
+        return response.data;
     }
 }
