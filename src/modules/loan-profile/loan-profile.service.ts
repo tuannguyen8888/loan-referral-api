@@ -859,7 +859,7 @@ export class LoanProfileService extends BaseService {
     async pollingS37(customerNationalId) {
         let mafc_api_config = config.get("mafc_api");
         let response: any = await this.requestUtil.post(
-            mafc_api_config.cic_url + "/polling-s37",
+            mafc_api_config.cic.url + "/polling-s37",
             {
                 requestId: "",
                 idValue: customerNationalId,
@@ -867,8 +867,8 @@ export class LoanProfileService extends BaseService {
             },
             {
                 auth: {
-                    username: mafc_api_config.username,
-                    password: mafc_api_config.password
+                    username: mafc_api_config.cic.username,
+                    password: mafc_api_config.cic.password
                 }
             }
         );
