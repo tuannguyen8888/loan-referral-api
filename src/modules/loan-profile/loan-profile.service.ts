@@ -524,7 +524,7 @@ export class LoanProfileService extends BaseService {
                 }
             ]);
             qdeResult = await this.requestUtil.post(
-                mafc_api_config.mafc_api_config.input_data_entry.url,
+                mafc_api_config.input_data_entry.url,
                 inputQdeDto,
                 {
                     auth: {
