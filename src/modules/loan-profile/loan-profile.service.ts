@@ -28,7 +28,7 @@ import {
     ReferenceRepository,
     SendDataLogRepository
 } from "../../repositories";
-import {IsNull, Like} from "typeorm";
+import {IsNull, Like, Equal} from "typeorm";
 import {
     Address,
     AttachFile,
@@ -57,47 +57,53 @@ export class LoanProfileService extends BaseService {
     }
 
     async getAllLoanProfiles(dto: GetLoanProfilesRequestDto) {
-        const repo = this.connection.getCustomRepository(LoanProfileRepository);
-        const where = {
-            deletedAt: IsNull()
-        };
-        if (dto.partner_id) {
-            where["partnerId"] = dto.partner_id;
-        }
-        if (dto.fv_status) {
-            where["fvStatus"] = dto.fv_status;
-        }
-        if (dto.loan_no) {
-            where["loanNo"] = dto.loan_no;
-        }
-        if (dto.loan_status) {
-            where["loanStatus"] = dto.loan_status;
-        }
-        if (dto.name) {
-            where["inFname"] = Like(`%${dto.name}%`);
-        }
+        try{
 
-        const result = new LoanProfilesResponseDto();
-        result.count = await repo.count({where: where});
-        result.rows = [];
-        if (!dto.sort) {
-            dto.sort = {id: -1};
+            const repo = this.connection.getCustomRepository(LoanProfileRepository);
+            const where = {
+                deletedAt: IsNull()
+            };
+            if (dto.partner_id) {
+                where["partnerId"] = dto.partner_id;
+            }
+            if (dto.fv_status) {
+                where["fvStatus"] = Equal(dto.fv_status);
+            }
+            if (dto.loan_no) {
+                where["loanNo"] = Like(`%${dto.loan_no}%`);
+            }
+            if (dto.loan_status) {
+                where["loanStatus"] = Equal(dto.loan_status);
+            }
+            if (dto.name) {
+                where["inFname"] = Like(`%${dto.name}%`);
+            }
+
+            const result = new LoanProfilesResponseDto();
+            result.count = await repo.count({where: where});
+            result.rows = [];
+            if (!dto.sort) {
+                dto.sort = {id: -1};
+            }
+            const options = {
+                where: where,
+                order: dto.sort,
+                skip: (dto.page - 1) * dto.pagesize,
+                take: dto.pagesize
+            };
+            const data = await repo.find(options);
+            if (data && data.length) {
+                data.forEach(item => {
+                    let lp = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
+                    // lp = Object.assign(lp, item);
+                    result.rows.push(lp);
+                });
+            }
+            return result;
+        }catch (e) {
+            console.error(e);
+            throw e;
         }
-        const options = {
-            where: where,
-            order: dto.sort,
-            skip: (dto.page - 1) * dto.pagesize,
-            take: dto.pagesize
-        };
-        const data = await repo.find(options);
-        if (data && data.length) {
-            data.forEach(item => {
-                let lp = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
-                // lp = Object.assign(lp, item);
-                result.rows.push(lp);
-            });
-        }
-        return result;
     }
 
     private convertEntity2Dto(entity, entityClass, dtoClass) {
@@ -534,6 +540,7 @@ export class LoanProfileService extends BaseService {
                     }
                 }
             );
+            console.log('qdeResult = ', qdeResult);
         } catch (e) {
             console.log(e);
             qdeResult = e;
@@ -832,7 +839,7 @@ export class LoanProfileService extends BaseService {
         } else {
             response.statusCode = 400;
         }
-        return response.data;
+        return response;
     }
 
     async checkingS37(customerNationalId) {
@@ -855,7 +862,7 @@ export class LoanProfileService extends BaseService {
         } else {
             response.statusCode = 400;
         }
-        return response.data;
+        return response;
     }
 
     async pollingS37(customerNationalId) {
@@ -879,6 +886,6 @@ export class LoanProfileService extends BaseService {
         } else {
             response.statusCode = 400;
         }
-        return response.data;
+        return response;
     }
 }

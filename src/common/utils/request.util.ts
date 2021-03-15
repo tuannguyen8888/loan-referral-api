@@ -23,7 +23,7 @@ export class RequestUtil {
         "Timeout roi cha noi, api gi ma cham qua vay";
       console.log("call partner api: ", url);
       console.log("body = ", body);
-      const data = await this.httpService
+      const { data } = await this.httpService
         .post<T>(url, body, config)
         .toPromise();
       console.log("api result data = ", data);
