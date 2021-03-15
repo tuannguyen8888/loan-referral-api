@@ -8,13 +8,11 @@ import {
 } from "class-validator";
 import { Column, PrimaryGeneratedColumn } from "typeorm";
 
-export class ReferenceDto {
-  id?: number = null;
-  title: string = null;
-  referee_name: string = null;
-  referee_relation: string = null;
-  phone_1: string = null;
-
+export class ProcessDto {
+  id: number = null;
+  loan_profile_id: number = null;
+  process_status: string = null;
+  description: string = null;
   @IsOptional()
   @IsDateString()
   created_at: string = null;

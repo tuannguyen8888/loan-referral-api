@@ -1,0 +1,73 @@
+export class InputQdeDto {
+  in_channel?: string = null;
+  in_schemeid?: number = null;
+  in_downpayment?: number = null;
+  in_totalloanamountreq?: number = null;
+  in_tenure?: number = null;
+  in_sourcechannel?: string = null;
+  in_salesofficer?: string = null;
+  in_loanpurpose?: string = null;
+  in_creditofficercode?: string = null;
+  in_bankbranchcode?: string = null;
+  in_laa_app_ins_applicable?: string = null;
+  in_possipbranch?: string = null;
+  in_priority_c?: string = null;
+  in_userid?: string = null;
+  in_title?: string = null;
+  in_fname?: string = null;
+  in_mname?: string = null;
+  in_lname?: string = null;
+  in_gender?: string = null;
+  in_nationalid?: string = null;
+  in_dob?: string = null;
+  in_constid?: number = null;
+  address?: InputQdeAddressDto[] = [];
+  in_tax_code?: string = null;
+  in_presentjobyear?: number = null;
+  in_presentjobmth?: number = null;
+  in_previousjobyear?: number = null;
+  in_previousjobmth?: number = null;
+  in_referalgroup?: string = null;
+  in_addresstype?: string = null;
+  in_addressline?: string = null;
+  in_country?: string = null;
+  in_city?: string = null;
+  in_district?: string = null;
+  in_ward?: string = null;
+  in_phone?: string = null;
+  in_others?: string = null;
+  in_position?: string = null;
+  in_natureofbuss?: string = null;
+  reference: InputQdeReferenceDto[] = [];
+  in_head?: string = null;
+  in_frequency?: string = null;
+  in_amount?: number = null;
+  in_accountbank?: string = null;
+  in_debit_credit?: string = null;
+  in_per_cont?: string = null;
+  msgName: string = "inputQDE";
+}
+export class InputQdeAddressDto {
+  in_addresstype?: string = null;
+  in_propertystatus?: string = null;
+  in_address1stline?: string = null;
+  in_country?: string = null;
+  in_city?: string = null;
+  in_district?: string = null;
+  in_ward?: string = null;
+  in_roomno?: string = null;
+  in_stayduratcuradd_y?: number = null;
+  in_stayduratcuradd_m?: number = null;
+  in_mailingaddress?: string = null;
+  in_mobile?: string = null;
+  in_landlord?: string = null;
+  in_landmark?: string = null;
+  in_email?: string = null;
+  In_fixphone?: string = null;
+}
+export class InputQdeReferenceDto {
+  in_title?: string = null;
+  in_refereename?: string = null;
+  in_refereerelation?: string = null;
+  in_phone_1?: string = null;
+}

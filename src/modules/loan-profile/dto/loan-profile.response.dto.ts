@@ -7,14 +7,17 @@ import {
 } from "class-validator";
 import { AddressDto } from "./address.dto";
 import { ReferenceDto } from "./reference.dto";
+import { AttachFileDto } from "./attach-file.dto";
+import { ProcessDto } from "./process.dto";
+import { LoanProfileChangeLogDto, LoanProfileDeferDto } from ".";
 
-export class LoanProfileDto {
-  id?: number = null;
-  partner_id?: number = null;
-  loan_no?: string = null;
-  fv_status?: string = null;
-  loan_status?: string = null;
-  in_channel?: string = null;
+export class LoanProfileResponseDto {
+  id: number = null;
+  partner_id: number = null;
+  loan_no: string = null;
+  fv_status: string = null;
+  loan_status: string = null;
+  in_channel: string = null;
   in_schemeid: number = null;
   in_downpayment: number = null;
   in_totalloanamountreq: number = null;
@@ -35,7 +38,7 @@ export class LoanProfileDto {
   in_gender: string = null;
   in_nationalid: string = null;
   in_dob: string = null;
-  in_constid: number = null;
+  in_constid: string = null;
   in_tax_code: string = null;
   in_presentjobyear: number = null;
   in_presentjobmth: number = null;
@@ -90,4 +93,8 @@ export class LoanProfileDto {
 
   address: AddressDto[];
   references: ReferenceDto[];
+  attach_files: AttachFileDto[];
+  process: ProcessDto[];
+  defers: LoanProfileDeferDto[];
+  change_logs: LoanProfileChangeLogDto[];
 }

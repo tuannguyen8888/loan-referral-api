@@ -64,12 +64,23 @@ database:
       database: "loan_referral"
 
 mafc_api:
-  url: 'https://apigw.mafc.vn/uat'
-  url_check_customer_info: 'https://apigw-staging.mafc.vn/3p/v2/check-customer'
   partner_code: 'FIV'
-  cic_url: 'https://apigw-staging.mafc.vn/cic'
-  username: 'mirae-3p'
-  password: '123456'
+  input_data_entry:
+    url: 'https://apigw-staging.mafc.vn/dataentry-mci'
+    username: 'dataentrymci'
+    password: 'mirae52345!@#%$'
+  master_data:
+    url: 'https://apigw-staging.mafc.vn/masterdatamci'
+    username: 'masterdatamci'
+    password: 'mafc32412^&%^$'
+  check_customer_info:
+    url: 'https://apigw-staging.mafc.vn/3p/v2/check-customer'
+    username: 'mirae-3p'
+    password: '123456'
+  cic:
+    url: 'https://apigw-staging.mafc.vn/cic'
+    username: 'mirae-3p'
+    password: '123456'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
