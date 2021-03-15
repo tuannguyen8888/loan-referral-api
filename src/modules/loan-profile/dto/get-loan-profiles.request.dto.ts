@@ -15,19 +15,10 @@ export class GetLoanProfilesRequestDto extends BaseRequestDto {
   @IsOptional()
   partner_id?: number;
 
-  @IsNumberString()
-  @IsOptional()
-  loan_no?: string;
-
-  @IsNumberString()
   @IsOptional()
   fv_status?: string;
 
-  @IsNumberString()
   @IsOptional()
   loan_status?: string;
 
-  @IsNumberString()
-  @IsOptional()
-  name?: string;
 }

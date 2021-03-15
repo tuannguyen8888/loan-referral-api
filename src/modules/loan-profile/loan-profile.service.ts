@@ -69,16 +69,18 @@ export class LoanProfileService extends BaseService {
             if (dto.fv_status) {
                 where["fvStatus"] = Equal(dto.fv_status);
             }
-            if (dto.loan_no) {
-                where["loanNo"] = Like(`%${dto.loan_no}%`);
-            }
             if (dto.loan_status) {
                 where["loanStatus"] = Equal(dto.loan_status);
             }
-            if (dto.name) {
-                where["inFname"] = Like(`%${dto.name}%`);
+            if (dto.keyword) {
+                where["$or"] = [
+                    {inFname: Like(`%${dto.keyword}%`)},
+                    {inMname: Like(`%${dto.keyword}%`)},
+                    {inLname: Like(`%${dto.keyword}%`)},
+                    {inPhone: Like(`%${dto.keyword}%`)},
+                    {inNationalid: Like(`%${dto.keyword}%`)},
+            ];
             }
-
             const result = new LoanProfilesResponseDto();
             result.count = await repo.count({where: where});
             result.rows = [];
