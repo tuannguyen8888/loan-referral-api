@@ -785,9 +785,16 @@ export class LoanProfileService extends BaseService {
         let results = await this.connection
             .getCustomRepository(AttachFileRepository)
             .save(entities);
-        this.logger.verbose(`insertResult = ${results}`);
+        const attachFiles = await this.connection
+            .getCustomRepository(AttachFileRepository)
+            .find({
+                where: {
+                    deletedAt: IsNull(),
+                    loanProfileId: dtos[0].loan_profile_id
+                }
+            });
         let response: AttachFileDto[] = this.convertEntities2Dtos(
-            results,
+            attachFiles,
             AttachFile,
             AttachFileDto
         );
