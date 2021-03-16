@@ -388,10 +388,12 @@ export class LoanProfileService extends BaseService {
         if (!qdeResult.success) {
             throw new BadRequestException(qdeResult, 'error SENT_QDE');
         }
+        dto.loan_no = qdeResult.data;
         entity.loanNo = qdeResult.data;
         // entity.status = "ACTIVE";
         entity.partnerId = 2; //MAFC
         entity.fvStatus = "SENT_QDE";
+        entity.createdAt = new Date();
         let qdeChangeResult = await this.sendData_procQDEChangeState(entity.loanNo);
         if (!qdeChangeResult.success) {
             throw new BadRequestException(qdeChangeResult, 'error SENT_QDTChangeToDDE');
@@ -641,24 +643,24 @@ export class LoanProfileService extends BaseService {
             inputDdeDto.in_channel = mafc_api_config.partner_code;
             inputDdeDto.in_userid = "EXT_FIV";
             inputDdeDto.in_appid = dto.loan_no;
-            inputDdeDto.in_maritalstatus = dto.loan_no;
-            inputDdeDto.in_qualifyingyear = dto.loan_no;
-            inputDdeDto.in_eduqualify = dto.loan_no;
-            inputDdeDto.in_noofdependentin = dto.loan_no;
-            inputDdeDto.in_paymentchannel = dto.loan_no;
-            inputDdeDto.in_nationalidissuedate = dto.loan_no;
-            inputDdeDto.in_familybooknumber = dto.loan_no;
-            inputDdeDto.in_idissuer = dto.loan_no;
-            inputDdeDto.in_spousename = dto.loan_no;
-            inputDdeDto.in_spouse_id_c = dto.loan_no;
-            inputDdeDto.in_categoryid = dto.loan_no;
-            inputDdeDto.in_bankname = dto.loan_no;
-            inputDdeDto.in_bankbranch = dto.loan_no;
-            inputDdeDto.in_acctype = dto.loan_no;
-            inputDdeDto.in_accno = dto.loan_no;
-            inputDdeDto.in_dueday = dto.loan_no;
-            inputDdeDto.in_notecode = dto.loan_no;
-            inputDdeDto.in_notedetails = dto.loan_no;
+            inputDdeDto.in_maritalstatus = dto.in_maritalstatus;
+            inputDdeDto.in_qualifyingyear = dto.in_qualifyingyear;
+            inputDdeDto.in_eduqualify = dto.in_eduqualify;
+            inputDdeDto.in_noofdependentin = dto.in_noofdependentin;
+            inputDdeDto.in_paymentchannel = dto.in_paymentchannel;
+            inputDdeDto.in_nationalidissuedate = dto.in_nationalidissuedate;
+            inputDdeDto.in_familybooknumber = dto.in_familybooknumber;
+            inputDdeDto.in_idissuer = dto.in_idissuer;
+            inputDdeDto.in_spousename = dto.in_spousename;
+            inputDdeDto.in_spouse_id_c = dto.in_spouse_id_c;
+            inputDdeDto.in_categoryid = 'FIV'
+            inputDdeDto.in_bankname = dto.in_bankname;
+            inputDdeDto.in_bankbranch = dto.in_bankbranch;
+            inputDdeDto.in_acctype = dto.in_acctype;
+            inputDdeDto.in_accno = dto.in_accno;
+            inputDdeDto.in_dueday = dto.in_dueday;
+            inputDdeDto.in_notecode = dto.in_notecode;
+            inputDdeDto.in_notedetails = dto.in_notedetails;
             inputDdeDto.msgName = "inputDDE";
             console.log("call api MAFC: ", [
                 mafc_api_config.input_data_entry.url,
@@ -768,6 +770,70 @@ export class LoanProfileService extends BaseService {
         }
         return result;
     }
+
+    // private async sendData_pushUnderSystem(loanNo: string) {
+    //     let mafc_api_config = config.get("mafc_api");
+    //     let result;
+    //     try {
+    //         console.log("call api MAFC: ", [
+    //             mafc_api_config.upload.url,
+    //             {
+    //                 p_appid: loanNo,
+    //                 in_userid: "EXT_FIV",
+    //                 in_channel: "FIV",
+    //                 msgName: "pushUnderSystem"
+    //             },
+    //             {
+    //                 auth: {
+    //                     username: mafc_api_config.upload.username,
+    //                     password: mafc_api_config.upload.password
+    //                 }
+    //             }
+    //         ]);
+    //         let result = await this.requestUtil.uploadFile(
+    //             mafc_api_config.input_data_entry.url,
+    //             {
+    //                 p_appid: loanNo,
+    //                 in_userid: "EXT_FIV",
+    //                 in_channel: "FIV",
+    //                 msgName: "pushUnderSystem"
+    //             },
+    //             {
+    //                 auth: {
+    //                     username: mafc_api_config.upload.username,
+    //                     password: mafc_api_config.upload.password
+    //                 }
+    //             }
+    //         );
+    //     } catch (e) {
+    //         console.log(e);
+    //         result = e;
+    //     } finally {
+    //         let log = new SendDataLog();
+    //         log.apiUrl = "pushUnderSystem";
+    //         log.data = JSON.stringify([
+    //             mafc_api_config.input_data_entry.url,
+    //             {
+    //                 p_appid: loanNo,
+    //                 in_userid: "EXT_FIV",
+    //                 in_channel: "FIV",
+    //                 msgName: "pushUnderSystem"
+    //             },
+    //             {
+    //                 auth: {
+    //                     username: mafc_api_config.input_data_entry.username,
+    //                     password: mafc_api_config.input_data_entry.password
+    //                 }
+    //             }
+    //         ]);
+    //         log.result = JSON.stringify(result);
+    //         log.createdAt = new Date();
+    //         await this.connection
+    //             .getCustomRepository(SendDataLogRepository)
+    //             .save(log);
+    //     }
+    //     return result;
+    // }
 
     async updateLoanProfile(dto: LoanProfileDto) {
         let entity = this.convertDto2Entity(dto, LoanProfile);
@@ -898,4 +964,5 @@ export class LoanProfileService extends BaseService {
         }
         return response;
     }
+
 }

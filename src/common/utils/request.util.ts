@@ -34,10 +34,14 @@ export class RequestUtil {
     }
   }
 
-  async uploadFile<T>(url: string, formData: FormData): Promise<T> {
+  async uploadFile<T>(url: string, formData: FormData, auth = null): Promise<T> {
     try {
+      let config: any = { headers: formData.getHeaders() };
+      if(auth){
+          config.auth = auth;
+      }
       const { data } = await this.httpService
-        .post<T>(url, formData, { headers: formData.getHeaders() })
+        .post<T>(url, formData, config)
         .toPromise();
       return data;
     } catch (error) {

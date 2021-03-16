@@ -81,6 +81,10 @@ mafc_api:
     url: 'https://apigw-staging.mafc.vn/cic'
     username: 'mirae-3p'
     password: '123456'
+  upload:
+    url: 'https://apigw-staging.mafc.vn/dataentry/openapi'
+    username: 'dataentry'
+    password: 'mafcdataentry$%&$!@#'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
