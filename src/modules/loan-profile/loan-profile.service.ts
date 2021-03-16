@@ -404,7 +404,7 @@ export class LoanProfileService extends BaseService {
             throw new BadRequestException(ddeResult, 'error SENT_DDE');
         }
         entity.fvStatus = "SENT_DDE";
-        let ddeChangeResult = await this.sendData_procQDEChangeState(entity.loanNo);
+        let ddeChangeResult = await this.sendData_procDDEChangeState(entity.loanNo);
         if (!ddeChangeResult.success) {
             throw new BadRequestException(ddeChangeResult, 'error SENT_DDEChangeToPOL');
         }
@@ -771,69 +771,67 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
-    // private async sendData_pushUnderSystem(loanNo: string) {
-    //     let mafc_api_config = config.get("mafc_api");
-    //     let result;
-    //     try {
-    //         console.log("call api MAFC: ", [
-    //             mafc_api_config.upload.url,
-    //             {
-    //                 p_appid: loanNo,
-    //                 in_userid: "EXT_FIV",
-    //                 in_channel: "FIV",
-    //                 msgName: "pushUnderSystem"
-    //             },
-    //             {
-    //                 auth: {
-    //                     username: mafc_api_config.upload.username,
-    //                     password: mafc_api_config.upload.password
-    //                 }
-    //             }
-    //         ]);
-    //         let result = await this.requestUtil.uploadFile(
-    //             mafc_api_config.input_data_entry.url,
-    //             {
-    //                 p_appid: loanNo,
-    //                 in_userid: "EXT_FIV",
-    //                 in_channel: "FIV",
-    //                 msgName: "pushUnderSystem"
-    //             },
-    //             {
-    //                 auth: {
-    //                     username: mafc_api_config.upload.username,
-    //                     password: mafc_api_config.upload.password
-    //                 }
-    //             }
-    //         );
-    //     } catch (e) {
-    //         console.log(e);
-    //         result = e;
-    //     } finally {
-    //         let log = new SendDataLog();
-    //         log.apiUrl = "pushUnderSystem";
-    //         log.data = JSON.stringify([
-    //             mafc_api_config.input_data_entry.url,
-    //             {
-    //                 p_appid: loanNo,
-    //                 in_userid: "EXT_FIV",
-    //                 in_channel: "FIV",
-    //                 msgName: "pushUnderSystem"
-    //             },
-    //             {
-    //                 auth: {
-    //                     username: mafc_api_config.input_data_entry.username,
-    //                     password: mafc_api_config.input_data_entry.password
-    //                 }
-    //             }
-    //         ]);
-    //         log.result = JSON.stringify(result);
-    //         log.createdAt = new Date();
-    //         await this.connection
-    //             .getCustomRepository(SendDataLogRepository)
-    //             .save(log);
-    //     }
-    //     return result;
-    // }
+    private async sendData_pushUnderSystem(loanNo: string) {
+        let mafc_api_config = config.get("mafc_api");
+        let result;
+        try {
+            console.log("call api MAFC: ", [
+                mafc_api_config.upload.url,
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "pushUnderSystem"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.upload.username,
+                        password: mafc_api_config.upload.password
+                    }
+                }
+            ]);
+            let result = await this.requestUtil.uploadFile(
+                mafc_api_config.input_data_entry.url,
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "pushUnderSystem"
+                },{
+                    username: mafc_api_config.upload.username,
+                    password: mafc_api_config.upload.password
+                }
+
+            );
+        } catch (e) {
+            console.log(e);
+            result = e;
+        } finally {
+            let log = new SendDataLog();
+            log.apiUrl = "pushUnderSystem";
+            log.data = JSON.stringify([
+                mafc_api_config.input_data_entry.url,
+                {
+                    p_appid: loanNo,
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "pushUnderSystem"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
+                    }
+                }
+            ]);
+            log.result = JSON.stringify(result);
+            log.createdAt = new Date();
+            await this.connection
+                .getCustomRepository(SendDataLogRepository)
+                .save(log);
+        }
+        return result;
+    }
 
     async updateLoanProfile(dto: LoanProfileDto) {
         let entity = this.convertDto2Entity(dto, LoanProfile);
