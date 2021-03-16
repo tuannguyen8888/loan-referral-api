@@ -44,6 +44,7 @@ import * as config from "config";
 import {AttachFileDto} from "./dto/attach-file.dto";
 import * as moment from "moment";
 import {ReferenceDto} from "./dto/reference.dto";
+import * as FormData from "form-data";
 
 @Injectable({scope: Scope.REQUEST})
 export class LoanProfileService extends BaseService {
@@ -726,7 +727,7 @@ export class LoanProfileService extends BaseService {
                     }
                 }
             ]);
-            let result = await this.requestUtil.post(
+            result = await this.requestUtil.post(
                 mafc_api_config.input_data_entry.url,
                 {
                     p_appid: loanNo,
@@ -790,6 +791,7 @@ export class LoanProfileService extends BaseService {
     //                 }
     //             }
     //         ]);
+    //         let fromData: FromData = {};
     //         let result = await this.requestUtil.uploadFile(
     //             mafc_api_config.input_data_entry.url,
     //             {
