@@ -404,7 +404,7 @@ export class LoanProfileService extends BaseService {
             throw new BadRequestException(ddeResult, 'error SENT_DDE');
         }
         entity.fvStatus = "SENT_DDE";
-        let ddeChangeResult = await this.sendData_procQDEChangeState(entity.loanNo);
+        let ddeChangeResult = await this.sendData_procDDEChangeState(entity.loanNo);
         if (!ddeChangeResult.success) {
             throw new BadRequestException(ddeChangeResult, 'error SENT_DDEChangeToPOL');
         }
@@ -797,13 +797,11 @@ export class LoanProfileService extends BaseService {
     //                 in_userid: "EXT_FIV",
     //                 in_channel: "FIV",
     //                 msgName: "pushUnderSystem"
-    //             },
-    //             {
-    //                 auth: {
-    //                     username: mafc_api_config.upload.username,
-    //                     password: mafc_api_config.upload.password
-    //                 }
+    //             },{
+    //                 username: mafc_api_config.upload.username,
+    //                 password: mafc_api_config.upload.password
     //             }
+    //
     //         );
     //     } catch (e) {
     //         console.log(e);
