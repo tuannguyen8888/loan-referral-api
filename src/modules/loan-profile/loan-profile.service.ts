@@ -579,7 +579,7 @@ export class LoanProfileService extends BaseService {
             console.log("call api MAFC: ", [
                 mafc_api_config.input_data_entry.url,
                 {
-                    p_appid: loanNo,
+                    p_appid: Number(loanNo),
                     in_userid: "EXT_FIV",
                     in_channel: "FIV",
                     msgName: "procQDEChangeState"
@@ -594,7 +594,7 @@ export class LoanProfileService extends BaseService {
             result = await this.requestUtil.post(
                 mafc_api_config.input_data_entry.url,
                 {
-                    p_appid: loanNo,
+                    p_appid: Number(loanNo),
                     in_userid: "EXT_FIV",
                     in_channel: "FIV",
                     msgName: "procQDEChangeState"
@@ -615,7 +615,7 @@ export class LoanProfileService extends BaseService {
             log.data = JSON.stringify([
                 mafc_api_config.input_data_entry.url,
                 {
-                    p_appid: loanNo,
+                    p_appid: Number(loanNo),
                     in_userid: "EXT_FIV",
                     in_channel: "FIV",
                     msgName: "procQDEChangeState"
@@ -643,7 +643,7 @@ export class LoanProfileService extends BaseService {
         try {
             inputDdeDto.in_channel = mafc_api_config.partner_code;
             inputDdeDto.in_userid = "EXT_FIV";
-            inputDdeDto.in_appid = dto.loan_no;
+            inputDdeDto.in_appid = Number(dto.loan_no);
             inputDdeDto.in_maritalstatus = dto.in_maritalstatus;
             inputDdeDto.in_qualifyingyear = dto.in_qualifyingyear;
             inputDdeDto.in_eduqualify = dto.in_eduqualify;
@@ -715,7 +715,7 @@ export class LoanProfileService extends BaseService {
             console.log("call api MAFC: ", [
                 mafc_api_config.input_data_entry.url,
                 {
-                    p_appid: loanNo,
+                    p_appid: Number(loanNo),
                     in_userid: "EXT_FIV",
                     in_channel: "FIV",
                     msgName: "procDDEChangeState"
@@ -730,7 +730,7 @@ export class LoanProfileService extends BaseService {
             result = await this.requestUtil.post(
                 mafc_api_config.input_data_entry.url,
                 {
-                    p_appid: loanNo,
+                    p_appid: Number(loanNo),
                     in_userid: "EXT_FIV",
                     in_channel: "FIV",
                     msgName: "procDDEChangeState"
@@ -751,7 +751,7 @@ export class LoanProfileService extends BaseService {
             log.data = JSON.stringify([
                 mafc_api_config.input_data_entry.url,
                 {
-                    p_appid: loanNo,
+                    p_appid: Number(loanNo),
                     in_userid: "EXT_FIV",
                     in_channel: "FIV",
                     msgName: "procDDEChangeState"
@@ -779,7 +779,7 @@ export class LoanProfileService extends BaseService {
     //         console.log("call api MAFC: ", [
     //             mafc_api_config.upload.url,
     //             {
-    //                 p_appid: loanNo,
+    //                 p_appid: Number(loanNo),
     //                 in_userid: "EXT_FIV",
     //                 in_channel: "FIV",
     //                 msgName: "pushUnderSystem"
@@ -795,7 +795,7 @@ export class LoanProfileService extends BaseService {
     //         let result = await this.requestUtil.uploadFile(
     //             mafc_api_config.input_data_entry.url,
     //             {
-    //                 p_appid: loanNo,
+    //                 p_appid: Number(loanNo),
     //                 in_userid: "EXT_FIV",
     //                 in_channel: "FIV",
     //                 msgName: "pushUnderSystem"
@@ -814,7 +814,7 @@ export class LoanProfileService extends BaseService {
     //         log.data = JSON.stringify([
     //             mafc_api_config.input_data_entry.url,
     //             {
-    //                 p_appid: loanNo,
+    //                 p_appid: Number(loanNo),
     //                 in_userid: "EXT_FIV",
     //                 in_channel: "FIV",
     //                 msgName: "pushUnderSystem"
