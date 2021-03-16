@@ -1,7 +1,7 @@
 export class InputDdeDto {
   in_channel?: string = null;
   in_userid?: string = null;
-  in_appid?: string = null;
+  in_appid?: number = null;
   in_maritalstatus?: string = null;
   in_qualifyingyear?: string = null;
   in_eduqualify?: string = null;
