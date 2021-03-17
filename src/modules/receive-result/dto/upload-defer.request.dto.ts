@@ -1,4 +1,4 @@
-import {IsString, IsNotEmpty, IsDateString, IsDefined} from "class-validator";
+import {IsString, IsNotEmpty, IsDateString, IsDefined, IsOptional} from "class-validator";
 
 export class UploadDeferRequestDto {
   @IsDefined()
@@ -8,15 +8,13 @@ export class UploadDeferRequestDto {
   @IsNotEmpty()
   client_name: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   defer_code: string;
 
   @IsString()
   @IsNotEmpty()
   defer_note: string;
 
-  @IsDateString()
   @IsNotEmpty()
   defer_time: string;
 }
