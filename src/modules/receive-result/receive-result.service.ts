@@ -31,7 +31,7 @@ export class ReceiveResultService extends BaseService {
 
     async receiveDefer(dto: UploadDeferRequestDto) {
         let repoLP = this.connection.getCustomRepository(LoanProfileRepository);
-        let loanProfile = await repoLP.findOneOrFail({
+        let loanProfile = await repoLP.findOne({
             where: {
                 deletedAt: IsNull(),
                 loanNo: dto.id_f1.toString()
@@ -80,7 +80,7 @@ export class ReceiveResultService extends BaseService {
         if (dtos && dtos.length) {
             for (let i = 0; i < dtos.length; i++) {
                 let dto = dtos[i];
-                let loanProfile = await repoLP.findOneOrFail({
+                let loanProfile = await repoLP.findOne({
                     where: {
                         deletedAt: IsNull(),
                         loanNo: dto.id_f1.toString()
