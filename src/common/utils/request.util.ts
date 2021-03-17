@@ -49,21 +49,36 @@ export class RequestUtil {
     }
   }
 
-  async downloadFile<T>(
-    url: string,
-    token: string,
-    initiator: string,
-    fileName: string,
-    config?: axios.AxiosRequestConfig
-  ): Promise<DownloadFileResParam> {
-    try {
-      const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
-      const { data } = await this.httpService
-        .get<T>(downloadUrl, config)
-        .toPromise();
-      return { downloadUrl, data };
-    } catch (error) {
-      throw error;
+    async downloadFile<T>(
+        url: string,
+        token: string,
+        initiator: string,
+        fileName: string,
+        config?: axios.AxiosRequestConfig
+    ): Promise<DownloadFileResParam> {
+        try {
+            const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
+            const { data } = await this.httpService
+                .get<T>(downloadUrl, config)
+                .toPromise();
+            return { downloadUrl, data };
+        } catch (error) {
+            throw error;
+        }
     }
-  }
+    async downloadPublicFile<T>(
+        url: string,
+        fileName: string,
+        config?: axios.AxiosRequestConfig
+    ): Promise<DownloadFileResParam> {
+        try {
+            // const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
+            const { data } = await this.httpService
+                .get<T>(url, config)
+                .toPromise();
+            return { downloadUrl: url, data: data };
+        } catch (error) {
+            throw error;
+        }
+    }
 }

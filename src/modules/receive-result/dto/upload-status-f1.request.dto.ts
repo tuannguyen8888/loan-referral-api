@@ -1,9 +1,8 @@
-import { IsString, IsNotEmpty, IsDateString } from "class-validator";
+import {IsString, IsNotEmpty, IsDateString, IsDefined} from "class-validator";
 
 export class UploadStatusF1RequestDto {
-  @IsString()
-  @IsNotEmpty()
-  id_f1: string;
+  @IsDefined()
+  id_f1: number;
 
   @IsString()
   @IsNotEmpty()
