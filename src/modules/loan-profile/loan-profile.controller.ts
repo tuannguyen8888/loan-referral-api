@@ -95,16 +95,25 @@ export class LoanProfileController {
   // ): Promise<LoanProfileDto> {
   //   return this.service.updateLoanProfile(dto);
   // }
-  @Put("/update-attach-files")
-  @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
-  @ApiBody({ type: [AttachFileDto] })
-  @ApiResponse({ type: [AttachFileDto] })
-  updateAttachFiles(
-    @Headers() headers,
-    @Body() dtos: AttachFileDto[]
-  ): Promise<AttachFileDto[]> {
-    return this.service.updateAttachFiles(dtos);
-  }
+    @Put("/update-attach-files")
+    @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
+    @ApiBody({ type: [AttachFileDto] })
+    @ApiResponse({ type: [AttachFileDto] })
+    updateAttachFiles(
+        @Headers() headers,
+        @Body() dtos: AttachFileDto[]
+    ): Promise<AttachFileDto[]> {
+        return this.service.updateAttachFiles(dtos);
+    }
+    @Get("/sendData_pushUnderSystem/:loan_profile_id")
+    @ApiOperation({ summary: "test đẩy file qua MAFC" })
+    sendData_pushUnderSystem(
+        @Headers() headers,
+        @Param() params
+    ): Promise<any> {
+        return this.service.test_sendData_pushUnderSystem(params.loan_profile_id);
+    }
+
   @Delete("/remove-attach-files/:attach_file_id/:user_id")
   @ApiOperation({ summary: "Xóa file đính kèm cho hồ sơ vay" })
   removeAttachFiles(@Headers() headers, @Param() params): Promise<boolean> {
