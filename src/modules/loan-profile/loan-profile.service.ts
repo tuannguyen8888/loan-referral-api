@@ -449,7 +449,7 @@ export class LoanProfileService extends BaseService {
         try {
             inputQdeDto.in_channel = mafc_api_config.partner_code;
             inputQdeDto.in_schemeid = dto.in_schemeid;
-            inputQdeDto.in_downpayment = dto.in_downpayment;
+            inputQdeDto.in_downpayment = dto.in_downpayment?dto.in_downpayment:0;
             inputQdeDto.in_totalloanamountreq = dto.in_totalloanamountreq;
             inputQdeDto.in_tenure = dto.in_tenure;
             inputQdeDto.in_sourcechannel = "ADVT"; //dto.in_sourcechannel;
