@@ -295,7 +295,7 @@ export class LoanProfileService extends BaseService {
     async getLoanProfile(loanProfileId: number) {
         const loanProfile = await this.connection
             .getCustomRepository(LoanProfileRepository)
-            .findOneOrFail(loanProfileId);
+            .findOne(loanProfileId);
         if (loanProfile) {
             const address = await this.connection
                 .getCustomRepository(AddressRepository)
@@ -879,7 +879,7 @@ export class LoanProfileService extends BaseService {
 
     async removeAttachFiles(attchFileId: number, userId) {
         let repo = this.connection.getCustomRepository(AttachFileRepository);
-        let entity = await repo.findOneOrFail(attchFileId);
+        let entity = await repo.findOne(attchFileId);
         if (entity) {
             entity.deletedAt = new Date();
             entity.deletedBy = userId;
