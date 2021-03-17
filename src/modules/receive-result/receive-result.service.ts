@@ -40,7 +40,7 @@ export class ReceiveResultService extends BaseService {
         let response = new UploadDeferReponseDto();
         response.data = dto;
         if (loanProfile) {
-            loanProfile.fvStatus = "NEED_EDIT";
+            loanProfile.fvStatus = "NEED_UPDATE";
             loanProfile = await repoLP.save(loanProfile);
 
             let newDefer = new LoanProfileDefer();

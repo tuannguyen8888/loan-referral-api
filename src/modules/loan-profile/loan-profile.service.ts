@@ -795,7 +795,8 @@ export class LoanProfileService extends BaseService {
             let formData = new FormData();
             let files = [];
             for (let i = 0; i < attachFiles.length; i++) {
-                let file = await this.requestUtil.downloadFile(attachFiles[i].url,download_config.token, download_config.backendUser, '', {});
+                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url,'abc.jpg', {});
+                console.log('file = ', file);
                 files.push(file);
                 formData.append(attachFiles[i].docCode,file.data);
             }
@@ -806,15 +807,15 @@ export class LoanProfileService extends BaseService {
             formData.append("usersname", "EXT_FIV");
             formData.append("password", "mafc123!");
             formData.append("vendor","EXT_FIV");
-            let result = await this.requestUtil.uploadFile(
-                mafc_api_config.upload.url+'/pushUnderSystem',
-                formData,
-                {
-                    username: mafc_api_config.upload.username,
-                    password: mafc_api_config.upload.password
-                }
+            // let result = await this.requestUtil.uploadFile(
+            //     mafc_api_config.upload.url+'/pushUnderSystem',
+            //     formData,
+            //     {
+            //         username: mafc_api_config.upload.username,
+            //         password: mafc_api_config.upload.password
+            //     }
 
-            );
+            // );
         } catch (e) {
             console.log(e);
             result = e;
@@ -874,6 +875,18 @@ export class LoanProfileService extends BaseService {
             AttachFile,
             AttachFileDto
         );
+        if(attachFiles && attachFiles.length) {
+            const loanProfile = await this.connection
+                .getCustomRepository(LoanProfileRepository)
+                .findOne(attachFiles[0].loanProfileId);
+            if (loanProfile) {
+                if (loanProfile.fvStatus == 'NEED_UPDATE') {
+
+                } else {
+                    this.sendData_pushUnderSystem(loanProfile.loanNo, attachFiles)
+                }
+            }
+        }
         return response;
     }
 
