@@ -845,6 +845,33 @@ export class LoanProfileService extends BaseService {
         }
         return result;
     }
+    async test_sendData_pushUnderSystem(loanProfileId: number){
+        try{
+            const attachFiles = await this.connection
+                .getCustomRepository(AttachFileRepository)
+                .find({
+                    where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfileId
+                    }
+                });
+            if(attachFiles && attachFiles.length) {
+                const loanProfile = await this.connection
+                    .getCustomRepository(LoanProfileRepository)
+                    .findOne(attachFiles[0].loanProfileId);
+                if (loanProfile) {
+                    if (loanProfile.fvStatus == 'NEED_UPDATE') {
+
+                    } else {
+                        await this.sendData_pushUnderSystem(loanProfile.loanNo, attachFiles)
+                    }
+                }
+            }
+        }catch (e) {
+            throw new BadRequestException(e.message);
+        }
+        return true;
+    }
 
     async updateLoanProfile(dto: LoanProfileDto) {
         let entity = this.convertDto2Entity(dto, LoanProfile);
@@ -883,7 +910,7 @@ export class LoanProfileService extends BaseService {
                 if (loanProfile.fvStatus == 'NEED_UPDATE') {
 
                 } else {
-                    this.sendData_pushUnderSystem(loanProfile.loanNo, attachFiles)
+                    await this.sendData_pushUnderSystem(loanProfile.loanNo, attachFiles)
                 }
             }
         }
