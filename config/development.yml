@@ -93,3 +93,4 @@ upload:
 download:
   backendUrl: http://sandbox.finviet.com.vn:3000/download
   backendUser: loan_referral-user
+  token: dvsdvsdkvmvkdfm

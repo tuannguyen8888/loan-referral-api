@@ -435,7 +435,7 @@ export class LoanProfileService extends BaseService {
         response.address = this.convertEntities2Dtos(address, Address, AddressDto);
         response.references = this.convertEntities2Dtos(
             references,
-            ReferenceDto,
+            Reference,
             ReferenceDto
         );
 
@@ -772,68 +772,78 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
-    // private async sendData_pushUnderSystem(loanNo: string) {
-    //     let mafc_api_config = config.get("mafc_api");
-    //     let result;
-    //     try {
-    //         console.log("call api MAFC: ", [
-    //             mafc_api_config.upload.url,
-    //             {
-    //                 p_appid: Number(loanNo),
-    //                 in_userid: "EXT_FIV",
-    //                 in_channel: "FIV",
-    //                 msgName: "pushUnderSystem"
-    //             },
-    //             {
-    //                 auth: {
-    //                     username: mafc_api_config.upload.username,
-    //                     password: mafc_api_config.upload.password
-    //                 }
-    //             }
-    //         ]);
-    //         let fromData: FromData = {};
-    //         let result = await this.requestUtil.uploadFile(
-    //             mafc_api_config.input_data_entry.url,
-    //             {
-    //                 p_appid: Number(loanNo),
-    //                 in_userid: "EXT_FIV",
-    //                 in_channel: "FIV",
-    //                 msgName: "pushUnderSystem"
-    //             },{
-    //                 username: mafc_api_config.upload.username,
-    //                 password: mafc_api_config.upload.password
-    //             }
-    //
-    //         );
-    //     } catch (e) {
-    //         console.log(e);
-    //         result = e;
-    //     } finally {
-    //         let log = new SendDataLog();
-    //         log.apiUrl = "pushUnderSystem";
-    //         log.data = JSON.stringify([
-    //             mafc_api_config.input_data_entry.url,
-    //             {
-    //                 p_appid: Number(loanNo),
-    //                 in_userid: "EXT_FIV",
-    //                 in_channel: "FIV",
-    //                 msgName: "pushUnderSystem"
-    //             },
-    //             {
-    //                 auth: {
-    //                     username: mafc_api_config.input_data_entry.username,
-    //                     password: mafc_api_config.input_data_entry.password
-    //                 }
-    //             }
-    //         ]);
-    //         log.result = JSON.stringify(result);
-    //         log.createdAt = new Date();
-    //         await this.connection
-    //             .getCustomRepository(SendDataLogRepository)
-    //             .save(log);
-    //     }
-    //     return result;
-    // }
+    private async sendData_pushUnderSystem(loanNo: string, attachFiles: AttachFile[]) {
+        let mafc_api_config = config.get("mafc_api");
+        let download_config = config.get("download");
+        let result;
+        try {
+            // console.log("call api MAFC: ", [
+            //     mafc_api_config.upload.url,
+            //     {
+            //         p_appid: Number(loanNo),
+            //         in_userid: "EXT_FIV",
+            //         in_channel: "FIV",
+            //         msgName: "pushUnderSystem"
+            //     },
+            //     {
+            //         auth: {
+            //             username: mafc_api_config.upload.username,
+            //             password: mafc_api_config.upload.password
+            //         }
+            //     }
+            // ]);
+            let formData = new FormData();
+            let files = [];
+            for (let i = 0; i < attachFiles.length; i++) {
+                let file = await this.requestUtil.downloadFile(attachFiles[i].url,download_config.token, download_config.backendUser, '', {});
+                files.push(file);
+                formData.append(attachFiles[i].docCode,file.data);
+            }
+            formData.append("warning","N");
+            formData.append("warning_msg",null);
+            formData.append("appid",Number(loanNo));
+            formData.append("salecode","EXT_FIV");
+            formData.append("usersname", "EXT_FIV");
+            formData.append("password", "mafc123!");
+            formData.append("vendor","EXT_FIV");
+            let result = await this.requestUtil.uploadFile(
+                mafc_api_config.upload.url+'/pushUnderSystem',
+                formData,
+                {
+                    username: mafc_api_config.upload.username,
+                    password: mafc_api_config.upload.password
+                }
+
+            );
+        } catch (e) {
+            console.log(e);
+            result = e;
+        } finally {
+            let log = new SendDataLog();
+            log.apiUrl = "pushUnderSystem";
+            log.data = JSON.stringify([
+                mafc_api_config.input_data_entry.url,
+                {
+                    p_appid: Number(loanNo),
+                    in_userid: "EXT_FIV",
+                    in_channel: "FIV",
+                    msgName: "pushUnderSystem"
+                },
+                {
+                    auth: {
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
+                    }
+                }
+            ]);
+            log.result = JSON.stringify(result);
+            log.createdAt = new Date();
+            await this.connection
+                .getCustomRepository(SendDataLogRepository)
+                .save(log);
+        }
+        return result;
+    }
 
     async updateLoanProfile(dto: LoanProfileDto) {
         let entity = this.convertDto2Entity(dto, LoanProfile);
