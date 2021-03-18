@@ -792,38 +792,48 @@ export class LoanProfileService extends BaseService {
             //         }
             //     }
             // ]);
-            let formData = new FormData();
+            // let formData = new FormData();
+            let formData = {};
             // let files = [];
             for (let i = 0; i < attachFiles.length; i++) {
                 let ext: any = attachFiles[i].url.split('.');
                 ext = ext[ext.length - 1];
                 let fileName = `${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
-                let buffer = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${fileName}`);
-                console.log('buffer = ', buffer);
+                let fileStream = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${fileName}`);
+                console.log('fileStream = ', fileStream);
                 // buffer.lastModifiedDate = new Date();
                 // buffer.name = fileName;
                 // let file = new File(buffer, fileName);
                 // files.push(file);
-                formData.append(attachFiles[i].docCode, buffer, {
-                    filename: fileName,
-                });
-            }
-            formData.append("warning","N");
-            formData.append("warning_msg",null);
-            formData.append("appid",Number(loanNo));
-            formData.append("salecode","EXT_FIV");
-            formData.append("usersname", "EXT_FIV");
-            formData.append("password", "mafc123!");
-            formData.append("vendor","EXT_FIV");
-            // let result = await this.requestUtil.uploadFile(
-            //     mafc_api_config.upload.url+'/pushUnderSystem',
-            //     formData,
-            //     {
-            //         username: mafc_api_config.upload.username,
-            //         password: mafc_api_config.upload.password
-            //     }
 
-            // );
+                // formData.append(attachFiles[i].docCode, buffer, {
+                //     filename: fileName,
+                // });
+                formData[attachFiles[i].docCode] = fileStream;
+            }
+            // formData.append("warning","N");
+            // formData.append("warning_msg",null);
+            // formData.append("appid",Number(loanNo));
+            // formData.append("salecode","EXT_FIV");
+            // formData.append("usersname", "EXT_FIV");
+            // formData.append("password", "mafc123!");
+            // formData.append("vendor","EXT_FIV");
+            formData["warning"] = "N";
+            formData["warning_msg"] = null;
+            formData["appid"] = Number(loanNo);
+            formData["salecode"] = "EXT_FIV";
+            formData["usersname"] =  "EXT_FIV";
+            formData["password"] =  "mafc123!";
+            formData["vendor"] = "EXT_FIV";
+            let result = await this.requestUtil.uploadFile(
+                mafc_api_config.upload.url+'/pushUnderSystem',
+                formData,
+                {
+                    username: mafc_api_config.upload.username,
+                    password: mafc_api_config.upload.password
+                }
+
+            );
         } catch (e) {
             console.log(e);
             result = e;

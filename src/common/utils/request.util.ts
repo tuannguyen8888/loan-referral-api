@@ -35,9 +35,11 @@ export class RequestUtil {
     }
   }
 
-  async uploadFile<T>(url: string, formData: FormData, auth = null): Promise<T> {
+  async uploadFile<T>(url: string, formData, auth = null): Promise<T> {
     try {
-      let config: any = { headers: formData.getHeaders() };
+      let config: any = { headers: {
+          'Content-Type': 'multipart/form-data'
+          } };
       if(auth){
           config.auth = auth;
       }
@@ -84,7 +86,7 @@ export class RequestUtil {
 
             return new Promise((resolve, reject) => {
                 writer.on('finish', ()=>{
-                    resolve(fs.readFileSync(fileName));
+                    resolve(fs.createReadStream(fileName));
                 });
                 writer.on('error', reject);
             });
