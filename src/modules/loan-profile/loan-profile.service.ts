@@ -797,7 +797,7 @@ export class LoanProfileService extends BaseService {
             for (let i = 0; i < attachFiles.length; i++) {
                 let ext: any = attachFiles[i].url.split('.');
                 ext = ext[ext.length - 1];
-                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `./attach_files/${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`);
+                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `attach_files/${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`);
                 console.log('file = ', file);
                 files.push(file);
                 formData.append(attachFiles[i].docCode,file.data);
@@ -871,10 +871,10 @@ export class LoanProfileService extends BaseService {
                     }
                 }
             }
+            return true;
         }catch (e) {
-            throw new BadRequestException(e.message);
+            throw new BadRequestException('lỗi: '+e.message+e.toString());
         }
-        return true;
     }
 
     async updateLoanProfile(dto: LoanProfileDto) {
