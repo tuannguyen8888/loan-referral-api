@@ -793,16 +793,17 @@ export class LoanProfileService extends BaseService {
             //     }
             // ]);
             let formData = new FormData();
-            let files = [];
+            // let files = [];
             for (let i = 0; i < attachFiles.length; i++) {
                 let ext: any = attachFiles[i].url.split('.');
                 ext = ext[ext.length - 1];
                 let fileName = `${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
-                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${fileName}`);
-                console.log('file = ', file);
-                file.lastModifiedDate = new Date();
-                file.name = fileName;
-                files.push(file);
+                let buffer = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${fileName}`);
+                console.log('buffer = ', buffer);
+                // buffer.lastModifiedDate = new Date();
+                // buffer.name = fileName;
+                let file = new File(buffer, fileName);
+                // files.push(file);
                 formData.append(attachFiles[i].docCode,file, fileName);
             }
             formData.append("warning","N");
