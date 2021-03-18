@@ -802,9 +802,11 @@ export class LoanProfileService extends BaseService {
                 console.log('buffer = ', buffer);
                 // buffer.lastModifiedDate = new Date();
                 // buffer.name = fileName;
-                let file = new File(buffer, fileName);
+                // let file = new File(buffer, fileName);
                 // files.push(file);
-                formData.append(attachFiles[i].docCode,file, fileName);
+                formData.append(attachFiles[i].docCode, buffer, {
+                    filename: fileName,
+                });
             }
             formData.append("warning","N");
             formData.append("warning_msg",null);
