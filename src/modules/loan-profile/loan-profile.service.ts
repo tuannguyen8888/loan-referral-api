@@ -800,7 +800,7 @@ export class LoanProfileService extends BaseService {
                 let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`);
                 console.log('file = ', file);
                 files.push(file);
-                formData.append(attachFiles[i].docCode,file.data);
+                formData.append(attachFiles[i].docCode,file);
             }
             formData.append("warning","N");
             formData.append("warning_msg",null);

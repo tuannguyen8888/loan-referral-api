@@ -83,7 +83,9 @@ export class RequestUtil {
             response.data.pipe(writer);
 
             return new Promise((resolve, reject) => {
-                writer.on('finish', resolve);
+                writer.on('finish', ()=>{
+                    resolve(fs.readFileSync(fileName));
+                });
                 writer.on('error', reject);
             });
 
