@@ -797,7 +797,7 @@ export class LoanProfileService extends BaseService {
             for (let i = 0; i < attachFiles.length; i++) {
                 let ext: any = attachFiles[i].url.split('.');
                 ext = ext[ext.length - 1];
-                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/attach_files/${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`);
+                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`);
                 console.log('file = ', file);
                 files.push(file);
                 formData.append(attachFiles[i].docCode,file.data);
