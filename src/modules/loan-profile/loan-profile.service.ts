@@ -865,7 +865,9 @@ export class LoanProfileService extends BaseService {
                     if (loanProfile.fvStatus == 'NEED_UPDATE') {
 
                     } else {
-                        await this.sendData_pushUnderSystem(loanProfile.loanNo, attachFiles)
+                        await this.sendData_pushUnderSystem(
+                            loanProfile.loanNo,loanProfile.inFname + (loanProfile.inMname?(' ' + loanProfile.inMname):'') + ' ' + loanProfile.inLname,
+                            attachFiles);
                     }
                 }
             }
@@ -912,7 +914,9 @@ export class LoanProfileService extends BaseService {
                 if (loanProfile.fvStatus == 'NEED_UPDATE') {
 
                 } else {
-                    await this.sendData_pushUnderSystem(loanProfile.loanNo, attachFiles)
+                    await this.sendData_pushUnderSystem(
+                        loanProfile.loanNo,loanProfile.inFname + (loanProfile.inMname?(' ' + loanProfile.inMname):'') + ' ' + loanProfile.inLname,
+                        attachFiles);
                 }
             }
         }
