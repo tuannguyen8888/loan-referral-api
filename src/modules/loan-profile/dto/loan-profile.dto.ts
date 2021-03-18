@@ -73,7 +73,9 @@ export class LoanProfileDto {
   in_acctype: string = null;
   in_accno: string = null;
   in_dueday: string = null;
+  @IsOptional()
   in_notecode: string = null;
+  @IsOptional()
   in_notedetails: string = null;
   @IsOptional()
   @IsDateString()
