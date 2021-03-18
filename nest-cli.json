@@ -2,7 +2,7 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["i18n/**/*", "grpc/protobufs/**/*", "../cert/**/*"],
+    "assets": ["i18n/**/*", "grpc/protobufs/**/*", "../cert/**/*", "attach_files/*"],
     "plugins": ["@nestjs/swagger/plugin"]
   }
 }
