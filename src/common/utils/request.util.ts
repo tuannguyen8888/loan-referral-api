@@ -86,6 +86,7 @@ export class RequestUtil {
 
             return new Promise((resolve, reject) => {
                 writer.on('finish', ()=>{
+                    writer.close();
                     resolve(fs.createReadStream(fileName));
                 });
                 writer.on('error', reject);
