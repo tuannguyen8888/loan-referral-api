@@ -800,6 +800,8 @@ export class LoanProfileService extends BaseService {
                 let fileName = `${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
                 let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${fileName}`);
                 console.log('file = ', file);
+                file.lastModifiedDate = new Date();
+                file.name = fileName;
                 files.push(file);
                 formData.append(attachFiles[i].docCode,file, fileName);
             }
