@@ -25,6 +25,7 @@ export class AddressDto {
   landlord: string = null;
   landmark: string = null;
   email: string = null;
+  @IsOptional()
   fixphone: string = null;
 
   @IsOptional()
