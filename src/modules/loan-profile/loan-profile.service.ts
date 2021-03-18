@@ -688,7 +688,7 @@ export class LoanProfileService extends BaseService {
             ddeResult = e;
         } finally {
             let log = new SendDataLog();
-            log.apiUrl = "inputQDE";
+            log.apiUrl = "inputDDE";
             log.data = JSON.stringify([
                 mafc_api_config.input_data_entry.url,
                 inputDdeDto,
@@ -772,7 +772,7 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
-    private async sendData_pushUnderSystem(loanNo: string, attachFiles: AttachFile[]) {
+    private async sendData_pushUnderSystem(loanNo: string, customerName: string, attachFiles: AttachFile[]) {
         let mafc_api_config = config.get("mafc_api");
         let download_config = config.get("download");
         let result;
@@ -795,7 +795,9 @@ export class LoanProfileService extends BaseService {
             let formData = new FormData();
             let files = [];
             for (let i = 0; i < attachFiles.length; i++) {
-                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url,'abc.jpg', {});
+                let ext: any = attachFiles[i].url.split('.');
+                ext = ext[ext.length - 1];
+                let file = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `./attach_files/${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`);
                 console.log('file = ', file);
                 files.push(file);
                 formData.append(attachFiles[i].docCode,file.data);

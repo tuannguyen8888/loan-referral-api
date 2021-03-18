@@ -2,6 +2,7 @@ import * as axios from "axios";
 import * as FormData from "form-data";
 import { HttpService, Inject, Injectable } from "@nestjs/common";
 import { DownloadFileResParam } from "../interfaces/response";
+import * as fs from "fs";
 
 @Injectable()
 export class RequestUtil {
@@ -68,15 +69,34 @@ export class RequestUtil {
     }
     async downloadPublicFile<T>(
         url: string,
-        fileName: string,
-        config?: axios.AxiosRequestConfig
-    ): Promise<DownloadFileResParam> {
+        fileName: string
+    ): Promise<any> {
         try {
+            const writer = fs.createWriteStream(fileName);
+
+            const response = await this.httpService.axiosRef({
+                url: url,
+                method: 'GET',
+                responseType: 'stream',
+            });
+
+            response.data.pipe(writer);
+
+            return new Promise((resolve, reject) => {
+                writer.on('finish', resolve);
+                writer.on('error', reject);
+            });
+
+
+
+
+
             // const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
-            const { data } = await this.httpService
-                .get<T>(url, config)
-                .toPromise();
-            return { downloadUrl: url, data: data };
+            // let file = fs.createWriteStream(fileName);
+            // const { data } = await this.httpService
+            //     .get<T>(url, config).pipe(file)
+            //     .toPromise();
+            // return { downloadUrl: url, data: data };
         } catch (error) {
             throw error;
         }
