@@ -72,7 +72,7 @@ export class RequestUtil {
     async downloadPublicFile<T>(
         url: string,
         fileName: string
-    ): Promise<any> {
+    ): Promise<fs.ReadStream> {
         try {
             const writer = fs.createWriteStream(fileName);
 
