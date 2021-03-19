@@ -82,7 +82,7 @@ mafc_api:
     username: 'mirae-3p'
     password: '123456'
   upload:
-    url: 'https://apigw-staging.mafc.vn/dataentry/openapi'
+    url: 'https://apigw-staging.mafc.vn/3p/v2'
     username: 'dataentry'
     password: 'mafcdataentry$%&$!@#'
 

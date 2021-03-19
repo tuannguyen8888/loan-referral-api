@@ -25,6 +25,7 @@ import {
   LoanProfileResponseDto
 } from "./dto";
 import { AttachFileDto } from "./dto/attach-file.dto";
+import {LoanProfileDeferReplyRequestDto} from "./dto/loan-profile-defer-reply.request.dto";
 
 @ApiTags("Loan profile")
 @ApiSecurity("api-key")
@@ -104,6 +105,15 @@ export class LoanProfileController {
         @Body() dtos: AttachFileDto[]
     ): Promise<AttachFileDto[]> {
         return this.service.updateAttachFiles(dtos);
+    }
+    @Put("/reply-defers")
+    @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
+    @ApiBody({ type: [LoanProfileDeferReplyRequestDto] })
+    replyDeffers(
+        @Headers() headers,
+        @Body() dtos: LoanProfileDeferReplyRequestDto[]
+    ): Promise<boolean> {
+        return this.service.replyDeffers(dtos);
     }
     @Get("/sendData_pushUnderSystem/:loan_profile_id")
     @ApiOperation({ summary: "test đẩy file qua MAFC" })
