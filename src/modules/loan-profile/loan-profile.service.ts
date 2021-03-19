@@ -776,6 +776,7 @@ export class LoanProfileService extends BaseService {
         let mafc_api_config = config.get("mafc_api");
         let download_config = config.get("download");
         let result;
+        let isError = false;
         try {
             // console.log("call api MAFC: ", [
             //     mafc_api_config.upload.url,
@@ -837,8 +838,9 @@ export class LoanProfileService extends BaseService {
             );
             console.log('call api uploadFile result = ',result);
         } catch (e) {
-            console.log(e);
+            console.error(e.message);
             result = e;
+            isError = true;
         } finally {
             let log = new SendDataLog();
             log.apiUrl = "pushUnderSystem";
@@ -857,7 +859,11 @@ export class LoanProfileService extends BaseService {
                     }
                 }
             ]);
-            log.result = JSON.stringify(result);
+            if(isError){
+                log.result = result.message;
+            }else {
+                log.result = JSON.stringify(result);
+            }
             log.createdAt = new Date();
             await this.connection
                 .getCustomRepository(SendDataLogRepository)
