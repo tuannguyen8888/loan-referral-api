@@ -21,7 +21,7 @@ import {
 import {
     AddressRepository,
     AttachFileRepository,
-    LoanProfileChangeLogRepository,
+    LoanProfileChangeLogRepository, LoanProfileDeferReplyRepository,
     LoanProfileDeferRepository,
     LoanProfileRepository,
     ProcessRepository,
@@ -37,7 +37,7 @@ import {
     Reference,
     LoanProfileDefer,
     LoanProfileChangeLog,
-    SendDataLog
+    SendDataLog, LoanProfileDeferReply
 } from "../../entities";
 import {RequestUtil} from "../../common/utils";
 import * as config from "config";
@@ -59,7 +59,7 @@ export class LoanProfileService extends BaseService {
     }
 
     async getAllLoanProfiles(dto: GetLoanProfilesRequestDto) {
-        try{
+        try {
             console.log('getAllLoanProfiles dto = ', dto);
             const repo = this.connection.getCustomRepository(LoanProfileRepository);
             const where = {
@@ -81,7 +81,7 @@ export class LoanProfileService extends BaseService {
                     {inLname: Like(`%${dto.keyword}%`)},
                     {inPhone: Like(`%${dto.keyword}%`)},
                     {inNationalid: Like(`%${dto.keyword}%`)},
-            ];
+                ];
             }
             const result = new LoanProfilesResponseDto();
             result.count = await repo.count({where: where});
@@ -105,7 +105,7 @@ export class LoanProfileService extends BaseService {
             }
             console.log('result = ', result);
             return result;
-        }catch (e) {
+        } catch (e) {
             console.error(e);
             throw e;
         }
@@ -450,7 +450,7 @@ export class LoanProfileService extends BaseService {
         try {
             inputQdeDto.in_channel = mafc_api_config.partner_code;
             inputQdeDto.in_schemeid = dto.in_schemeid;
-            inputQdeDto.in_downpayment = dto.in_downpayment?dto.in_downpayment:0;
+            inputQdeDto.in_downpayment = dto.in_downpayment ? dto.in_downpayment : 0;
             inputQdeDto.in_totalloanamountreq = dto.in_totalloanamountreq;
             inputQdeDto.in_tenure = dto.in_tenure;
             inputQdeDto.in_sourcechannel = "ADVT"; //dto.in_sourcechannel;
@@ -802,10 +802,10 @@ export class LoanProfileService extends BaseService {
             formData["warning_msg"] = null;
             formData["appid"] = Number(loanNo);
             formData["salecode"] = "EXT_FIV";
-            formData["usersname"] =  "EXT_FIV";
-            formData["password"] =  "mafc123!";
+            formData["usersname"] = "EXT_FIV";
+            formData["password"] = "mafc123!";
             formData["vendor"] = "EXT_FIV";
-            formData_log = Object.assign({},formData);
+            formData_log = Object.assign({}, formData);
             for (let i = 0; i < attachFiles.length; i++) {
                 let ext: any = attachFiles[i].url.split('.');
                 ext = ext[ext.length - 1];
@@ -833,28 +833,29 @@ export class LoanProfileService extends BaseService {
             // formData.append("vendor","EXT_FIV");
             console.log('call api uploadFile');
             let result = await this.requestUtil.uploadFile(
-                mafc_api_config.upload.url+'/push-to-und',
+                mafc_api_config.upload.url + '/push-to-und',
                 formData,
                 {
                     username: mafc_api_config.upload.username,
                     password: mafc_api_config.upload.password
                 }
-
             );
 
-            console.log('call api uploadFile result = ',result);
+            console.log('call api uploadFile result = ', result);
         } catch (e) {
             console.error(e.message);
             result = e;
             isError = true;
         } finally {
-            if(files && files.length){
-                files.forEach(async filePath=>fs.unlink(filePath,(err)=>{ console.log('finally unlink ',err)}));
+            if (files && files.length) {
+                files.forEach(async filePath => fs.unlink(filePath, (err) => {
+                    console.log('finally unlink ', err)
+                }));
             }
             let log = new SendDataLog();
             log.apiUrl = "push-to-und";
             log.data = JSON.stringify([
-                mafc_api_config.upload.url+'/push-to-und',
+                mafc_api_config.upload.url + '/push-to-und',
                 formData_log,
                 {
                     auth: {
@@ -863,9 +864,9 @@ export class LoanProfileService extends BaseService {
                     }
                 }
             ]);
-            if(isError){
+            if (isError) {
                 log.result = result.message;
-            }else {
+            } else {
                 log.result = JSON.stringify(result);
             }
             log.createdAt = new Date();
@@ -875,8 +876,9 @@ export class LoanProfileService extends BaseService {
         }
         return result;
     }
-    async test_sendData_pushUnderSystem(loanProfileId: number){
-        try{
+
+    async test_sendData_pushUnderSystem(loanProfileId: number) {
+        try {
             const attachFiles = await this.connection
                 .getCustomRepository(AttachFileRepository)
                 .find({
@@ -885,7 +887,7 @@ export class LoanProfileService extends BaseService {
                         loanProfileId: loanProfileId
                     }
                 });
-            if(attachFiles && attachFiles.length) {
+            if (attachFiles && attachFiles.length) {
                 const loanProfile = await this.connection
                     .getCustomRepository(LoanProfileRepository)
                     .findOne(attachFiles[0].loanProfileId);
@@ -894,24 +896,87 @@ export class LoanProfileService extends BaseService {
 
                     } else {
                         await this.sendData_pushToUND(
-                            loanProfile.loanNo,loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim()!='')?(' ' + loanProfile.inMname.trim()):'') + ' ' + loanProfile.inLname.trim(),
+                            loanProfile.loanNo, loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim() != '') ? (' ' + loanProfile.inMname.trim()) : '') + ' ' + loanProfile.inLname.trim(),
                             attachFiles);
                     }
                 }
             }
             return true;
-        }catch (e) {
-            throw new BadRequestException('lỗi: '+e.message+e.toString());
+        } catch (e) {
+            throw new BadRequestException('lỗi: ' + e.message + e.toString());
         }
     }
 
     async replyDeffers(dtos: LoanProfileDeferReplyRequestDto[]) {
-        if(dtos && dtos.length){
-
+        let defer;
+        if (dtos && dtos.length) {
+            for (let i = 0; i < dtos.length; i++) {
+                defer = await this.connection
+                    .getCustomRepository(LoanProfileDeferRepository)
+                    .findOne({
+                        where: {
+                            deletedAt: IsNull(),
+                            status: 'NEW',
+                            id: dtos[0].defer_id
+                        }
+                    });
+                if (defer) {
+                    let newReplys = [];
+                    if (dtos[i].details && dtos[i].details.length) {
+                        for (let j = 0; j < dtos[i].details.length; j++) {
+                            let result = await this.sendData_replyDeferUND(
+                                defer.idF1,
+                                defer.clientName,
+                                dtos[i].details[j].doc_code,
+                                dtos[i].details[j].url,
+                                dtos[i].reply_comment,
+                                defer.deferCode,
+                                (i == dtos.length - 1) && (j == dtos[i].details.length - 1) ? 'N' : 'Y'
+                            );
+                            if (result.success) {
+                                let newReply = new LoanProfileDeferReply();
+                                newReply.deferId = dtos[i].defer_id;
+                                newReply.docCode = dtos[i].details[j].doc_code;
+                                newReply.url = dtos[i].details[j].url;
+                                newReplys.push(newReply);
+                            }
+                        }
+                    }else{
+                        let result = await this.sendData_replyDeferUND(
+                            defer.idF1,
+                            defer.clientName,
+                            null,
+                            null,
+                            dtos[i].reply_comment,
+                            defer.deferCode,
+                            (i == dtos.length - 1) ? 'N' : 'Y'
+                        );
+                    }
+                    defer.replyComment = dtos[i].reply_comment;
+                    defer.status = 'SENT';
+                    defer.updatedAt = new Date();
+                    await this.connection.getCustomRepository(LoanProfileDeferRepository).save(defer);
+                    if(newReplys && newReplys.length) {
+                        await this.connection.getCustomRepository(LoanProfileDeferReplyRepository).save(newReplys);
+                    }
+                }
+            }
+            // update status profile
+            if(defer) {
+                let profile = await this.connection
+                    .getCustomRepository(LoanProfileRepository)
+                    .findOne(defer.id);
+                if(profile){
+                    profile.fvStatus = 'SENT_DEFER_FILES';
+                    profile.updatedAt = new Date();
+                    await this.connection.getCustomRepository(LoanProfileRepository).save(profile);
+                }
+            }
         }
         return true;
     }
-    private async sendData_replyDeferUND(loanNo: string, customerName: string, attachFiles: AttachFile[]) {
+
+    private async sendData_replyDeferUND(loanNo: string, customerName: string, docCode: string, url: string, comment: string, deferCode: string, deferStatus: string = 'Y') {
         let mafc_api_config = config.get("mafc_api");
         let download_config = config.get("download");
         let result;
@@ -920,63 +985,48 @@ export class LoanProfileService extends BaseService {
         let files = [];
         try {
             let formData = {};
-            formData["warning"] = "N";
-            formData["warning_msg"] = null;
             formData["appid"] = Number(loanNo);
-            formData["salecode"] = "EXT_FIV";
-            formData["usersname"] =  "EXT_FIV";
-            formData["password"] =  "mafc123!";
-            formData["vendor"] = "EXT_FIV";
-            formData_log = Object.assign({},formData);
-            for (let i = 0; i < attachFiles.length; i++) {
-                let ext: any = attachFiles[i].url.split('.');
+            formData["userid"] = "EXT_FIV";
+            formData["defercode"] = deferCode;
+            formData["deferstatus"] = deferStatus;
+            formData["usersname"] = "EXT_FIV";
+            formData["password"] = "mafc123!";
+            formData["comment"] = comment;
+            formData_log = Object.assign({}, formData);
+                let ext: any = url.split('.');
                 ext = ext[ext.length - 1];
-                let fileName = `${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
+                let fileName = `${loanNo}_${customerName}_${docCode}.${ext}`;
                 let filePath = `${__dirname}/../../attach_files/${fileName}`;
-                let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(attachFiles[i].url, filePath);
+                let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(url, filePath);
                 console.log('fileStream = ', fileStream.path);
-                // buffer.lastModifiedDate = new Date();
-                // buffer.name = fileName;
-                // let file = new File(buffer, fileName);
                 files.push(fileStream.path);
-
-                // formData.append(attachFiles[i].docCode, buffer, {
-                //     filename: fileName,
-                // });
-                formData[attachFiles[i].docCode] = fileStream;
-                formData_log[attachFiles[i].docCode] = fileName;
-            }
-            // formData.append("warning","N");
-            // formData.append("warning_msg",null);
-            // formData.append("appid",Number(loanNo));
-            // formData.append("salecode","EXT_FIV");
-            // formData.append("usersname", "EXT_FIV");
-            // formData.append("password", "mafc123!");
-            // formData.append("vendor","EXT_FIV");
-            console.log('call api uploadFile');
+                formData[docCode] = fileStream;
+                formData_log[docCode] = fileName;
+            console.log('call api reply-defer-und');
             let result = await this.requestUtil.uploadFile(
-                mafc_api_config.upload.url+'/reply-defer-und',
+                mafc_api_config.upload.url + '/reply-defer-und',
                 formData,
                 {
                     username: mafc_api_config.upload.username,
                     password: mafc_api_config.upload.password
                 }
-
             );
 
-            console.log('call api uploadFile result = ',result);
+            console.log('call api reply-defer-und result = ', result);
         } catch (e) {
             console.error(e.message);
             result = e;
             isError = true;
         } finally {
-            if(files && files.length){
-                files.forEach(async filePath=>fs.unlink(filePath,(err)=>{ console.log('finally unlink ',err)}));
+            if (files && files.length) {
+                files.forEach(async filePath => fs.unlink(filePath, (err) => {
+                    console.log('finally unlink ', err)
+                }));
             }
             let log = new SendDataLog();
             log.apiUrl = "reply-defer-und";
             log.data = JSON.stringify([
-                mafc_api_config.upload.url+'/reply-defer-und',
+                mafc_api_config.upload.url + '/reply-defer-und',
                 formData_log,
                 {
                     auth: {
@@ -985,9 +1035,9 @@ export class LoanProfileService extends BaseService {
                     }
                 }
             ]);
-            if(isError){
+            if (isError) {
                 log.result = result.message;
-            }else {
+            } else {
                 log.result = JSON.stringify(result);
             }
             log.createdAt = new Date();
@@ -1027,7 +1077,7 @@ export class LoanProfileService extends BaseService {
             AttachFile,
             AttachFileDto
         );
-        if(attachFiles && attachFiles.length) {
+        if (attachFiles && attachFiles.length) {
             const loanProfile = await this.connection
                 .getCustomRepository(LoanProfileRepository)
                 .findOne(attachFiles[0].loanProfileId);
@@ -1036,7 +1086,7 @@ export class LoanProfileService extends BaseService {
 
                 } else {
                     await this.sendData_pushToUND(
-                        loanProfile.loanNo,loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim()!='')?(' ' + loanProfile.inMname.trim()):'') + ' ' + loanProfile.inLname.trim(),
+                        loanProfile.loanNo, loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim() != '') ? (' ' + loanProfile.inMname.trim()) : '') + ' ' + loanProfile.inLname.trim(),
                         attachFiles);
                 }
             }
