@@ -5,5 +5,6 @@ export * from "./partner";
 export * from "./process";
 export * from "./reference";
 export * from "./loan-profile-defer";
+export * from "./loan-profile-defer-reply";
 export * from "./attach-file";
 export * from "./send-data-log";
