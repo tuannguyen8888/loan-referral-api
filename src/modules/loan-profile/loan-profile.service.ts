@@ -800,7 +800,7 @@ export class LoanProfileService extends BaseService {
                 ext = ext[ext.length - 1];
                 let fileName = `${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
                 let fileStream = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${fileName}`);
-                console.log('fileStream = ', fileStream);
+                console.log('fileStream = ', fileStream.path);
                 // buffer.lastModifiedDate = new Date();
                 // buffer.name = fileName;
                 // let file = new File(buffer, fileName);
@@ -825,6 +825,7 @@ export class LoanProfileService extends BaseService {
             formData["usersname"] =  "EXT_FIV";
             formData["password"] =  "mafc123!";
             formData["vendor"] = "EXT_FIV";
+            console.log('call api uploadFile');
             let result = await this.requestUtil.uploadFile(
                 mafc_api_config.upload.url+'/pushUnderSystem',
                 formData,
@@ -834,6 +835,7 @@ export class LoanProfileService extends BaseService {
                 }
 
             );
+            console.log('call api uploadFile result = ',result);
         } catch (e) {
             console.log(e);
             result = e;
