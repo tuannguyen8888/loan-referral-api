@@ -44,7 +44,7 @@ import * as config from "config";
 import {AttachFileDto} from "./dto/attach-file.dto";
 import * as moment from "moment";
 import {ReferenceDto} from "./dto/reference.dto";
-import * as FormData from "form-data";
+import * as fs from "fs";
 
 @Injectable({scope: Scope.REQUEST})
 export class LoanProfileService extends BaseService {
@@ -777,6 +777,8 @@ export class LoanProfileService extends BaseService {
         let download_config = config.get("download");
         let result;
         let isError = false;
+        let formData_log;
+        let files = [];
         try {
             // console.log("call api MAFC: ", [
             //     mafc_api_config.upload.url,
@@ -795,22 +797,31 @@ export class LoanProfileService extends BaseService {
             // ]);
             // let formData = new FormData();
             let formData = {};
-            // let files = [];
+            formData["warning"] = "N";
+            formData["warning_msg"] = null;
+            formData["appid"] = Number(loanNo);
+            formData["salecode"] = "EXT_FIV";
+            formData["usersname"] =  "EXT_FIV";
+            formData["password"] =  "mafc123!";
+            formData["vendor"] = "EXT_FIV";
+            formData_log = Object.assign({},formData);
             for (let i = 0; i < attachFiles.length; i++) {
                 let ext: any = attachFiles[i].url.split('.');
                 ext = ext[ext.length - 1];
                 let fileName = `${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
-                let fileStream = await this.requestUtil.downloadPublicFile(attachFiles[i].url, `${__dirname}/../../attach_files/${fileName}`);
+                let filePath = `${__dirname}/../../attach_files/${fileName}`;
+                let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(attachFiles[i].url, filePath);
                 console.log('fileStream = ', fileStream.path);
                 // buffer.lastModifiedDate = new Date();
                 // buffer.name = fileName;
                 // let file = new File(buffer, fileName);
-                // files.push(file);
+                files.push(fileStream.path);
 
                 // formData.append(attachFiles[i].docCode, buffer, {
                 //     filename: fileName,
                 // });
                 formData[attachFiles[i].docCode] = fileStream;
+                formData_log[attachFiles[i].docCode] = fileName;
             }
             // formData.append("warning","N");
             // formData.append("warning_msg",null);
@@ -819,13 +830,6 @@ export class LoanProfileService extends BaseService {
             // formData.append("usersname", "EXT_FIV");
             // formData.append("password", "mafc123!");
             // formData.append("vendor","EXT_FIV");
-            formData["warning"] = "N";
-            formData["warning_msg"] = null;
-            formData["appid"] = Number(loanNo);
-            formData["salecode"] = "EXT_FIV";
-            formData["usersname"] =  "EXT_FIV";
-            formData["password"] =  "mafc123!";
-            formData["vendor"] = "EXT_FIV";
             console.log('call api uploadFile');
             let result = await this.requestUtil.uploadFile(
                 mafc_api_config.upload.url+'/pushUnderSystem',
@@ -836,22 +840,21 @@ export class LoanProfileService extends BaseService {
                 }
 
             );
+
             console.log('call api uploadFile result = ',result);
         } catch (e) {
             console.error(e.message);
             result = e;
             isError = true;
         } finally {
+            if(files && files.length){
+                files.forEach(async filePath=>fs.unlink(filePath,(err)=>{ console.log('finally unlink ',err)}));
+            }
             let log = new SendDataLog();
             log.apiUrl = "pushUnderSystem";
             log.data = JSON.stringify([
                 mafc_api_config.input_data_entry.url,
-                {
-                    p_appid: Number(loanNo),
-                    in_userid: "EXT_FIV",
-                    in_channel: "FIV",
-                    msgName: "pushUnderSystem"
-                },
+                formData_log,
                 {
                     auth: {
                         username: mafc_api_config.input_data_entry.username,
