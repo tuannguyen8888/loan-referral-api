@@ -1,0 +1,24 @@
+export class InputDdeDto {
+  in_channel?: string = null;
+  in_userid?: string = null;
+  in_appid?: number = null;
+  in_maritalstatus?: string = null;
+  in_qualifyingyear?: string = null;
+  in_eduqualify?: string = null;
+  in_noofdependentin?: string = null;
+  in_paymentchannel?: string = null;
+  in_nationalidissuedate?: string = null;
+  in_familybooknumber?: string = null;
+  in_idissuer?: string = null;
+  in_spousename?: string = null;
+  in_spouse_id_c?: string = null;
+  in_categoryid?: string = null;
+  in_bankname?: string = null;
+  in_bankbranch?: string = null;
+  in_acctype?: string = null;
+  in_accno?: string = null;
+  in_dueday?: string = null;
+  in_notecode?: string = null;
+  in_notedetails?: string = null;
+  msgName: string = "inputDDE";
+}

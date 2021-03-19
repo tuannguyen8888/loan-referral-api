@@ -1,44 +1,18 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("reference")
-export class Reference {
+@Entity("attach_file")
+export class AttachFile {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
   @Column("int", { name: "loan_profile_id" })
   loanProfileId: number;
 
-  @Column("varchar", {
-    name: "title",
-    comment: "Title trên Finnone: MR.; MRS.; MS.",
-    length: 50
-  })
-  title: string;
+  @Column("varchar", { name: "doc_code", length: 45 })
+  docCode: string;
 
-  @Column("varchar", {
-    name: "referee_name",
-    nullable: true,
-    comment: "Referee Name  trên Finnone",
-    length: 250
-  })
-  refereeName: string | null;
-
-  @Column("varchar", {
-    name: "referee_relation",
-    nullable: true,
-    comment:
-      "Referee Relation  trên Finnone\n•\tR  - Relative\n•\tCA – CO Applicant\n•\tWH  - Wife/Husband\n•\tF – Friend\n•\tC - Colleague\n",
-    length: 8
-  })
-  refereeRelation: string | null;
-
-  @Column("varchar", {
-    name: "phone_1",
-    nullable: true,
-    comment: "Phone 1 trên Finnone",
-    length: 24
-  })
-  phone_1: string | null;
+  @Column("varchar", { name: "url", nullable: true, length: 255 })
+  url: string | null;
 
   @Column("timestamp", {
     name: "created_at",

@@ -1,44 +1,32 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("reference")
-export class Reference {
+@Entity("loan_profile_defer")
+export class LoanProfileDefer {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
   @Column("int", { name: "loan_profile_id" })
   loanProfileId: number;
 
-  @Column("varchar", {
-    name: "title",
-    comment: "Title trên Finnone: MR.; MRS.; MS.",
-    length: 50
-  })
-  title: string;
+  @Column("varchar", { name: "id_f1", length: 45 })
+  idF1: string;
 
-  @Column("varchar", {
-    name: "referee_name",
-    nullable: true,
-    comment: "Referee Name  trên Finnone",
-    length: 250
-  })
-  refereeName: string | null;
+  @Column("varchar", { name: "client_name", length: 255 })
+  clientName: string;
 
-  @Column("varchar", {
-    name: "referee_relation",
-    nullable: true,
-    comment:
-      "Referee Relation  trên Finnone\n•\tR  - Relative\n•\tCA – CO Applicant\n•\tWH  - Wife/Husband\n•\tF – Friend\n•\tC - Colleague\n",
-    length: 8
-  })
-  refereeRelation: string | null;
+  @Column("varchar", { name: "defer_code", length: 45 })
+  deferCode: string;
 
-  @Column("varchar", {
-    name: "phone_1",
-    nullable: true,
-    comment: "Phone 1 trên Finnone",
-    length: 24
+  @Column("varchar", { name: "defer_note", length: 255 })
+  deferNote: string;
+
+  @Column("timestamp", {
+    name: "defer_time"
   })
-  phone_1: string | null;
+  deferTime: Date;
+
+  @Column("varchar", { name: "status", length: 45 })
+  status: string;
 
   @Column("timestamp", {
     name: "created_at",

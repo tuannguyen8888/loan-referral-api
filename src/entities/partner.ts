@@ -1,7 +1,7 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Index("code_UNIQUE", ["code"], { unique: true })
-@Entity("partner", { schema: "loan_referral" })
+@Entity("partner")
 export class Partner {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
@@ -21,18 +21,23 @@ export class Partner {
   })
   createdAt: Date;
 
-  @Column("int", { name: "created_by", nullable: true })
-  createdBy: number | null;
+  @Column("varchar", {
+    name: "created_by",
+    nullable: true,
+    length: 255,
+    comment: "user id who create "
+  })
+  createdBy: string;
 
   @Column("timestamp", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
-  @Column("int", { name: "updated_by", nullable: true })
-  updatedBy: number | null;
+  @Column("varchar", { name: "updated_by", nullable: true, length: 255 })
+  updatedBy: string;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })
   deletedAt: Date | null;
 
-  @Column("int", { name: "deleted_by", nullable: true })
-  deletedBy: number | null;
+  @Column("varchar", { name: "deleted_by", nullable: true, length: 255 })
+  deletedBy: string;
 }

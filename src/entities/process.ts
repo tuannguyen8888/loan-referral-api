@@ -1,12 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("process", { schema: "loan_referral" })
+@Entity("process")
 export class Process {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Column("int", { name: "loan_profile" })
-  loanProfile: number;
+  @Column("int", { name: "loan_profile_id" })
+  loanProfileId: number;
 
   @Column("varchar", { name: "process_status", length: 45 })
   processStatus: string;
@@ -26,22 +26,23 @@ export class Process {
   })
   createdAt: Date;
 
-  @Column("int", {
+  @Column("varchar", {
     name: "created_by",
     nullable: true,
+    length: 255,
     comment: "user id who create "
   })
-  createdBy: number | null;
+  createdBy: string;
 
   @Column("timestamp", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
-  @Column("int", { name: "updated_by", nullable: true })
-  updatedBy: number | null;
+  @Column("varchar", { name: "updated_by", nullable: true, length: 255 })
+  updatedBy: string;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })
   deletedAt: Date | null;
 
-  @Column("int", { name: "deleted_by", nullable: true })
-  deletedBy: number | null;
+  @Column("varchar", { name: "deleted_by", nullable: true, length: 255 })
+  deletedBy: string;
 }

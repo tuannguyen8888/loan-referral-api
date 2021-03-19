@@ -48,20 +48,43 @@ database:
   logging: true
   synchronize: false
   entities:
-  - "dist/entities/*.entity.{js,ts}"
+  - "dist/entities/*.{js,ts}"
   replication:
     master:
-      host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
+      host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
       database: "loan_referral"
     slaves:
-    - host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
+    - host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
       database: "loan_referral"
+
+mafc_api:
+  partner_code: 'FIV'
+  input_data_entry:
+    url: 'https://apigw-staging.mafc.vn/dataentry-mci'
+    username: 'dataentrymci'
+    password: 'mirae52345!@#%$'
+  master_data:
+    url: 'https://apigw-staging.mafc.vn/masterdatamci'
+    username: 'masterdatamci'
+    password: 'mafc32412^&%^$'
+  check_customer_info:
+    url: 'https://apigw-staging.mafc.vn/3p/v2/check-customer'
+    username: 'mirae-3p'
+    password: '123456'
+  cic:
+    url: 'https://apigw-staging.mafc.vn/cic'
+    username: 'mirae-3p'
+    password: '123456'
+  upload:
+    url: 'https://apigw-staging.mafc.vn/dataentry/openapi'
+    username: 'dataentry'
+    password: 'mafcdataentry$%&$!@#'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
@@ -70,3 +93,4 @@ upload:
 download:
   backendUrl: http://sandbox.finviet.com.vn:3000/download
   backendUser: loan_referral-user
+  token: dvsdvsdkvmvkdfm
