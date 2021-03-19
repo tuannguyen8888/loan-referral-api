@@ -890,7 +890,7 @@ export class LoanProfileService extends BaseService {
 
                     } else {
                         await this.sendData_pushUnderSystem(
-                            loanProfile.loanNo,loanProfile.inFname + (loanProfile.inMname?(' ' + loanProfile.inMname):'') + ' ' + loanProfile.inLname,
+                            loanProfile.loanNo,loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim()!='')?(' ' + loanProfile.inMname.trim()):'') + ' ' + loanProfile.inLname.trim(),
                             attachFiles);
                     }
                 }
@@ -939,7 +939,7 @@ export class LoanProfileService extends BaseService {
 
                 } else {
                     await this.sendData_pushUnderSystem(
-                        loanProfile.loanNo,loanProfile.inFname + (loanProfile.inMname?(' ' + loanProfile.inMname):'') + ' ' + loanProfile.inLname,
+                        loanProfile.loanNo,loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim()!='')?(' ' + loanProfile.inMname.trim()):'') + ' ' + loanProfile.inLname.trim(),
                         attachFiles);
                 }
             }
