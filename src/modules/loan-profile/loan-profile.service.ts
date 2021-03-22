@@ -843,8 +843,7 @@ export class LoanProfileService extends BaseService {
 
             console.log('call api uploadFile result = ', result);
         } catch (e) {
-            console.error( 'call api uploadFile error : ' + e.message + e.stackTrace);
-            throw e;
+            console.error( 'call api uploadFile error : ' + e);
             result = e;
             isError = true;
         } finally {
