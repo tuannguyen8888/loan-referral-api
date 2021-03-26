@@ -839,7 +839,7 @@ export class LoanProfileService extends BaseService {
       //     }
       // ]);
       let formData = new FormData();
-      let formData_log = {};
+      formData_log = {};
         formData_log["warning"] = "N";
         formData_log["warning_msg"] = '';
         formData_log["appid"] = loanProfile.loanNo;
@@ -865,17 +865,10 @@ export class LoanProfileService extends BaseService {
           filePath
         );
         console.log("fileStream = ", fileStream.path);
-        // buffer.lastModifiedDate = new Date();
-        // buffer.name = fileName;
-        // let file = new File(buffer, fileName);
         files.push(fileStream.path);
-
         formData.append(attachFiles[i].docCode, fs.createReadStream(filePath));
-        // formData[attachFiles[i].docCode] = fileStream;
         formData_log[attachFiles[i].docCode] = fileName;
       }
-
-
       console.log("call api uploadFile");
       let result: any = await this.requestUtil.uploadFile(
         mafc_api_config.upload.push_to_und_url,
@@ -1093,14 +1086,14 @@ export class LoanProfileService extends BaseService {
       formData[docCode] = fileStream;
       formData_log[docCode] = fileName;
       console.log("call api reply-defer-und");
-      let result = await this.requestUtil.uploadFile(
-        mafc_api_config.upload.reply_defer_url,
-        formData,
-        {
-          username: mafc_api_config.upload.username,
-          password: mafc_api_config.upload.password
-        }
-      );
+      // let result = await this.requestUtil.uploadFile(
+      //   mafc_api_config.upload.reply_defer_url,
+      //   formData,
+      //   {
+      //     username: mafc_api_config.upload.username,
+      //     password: mafc_api_config.upload.password
+      //   }
+      // );
 
       console.log("call api reply-defer-und result = ", result);
     } catch (e) {
