@@ -48,6 +48,7 @@ import { AttachFileDto } from "./dto/attach-file.dto";
 import * as moment from "moment";
 import { ReferenceDto } from "./dto/reference.dto";
 import * as fs from "fs";
+import * as FormData from "form-data";
 import { LoanProfileDeferReplyRequestDto } from "./dto/loan-profile-defer-reply.request.dto";
 
 @Injectable({ scope: Scope.REQUEST })
@@ -837,15 +838,22 @@ export class LoanProfileService extends BaseService {
       //         }
       //     }
       // ]);
-      // let formData = new FormData();
-      let formData = {};
-      formData["warning"] = "N";
-      formData["warning_msg"] = null;
-      formData["appid"] = Number(loanProfile.loanNo);
-      formData["salecode"] = "EXT_FIV";
-      formData["usersname"] = "EXT_FIV";
-      formData["password"] = "mafc123!";
-      formData["vendor"] = "EXT_FIV";
+      let formData = new FormData();
+      let formData_log = {};
+        formData_log["warning"] = "N";
+        formData_log["warning_msg"] = '';
+        formData_log["appid"] = loanProfile.loanNo;
+        formData_log["salecode"] = "EXT_FIV";
+        formData_log["usersname"] = "EXT_FIV";
+        formData_log["password"] = "mafc123!";
+        formData_log["vendor"] = "EXT_FIV";
+        formData.append("warning","N");
+        formData.append("warning_msg",'');
+        formData.append("appid", loanProfile.loanNo);
+        formData.append("salecode","EXT_FIV");
+        formData.append("usersname", "EXT_FIV");
+        formData.append("password", "mafc123!");
+        formData.append("vendor","EXT_FIV");
       formData_log = Object.assign({}, formData);
       for (let i = 0; i < attachFiles.length; i++) {
         let ext: any = attachFiles[i].url.split(".");
@@ -862,19 +870,12 @@ export class LoanProfileService extends BaseService {
         // let file = new File(buffer, fileName);
         files.push(fileStream.path);
 
-        // formData.append(attachFiles[i].docCode, buffer, {
-        //     filename: fileName,
-        // });
-        formData[attachFiles[i].docCode] = fileStream;
+        formData.append(attachFiles[i].docCode, fs.createReadStream(filePath));
+        // formData[attachFiles[i].docCode] = fileStream;
         formData_log[attachFiles[i].docCode] = fileName;
       }
-      // formData.append("warning","N");
-      // formData.append("warning_msg",null);
-      // formData.append("appid",Number(loanNo));
-      // formData.append("salecode","EXT_FIV");
-      // formData.append("usersname", "EXT_FIV");
-      // formData.append("password", "mafc123!");
-      // formData.append("vendor","EXT_FIV");
+
+
       console.log("call api uploadFile");
       let result: any = await this.requestUtil.uploadFile(
         mafc_api_config.upload.push_to_und_url,
