@@ -1,4 +1,4 @@
-import {IsString, IsNotEmpty, IsDateString, IsDefined} from "class-validator";
+import { IsString, IsNotEmpty, IsDateString, IsDefined } from "class-validator";
 
 export class UploadStatusF1RequestDto {
   @IsDefined()

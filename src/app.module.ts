@@ -19,8 +19,8 @@ import { PartnerRepository } from "./repositories";
 import { LoanProfileModule } from "./modules/loan-profile/loan-profile.module";
 import { MasterDataModule } from "./modules/master-data/master-data.module";
 import { ReceiveResultModule } from "./modules/receive-result/receive-result.module";
-import { SaleGroupController } from './modules/sale-group/sale-group.controller';
-import { SaleGroupService } from './modules/sale-group/sale-group.service';
+import { SaleGroupController } from "./modules/sale-group/sale-group.controller";
+import { SaleGroupService } from "./modules/sale-group/sale-group.service";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");

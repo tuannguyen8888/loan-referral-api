@@ -82,10 +82,10 @@ mafc_api:
     username: 'mirae-3p'
     password: '123456'
   upload:
-    push_to_und_url: 'https://apigw-staging.mafc.vn/dataentry/openapi/pushUnderSystem'
-    reply_defer_url: 'https://apigw-staging.mafc.vn/dataentry/openapi/pushPenHistory'
-    username: 'dataentry'
-    password: 'mafcdataentry$%&$!@#'
+    push_to_und_url: 'https://apigw-staging.mafc.vn/thirdparty/pushundersystem'
+    reply_defer_url: 'https://apigw-staging.mafc.vn/thirdparty/pushpenhistory'
+    username: 'mirae-3p'
+    password: '123456'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
