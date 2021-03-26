@@ -74,7 +74,7 @@ export class SaleGroupService extends BaseService {
     if (parent) {
       result.treePath = parent.treePath + "." + result.id;
     } else {
-      result.treePath = "" + parent.id;
+      result.treePath = "" + result.id;
     }
     result = await this.connection
       .getCustomRepository(SaleGroupRepository)
