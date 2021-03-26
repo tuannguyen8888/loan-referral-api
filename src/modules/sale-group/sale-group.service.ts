@@ -65,6 +65,7 @@ export class SaleGroupService extends BaseService {
     let result = await this.connection
       .getCustomRepository(SaleGroupRepository)
       .save(entity);
+      this.logger.verbose(`insertResult = ${result}`);
     let parent;
     if (result.parent) {
       parent = await this.connection
@@ -79,7 +80,6 @@ export class SaleGroupService extends BaseService {
     result = await this.connection
       .getCustomRepository(SaleGroupRepository)
       .save(result);
-    this.logger.verbose(`insertResult = ${result}`);
     let response: LoanProfileDto = this.convertEntity2Dto(
       result,
       SaleGroup,
