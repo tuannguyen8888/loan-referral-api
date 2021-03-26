@@ -1078,14 +1078,14 @@ export class LoanProfileService extends BaseService {
             formData.append(docCode, fs.createReadStream(filePath));
             formData_log[docCode] = fileName;
             console.log("call api reply-defer-und");
-            // let result = await this.requestUtil.uploadFile(
-            //   mafc_api_config.upload.reply_defer_url,
-            //   formData,
-            //   {
-            //     username: mafc_api_config.upload.username,
-            //     password: mafc_api_config.upload.password
-            //   }
-            // );
+            let result = await this.requestUtil.uploadFile(
+              mafc_api_config.upload.reply_defer_url,
+              formData,
+              {
+                username: mafc_api_config.upload.username,
+                password: mafc_api_config.upload.password
+              }
+            );
 
             console.log("call api reply-defer-und result = ", result);
         } catch (e) {
