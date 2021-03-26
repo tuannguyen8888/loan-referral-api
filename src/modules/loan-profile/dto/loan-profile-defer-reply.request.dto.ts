@@ -7,7 +7,7 @@ export class LoanProfileDeferReplyRequestDto {
   details: DeferReplyDto[] = [];
 }
 
-export class DeferReplyDto{
-    doc_code: string = null;
-    url: string = null;
+export class DeferReplyDto {
+  doc_code: string = null;
+  url: string = null;
 }

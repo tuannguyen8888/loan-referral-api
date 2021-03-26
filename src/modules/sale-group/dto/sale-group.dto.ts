@@ -12,7 +12,7 @@ export class SaleGroupDto {
   @IsString()
   @IsNotEmpty()
   email: string = null;
-  name?: string;
+  name?: string = null;
   parent: number = null;
   tree_path: string = null;
   @IsOptional()
