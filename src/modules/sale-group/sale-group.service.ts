@@ -55,6 +55,20 @@ export class SaleGroupService extends BaseService {
         let result = await this.connection
             .getCustomRepository(SaleGroupRepository)
             .save(entity);
+
+        if(result.parent) {
+            let parent = await this.connection
+                .getCustomRepository(SaleGroupRepository)
+                .findOne({where: {id: result.parent}});
+            if(parent){
+                result.treePath = parent.treePath + '.'+parent.id;
+            }else{
+                result.treePath = '.'+parent.id;
+            }
+            result = await this.connection
+                .getCustomRepository(SaleGroupRepository)
+                .save(result);
+        }
         this.logger.verbose(`insertResult = ${result}`);
         let response: LoanProfileDto = this.convertEntity2Dto(
             result,
