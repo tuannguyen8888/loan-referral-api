@@ -800,7 +800,7 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
-    private async sendData_pushToUND(loanNo: string, customerName: string, attachFiles: AttachFile[]) {
+    private async sendData_pushToUND(loanProfile: LoanProfile, customerName: string, attachFiles: AttachFile[]) {
         let mafc_api_config = config.get("mafc_api");
         let download_config = config.get("download");
         let result;
@@ -827,7 +827,7 @@ export class LoanProfileService extends BaseService {
             let formData = {};
             formData["warning"] = "N";
             formData["warning_msg"] = null;
-            formData["appid"] = Number(loanNo);
+            formData["appid"] = Number(loanProfile.loanNo);
             formData["salecode"] = "EXT_FIV";
             formData["usersname"] = "EXT_FIV";
             formData["password"] = "mafc123!";
@@ -836,7 +836,7 @@ export class LoanProfileService extends BaseService {
             for (let i = 0; i < attachFiles.length; i++) {
                 let ext: any = attachFiles[i].url.split('.');
                 ext = ext[ext.length - 1];
-                let fileName = `${loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
+                let fileName = `${loanProfile.loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
                 let filePath = `${__dirname}/../../attach_files/${fileName}`;
                 let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(attachFiles[i].url, filePath);
                 console.log('fileStream = ', fileStream.path);
@@ -859,7 +859,7 @@ export class LoanProfileService extends BaseService {
             // formData.append("password", "mafc123!");
             // formData.append("vendor","EXT_FIV");
             console.log('call api uploadFile');
-            let result = await this.requestUtil.uploadFile(
+            let result:any = await this.requestUtil.uploadFile(
                 mafc_api_config.upload.push_to_und_url,
                 formData,
                 {
@@ -867,6 +867,18 @@ export class LoanProfileService extends BaseService {
                     password: mafc_api_config.upload.password
                 }
             );
+            if(result.success){
+                let profile = await this.connection
+                    .getCustomRepository(LoanProfileRepository)
+                    .findOne(loanProfile.id);
+                if(profile){
+                    profile.fvStatus = 'SENT_FILES';
+                    profile.updatedAt = new Date();
+                    await this.connection.getCustomRepository(LoanProfileRepository).save(profile);
+                }
+            }else{
+                isError = true;
+            }
 
             console.log('call api uploadFile result = ', result);
         } catch (e) {
@@ -876,7 +888,11 @@ export class LoanProfileService extends BaseService {
         } finally {
             if (files && files.length) {
                 files.forEach(async filePath => fs.unlink(filePath, (err) => {
-                    console.log('finally unlink ', err)
+                    if(err) {
+                        console.error('finally unlink ' +filePath+ ' error = ', err);
+                    }else{
+                        console.error('finally unlink success ', filePath);
+                    }
                 }));
             }
             let log = new SendDataLog();
@@ -923,7 +939,7 @@ export class LoanProfileService extends BaseService {
 
                     } else {
                         await this.sendData_pushToUND(
-                            loanProfile.loanNo, loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim() != '') ? (' ' + loanProfile.inMname.trim()) : '') + ' ' + loanProfile.inLname.trim(),
+                            loanProfile, loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim() != '') ? (' ' + loanProfile.inMname.trim()) : '') + ' ' + loanProfile.inLname.trim(),
                             attachFiles);
                     }
                 }
@@ -1113,7 +1129,7 @@ export class LoanProfileService extends BaseService {
 
                 } else {
                     await this.sendData_pushToUND(
-                        loanProfile.loanNo, loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim() != '') ? (' ' + loanProfile.inMname.trim()) : '') + ' ' + loanProfile.inLname.trim(),
+                        loanProfile, loanProfile.inFname.trim() + ((loanProfile.inMname && loanProfile.inMname.trim() != '') ? (' ' + loanProfile.inMname.trim()) : '') + ' ' + loanProfile.inLname.trim(),
                         attachFiles);
                 }
             }
