@@ -8,3 +8,4 @@ export * from "./loan-profile-defer.repository";
 export * from "./loan-profile-defer-reply.repository";
 export * from "./attach-file.repository";
 export * from "./send-data-log.repository";
+export * from "./sale-group.repository";

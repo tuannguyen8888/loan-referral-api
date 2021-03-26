@@ -25,10 +25,10 @@ import {
     LoanProfileDeferRepository,
     LoanProfileRepository,
     ProcessRepository,
-    ReferenceRepository,
+    ReferenceRepository, SaleGroupRepository,
     SendDataLogRepository
 } from "../../repositories";
-import {IsNull, Like, Equal} from "typeorm";
+import {IsNull, Like, Equal, In} from "typeorm";
 import {
     Address,
     AttachFile,
@@ -82,6 +82,33 @@ export class LoanProfileService extends BaseService {
                     {inPhone: Like(`%${dto.keyword}%`)},
                     {inNationalid: Like(`%${dto.keyword}%`)},
                 ];
+            }
+            if(dto.user_id){
+                let userGroup = await this.connection.getCustomRepository(SaleGroupRepository).findOne(
+                    {
+                        where: {
+                            deletedAt: IsNull(),
+                            email: dto.user_id
+                        }
+                    }
+                );
+                if(userGroup){
+                    let userGroups = await this.connection.getCustomRepository(SaleGroupRepository).find(
+                        {
+                            where: {
+                                deletedAt: IsNull(),
+                                treePath: Like(`${userGroup.treePath}%`)
+                            }
+                        }
+                    );
+                    let userEmails = [];
+                    if(userGroups && userGroups.length){
+                        userGroups.forEach(ug=>userEmails.push(ug.email));
+                    }
+                    where['created_by'] = In(userGroups);
+                }{
+                    where['created_by'] = dto.user_id;
+                }
             }
             const result = new LoanProfilesResponseDto();
             result.count = await repo.count({where: where});
@@ -833,7 +860,7 @@ export class LoanProfileService extends BaseService {
             // formData.append("vendor","EXT_FIV");
             console.log('call api uploadFile');
             let result = await this.requestUtil.uploadFile(
-                mafc_api_config.upload.url + '/push-to-und',
+                mafc_api_config.upload.push_to_und_url,
                 formData,
                 {
                     username: mafc_api_config.upload.username,
@@ -855,7 +882,7 @@ export class LoanProfileService extends BaseService {
             let log = new SendDataLog();
             log.apiUrl = "push-to-und";
             log.data = JSON.stringify([
-                mafc_api_config.upload.url + '/push-to-und',
+                mafc_api_config.upload.push_to_und_url,
                 formData_log,
                 {
                     auth: {
@@ -1004,7 +1031,7 @@ export class LoanProfileService extends BaseService {
                 formData_log[docCode] = fileName;
             console.log('call api reply-defer-und');
             let result = await this.requestUtil.uploadFile(
-                mafc_api_config.upload.url + '/reply-defer-und',
+                mafc_api_config.upload.reply_defer_url,
                 formData,
                 {
                     username: mafc_api_config.upload.username,
@@ -1026,7 +1053,7 @@ export class LoanProfileService extends BaseService {
             let log = new SendDataLog();
             log.apiUrl = "reply-defer-und";
             log.data = JSON.stringify([
-                mafc_api_config.upload.url + '/reply-defer-und',
+                mafc_api_config.upload.reply_defer_url,
                 formData_log,
                 {
                     auth: {
