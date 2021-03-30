@@ -27,7 +27,7 @@ export class RequestUtil {
       const { data } = await this.httpService
         .post<T>(url, body, config)
         .toPromise();
-      console.log("api result data = ", data);
+      // console.log("api result data = ", data);
       return data;
     } catch (error) {
       console.error(error);
