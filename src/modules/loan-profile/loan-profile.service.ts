@@ -109,10 +109,10 @@ export class LoanProfileService extends BaseService {
                     if (userGroups && userGroups.length) {
                         userGroups.forEach(ug => userEmails.push(ug.email));
                     }
-                    where["created_by"] = In(userGroups);
+                    where["createdBy"] = In(userGroups);
                 }
                 {
-                    where["created_by"] = dto.user_id;
+                    where["createdBy"] = dto.user_id;
                 }
             }
             const result = new LoanProfilesResponseDto();
