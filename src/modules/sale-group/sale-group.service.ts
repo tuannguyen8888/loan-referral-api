@@ -103,9 +103,19 @@ export class SaleGroupService extends BaseService {
     let repo = this.connection.getCustomRepository(SaleGroupRepository);
     let entity = await repo.findOne(id);
     if (entity) {
-      entity.deletedAt = new Date();
-      entity.deletedBy = userId;
-      entity = await repo.save(entity);
+      let entities = await repo.find({
+          where: {
+            deletedAt: IsNull(),
+            treePath: Like(entity.treePath+'%')
+          }
+      });
+      if(entities && entities.length){
+          entities.forEach(en => {
+              en.deletedAt = new Date();
+              en.deletedBy = userId;
+          })
+      }
+      await repo.save(entities);
       return true;
     } else {
       return false;
