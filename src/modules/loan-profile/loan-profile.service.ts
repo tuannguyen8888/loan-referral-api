@@ -1078,7 +1078,7 @@ export class LoanProfileService extends BaseService {
             formData.append(docCode, fs.createReadStream(filePath));
             formData_log[docCode] = fileName;
             console.log("call api reply-defer-und");
-            let result = await this.requestUtil.uploadFile(
+            result = await this.requestUtil.uploadFile(
               mafc_api_config.upload.reply_defer_url,
               formData,
               {
