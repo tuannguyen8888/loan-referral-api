@@ -1063,7 +1063,7 @@ export class LoanProfileService extends BaseService {
             let formData = new FormData();
             formData.append("appid", loanNo);
             formData.append("userid", "EXT_FIV");
-            formData.append("defercode", deferCode);
+            formData.append("defercode", 'S1'); //deferCode;
             formData.append("deferstatus", deferStatus);
             formData.append("usersname", "EXT_FIV");
             formData.append("password", "mafc123!");
