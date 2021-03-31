@@ -916,6 +916,9 @@ export class LoanProfileService extends BaseService {
             await this.connection
                 .getCustomRepository(SendDataLogRepository)
                 .save(log);
+            if (isError) {
+                throw new BadRequestException(log.result);
+            }
         }
         return result;
     }
@@ -1052,7 +1055,7 @@ export class LoanProfileService extends BaseService {
             formData_log = {};
             formData_log["appid"] = Number(loanNo);
             formData_log["userid"] = "EXT_FIV";
-            formData_log["defercode"] = deferCode;
+            formData_log["defercode"] = 'S1'; //deferCode;
             formData_log["deferstatus"] = deferStatus;
             formData_log["usersname"] = "EXT_FIV";
             formData_log["password"] = "mafc123!";
@@ -1121,6 +1124,10 @@ export class LoanProfileService extends BaseService {
             await this.connection
                 .getCustomRepository(SendDataLogRepository)
                 .save(log);
+
+            if (isError) {
+                throw new BadRequestException(log.result);
+            }
         }
         return result;
     }
