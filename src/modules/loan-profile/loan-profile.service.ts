@@ -1113,7 +1113,7 @@ export class LoanProfileService extends BaseService {
                 }
             ]);
             if (isError) {
-                log.result = result.message;
+                log.result = 'ERROR:' + result.message;
             } else {
                 log.result = JSON.stringify(result);
             }
