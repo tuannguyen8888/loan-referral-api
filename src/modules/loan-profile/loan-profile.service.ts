@@ -1017,6 +1017,8 @@ export class LoanProfileService extends BaseService {
                             .getCustomRepository(LoanProfileDeferReplyRepository)
                             .save(newReplys);
                     }
+                }else{
+                    throw new BadRequestException('Cannot find defer '+dtos[0].defer_id);
                 }
             }
             // update status profile
