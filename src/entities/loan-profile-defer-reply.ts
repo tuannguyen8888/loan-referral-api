@@ -11,7 +11,7 @@ export class LoanProfileDeferReply {
   @Column("varchar", { name: "doc_code", length: 45 })
   docCode: string;
 
-  @Column("varchar", { name: "client_name", length: 255 })
+  @Column("varchar", { name: "url", length: 255 })
   url: string;
 
   @Column("timestamp", {
