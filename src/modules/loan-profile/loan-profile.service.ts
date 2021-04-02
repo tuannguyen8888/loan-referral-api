@@ -1135,11 +1135,14 @@ export class LoanProfileService extends BaseService {
     }
 
     async updateLoanProfile(dto: LoanProfileDto) {
-        let entity = this.convertDto2Entity(dto, LoanProfile);
-        this.logger.verbose(`entity = ${entity}`);
+        let entityUpdate = this.convertDto2Entity(dto, LoanProfile);
+        let entityOld = await this.connection
+            .getCustomRepository(LoanProfileRepository)
+            .findOne(dto.id);
+
         let result = await this.connection
             .getCustomRepository(LoanProfileRepository)
-            .save(entity);
+            .save(entityUpdate);
         this.logger.verbose(`insertResult = ${result}`);
         let response = this.convertEntity2Dto(result, LoanProfile, LoanProfileDto);
         return response;

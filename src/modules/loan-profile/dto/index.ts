@@ -12,3 +12,4 @@ export * from "./process.dto";
 export * from "./reference.dto";
 export * from "./input-qde.dto";
 export * from "./input-dde.dto";
+export * from "./input-data-update.dto";
