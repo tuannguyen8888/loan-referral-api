@@ -1303,6 +1303,9 @@ export class LoanProfileService extends BaseService {
                     inputDatatUpdateDto.reference.push(refer);
                 });
             }
+            if(!hasChange){
+                throw new BadRequestException('No data changed, cannot sent to MAFC');
+            }
             console.log("call api MAFC: ", [
                 mafc_api_config.update_data_entry.url,
                 inputDatatUpdateDto,
