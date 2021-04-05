@@ -50,7 +50,7 @@ export class ReceiveResultService extends BaseService {
       newDefer.deferCode = dto.defer_code;
       newDefer.deferNote = dto.defer_note;
       newDefer.deferTime = new Date(dto.defer_time);
-      newDefer.status = ((dto.defer_code == "S1")? "RECEIVED":"NEW");
+      newDefer.status = dto.defer_code == "S1" ? "RECEIVED" : "NEW";
       newDefer.createdAt = new Date();
       newDefer = await this.connection
         .getCustomRepository(LoanProfileDeferRepository)
