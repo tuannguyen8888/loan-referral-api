@@ -84,7 +84,8 @@ export class LoanProfileService extends BaseService {
                     {inMname: Like(`%${dto.keyword}%`)},
                     {inLname: Like(`%${dto.keyword}%`)},
                     {inPhone: Like(`%${dto.keyword}%`)},
-                    {inNationalid: Like(`%${dto.keyword}%`)}
+                    {inNationalid: Like(`%${dto.keyword}%`)},
+                    {loanNo: Like(`%${dto.keyword}%`)}
                 ];
             }
             if (dto.user_id) {
@@ -110,8 +111,7 @@ export class LoanProfileService extends BaseService {
                         userGroups.forEach(ug => userEmails.push(ug.email));
                     }
                     where["createdBy"] = In(userGroups);
-                }
-                {
+                }else{
                     where["createdBy"] = dto.user_id;
                 }
             }
