@@ -35,12 +35,16 @@ export class RequestUtil {
     }
   }
 
-  async uploadFile<T>(url: string, formData: FormData, auth = null): Promise<T> {
+  async uploadFile<T>(
+    url: string,
+    formData: FormData,
+    auth = null
+  ): Promise<T> {
     try {
       let config: any = {
         headers: {
           "Content-Type": "multipart/form-data",
-            ...formData.getHeaders()
+          ...formData.getHeaders()
         }
       };
       if (auth) {

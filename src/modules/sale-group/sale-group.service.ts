@@ -65,7 +65,7 @@ export class SaleGroupService extends BaseService {
     let result = await this.connection
       .getCustomRepository(SaleGroupRepository)
       .save(entity);
-      this.logger.verbose(`insertResult = ${result}`);
+    this.logger.verbose(`insertResult = ${result}`);
     let parent;
     if (result.parent) {
       parent = await this.connection
@@ -104,16 +104,16 @@ export class SaleGroupService extends BaseService {
     let entity = await repo.findOne(id);
     if (entity) {
       let entities = await repo.find({
-          where: {
-            deletedAt: IsNull(),
-            treePath: Like(entity.treePath+'%')
-          }
+        where: {
+          deletedAt: IsNull(),
+          treePath: Like(entity.treePath + "%")
+        }
       });
-      if(entities && entities.length){
-          entities.forEach(en => {
-              en.deletedAt = new Date();
-              en.deletedBy = userId;
-          })
+      if (entities && entities.length) {
+        entities.forEach(en => {
+          en.deletedAt = new Date();
+          en.deletedBy = userId;
+        });
       }
       await repo.save(entities);
       return true;
