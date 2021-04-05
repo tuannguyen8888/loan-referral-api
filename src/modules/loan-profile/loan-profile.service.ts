@@ -1355,6 +1355,7 @@ export class LoanProfileService extends BaseService {
         if(!dto.id){
             throw new BadRequestException('Loan profile id can be not null')
         }
+        console.log('updateLoanProfile id = ', dto.id);
         let entityUpdate = this.convertDto2Entity(dto, LoanProfile);
         let entityOld = await this.connection
             .getCustomRepository(LoanProfileRepository)
