@@ -1134,10 +1134,11 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
-    private async sendData_dataEntryUpdate(oldProfile: LoanProfile, updateProfile: LoanProfile) {
+    private async sendData_dataEntryUpdate(oldProfile: LoanProfile, updateProfile: LoanProfile, dto: LoanProfileDto) {
         let mafc_api_config = config.get("mafc_api");
         let inputDatatUpdateDto = new InputDataUpdateDto();
         let updateResult;
+        let hasChange = false;
         try {
             inputDatatUpdateDto.in_channel = mafc_api_config.partner_code;
             inputDatatUpdateDto.in_userid = "EXT_FIV"; //dto.in_userid;
@@ -1148,61 +1149,160 @@ export class LoanProfileService extends BaseService {
             // •	in_tenure
             // •	in_laa_app_ins_applicable
             //Nếu không cập nhât thông tin khoản vay, để trống (null) các trường bên trên
-            if((oldProfile.inSchemeid && oldProfile.inSchemeid )
-                || (oldProfile.inTotalloanamountreq && oldProfile.inTotalloanamountreq )
-                || (oldProfile.inTenure && oldProfile.inTenure )
-                || (oldProfile.inLaaAppInsApplicable && oldProfile.inLaaAppInsApplicable )){
+            if((oldProfile.inSchemeid != updateProfile.inSchemeid)
+                || (oldProfile.inTotalloanamountreq != updateProfile.inTotalloanamountreq )
+                || (oldProfile.inTenure != updateProfile.inTenure )
+                || (oldProfile.inLaaAppInsApplicable != updateProfile.inLaaAppInsApplicable )){
                 inputDatatUpdateDto.in_schemeid = updateProfile.inSchemeid;
                 inputDatatUpdateDto.in_totalloanamountreq = updateProfile.inTotalloanamountreq;
                 inputDatatUpdateDto.in_tenure = updateProfile.inTenure;
                 inputDatatUpdateDto.in_laa_app_ins_applicable = updateProfile.inLaaAppInsApplicable;
+                hasChange = true;
+            }
+            //Đối với cập nhật thông tin khách hàng , Trường nào cần cập nhật thì truyền giá trị ,
+            // trường nào không cập nhật thì để trống (null)
+            if((oldProfile.inFname != updateProfile.inFname )
+                || (oldProfile.inMname != updateProfile.inMname )
+                || (oldProfile.inLname != updateProfile.inLname )){
+                inputDatatUpdateDto.in_fname = updateProfile.inFname;
+                inputDatatUpdateDto.in_mname = updateProfile.inMname;
+                inputDatatUpdateDto.in_lname = updateProfile.inLname;
+                hasChange = true;
+            }
+            if(oldProfile.inSalesofficer != updateProfile.inSalesofficer){
+                inputDatatUpdateDto.in_salesofficer = updateProfile.inSalesofficer;
+                hasChange = true;
+            }
+            if(oldProfile.inLoanpurpose != updateProfile.inLoanpurpose){
+                inputDatatUpdateDto.in_loanpurpose = updateProfile.inLoanpurpose;
+                hasChange = true;
+            }
+            if(oldProfile.inPriorityC != updateProfile.inPriorityC){
+                inputDatatUpdateDto.in_priority_c = updateProfile.inPriorityC;
+                hasChange = true;
+            }
+            if(oldProfile.inTitle != updateProfile.inTitle){
+                inputDatatUpdateDto.in_title = updateProfile.inTitle;
+                hasChange = true;
+            }
+            if(oldProfile.inGender != updateProfile.inGender){
+                inputDatatUpdateDto.in_gender = updateProfile.inGender;
+                hasChange = true;
+            }
+            if(oldProfile.inNationalid != updateProfile.inNationalid){
+                inputDatatUpdateDto.in_nationalid = updateProfile.inNationalid;
+                hasChange = true;
+            }
+            if(oldProfile.inDob != updateProfile.inDob){
+                inputDatatUpdateDto.in_dob = updateProfile.inDob;
+                hasChange = true;
+            }
+            if(oldProfile.inTaxCode != updateProfile.inTaxCode){
+                inputDatatUpdateDto.in_tax_code = updateProfile.inTaxCode;
+                hasChange = true;
+            }
+            if(oldProfile.inPresentjobyear != updateProfile.inPresentjobyear){
+                inputDatatUpdateDto.in_presentjobyear = updateProfile.inPresentjobyear;
+                hasChange = true;
+            }
+            if(oldProfile.inPresentjobmth != updateProfile.inPresentjobmth){
+                inputDatatUpdateDto.in_presentjobmth = updateProfile.inPresentjobmth;
+                hasChange = true;
+            }
+            if(oldProfile.inOthers != updateProfile.inOthers){
+                inputDatatUpdateDto.in_others = updateProfile.inOthers;
+                hasChange = true;
+            }
+            if(oldProfile.inPosition != updateProfile.inPosition){
+                inputDatatUpdateDto.in_position = updateProfile.inPosition;
+                hasChange = true;
+            }
+            if(oldProfile.inAmount != updateProfile.inAmount){
+                inputDatatUpdateDto.in_amount = updateProfile.inAmount;
+                hasChange = true;
+            }
+            if(oldProfile.inAccountbank != updateProfile.inAccountbank){
+                inputDatatUpdateDto.in_accountbank = updateProfile.inAccountbank;
+                hasChange = true;
+            }
+            if(oldProfile.inMaritalstatus != updateProfile.inMaritalstatus){
+                inputDatatUpdateDto.in_maritalstatus = updateProfile.inMaritalstatus;
+                hasChange = true;
+            }
+            if(oldProfile.inEduqualify != updateProfile.inEduqualify){
+                inputDatatUpdateDto.in_eduqualify = updateProfile.inEduqualify;
+                hasChange = true;
+            }
+            if(oldProfile.inNoofdependentin != updateProfile.inNoofdependentin){
+                inputDatatUpdateDto.in_noofdependentin = updateProfile.inNoofdependentin;
+                hasChange = true;
+            }
+            if(oldProfile.inPaymentchannel != updateProfile.inPaymentchannel){
+                inputDatatUpdateDto.in_paymentchannel = updateProfile.inPaymentchannel;
+                hasChange = true;
+            }
+            if(oldProfile.inNationalidissuedate != updateProfile.inNationalidissuedate){
+                inputDatatUpdateDto.in_nationalidissuedate = updateProfile.inNationalidissuedate;
+                hasChange = true;
+            }
+            if(oldProfile.inFamilybooknumber != updateProfile.inFamilybooknumber){
+                inputDatatUpdateDto.in_familybooknumber = updateProfile.inFamilybooknumber;
+                hasChange = true;
+            }
+            if(oldProfile.inIdissuer != updateProfile.inIdissuer){
+                inputDatatUpdateDto.in_idissuer = updateProfile.inIdissuer;
+                hasChange = true;
+            }
+            if(oldProfile.inSpousename != updateProfile.inSpousename){
+                inputDatatUpdateDto.in_spousename = updateProfile.inSpousename;
+                hasChange = true;
+            }
+            if(oldProfile.inSpouseIdC != updateProfile.inSpouseIdC){
+                inputDatatUpdateDto.in_spouse_id_c = updateProfile.inSpouseIdC;
+                hasChange = true;
+            }
+            inputDatatUpdateDto.in_categoryid = 'FIV';
+            if(oldProfile.inBankname != updateProfile.inBankname){
+                inputDatatUpdateDto.in_bankname = updateProfile.inBankname;
+                hasChange = true;
+            }
+            if(oldProfile.inBankbranch != updateProfile.inBankbranch){
+                inputDatatUpdateDto.in_bankbranch = updateProfile.inBankbranch;
+                hasChange = true;
+            }
+            if(oldProfile.inAccno != updateProfile.inAccno){
+                inputDatatUpdateDto.in_accno = updateProfile.inAccno;
+                hasChange = true;
             }
 
-            // inputDatatUpdateDto.in_salesofficer = dto.in_salesofficer;
-            // inputDatatUpdateDto.in_loanpurpose = dto.in_loanpurpose;
-            // inputDatatUpdateDto.in_priority_c = dto.in_priority_c;
-            // inputDatatUpdateDto.in_title = dto.in_title;
-            // inputDatatUpdateDto.in_fname = dto.in_fname;
-            // inputDatatUpdateDto.in_mname = dto.in_mname;
-            // inputDatatUpdateDto.in_lname = dto.in_lname;
-            // inputDatatUpdateDto.in_gender = dto.in_gender;
-            // inputDatatUpdateDto.in_nationalid = dto.in_nationalid;
-            // inputDatatUpdateDto.in_dob = dto.in_dob;
-            // inputDatatUpdateDto.in_tax_code = dto.in_tax_code;
-            // inputDatatUpdateDto.in_presentjobyear = dto.in_presentjobyear;
-            // inputDatatUpdateDto.in_presentjobmth = dto.in_presentjobmth;
-            // inputDatatUpdateDto.in_others = dto.in_others;
-            // inputDatatUpdateDto.in_position = dto.in_position;
-            // inputDatatUpdateDto.in_amount = dto.in_amount;
-            // inputDatatUpdateDto.in_accountbank = dto.in_accountbank;
-            // inputDatatUpdateDto.address = [];
-            // if (dto.address && dto.address.length) {
-            //     dto.address.forEach(item => {
-            //         let address = new InputDataUpdateAddressDto();
-            //         address.in_addresstype = item.address_type;
-            //         address.in_propertystatus = item.property_status;
-            //         address.in_address1stline = item.address_1st_line;
-            //         address.in_country = item.country;
-            //         address.in_city = item.city;
-            //         address.in_district = item.district;
-            //         address.in_ward = item.ward;
-            //         address.in_roomno = item.roomno;
-            //         address.in_mobile = item.mobile;
-            //         address.in_phone = item.fixphone;
-            //         inputDatatUpdateDto.address.push(address);
-            //     });
-            // }
-            // inputDatatUpdateDto.reference = [];
-            // if (dto.references && dto.references.length) {
-            //     dto.references.forEach(item => {
-            //         let refer = new InputQdeReferenceDto();
-            //         refer.in_title = item.title;
-            //         refer.in_refereename = item.referee_name;
-            //         refer.in_refereerelation = item.referee_relation;
-            //         refer.in_phone_1 = item.phone_1;
-            //         inputDatatUpdateDto.reference.push(refer);
-            //     });
-            // }
+            inputDatatUpdateDto.address = [];
+            if (dto.address && dto.address.length) {
+                dto.address.forEach(item => {
+                    let address = new InputDataUpdateAddressDto();
+                    address.in_addresstype = item.address_type;
+                    address.in_propertystatus = item.property_status;
+                    address.in_address1stline = item.address_1st_line;
+                    address.in_country = item.country;
+                    address.in_city = item.city;
+                    address.in_district = item.district;
+                    address.in_ward = item.ward;
+                    address.in_roomno = item.roomno;
+                    address.in_mobile = item.mobile;
+                    address.in_phone = item.fixphone;
+                    inputDatatUpdateDto.address.push(address);
+                });
+            }
+            inputDatatUpdateDto.reference = [];
+            if (dto.references && dto.references.length) {
+                dto.references.forEach(item => {
+                    let refer = new InputQdeReferenceDto();
+                    refer.in_title = item.title;
+                    refer.in_refereename = item.referee_name;
+                    refer.in_refereerelation = item.referee_relation;
+                    refer.in_phone_1 = item.phone_1;
+                    inputDatatUpdateDto.reference.push(refer);
+                });
+            }
             console.log("call api MAFC: ", [
                 mafc_api_config.update_data_entry.url,
                 inputDatatUpdateDto,
@@ -1253,7 +1353,7 @@ export class LoanProfileService extends BaseService {
         let entityOld = await this.connection
             .getCustomRepository(LoanProfileRepository)
             .findOne(dto.id);
-        this.sendData_dataEntryUpdate(entityOld,entityUpdate);
+        this.sendData_dataEntryUpdate(entityOld,entityUpdate, dto);
         switch (entityOld.loanStatus) {
             case 'QDE':
                 let qdeChangeResult = await this.sendData_procQDEChangeState(entityOld.loanNo);
