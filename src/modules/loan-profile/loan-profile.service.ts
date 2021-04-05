@@ -16,7 +16,7 @@ import {
     InputQdeDto,
     InputQdeAddressDto,
     InputQdeReferenceDto,
-    InputDdeDto
+    InputDdeDto, InputDataUpdateDto, InputDataUpdateAddressDto
 } from "./dto";
 import {
     AddressRepository,
@@ -1134,13 +1134,162 @@ export class LoanProfileService extends BaseService {
         return result;
     }
 
+    private async sendData_dataEntryUpdate(oldProfile: LoanProfile, updateProfile: LoanProfile) {
+        let mafc_api_config = config.get("mafc_api");
+        let inputDatatUpdateDto = new InputDataUpdateDto();
+        let updateResult;
+        try {
+            inputDatatUpdateDto.in_channel = mafc_api_config.partner_code;
+            inputDatatUpdateDto.in_userid = "EXT_FIV"; //dto.in_userid;
+            inputDatatUpdateDto.in_appid = oldProfile.loanNo;
+            //Đối với trường hợp cập nhật thông tin khoản vay (Scheme , số tiền vay, bảo hiểm, số kỳ thanh toán ), bắt buộc truyền đủ thông tin các trường sau:
+            // •	in_schemeid
+            // •	in_totalloanamountreq
+            // •	in_tenure
+            // •	in_laa_app_ins_applicable
+            //Nếu không cập nhât thông tin khoản vay, để trống (null) các trường bên trên
+            if((oldProfile.inSchemeid && oldProfile.inSchemeid )
+                || (oldProfile.inTotalloanamountreq && oldProfile.inTotalloanamountreq )
+                || (oldProfile.inTenure && oldProfile.inTenure )
+                || (oldProfile.inLaaAppInsApplicable && oldProfile.inLaaAppInsApplicable )){
+                inputDatatUpdateDto.in_schemeid = updateProfile.inSchemeid;
+                inputDatatUpdateDto.in_totalloanamountreq = updateProfile.inTotalloanamountreq;
+                inputDatatUpdateDto.in_tenure = updateProfile.inTenure;
+                inputDatatUpdateDto.in_laa_app_ins_applicable = updateProfile.inLaaAppInsApplicable;
+            }
+
+            // inputDatatUpdateDto.in_salesofficer = dto.in_salesofficer;
+            // inputDatatUpdateDto.in_loanpurpose = dto.in_loanpurpose;
+            // inputDatatUpdateDto.in_priority_c = dto.in_priority_c;
+            // inputDatatUpdateDto.in_title = dto.in_title;
+            // inputDatatUpdateDto.in_fname = dto.in_fname;
+            // inputDatatUpdateDto.in_mname = dto.in_mname;
+            // inputDatatUpdateDto.in_lname = dto.in_lname;
+            // inputDatatUpdateDto.in_gender = dto.in_gender;
+            // inputDatatUpdateDto.in_nationalid = dto.in_nationalid;
+            // inputDatatUpdateDto.in_dob = dto.in_dob;
+            // inputDatatUpdateDto.in_tax_code = dto.in_tax_code;
+            // inputDatatUpdateDto.in_presentjobyear = dto.in_presentjobyear;
+            // inputDatatUpdateDto.in_presentjobmth = dto.in_presentjobmth;
+            // inputDatatUpdateDto.in_others = dto.in_others;
+            // inputDatatUpdateDto.in_position = dto.in_position;
+            // inputDatatUpdateDto.in_amount = dto.in_amount;
+            // inputDatatUpdateDto.in_accountbank = dto.in_accountbank;
+            // inputDatatUpdateDto.address = [];
+            // if (dto.address && dto.address.length) {
+            //     dto.address.forEach(item => {
+            //         let address = new InputDataUpdateAddressDto();
+            //         address.in_addresstype = item.address_type;
+            //         address.in_propertystatus = item.property_status;
+            //         address.in_address1stline = item.address_1st_line;
+            //         address.in_country = item.country;
+            //         address.in_city = item.city;
+            //         address.in_district = item.district;
+            //         address.in_ward = item.ward;
+            //         address.in_roomno = item.roomno;
+            //         address.in_mobile = item.mobile;
+            //         address.in_phone = item.fixphone;
+            //         inputDatatUpdateDto.address.push(address);
+            //     });
+            // }
+            // inputDatatUpdateDto.reference = [];
+            // if (dto.references && dto.references.length) {
+            //     dto.references.forEach(item => {
+            //         let refer = new InputQdeReferenceDto();
+            //         refer.in_title = item.title;
+            //         refer.in_refereename = item.referee_name;
+            //         refer.in_refereerelation = item.referee_relation;
+            //         refer.in_phone_1 = item.phone_1;
+            //         inputDatatUpdateDto.reference.push(refer);
+            //     });
+            // }
+            console.log("call api MAFC: ", [
+                mafc_api_config.update_data_entry.url,
+                inputDatatUpdateDto,
+                {
+                    auth: {
+                        username: mafc_api_config.update_data_entry.username,
+                        password: mafc_api_config.update_data_entry.password
+                    }
+                }
+            ]);
+            updateResult = await this.requestUtil.post(
+                mafc_api_config.update_data_entry.url,
+                inputDatatUpdateDto,
+                {
+                    auth: {
+                        username: mafc_api_config.update_data_entry.username,
+                        password: mafc_api_config.update_data_entry.password
+                    }
+                }
+            );
+            console.log("updateResult = ", updateResult);
+        } catch (e) {
+            console.log(e);
+            updateResult = e;
+        } finally {
+            let log = new SendDataLog();
+            log.apiUrl = "update_data_entry";
+            log.data = JSON.stringify([
+                mafc_api_config.input_data_entry.url,
+                inputDatatUpdateDto,
+                {
+                    auth: {
+                        username: mafc_api_config.input_data_entry.username,
+                        password: mafc_api_config.input_data_entry.password
+                    }
+                }
+            ]);
+            log.result = JSON.stringify(updateResult);
+            log.createdAt = new Date();
+            await this.connection
+                .getCustomRepository(SendDataLogRepository)
+                .save(log);
+        }
+        return updateResult;
+    }
     async updateLoanProfile(dto: LoanProfileDto) {
-        let entity = this.convertDto2Entity(dto, LoanProfile);
-        this.logger.verbose(`entity = ${entity}`);
+        let entityUpdate = this.convertDto2Entity(dto, LoanProfile);
+        let entityOld = await this.connection
+            .getCustomRepository(LoanProfileRepository)
+            .findOne(dto.id);
+        this.sendData_dataEntryUpdate(entityOld,entityUpdate);
+        switch (entityOld.loanStatus) {
+            case 'QDE':
+                let qdeChangeResult = await this.sendData_procQDEChangeState(entityOld.loanNo);
+                if (!qdeChangeResult.success) {
+                    throw new BadRequestException(
+                        qdeChangeResult,
+                        "error SENT_QDTChangeToDDE"
+                    );
+                }
+                let ddeChangeResult = await this.sendData_procDDEChangeState(entityOld.loanNo);
+                if (!ddeChangeResult.success) {
+                    throw new BadRequestException(
+                        ddeChangeResult,
+                        "error SENT_DDEChangeToPOL"
+                    );
+                }
+                break;
+            case 'DDE':
+            case 'BDE':
+                let bdeChangeResult = await this.sendData_procDDEChangeState(entityOld.loanNo);
+                if (!bdeChangeResult.success) {
+                    throw new BadRequestException(
+                        bdeChangeResult,
+                        "error SENT_DDEChangeToPOL"
+                    );
+                }
+                break;
+            default:
+                throw new BadRequestException('Cannot update for status '+entityOld.loanStatus);
+        }
+        entityUpdate.loanNo = entityOld.loanNo;
+        entityUpdate.partnerId = entityOld.partnerId; //MAFC
         let result = await this.connection
             .getCustomRepository(LoanProfileRepository)
-            .save(entity);
-        this.logger.verbose(`insertResult = ${result}`);
+            .save(entityUpdate);
+        this.logger.verbose(`upadteProfileResult = ${result}`);
         let response = this.convertEntity2Dto(result, LoanProfile, LoanProfileDto);
         return response;
     }

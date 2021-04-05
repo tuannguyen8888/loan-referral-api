@@ -88,14 +88,14 @@ export class LoanProfileController {
     return this.service.createLoanProfile(dto);
   }
 
-  // @Put("/")
-  // @ApiOperation({ summary: "Sửa thông tin hồ sơ vay" })
-  // updateLoanProfile(
-  //   @Headers() headers,
-  //   @Body() dto: LoanProfileDto
-  // ): Promise<LoanProfileDto> {
-  //   return this.service.updateLoanProfile(dto);
-  // }
+  @Put("/")
+  @ApiOperation({ summary: "Sửa thông tin hồ sơ vay" })
+  updateLoanProfile(
+    @Headers() headers,
+    @Body() dto: LoanProfileDto
+  ): Promise<LoanProfileDto> {
+    return this.service.updateLoanProfile(dto);
+  }
   @Put("/update-attach-files")
   @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
   @ApiBody({ type: [AttachFileDto] })
