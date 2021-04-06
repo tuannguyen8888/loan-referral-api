@@ -1428,8 +1428,56 @@ export class LoanProfileService extends BaseService {
     let result = await this.connection
       .getCustomRepository(LoanProfileRepository)
       .save(entityUpdate);
+      let addressOld =  await this.connection
+          .getCustomRepository(AddressRepository)
+          .find({where:{
+                  deletedAt: IsNull(),
+                  loanProfileId: entityOld.id
+              }});
+      if (addressOld && addressOld.length){
+          addressOld.forEach(ao=>{
+              ao.deletedAt = new Date();
+          });
+          await this.connection
+              .getCustomRepository(AddressRepository)
+              .save(addressOld);
+      };
+      let address = [];
+      if(dto.address && dto.address.length) {
+          address = this.convertDtos2Entities(dto.address, Address);
+          address.forEach(item => (item.loanProfileId = entityOld.id));
+          address = await this.connection
+              .getCustomRepository(AddressRepository)
+              .save(address);
+      }
+
+      let referencesOld =  await this.connection
+          .getCustomRepository(ReferenceRepository)
+          .find({where:{
+                  deletedAt: IsNull(),
+                  loanProfileId: entityOld.id
+              }});
+      if (referencesOld && referencesOld.length){
+          referencesOld.forEach(ao=>{
+              ao.deletedAt = new Date();
+          });
+          await this.connection
+              .getCustomRepository(ReferenceRepository)
+              .save(referencesOld);
+      };
+      let references = [];
+      if(dto.references && dto.references.length) {
+          references = this.convertDtos2Entities(dto.references, Reference);
+          references.forEach(item => (item.loanProfileId = entityOld.id));
+
+          references = await this.connection
+              .getCustomRepository(ReferenceRepository)
+              .save(references);
+      }
     this.logger.verbose(`upadteProfileResult = ${result}`);
-    let response = this.convertEntity2Dto(result, LoanProfile, LoanProfileDto);
+    let response: LoanProfileDto = this.convertEntity2Dto(result, LoanProfile, LoanProfileDto);
+      response.address = this.convertEntities2Dtos(address, Address, AddressDto);
+      response.references = this.convertEntities2Dtos(references, Reference, ReferenceDto);
     return response;
   }
 
