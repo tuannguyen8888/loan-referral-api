@@ -1293,34 +1293,36 @@ export class LoanProfileService extends BaseService {
         hasChange = true;
       }
 
-      // inputDatatUpdateDto.address = [];
-      // if (dto.address && dto.address.length) {
-      //   dto.address.forEach(item => {
-      //     let address = new InputDataUpdateAddressDto();
-      //     address.in_addresstype = item.address_type;
-      //     address.in_propertystatus = item.property_status;
-      //     address.in_address1stline = item.address_1st_line;
-      //     address.in_country = item.country;
-      //     address.in_city = item.city;
-      //     address.in_district = item.district;
-      //     address.in_ward = item.ward;
-      //     address.in_roomno = item.roomno;
-      //     address.in_mobile = item.mobile;
-      //     address.in_phone = item.fixphone;
-      //     inputDatatUpdateDto.address.push(address);
-      //   });
-      // }
-      // inputDatatUpdateDto.reference = [];
-      // if (dto.references && dto.references.length) {
-      //   dto.references.forEach(item => {
-      //     let refer = new InputQdeReferenceDto();
-      //     refer.in_title = item.title;
-      //     refer.in_refereename = item.referee_name;
-      //     refer.in_refereerelation = item.referee_relation;
-      //     refer.in_phone_1 = item.phone_1;
-      //     inputDatatUpdateDto.reference.push(refer);
-      //   });
-      // }
+      inputDatatUpdateDto.address = [];
+      if (dto.address && dto.address.length) {
+        dto.address.forEach(item => {
+            if (oldProfile.inAccno != updateProfile.inAccno){
+                let address = new InputDataUpdateAddressDto();
+                address.in_addresstype = item.address_type;
+                address.in_propertystatus = item.property_status;
+                address.in_address1stline = item.address_1st_line;
+                address.in_country = item.country;
+                address.in_city = item.city;
+                address.in_district = item.district;
+                address.in_ward = item.ward;
+                address.in_roomno = item.roomno;
+                address.in_mobile = item.mobile;
+                address.in_phone = item.fixphone;
+                inputDatatUpdateDto.address.push(address);
+            }
+        });
+      }
+      inputDatatUpdateDto.reference = [];
+      if (dto.references && dto.references.length) {
+        dto.references.forEach(item => {
+          let refer = new InputQdeReferenceDto();
+          refer.in_title = item.title;
+          refer.in_refereename = item.referee_name;
+          refer.in_refereerelation = item.referee_relation;
+          refer.in_phone_1 = item.phone_1;
+          inputDatatUpdateDto.reference.push(refer);
+        });
+      }
       if (!hasChange) {
         throw new BadRequestException("No data changed, cannot sent to MAFC");
       }
