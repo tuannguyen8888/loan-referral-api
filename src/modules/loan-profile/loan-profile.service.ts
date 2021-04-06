@@ -613,7 +613,7 @@ export class LoanProfileService extends BaseService {
     return qdeResult;
   }
 
-  private async sendData_procQDEChangeState(loanNo: string) {
+  public async sendData_procQDEChangeState(loanNo: string) {
     let mafc_api_config = config.get("mafc_api");
     let result;
     try {
@@ -749,7 +749,7 @@ export class LoanProfileService extends BaseService {
     return ddeResult;
   }
 
-  private async sendData_procDDEChangeState(loanNo: string) {
+  public async sendData_procDDEChangeState(loanNo: string) {
     let mafc_api_config = config.get("mafc_api");
     let result;
     try {
