@@ -1423,6 +1423,10 @@ export class LoanProfileService extends BaseService {
     // }
     entityUpdate.loanNo = entityOld.loanNo;
     entityUpdate.partnerId = entityOld.partnerId; //MAFC
+      entityUpdate.fvStatus = entityOld.fvStatus;
+      entityUpdate.loanStatus = entityOld.loanStatus;
+      entityUpdate.createdAt = entityOld.createdAt;
+      entityUpdate.createdBy = entityOld.createdBy;
     let result = await this.connection
       .getCustomRepository(LoanProfileRepository)
       .save(entityUpdate);
