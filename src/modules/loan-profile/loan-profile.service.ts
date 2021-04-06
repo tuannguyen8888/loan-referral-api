@@ -1352,12 +1352,12 @@ export class LoanProfileService extends BaseService {
       let log = new SendDataLog();
       log.apiUrl = "update_data_entry";
       log.data = JSON.stringify([
-        mafc_api_config.input_data_entry.url,
+        mafc_api_config.update_data_entry.url,
         inputDatatUpdateDto,
         {
           auth: {
-            username: mafc_api_config.input_data_entry.username,
-            password: mafc_api_config.input_data_entry.password
+            username: mafc_api_config.update_data_entry.username,
+            password: mafc_api_config.update_data_entry.password
           }
         }
       ]);
