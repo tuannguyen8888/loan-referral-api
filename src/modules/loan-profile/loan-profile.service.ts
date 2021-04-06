@@ -1296,7 +1296,6 @@ export class LoanProfileService extends BaseService {
       inputDatatUpdateDto.address = [];
       if (dto.address && dto.address.length) {
         dto.address.forEach(item => {
-            if (oldProfile.inAccno != updateProfile.inAccno){
                 let address = new InputDataUpdateAddressDto();
                 address.in_addresstype = item.address_type;
                 address.in_propertystatus = item.property_status;
@@ -1309,7 +1308,6 @@ export class LoanProfileService extends BaseService {
                 address.in_mobile = item.mobile;
                 address.in_phone = item.fixphone;
                 inputDatatUpdateDto.address.push(address);
-            }
         });
       }
       inputDatatUpdateDto.reference = [];
