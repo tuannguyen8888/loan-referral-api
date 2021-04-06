@@ -45,6 +45,7 @@ export class InputDataUpdateDto {
   in_accno?: string = null;
 }
 export class InputDataUpdateAddressDto {
+  id?:number;
   in_addresstype?: string = null;
   in_propertystatus?: string = null;
   in_address1stline?: string = null;
