@@ -1372,53 +1372,53 @@ export class LoanProfileService extends BaseService {
   async updateLoanProfile(dto: LoanProfileDto) {
     console.log("updateLoanProfile id = ", dto.id);
     console.log("updateLoanProfile loan_no = ", dto.loan_no);
-    if (!dto.id) {
-      throw new BadRequestException("Loan profile id can be not null");
-    }
+    // if (!dto.id) {
+    //   throw new BadRequestException("Loan profile id can be not null");
+    // }
     console.log("updateLoanProfile id = ", dto.id);
     let entityUpdate = this.convertDto2Entity(dto, LoanProfile);
     let entityOld = await this.connection
       .getCustomRepository(LoanProfileRepository)
       .findOne(dto.id);
     this.sendData_dataEntryUpdate(entityOld, entityUpdate, dto);
-    switch (entityOld.loanStatus) {
-      case "QDE":
-        let qdeChangeResult = await this.sendData_procQDEChangeState(
-          entityOld.loanNo
-        );
-        if (!qdeChangeResult.success) {
-          throw new BadRequestException(
-            qdeChangeResult,
-            "error SENT_QDTChangeToDDE"
-          );
-        }
-        let ddeChangeResult = await this.sendData_procDDEChangeState(
-          entityOld.loanNo
-        );
-        if (!ddeChangeResult.success) {
-          throw new BadRequestException(
-            ddeChangeResult,
-            "error SENT_DDEChangeToPOL"
-          );
-        }
-        break;
-      case "DDE":
-      case "BDE":
-        let bdeChangeResult = await this.sendData_procDDEChangeState(
-          entityOld.loanNo
-        );
-        if (!bdeChangeResult.success) {
-          throw new BadRequestException(
-            bdeChangeResult,
-            "error SENT_DDEChangeToPOL"
-          );
-        }
-        break;
-      default:
-        throw new BadRequestException(
-          "Cannot update for status " + entityOld.loanStatus
-        );
-    }
+    // switch (entityOld.loanStatus) {
+    //   case "QDE":
+    //     let qdeChangeResult = await this.sendData_procQDEChangeState(
+    //       entityOld.loanNo
+    //     );
+    //     if (!qdeChangeResult.success) {
+    //       throw new BadRequestException(
+    //         qdeChangeResult,
+    //         "error SENT_QDTChangeToDDE"
+    //       );
+    //     }
+    //     let ddeChangeResult = await this.sendData_procDDEChangeState(
+    //       entityOld.loanNo
+    //     );
+    //     if (!ddeChangeResult.success) {
+    //       throw new BadRequestException(
+    //         ddeChangeResult,
+    //         "error SENT_DDEChangeToPOL"
+    //       );
+    //     }
+    //     break;
+    //   case "DDE":
+    //   case "BDE":
+    //     let bdeChangeResult = await this.sendData_procDDEChangeState(
+    //       entityOld.loanNo
+    //     );
+    //     if (!bdeChangeResult.success) {
+    //       throw new BadRequestException(
+    //         bdeChangeResult,
+    //         "error SENT_DDEChangeToPOL"
+    //       );
+    //     }
+    //     break;
+    //   default:
+    //     throw new BadRequestException(
+    //       "Cannot update for status " + entityOld.loanStatus
+    //     );
+    // }
     entityUpdate.loanNo = entityOld.loanNo;
     entityUpdate.partnerId = entityOld.partnerId; //MAFC
     let result = await this.connection
