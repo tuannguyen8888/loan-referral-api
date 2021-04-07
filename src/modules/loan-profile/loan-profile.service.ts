@@ -1321,9 +1321,9 @@ export class LoanProfileService extends BaseService {
           inputDatatUpdateDto.reference.push(refer);
         });
       }
-      if (!hasChange) {
-        throw new BadRequestException("No data changed, cannot sent to MAFC");
-      }
+      // if (!hasChange) {
+      //   throw new BadRequestException("No data changed, cannot sent to MAFC");
+      // }
       console.log("call api MAFC: ", [
         mafc_api_config.update_data_entry.url,
         inputDatatUpdateDto,
@@ -1445,7 +1445,10 @@ export class LoanProfileService extends BaseService {
       let address = [];
       if(dto.address && dto.address.length) {
           address = this.convertDtos2Entities(dto.address, Address);
-          address.forEach(item => (item.loanProfileId = entityOld.id));
+          address.forEach(item => {
+              item.loanProfileId = entityOld.id;
+              item.id = null;
+          });
           address = await this.connection
               .getCustomRepository(AddressRepository)
               .save(address);
@@ -1468,7 +1471,10 @@ export class LoanProfileService extends BaseService {
       let references = [];
       if(dto.references && dto.references.length) {
           references = this.convertDtos2Entities(dto.references, Reference);
-          references.forEach(item => (item.loanProfileId = entityOld.id));
+          references.forEach(item => {
+              item.loanProfileId = entityOld.id;
+              item.id =  null;
+          });
 
           references = await this.connection
               .getCustomRepository(ReferenceRepository)
