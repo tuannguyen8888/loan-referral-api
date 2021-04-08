@@ -1310,6 +1310,27 @@ export class LoanProfileService extends BaseService {
                 inputDatatUpdateDto.address.push(address);
         });
       }
+      if(oldProfile.inAddresstype != updateProfile.inAddresstype
+          || oldProfile.inAddressline != updateProfile.inAddressline
+          || oldProfile.inCountry != updateProfile.inCountry
+          || oldProfile.inCity != updateProfile.inCity
+          || oldProfile.inDistrict != updateProfile.inDistrict
+          || oldProfile.inWard != updateProfile.inWard
+          || oldProfile.inPhone != updateProfile.inPhone){
+          let address = new InputDataUpdateAddressDto();
+          address.in_addresstype = updateProfile.inAddresstype;
+          // address.in_propertystatus = updateProfile.property_status;
+          address.in_address1stline = updateProfile.inAddressline;
+          address.in_country = updateProfile.inCountry;
+          address.in_city = updateProfile.inCity;
+          address.in_district = updateProfile.inDistrict;
+          address.in_ward = updateProfile.inWard;
+          // address.in_roomno = updateProfile.roomno;
+          // address.in_mobile = updateProfile.mobile;
+          address.in_phone = updateProfile.inPhone;
+          inputDatatUpdateDto.address.push(address);
+          hasChange = true;
+      }
       inputDatatUpdateDto.reference = [];
       if (dto.references && dto.references.length) {
         dto.references.forEach(item => {
