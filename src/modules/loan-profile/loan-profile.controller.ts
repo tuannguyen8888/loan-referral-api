@@ -121,16 +121,22 @@ export class LoanProfileController {
     return this.service.test_sendData_pushUnderSystem(params.loan_profile_id);
   }
 
-    @Get("/sendData_procQDEChangeState/:loan_no")
-    @ApiOperation({ summary: "test chuyển trạng thái QDE qua DDE" })
-    sendData_procQDEChangeState(@Headers() headers, @Param() params): Promise<any> {
-        return this.service.sendData_procQDEChangeState(params.loan_no);
-    }
-    @Get("/sendData_procDDEChangeState/:loan_no")
-    @ApiOperation({ summary: "test chuyển trạng thái DDE qua POR" })
-    sendData_procDDEChangeState(@Headers() headers, @Param() params): Promise<any> {
-        return this.service.sendData_procDDEChangeState(params.loan_no);
-    }
+  @Get("/sendData_procQDEChangeState/:loan_no")
+  @ApiOperation({ summary: "test chuyển trạng thái QDE qua DDE" })
+  sendData_procQDEChangeState(
+    @Headers() headers,
+    @Param() params
+  ): Promise<any> {
+    return this.service.sendData_procQDEChangeState(params.loan_no);
+  }
+  @Get("/sendData_procDDEChangeState/:loan_no")
+  @ApiOperation({ summary: "test chuyển trạng thái DDE qua POR" })
+  sendData_procDDEChangeState(
+    @Headers() headers,
+    @Param() params
+  ): Promise<any> {
+    return this.service.sendData_procDDEChangeState(params.loan_no);
+  }
 
   @Delete("/remove-attach-files/:attach_file_id/:user_id")
   @ApiOperation({ summary: "Xóa file đính kèm cho hồ sơ vay" })
