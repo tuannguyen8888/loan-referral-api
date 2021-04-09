@@ -69,6 +69,10 @@ mafc_api:
     url: 'https://apigw-staging.mafc.vn/dataentry-mci'
     username: 'dataentrymci'
     password: 'mirae52345!@#%$'
+  update_data_entry:
+    url: 'https://apigw-staging.mafc.vn/3p/v2/data-entry-update'
+    username: 'mirae-3p'
+    password: '123456'
   master_data:
     url: 'https://apigw-staging.mafc.vn/masterdatamci'
     username: 'masterdatamci'
@@ -82,9 +86,10 @@ mafc_api:
     username: 'mirae-3p'
     password: '123456'
   upload:
-    url: 'https://apigw-staging.mafc.vn/dataentry/openapi'
-    username: 'dataentry'
-    password: 'mafcdataentry$%&$!@#'
+    push_to_und_url: 'https://apigw-staging.mafc.vn/thirdparty/pushundersystem'
+    reply_defer_url: 'https://apigw-staging.mafc.vn/thirdparty/pushpenhistory'
+    username: 'mirae-3p'
+    password: '123456'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload

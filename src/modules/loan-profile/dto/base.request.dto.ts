@@ -31,4 +31,6 @@ export class BaseRequestDto {
 
   @IsDefined()
   sort: any;
+
+  user_id: string;
 }

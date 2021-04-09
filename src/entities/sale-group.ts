@@ -1,35 +1,21 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("loan_profile_defer")
-export class LoanProfileDefer {
+@Entity("sale_group")
+export class SaleGroup {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Column("int", { name: "loan_profile_id" })
-  loanProfileId: number;
+  @Column("varchar", { name: "email", nullable: false, length: 255 })
+  email: string;
 
-  @Column("varchar", { name: "id_f1", length: 45 })
-  idF1: string;
+  @Column("varchar", { name: "name", nullable: true, length: 255 })
+  name: string | null;
 
-  @Column("varchar", { name: "client_name", length: 255 })
-  clientName: string;
+  @Column("int", { name: "parent" })
+  parent: number;
 
-  @Column("varchar", { name: "defer_code", length: 45 })
-  deferCode: string;
-
-  @Column("varchar", { name: "defer_note", length: 255 })
-  deferNote: string;
-
-  @Column("timestamp", {
-    name: "defer_time"
-  })
-  deferTime: Date;
-
-  @Column("varchar", { name: "status", length: 45 })
-  status: string;
-
-  @Column("varchar", { name: "reply_comment", length: 255 })
-  replyComment: string;
+  @Column("varchar", { name: "tree_path", nullable: false, length: 255 })
+  treePath: string;
 
   @Column("timestamp", {
     name: "created_at",

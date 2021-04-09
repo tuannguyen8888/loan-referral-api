@@ -67,7 +67,8 @@ export class LoanProfileDto {
   in_familybooknumber: string = null;
   in_idissuer: string = null;
   in_spousename: string = null;
-  in_spouse_id_c: string = null;
+  @IsOptional()
+  in_spouse_id_c?: string = null;
   in_bankname: string = null;
   in_bankbranch: string = null;
   in_acctype: string = null;

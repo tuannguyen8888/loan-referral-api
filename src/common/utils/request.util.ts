@@ -27,7 +27,7 @@ export class RequestUtil {
       const { data } = await this.httpService
         .post<T>(url, body, config)
         .toPromise();
-      console.log("api result data = ", data);
+      // console.log("api result data = ", data);
       return data;
     } catch (error) {
       console.error(error);
@@ -35,13 +35,20 @@ export class RequestUtil {
     }
   }
 
-  async uploadFile<T>(url: string, formData, auth = null): Promise<T> {
+  async uploadFile<T>(
+    url: string,
+    formData: FormData,
+    auth = null
+  ): Promise<T> {
     try {
-      let config: any = { headers: {
-          'Content-Type': 'multipart/form-data'
-          } };
-      if(auth){
-          config.auth = auth;
+      let config: any = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          ...formData.getHeaders()
+        }
+      };
+      if (auth) {
+        config.auth = auth;
       }
       const { data } = await this.httpService
         .post<T>(url, formData, config)
@@ -52,58 +59,54 @@ export class RequestUtil {
     }
   }
 
-    async downloadFile<T>(
-        url: string,
-        token: string,
-        initiator: string,
-        fileName: string,
-        config?: axios.AxiosRequestConfig
-    ): Promise<DownloadFileResParam> {
-        try {
-            const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
-            const { data } = await this.httpService
-                .get<T>(downloadUrl, config)
-                .toPromise();
-            return { downloadUrl, data };
-        } catch (error) {
-            throw error;
-        }
+  async downloadFile<T>(
+    url: string,
+    token: string,
+    initiator: string,
+    fileName: string,
+    config?: axios.AxiosRequestConfig
+  ): Promise<DownloadFileResParam> {
+    try {
+      const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
+      const { data } = await this.httpService
+        .get<T>(downloadUrl, config)
+        .toPromise();
+      return { downloadUrl, data };
+    } catch (error) {
+      throw error;
     }
-    async downloadPublicFile<T>(
-        url: string,
-        fileName: string
-    ): Promise<any> {
-        try {
-            const writer = fs.createWriteStream(fileName);
+  }
+  async downloadPublicFile<T>(
+    url: string,
+    fileName: string
+  ): Promise<fs.ReadStream> {
+    try {
+      const writer = fs.createWriteStream(fileName);
 
-            const response = await this.httpService.axiosRef({
-                url: url,
-                method: 'GET',
-                responseType: 'stream',
-            });
+      const response = await this.httpService.axiosRef({
+        url: url,
+        method: "GET",
+        responseType: "stream"
+      });
 
-            response.data.pipe(writer);
+      response.data.pipe(writer);
 
-            return new Promise((resolve, reject) => {
-                writer.on('finish', ()=>{
-                    writer.close();
-                    resolve(fs.createReadStream(fileName));
-                });
-                writer.on('error', reject);
-            });
+      return new Promise((resolve, reject) => {
+        writer.on("finish", () => {
+          writer.close();
+          resolve(fs.createReadStream(fileName));
+        });
+        writer.on("error", reject);
+      });
 
-
-
-
-
-            // const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
-            // let file = fs.createWriteStream(fileName);
-            // const { data } = await this.httpService
-            //     .get<T>(url, config).pipe(file)
-            //     .toPromise();
-            // return { downloadUrl: url, data: data };
-        } catch (error) {
-            throw error;
-        }
+      // const downloadUrl = `${url}?token=${token}&initiator=${initiator}&filename=${fileName}`;
+      // let file = fs.createWriteStream(fileName);
+      // const { data } = await this.httpService
+      //     .get<T>(url, config).pipe(file)
+      //     .toPromise();
+      // return { downloadUrl: url, data: data };
+    } catch (error) {
+      throw error;
     }
+  }
 }

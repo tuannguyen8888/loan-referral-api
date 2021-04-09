@@ -20,5 +20,4 @@ export class GetLoanProfilesRequestDto extends BaseRequestDto {
 
   @IsOptional()
   loan_status?: string;
-
 }

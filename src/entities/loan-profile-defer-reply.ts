@@ -1,35 +1,18 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("loan_profile_defer")
-export class LoanProfileDefer {
+@Entity("loan_profile_defer_reply")
+export class LoanProfileDeferReply {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Column("int", { name: "loan_profile_id" })
-  loanProfileId: number;
+  @Column("int", { name: "defer_id" })
+  deferId: number;
 
-  @Column("varchar", { name: "id_f1", length: 45 })
-  idF1: string;
+  @Column("varchar", { name: "doc_code", length: 45 })
+  docCode: string;
 
-  @Column("varchar", { name: "client_name", length: 255 })
-  clientName: string;
-
-  @Column("varchar", { name: "defer_code", length: 45 })
-  deferCode: string;
-
-  @Column("varchar", { name: "defer_note", length: 255 })
-  deferNote: string;
-
-  @Column("timestamp", {
-    name: "defer_time"
-  })
-  deferTime: Date;
-
-  @Column("varchar", { name: "status", length: 45 })
-  status: string;
-
-  @Column("varchar", { name: "reply_comment", length: 255 })
-  replyComment: string;
+  @Column("varchar", { name: "url", length: 255 })
+  url: string;
 
   @Column("timestamp", {
     name: "created_at",

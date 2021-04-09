@@ -25,6 +25,7 @@ import {
   LoanProfileResponseDto
 } from "./dto";
 import { AttachFileDto } from "./dto/attach-file.dto";
+import { LoanProfileDeferReplyRequestDto } from "./dto/loan-profile-defer-reply.request.dto";
 
 @ApiTags("Loan profile")
 @ApiSecurity("api-key")
@@ -87,31 +88,48 @@ export class LoanProfileController {
     return this.service.createLoanProfile(dto);
   }
 
-  // @Put("/")
-  // @ApiOperation({ summary: "Sửa thông tin hồ sơ vay" })
-  // updateLoanProfile(
-  //   @Headers() headers,
-  //   @Body() dto: LoanProfileDto
-  // ): Promise<LoanProfileDto> {
-  //   return this.service.updateLoanProfile(dto);
-  // }
-    @Put("/update-attach-files")
-    @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
-    @ApiBody({ type: [AttachFileDto] })
-    @ApiResponse({ type: [AttachFileDto] })
-    updateAttachFiles(
-        @Headers() headers,
-        @Body() dtos: AttachFileDto[]
-    ): Promise<AttachFileDto[]> {
-        return this.service.updateAttachFiles(dtos);
+  @Put("/")
+  @ApiOperation({ summary: "Sửa thông tin hồ sơ vay" })
+  updateLoanProfile(
+    @Headers() headers,
+    @Body() dto: LoanProfileDto
+  ): Promise<LoanProfileDto> {
+    return this.service.updateLoanProfile(dto);
+  }
+  @Put("/update-attach-files")
+  @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
+  @ApiBody({ type: [AttachFileDto] })
+  @ApiResponse({ type: [AttachFileDto] })
+  updateAttachFiles(
+    @Headers() headers,
+    @Body() dtos: AttachFileDto[]
+  ): Promise<AttachFileDto[]> {
+    return this.service.updateAttachFiles(dtos);
+  }
+  @Put("/reply-defers")
+  @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
+  @ApiBody({ type: [LoanProfileDeferReplyRequestDto] })
+  replyDeffers(
+    @Headers() headers,
+    @Body() dtos: LoanProfileDeferReplyRequestDto[]
+  ): Promise<boolean> {
+    return this.service.replyDeffers(dtos);
+  }
+  @Get("/sendData_pushUnderSystem/:loan_profile_id")
+  @ApiOperation({ summary: "test đẩy file qua MAFC" })
+  sendData_pushUnderSystem(@Headers() headers, @Param() params): Promise<any> {
+    return this.service.test_sendData_pushUnderSystem(params.loan_profile_id);
+  }
+
+    @Get("/sendData_procQDEChangeState/:loan_no")
+    @ApiOperation({ summary: "test chuyển trạng thái QDE qua DDE" })
+    sendData_procQDEChangeState(@Headers() headers, @Param() params): Promise<any> {
+        return this.service.sendData_procQDEChangeState(params.loan_no);
     }
-    @Get("/sendData_pushUnderSystem/:loan_profile_id")
-    @ApiOperation({ summary: "test đẩy file qua MAFC" })
-    sendData_pushUnderSystem(
-        @Headers() headers,
-        @Param() params
-    ): Promise<any> {
-        return this.service.test_sendData_pushUnderSystem(params.loan_profile_id);
+    @Get("/sendData_procDDEChangeState/:loan_no")
+    @ApiOperation({ summary: "test chuyển trạng thái DDE qua POR" })
+    sendData_procDDEChangeState(@Headers() headers, @Param() params): Promise<any> {
+        return this.service.sendData_procDDEChangeState(params.loan_no);
     }
 
   @Delete("/remove-attach-files/:attach_file_id/:user_id")
