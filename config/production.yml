@@ -62,40 +62,48 @@ database:
   logging: true
   synchronize: false
   entities:
-  - "dist/entities/masterdb/*.entity.{js,ts}"
-  - "dist/entities/tenantdb/*.entity.{js,ts}"
+  - "dist/entities/*.{js,ts}"
   replication:
     master:
-      host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
-      database: "loyalty_master"
+      host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
+      database: "loan_referral"
     slaves:
-    - host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
-      database: "loyalty_master"
-- name: "loyalty_finviet"
-  type: "mysql"
-  logging: true
-  synchronize: false
-  entities:
-  - "dist/entities/tenantdb/*.entity.{js,ts}"
-  replication:
-    master:
-      host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
-      database: "loyalty_finviet"
-    slaves:
-    - host: "localhost"
-      port: 3306
-      username: "root"
-      password: "root"
-      database: "loyalty_finviet"
+    - host: "10.50.50.5"
+      port: 3308
+      username: "finviet"
+      password: "yVREMIiso8BYPBAptGS8"
+      database: "loan_referral"
+
+mafc_api:
+  partner_code: 'EXT_FIV'
+  input_data_entry:
+    url: 'https://apigw.mafc.vn/thirdparty/dataentry'
+    username: '3p-mirae'
+    password: '3p1qaz@WSX'
+  update_data_entry:
+    url: 'https://apigw.mafc.vn/3p/v2/data-entry-update'
+    username: 'mirae-3p'
+    password: '3p1qaz@WSX'
+  master_data:
+    url: 'https://apigw.mafc.vn/thirdparty/dataentryMD'
+    username: '3p-mirae'
+    password: '3p1qaz@WSX'
+  check_customer_info:
+    url: 'https://apigw.mafc.vn/thirdparty/checkcustomer'
+    username: '3p-mirae'
+    password: '3p1qaz@WSX'
+  cic:
+    url: 'https://apigw.mafc.vn/cic'
+    username: '3p-mirae'
+    password: '3p1qaz@WSX'
+  upload:
+    push_to_und_url: 'https://apigw.mafc.vn/thirdparty/pushundersystem'
+    reply_defer_url: 'https://apigw.mafc.vn/thirdparty/pushpenhistory'
+    username: '3p-mirae'
+    password: '3p1qaz@WSX'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
