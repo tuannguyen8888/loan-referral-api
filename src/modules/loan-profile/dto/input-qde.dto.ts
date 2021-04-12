@@ -66,7 +66,7 @@ export class InputQdeAddressDto {
   In_fixphone?: string = null;
 }
 export class InputQdeReferenceDto {
-    id?:number;
+  id?: number;
   in_title?: string = null;
   in_refereename?: string = null;
   in_refereerelation?: string = null;
