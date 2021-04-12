@@ -92,7 +92,7 @@ mafc_api:
     username: '3p-mirae'
     password: '3p1qaz@WSX'
   check_customer_info:
-    url: 'https://apigw.mafc.vn/thirdparty/checkcustomer'
+    url: 'https://apigw.mafc.vn/3p/v2/check-customer'
     username: '3p-mirae'
     password: '3p1qaz@WSX'
   cic:
