@@ -21,6 +21,7 @@ import { MasterDataModule } from "./modules/master-data/master-data.module";
 import { ReceiveResultModule } from "./modules/receive-result/receive-result.module";
 import { SaleGroupController } from "./modules/sale-group/sale-group.controller";
 import { SaleGroupService } from "./modules/sale-group/sale-group.service";
+import { ScheduleModule } from "@nestjs/schedule";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -29,7 +30,8 @@ const imports = [
   RouterModule.forRoutes(ROUTES),
   LoanProfileModule,
   MasterDataModule,
-  ReceiveResultModule
+  ReceiveResultModule,
+  ScheduleModule.forRoot()
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));
