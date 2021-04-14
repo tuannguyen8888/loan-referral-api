@@ -1053,11 +1053,14 @@ export class LoanProfileService extends BaseService {
     console.log(`sendData_replyDeferUND loanNo=${loanNo},  customerName=${customerName},  docCode=${docCode},  url=${url}, comment=${comment}, deferCode=${deferCode}, deferStatus=${deferStatus}`)
     let mafc_api_config = config.get("mafc_api");
     // let download_config = config.get("download");
+
+      console.log("log 1");
     let result: any;
     let isError = false;
     let formData_log;
     let files = [];
     try {
+        console.log("log 2");
       formData_log = {};
       formData_log["appid"] = Number(loanNo);
       formData_log["userid"] = "EXT_FIV";
@@ -1066,14 +1069,23 @@ export class LoanProfileService extends BaseService {
       formData_log["usersname"] = "EXT_FIV";
       formData_log["password"] = "mafc123!";
       formData_log["comment"] = comment;
+        console.log("log 3");
       let formData = new FormData();
+        console.log("log 4");
       formData.append("appid", loanNo);
+        console.log("log 5");
       formData.append("userid", "EXT_FIV");
+        console.log("log 6");
       formData.append("defercode", "S1"); //deferCode;
+        console.log("log 7");
       formData.append("deferstatus", deferStatus);
+        console.log("log 8");
       formData.append("usersname", "EXT_FIV");
+        console.log("log 9");
       formData.append("password", "mafc123!");
+        console.log("log 10");
       formData.append("comment", comment);
+        console.log("log 11");
       if(url && docCode) {
           console.log("download file");
           let ext: any = url.split(".");
