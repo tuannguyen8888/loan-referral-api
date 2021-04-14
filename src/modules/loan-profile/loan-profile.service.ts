@@ -1052,7 +1052,7 @@ export class LoanProfileService extends BaseService {
   ) {
     console.log(`sendData_replyDeferUND loanNo=${loanNo},  customerName=${customerName},  docCode=${docCode},  url=${url}, comment=${comment}, deferCode=${deferCode}, deferStatus=${deferStatus}`)
     let mafc_api_config = config.get("mafc_api");
-    let download_config = config.get("download");
+    // let download_config = config.get("download");
     let result: any;
     let isError = false;
     let formData_log;
@@ -1074,7 +1074,8 @@ export class LoanProfileService extends BaseService {
       formData.append("usersname", "EXT_FIV");
       formData.append("password", "mafc123!");
       formData.append("comment", comment);
-      if(url) {
+      if(url && docCode) {
+          console.log("download file");
           let ext: any = url.split(".");
           ext = ext[ext.length - 1];
           let fileName = `${loanNo}_${customerName}_${docCode}.${ext}`;
@@ -1133,9 +1134,9 @@ export class LoanProfileService extends BaseService {
         .getCustomRepository(SendDataLogRepository)
         .save(log);
 
-      if (isError) {
-        throw new BadRequestException(log.result);
-      }
+      // if (isError) {
+      //   throw new BadRequestException(log.result);
+      // }
     }
     return result;
   }
