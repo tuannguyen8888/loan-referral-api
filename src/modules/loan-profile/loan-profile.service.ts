@@ -1078,13 +1078,13 @@ export class LoanProfileService extends BaseService {
         console.log("log 6");
       formData.append("defercode", "S1"); //deferCode;
         console.log("log 7");
-      formData.append("deferstatus", deferStatus);
+      formData.append("deferstatus", deferStatus?deferStatus:'Y');
         console.log("log 8");
       formData.append("usersname", "EXT_FIV");
         console.log("log 9");
       formData.append("password", "mafc123!");
         console.log("log 10");
-      formData.append("comment", comment);
+      formData.append("comment", comment?comment:'');
         console.log("log 11");
       if(url && docCode) {
           console.log("download file");
