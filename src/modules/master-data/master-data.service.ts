@@ -17,6 +17,17 @@ import {
   WardRepository
 } from "../../repositories";
 import { Repository } from "typeorm";
+import {
+  BankMasterData,
+  CityMasterData,
+  DistrictMasterData,
+  LoanCategoryMasterData,
+  SaleOfficeMasterData,
+  SchemeMasterData,
+  SecUserMasterData,
+  WardMasterData
+} from "src/entities";
+import { classToPlain, plainToClass } from "class-transformer";
 
 @Injectable()
 export class MasterDataService extends BaseService {
@@ -31,197 +42,143 @@ export class MasterDataService extends BaseService {
     super(request, logger, redisClient);
   }
 
-  async getBanks() {
-    // try {
-    //   const repo = this.connection.getCustomRepository(BankRepository).find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
+  bankMD = this.connection.getCustomRepository(BankRepository);
+  schemeMD = this.connection.getCustomRepository(SchemeRepository);
+  saleMD = this.connection.getCustomRepository(SaleOfficeRepository);
+  secMD = this.connection.getCustomRepository(SecUserRepository);
+  cityMD = this.connection.getCustomRepository(CityRepository);
+  districtMD = this.connection.getCustomRepository(DistrictRepository);
+  wardMD = this.connection.getCustomRepository(WardRepository);
+  loanCateMD = this.connection.getCustomRepository(LoanCategoryRepository);
 
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getBank" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+  //#region  FIND
+  async getBanks() {
+    try {
+      const repo = await this.bankMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getBanks",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async getSchemes() {
-    // try {
-    //   const repo = this.connection.getCustomRepository(SchemeRepository).find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getSchemes" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+    try {
+      const repo = await this.schemeMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getSchemes",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async getSaleOffice() {
-    // try {
-    //   const repo = this.connection
-    //     .getCustomRepository(SaleOfficeRepository)
-    //     .find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getSaleOffice" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+    try {
+      const repo = await this.saleMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getSaleOffice",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async getSecUser() {
-    // try {
-    //   const repo = this.connection
-    //     .getCustomRepository(SecUserRepository)
-    //     .find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getSecUser" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+    try {
+      const repo = await this.secMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getSecUser",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async getCity() {
-    // try {
-    //   const repo = this.connection.getCustomRepository(CityRepository).find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getCity" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+    try {
+      const repo = await this.cityMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getCity",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async getDistrict() {
-    // try {
-    //   const repo = this.connection
-    //     .getCustomRepository(DistrictRepository)
-    //     .find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getDistrict" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+    try {
+      const repo = await this.districtMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getDistrict",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async getWard() {
-    // try {
-    //   const repo = this.connection.getCustomRepository(WardRepository).find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getWard" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+    try {
+      const repo = await this.wardMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getWard",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async getLoanCategory() {
-    // try {
-    //   const repo = this.connection
-    //     .getCustomRepository(LoanCategoryRepository)
-    //     .find();
-    //   return repo;
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getLoanCategory" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
-        }
-      }
-    );
-    return response;
+    try {
+      const repo = await this.loanCateMD
+        .find()
+        .then(res => this.convertEntity2DTO(res))
+        .catch(e => []);
+      return {
+        msgName: "getLoanCategory",
+        data: repo
+      };
+    } catch (e) {
+      throw e;
+    }
   }
+  //#endregion
 
-  //
-
+  //#region FETCH AND SAVE
   async mafcFetchBanks() {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
-      { msgName: "getBank" },
+      { msgName: "getBanks" },
       {
         auth: {
           username: mafc_api_config.master_data.username,
@@ -229,12 +186,36 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(BankRepository, response);
-    return response;
+    const banks: BankMasterData[] = response.data;
+    this.bankMD.save(banks);
   }
 
   async mafcFetchSchemes() {
     let mafc_api_config = config.get("mafc_api");
+    const listFilter = [
+      "210",
+      "211",
+      "213",
+      "301",
+      "302",
+      "303",
+      "304",
+      "305",
+      "507",
+      "316",
+      "317",
+      "330",
+      "315",
+      "314",
+      "334",
+      "326",
+      "331",
+      "332",
+      "320",
+      "321",
+      "311",
+      "322"
+    ];
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
       { msgName: "getSchemes" },
@@ -245,8 +226,13 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(SchemeRepository, response);
-    return response;
+    const schemes: SchemeMasterData[] = response.data.filter(m => {
+      const filt = listFilter.some(x => m.schemename.includes(x));
+      if (filt) {
+        return m;
+      }
+    });
+    this.schemeMD.save(schemes);
   }
 
   async mafcFetchSaleOffice() {
@@ -261,11 +247,10 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(
-      SaleOfficeRepository,
-      response
+    const saleoffices: SaleOfficeMasterData[] = response.data.filter(d =>
+      d.inspectorname.includes("FIV-TLS")
     );
-    return response;
+    this.saleMD.save(saleoffices);
   }
 
   async mafcFetchSecUser() {
@@ -280,11 +265,8 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(
-      SecUserRepository,
-      response
-    );
-    return response;
+    const secusers: SecUserMasterData[] = response.data;
+    this.secMD.save(secusers);
   }
 
   async mafcFetchCity() {
@@ -299,8 +281,8 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(CityRepository, response);
-    return response;
+    const cities: CityMasterData[] = response.data;
+    this.cityMD.save(cities);
   }
 
   async mafcFetchDistrict() {
@@ -315,11 +297,8 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(
-      DistrictRepository,
-      response
-    );
-    return response;
+    const districts: DistrictMasterData[] = response.data;
+    this.districtMD.save(districts);
   }
 
   async mafcFetchWard() {
@@ -334,8 +313,8 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(WardRepository, response);
-    return response;
+    const wards: WardMasterData[] = response.data;
+    this.wardMD.save(wards);
   }
 
   async mafcFetchLoanCategory() {
@@ -350,18 +329,32 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const res = await this.createOrUpdateMasterData(
-      LoanCategoryRepository,
-      response
-    );
-    return response;
+    const loanCategories: LoanCategoryMasterData[] = response.data;
+    this.loanCateMD.save(loanCategories);
   }
 
-  //
+  //#endregion
 
-  async createOrUpdateMasterData(repo, data) {
-    const tableSelect = this.connection.getCustomRepository(repo);
-    // @ts-ignore
-    await tableSelect.save(data);
+  convertEntity2DTO(entity) {
+    const res = [];
+    entity.map(e => {
+      const r = {};
+      for (const [key, val] of Object.entries(e)) {
+        r[key] = val;
+      }
+      res.push(r);
+    });
+    return res;
+  }
+
+  cronMasterDataMafc() {
+    this.mafcFetchBanks();
+    this.mafcFetchSaleOffice();
+    this.mafcFetchSecUser();
+    this.mafcFetchSchemes();
+    this.mafcFetchLoanCategory();
+    this.mafcFetchCity();
+    this.mafcFetchDistrict();
+    this.mafcFetchWard();
   }
 }
