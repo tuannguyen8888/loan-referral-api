@@ -1050,7 +1050,7 @@ export class LoanProfileService extends BaseService {
     deferCode: string,
     deferStatus: string = "Y"
   ) {
-    console.log(`sendData_replyDeferUND loanNo=${loanNo},  loanNo=${loanNo},  customerName=${customerName},  docCode=${docCode},  url=${url}, comment=${comment}, deferCode=${deferCode}, deferStatus=${deferStatus}`)
+    console.log(`sendData_replyDeferUND loanNo=${loanNo},  customerName=${customerName},  docCode=${docCode},  url=${url}, comment=${comment}, deferCode=${deferCode}, deferStatus=${deferStatus}`)
     let mafc_api_config = config.get("mafc_api");
     let download_config = config.get("download");
     let result: any;
@@ -1074,18 +1074,20 @@ export class LoanProfileService extends BaseService {
       formData.append("usersname", "EXT_FIV");
       formData.append("password", "mafc123!");
       formData.append("comment", comment);
-      let ext: any = url.split(".");
-      ext = ext[ext.length - 1];
-      let fileName = `${loanNo}_${customerName}_${docCode}.${ext}`;
-      let filePath = `${__dirname}/../../attach_files/${fileName}`;
-      let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(
-        url,
-        filePath
-      );
-      console.log("fileStream = ", fileStream.path);
-      files.push(fileStream.path);
-      formData.append(docCode, fs.createReadStream(filePath));
-      formData_log[docCode] = fileName;
+      if(url) {
+          let ext: any = url.split(".");
+          ext = ext[ext.length - 1];
+          let fileName = `${loanNo}_${customerName}_${docCode}.${ext}`;
+          let filePath = `${__dirname}/../../attach_files/${fileName}`;
+          let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(
+              url,
+              filePath
+          );
+          console.log("fileStream = ", fileStream.path);
+          files.push(fileStream.path);
+          formData.append(docCode, fs.createReadStream(filePath));
+          formData_log[docCode] = fileName;
+      }
       console.log("call api reply-defer-und");
       result = await this.requestUtil.uploadFile(
         mafc_api_config.upload.reply_defer_url,
