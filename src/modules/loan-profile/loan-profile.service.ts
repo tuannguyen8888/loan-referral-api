@@ -1050,6 +1050,7 @@ export class LoanProfileService extends BaseService {
     deferCode: string,
     deferStatus: string = "Y"
   ) {
+    console.log(`sendData_replyDeferUND loanNo=${loanNo},  loanNo=${loanNo},  customerName=${customerName},  docCode=${docCode},  url=${url}, comment=${comment}, deferCode=${deferCode}, deferStatus=${deferStatus}`)
     let mafc_api_config = config.get("mafc_api");
     let download_config = config.get("download");
     let result: any;
@@ -1097,7 +1098,7 @@ export class LoanProfileService extends BaseService {
 
       console.log("call api reply-defer-und result = ", result);
     } catch (e) {
-      console.error(e.message);
+      console.error('call api reply-defer-und error: ' + e.message);
       result = e;
       isError = true;
     } finally {
