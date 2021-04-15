@@ -22,17 +22,13 @@ import {
   CityMasterData,
   DistrictMasterData,
   LoanCategoryMasterData,
-  SaleOfficeMasterData,
   SchemeMasterData,
   SecUserMasterData,
   WardMasterData
 } from "src/entities";
-import { classToPlain, plainToClass } from "class-transformer";
 
 @Injectable()
 export class MasterDataService extends BaseService {
-  private modelRequest: Repository<any>;
-
   constructor(
     @Inject(REQUEST) protected request: Request,
     protected readonly logger: Logger,
@@ -59,7 +55,7 @@ export class MasterDataService extends BaseService {
         .then(res => this.convertEntity2DTO(res))
         .catch(e => []);
       return {
-        msgName: "getBanks",
+        msgName: "getBank",
         data: repo
       };
     } catch (e) {
@@ -84,14 +80,18 @@ export class MasterDataService extends BaseService {
 
   async getSaleOffice() {
     try {
-      const repo = await this.saleMD
-        .find()
-        .then(res => this.convertEntity2DTO(res))
-        .catch(e => []);
-      return {
-        msgName: "getSaleOffice",
-        data: repo
-      };
+      let mafc_api_config = config.get("mafc_api");
+      let response = await this.requestUtil.post(
+        mafc_api_config.master_data.url,
+        { msgName: "getSaleOffice" },
+        {
+          auth: {
+            username: mafc_api_config.master_data.username,
+            password: mafc_api_config.master_data.password
+          }
+        }
+      );
+      return response
     } catch (e) {
       throw e;
     }
@@ -178,7 +178,7 @@ export class MasterDataService extends BaseService {
     let mafc_api_config = config.get("mafc_api");
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
-      { msgName: "getBanks" },
+      { msgName: "getBank" },
       {
         auth: {
           username: mafc_api_config.master_data.username,
@@ -235,23 +235,23 @@ export class MasterDataService extends BaseService {
     this.schemeMD.save(schemes);
   }
 
-  async mafcFetchSaleOffice() {
-    let mafc_api_config = config.get("mafc_api");
-    let response = await this.requestUtil.post(
-      mafc_api_config.master_data.url,
-      { msgName: "getSaleOffice" },
-      {
-        auth: {
-          username: mafc_api_config.master_data.username,
-          password: mafc_api_config.master_data.password
+  /*   async mafcFetchSaleOffice() {
+      let mafc_api_config = config.get("mafc_api");
+      let response = await this.requestUtil.post(
+        mafc_api_config.master_data.url,
+        { msgName: "getSaleOffice" },
+        {
+          auth: {
+            username: mafc_api_config.master_data.username,
+            password: mafc_api_config.master_data.password
+          }
         }
-      }
-    );
-    const saleoffices: SaleOfficeMasterData[] = response.data.filter(d =>
-      d.inspectorname.includes("FIV-TLS")
-    );
-    this.saleMD.save(saleoffices);
-  }
+      );
+      const saleoffices: SaleOfficeMasterData[] = response.data.filter(d =>
+        d.inspectorname.includes("FIV-TLS")
+      );
+      this.saleMD.save(saleoffices);
+    } */
 
   async mafcFetchSecUser() {
     let mafc_api_config = config.get("mafc_api");
@@ -348,13 +348,14 @@ export class MasterDataService extends BaseService {
   }
 
   cronMasterDataMafc() {
-    this.mafcFetchBanks();
-    this.mafcFetchSaleOffice();
-    this.mafcFetchSecUser();
-    this.mafcFetchSchemes();
-    this.mafcFetchLoanCategory();
-    this.mafcFetchCity();
-    this.mafcFetchDistrict();
-    this.mafcFetchWard();
+    return Promise.all([
+      this.mafcFetchBanks(),
+      this.mafcFetchSecUser(),
+      this.mafcFetchSchemes(),
+      this.mafcFetchLoanCategory(),
+      this.mafcFetchCity(),
+      this.mafcFetchDistrict(),
+      this.mafcFetchWard(),
+    ]);
   }
 }
