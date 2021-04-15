@@ -50,6 +50,7 @@ database:
   entities:
   - "dist/entities/*.{js,ts}"
   replication:
+  
     master:
       host: "10.50.50.5"
       port: 3308

@@ -66,7 +66,7 @@ export class LoanProfileService extends BaseService {
 
   async getAllLoanProfiles(dto: GetLoanProfilesRequestDto) {
     try {
-      console.log("getAllLoanProfiles dto = ", dto);
+      // console.log("getAllLoanProfiles dto = ", dto);
       const repo = this.connection.getCustomRepository(LoanProfileRepository);
       const where = {
         deletedAt: IsNull()
@@ -137,7 +137,7 @@ export class LoanProfileService extends BaseService {
           result.rows.push(lp);
         });
       }
-      console.log("result = ", result);
+      // console.log("result = ", result);
       return result;
     } catch (e) {
       console.error(e);
