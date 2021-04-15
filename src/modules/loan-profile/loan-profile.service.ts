@@ -1010,7 +1010,7 @@ export class LoanProfileService extends BaseService {
           defer.replyComment = dtos[i].reply_comment;
           defer.status = "SENT";
           defer.updatedAt = new Date();
-          await this.connection
+          defer =await this.connection
             .getCustomRepository(LoanProfileDeferRepository)
             .save(defer);
           if (newReplys && newReplys.length) {
@@ -1028,7 +1028,7 @@ export class LoanProfileService extends BaseService {
       if (defer) {
         let profile = await this.connection
           .getCustomRepository(LoanProfileRepository)
-          .findOne(defer.id);
+          .findOne(defer.loanProfileId);
         if (profile) {
           profile.fvStatus = "SENT_DEFER_FILES";
           profile.updatedAt = new Date();
