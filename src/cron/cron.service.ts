@@ -4,13 +4,9 @@ import { Cron, SchedulerRegistry, Timeout } from "@nestjs/schedule";
 
 @Injectable()
 export class CronService {
-  constructor(
-    private masterData: MasterDataService,
-    private logger: Logger,
-    private schedulerRegistry: SchedulerRegistry
-  ) {}
+  constructor(private masterData: MasterDataService, private logger: Logger,private schedulerRegistry: SchedulerRegistry) {}
   callAPI = [
-    this.masterData.mafcFetchBanks(),
+    this.masterData.mafcFetchBanks(),  
     this.masterData.mafcFetchLoanCategory(),
     this.masterData.mafcFetchSaleOffice(),
     this.masterData.mafcFetchSchemes(),
@@ -20,15 +16,15 @@ export class CronService {
     this.masterData.mafcFetchWard()
   ];
 
-  @Timeout("mafc-masterdata-once", 0)
+  @Timeout('mafc-masterdata-once',0)
   firstCron() {
-    console.log(" START THIS ======== ", this.masterData);
+    console.log(" START THIS ======== ", this.masterData)
     this.logger.debug("Running cronjob first time .........");
     this.handleCron();
   }
 
-  @Cron("* * 0 * * *", {
-    name: "mafc-masterdata"
+  @Cron("* * 0 * * *",{
+    name: 'mafc-masterdata',
   })
   async handleCron() {
     try {
