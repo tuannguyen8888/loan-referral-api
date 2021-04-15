@@ -1,37 +1,29 @@
 import { HttpService, Injectable } from "@nestjs/common";
 import { RequestUtil } from "src/common/utils";
 import { Logger } from "src/common/loggers";
-import * as cron from "node-cron";
 import { MasterDataService } from "./../modules/master-data/master-data.service";
+import { Cron, Timeout } from "@nestjs/schedule";
 
 @Injectable()
 export class CronService {
   private readonly logger = new Logger();
-  constructor(private mafcService: MasterDataService) {}
+  private httpService = new HttpService();
+  private requestUtil = new RequestUtil(this.httpService);
 
+  @Timeout(0)
+  firstCron() {
+    console.info(`RUN ONCE AT ======= ${new Date()}`);
+    this.cronService();
+  }
+
+  @Cron("* * 0 * * *")
   mafcCron() {
-    this.mafcService.cronMasterDataMafc();
+    console.info(`START CRON AT ======= ${new Date()}`);
+    this.cronService();
+  }
+
+  cronService() {
+    const masterData = new MasterDataService(null, this.logger, null, this.requestUtil);
+    masterData.cronMasterDataMafc();
   }
 }
-
-const callCron = () => {
-  const httpService = new HttpService();
-  const newCron = new CronService(
-    new MasterDataService(
-      null,
-      new Logger(),
-      null,
-      new RequestUtil(httpService)
-    )
-  );
-  newCron.mafcCron();
-};
-
-export const runningOnStart = () => {
-  callCron();
-  cron.schedule("* * 0 * * *", () => {
-    callCron();
-  });
-};
-
-runningOnStart();

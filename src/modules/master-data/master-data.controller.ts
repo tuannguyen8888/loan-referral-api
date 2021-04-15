@@ -68,11 +68,4 @@ export class MasterDataController {
     return this.service.getLoanCategory();
   }
 
-  @Get("/master-data")
-  @ApiOperation({
-    summary: "Dành cho Vendor/3rd system gọi để lấy thông tin loan của MAFC"
-  })
-  saveMasterData(@Headers() headers, @Param() params): Promise<any> {
-    return this.service.cronMasterDataMafc();
-  }
 }
