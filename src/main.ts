@@ -108,7 +108,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("/", app, document);
   SwaggerModule.setup("/api", app, document);
-  
+
   // useContainer(app.select(AppModule), { fallbackOnErrors: true, fallback: true});
   // useContainer(app.select(MasterDataModule), { fallbackOnErrors: true, fallback: true });
   // useContainer(app.select(MemberModule), { fallbackOnErrors: true, fallback: true });
@@ -120,7 +120,6 @@ async function bootstrap() {
       `Server started with ${enviroment} enviroment on port ${serverConfig.port}`
     );
   });
-  
 }
 
 bootstrap();

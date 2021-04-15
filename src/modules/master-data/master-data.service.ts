@@ -91,7 +91,7 @@ export class MasterDataService extends BaseService {
           }
         }
       );
-      return response
+      return response;
     } catch (e) {
       throw e;
     }
@@ -355,7 +355,7 @@ export class MasterDataService extends BaseService {
       this.mafcFetchLoanCategory(),
       this.mafcFetchCity(),
       this.mafcFetchDistrict(),
-      this.mafcFetchWard(),
+      this.mafcFetchWard()
     ]);
   }
 }
