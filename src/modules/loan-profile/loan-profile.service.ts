@@ -1541,6 +1541,12 @@ export class LoanProfileService extends BaseService {
   }
 
   async updateAttachFiles(dtos: AttachFileDto[]) {
+      await this.connection
+          .createQueryBuilder()
+          .delete()
+          .from(AttachFile)
+          .where({LoanProfileId: dtos[0].loan_profile_id})
+          .execute();
     let entities = this.convertDtos2Entities(dtos, AttachFile);
     let results = await this.connection
       .getCustomRepository(AttachFileRepository)
