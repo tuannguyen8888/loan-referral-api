@@ -22,6 +22,7 @@ import { ReceiveResultModule } from "./modules/receive-result/receive-result.mod
 import { SaleGroupController } from "./modules/sale-group/sale-group.controller";
 import { SaleGroupService } from "./modules/sale-group/sale-group.service";
 import { ScheduleModule } from "@nestjs/schedule";
+import { CronService } from "./cron/cron.service";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -45,7 +46,8 @@ databaseConfig.forEach(db => {
     PartnerRepository,
     CheckPartnerService,
     BaseService,
-    SaleGroupService
+    SaleGroupService,
+    CronService
   ],
   controllers: [SaleGroupController]
 })

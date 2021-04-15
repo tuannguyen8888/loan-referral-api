@@ -52,6 +52,7 @@
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "nest-router": "^1.0.9",
+    "node-cron": "^3.0.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -110,6 +111,7 @@
     "testEnvironment": "node"
   },
   "pre-commit": [
-    "format"
+    "format",
+    "lint"
   ]
 }
