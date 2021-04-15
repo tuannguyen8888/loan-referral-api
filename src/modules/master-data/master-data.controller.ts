@@ -67,4 +67,5 @@ export class MasterDataController {
   getLoanCategory(@Headers() headers, @Param() params): Promise<any> {
     return this.service.getLoanCategory();
   }
+
 }

@@ -1,27 +1,29 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { MasterDataService } from "../modules/master-data/master-data.service";
+import { HttpService, Injectable } from "@nestjs/common";
+import { RequestUtil } from "src/common/utils";
+import { Logger } from "src/common/loggers";
+import { MasterDataService } from "./../modules/master-data/master-data.service";
 import { Cron, Timeout } from "@nestjs/schedule";
 
 @Injectable()
 export class CronService {
-  constructor(private masterData: MasterDataService, private logger: Logger) {}
+  private readonly logger = new Logger();
+  private httpService = new HttpService();
+  private requestUtil = new RequestUtil(this.httpService);
 
-  @Timeout("mafc-masterdata-once", 0)
+  @Timeout(0)
   firstCron() {
-    this.logger.debug("Running cronjob first time .........");
-    this.handleCron();
+    console.info(`RUN ONCE AT ======= ${new Date()}`);
+    this.cronService();
   }
 
-  @Cron("* * 0 * * *", {
-    name: "mafc-masterdata"
-  })
-  handleCron() {
-    try {
-      this.logger.debug("Starting cronjob .........");
-      this.masterData.cronMasterDataMafc();
-    } catch (e) {
-      this.logger.debug(e);
-      throw new Error(e);
-    }
+  @Cron("* * 0 * * *")
+  mafcCron() {
+    console.info(`START CRON AT ======= ${new Date()}`);
+    this.cronService();
+  }
+
+  cronService() {
+    const masterData = new MasterDataService(null, this.logger, null, this.requestUtil);
+    masterData.cronMasterDataMafc();
   }
 }

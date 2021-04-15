@@ -15,8 +15,6 @@ import { AppModule } from "./app.module";
 import { getThemeName } from "./common/helpers";
 import { DebugStream, ProductionStream } from "./common/loggers";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
-import { useContainer, Validator } from "class-validator";
-import { Container } from "typedi";
 // import {MasterDataModule, MemberModule, TransactionModule} from "./modules";
 
 async function bootstrap() {
@@ -110,6 +108,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("/", app, document);
   SwaggerModule.setup("/api", app, document);
+
   // useContainer(app.select(AppModule), { fallbackOnErrors: true, fallback: true});
   // useContainer(app.select(MasterDataModule), { fallbackOnErrors: true, fallback: true });
   // useContainer(app.select(MemberModule), { fallbackOnErrors: true, fallback: true });
