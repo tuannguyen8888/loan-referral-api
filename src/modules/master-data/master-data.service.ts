@@ -353,7 +353,7 @@ export class MasterDataService extends BaseService {
       this.mafcFetchDistrict(),
       this.mafcFetchWard()
     ]);
-    console.log("FETCH AND SAVE MASTER DATA COMPLETED !!!!!")
+    console.log("FETCH AND SAVE MASTER DATA COMPLETED !!!!!");
     return success;
   }
 }
