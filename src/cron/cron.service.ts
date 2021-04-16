@@ -23,7 +23,8 @@ export class CronService {
   }
 
   cronService() {
-    const masterData = new MasterDataService(null, this.logger, null, this.requestUtil);
+    const masterData = new MasterDataService(null,this.logger,null,this.requestUtil);
     masterData.cronMasterDataMafc();
+    return;
   }
 }

@@ -158,19 +158,19 @@ export class LoanProfileService extends BaseService {
             .toLowerCase()
             .split("_")
             .join("") ==
-            entityKey
-              .toLowerCase()
-              .split("_")
-              .join("") ||
+          entityKey
+            .toLowerCase()
+            .split("_")
+            .join("") ||
           dtoKey
             .toLowerCase()
             .split("_")
             .join("") ==
-            "in" +
-              entityKey
-                .toLowerCase()
-                .split("_")
-                .join("")
+          "in" +
+          entityKey
+            .toLowerCase()
+            .split("_")
+            .join("")
         ) {
           dto[dtoKey] = entity[entityKey];
           break;
@@ -214,19 +214,19 @@ export class LoanProfileService extends BaseService {
             .toLowerCase()
             .split("_")
             .join("") ==
-            entityKey
-              .toLowerCase()
-              .split("_")
-              .join("") ||
+          entityKey
+            .toLowerCase()
+            .split("_")
+            .join("") ||
           dtoKey
             .toLowerCase()
             .split("_")
             .join("") ==
-            "in" +
-              entityKey
-                .toLowerCase()
-                .split("_")
-                .join("")
+          "in" +
+          entityKey
+            .toLowerCase()
+            .split("_")
+            .join("")
         ) {
           entity[entityKey] = dto[dtoKey];
           break;
@@ -909,9 +909,9 @@ export class LoanProfileService extends BaseService {
         }
       ]);
       if (isError) {
-        log.result = result.message;
+        log.result = 'Error : ' + result.message;
       } else {
-        log.result = JSON.stringify(result);
+        log.result = 'API Result : ' + JSON.stringify(result);
       }
       log.createdAt = new Date();
       await this.connection
@@ -944,11 +944,11 @@ export class LoanProfileService extends BaseService {
             await this.sendData_pushToUND(
               loanProfile,
               loanProfile.inFname.trim() +
-                (loanProfile.inMname && loanProfile.inMname.trim() != ""
-                  ? " " + loanProfile.inMname.trim()
-                  : "") +
-                " " +
-                loanProfile.inLname.trim(),
+              (loanProfile.inMname && loanProfile.inMname.trim() != ""
+                ? " " + loanProfile.inMname.trim()
+                : "") +
+              " " +
+              loanProfile.inLname.trim(),
               attachFiles
             );
           }
@@ -1541,12 +1541,14 @@ export class LoanProfileService extends BaseService {
   }
 
   async updateAttachFiles(dtos: AttachFileDto[]) {
+    if (!dtos[0].id) {
       await this.connection
-          .createQueryBuilder()
-          .delete()
-          .from(AttachFile)
-          .where({LoanProfileId: dtos[0].loan_profile_id})
-          .execute();
+        .createQueryBuilder()
+        .delete()
+        .from(AttachFile)
+        .where({ loanProfileId: dtos[0].loan_profile_id })
+        .execute();
+    }
     let entities = this.convertDtos2Entities(dtos, AttachFile);
     let results = await this.connection
       .getCustomRepository(AttachFileRepository)
@@ -1574,11 +1576,11 @@ export class LoanProfileService extends BaseService {
           await this.sendData_pushToUND(
             loanProfile,
             loanProfile.inFname.trim() +
-              (loanProfile.inMname && loanProfile.inMname.trim() != ""
-                ? " " + loanProfile.inMname.trim()
-                : "") +
-              " " +
-              loanProfile.inLname.trim(),
+            (loanProfile.inMname && loanProfile.inMname.trim() != ""
+              ? " " + loanProfile.inMname.trim()
+              : "") +
+            " " +
+            loanProfile.inLname.trim(),
             attachFiles
           );
         }
