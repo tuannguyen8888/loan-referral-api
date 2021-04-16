@@ -47,6 +47,14 @@ export class MasterDataService extends BaseService {
   wardMD = this.connection.getCustomRepository(WardRepository);
   loanCateMD = this.connection.getCustomRepository(LoanCategoryRepository);
 
+  convertStringToCharCode(str:string){
+    let finalString = "";
+    for (var i=0; i<str.length; i++) {
+      finalString += str.charCodeAt(i).toString(16);
+    }
+    return finalString;
+  }
+
   //#region  FIND
   async getBanks() {
     try {
@@ -251,6 +259,10 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    response.data = response.data.map(d => {
+      d["id"] = this.convertStringToCharCode(d["lsu_USER_ID_C"]);
+      return d;
+    });
     const secusers: SecUserMasterData[] = response.data;
     const res = await this.secMD.save(secusers, { chunk: 500 });
     console.log("SAVED SEC USER");
