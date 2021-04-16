@@ -909,9 +909,9 @@ export class LoanProfileService extends BaseService {
         }
       ]);
       if (isError) {
-        log.result = result.message;
+        log.result = "Error : " + result.message;
       } else {
-        log.result = JSON.stringify(result);
+        log.result = "API Result : " + JSON.stringify(result);
       }
       log.createdAt = new Date();
       await this.connection
@@ -1541,12 +1541,14 @@ export class LoanProfileService extends BaseService {
   }
 
   async updateAttachFiles(dtos: AttachFileDto[]) {
+    if (!dtos[0].id) {
       await this.connection
-          .createQueryBuilder()
-          .delete()
-          .from(AttachFile)
-          .where({LoanProfileId: dtos[0].loan_profile_id})
-          .execute();
+        .createQueryBuilder()
+        .delete()
+        .from(AttachFile)
+        .where({ loanProfileId: dtos[0].loan_profile_id })
+        .execute();
+    }
     let entities = this.convertDtos2Entities(dtos, AttachFile);
     let results = await this.connection
       .getCustomRepository(AttachFileRepository)

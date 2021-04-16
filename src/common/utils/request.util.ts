@@ -20,8 +20,8 @@ export class RequestUtil {
         config = {};
       }
       config.timeout = 60 * 1000;
-      config.timeoutErrorMessage =
-        "Timeout roi cha noi, api gi ma cham qua vay";
+      // config.timeoutErrorMessage =
+      //   "Timeout roi cha noi, api gi ma cham qua vay";
       console.log("call partner api: ", url);
       console.log("body = ", body);
       const { data } = await this.httpService
@@ -30,7 +30,7 @@ export class RequestUtil {
       // console.log("api result data = ", data);
       return data;
     } catch (error) {
-      console.error(error);
+      console.error('error call '+url+': '+error.message);
       throw error;
     }
   }
@@ -45,7 +45,9 @@ export class RequestUtil {
         headers: {
           "Content-Type": "multipart/form-data",
           ...formData.getHeaders()
-        }
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
       };
       if (auth) {
         config.auth = auth;
