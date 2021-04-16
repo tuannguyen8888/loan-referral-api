@@ -251,6 +251,10 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    response.data = response.data.map(d =>{
+      d['id'] = d['lsu_USER_ID_C'];
+      return d;
+    })
     const secusers: SecUserMasterData[] = response.data;
     const res = await this.secMD.save(secusers, { chunk: 500 });
     console.log("SAVED SEC USER");
