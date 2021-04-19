@@ -418,11 +418,21 @@ export class LoanProfileService extends BaseService {
   }
 
   async createLoanProfile(dto: LoanProfileDto) {
+    let entityOld = await this.connection
+          .getCustomRepository(LoanProfileRepository)
+          .findOne({where: {
+                  deletedAt: IsNull(),
+                  inNationalid: dto.in_nationalid
+              }});
+    if(entityOld){
+        throw new BadRequestException(`Số CMND ${dto.in_nationalid} đã tồn tại dữ liệu trong hệ thống. Vuiu lòng kiểm tra lại.`)
+    }
+    let error = null;
     let qdeResult = await this.sendData_inputQDE(dto);
     console.log("qdeResult = ", qdeResult);
     let entity: LoanProfile = this.convertDto2Entity(dto, LoanProfile);
     if (!qdeResult.success) {
-      throw new BadRequestException(qdeResult, "error SENT_QDE");
+        error = new BadRequestException(qdeResult, "error from MAFC SENT_QDE");
     }
     dto.loan_no = qdeResult.data;
     entity.loanNo = qdeResult.data;
@@ -432,22 +442,22 @@ export class LoanProfileService extends BaseService {
     entity.createdAt = new Date();
     let qdeChangeResult = await this.sendData_procQDEChangeState(entity.loanNo);
     if (!qdeChangeResult.success) {
-      throw new BadRequestException(
+        error = new BadRequestException(
         qdeChangeResult,
-        "error SENT_QDTChangeToDDE"
+        "error from MAFC SENT_QDTChangeToDDE"
       );
     }
     entity.fvStatus = "SENT_QDTChangeToDDE";
     let ddeResult = await this.sendData_inputDDE(dto);
     if (!ddeResult.success) {
-      throw new BadRequestException(ddeResult, "error SENT_DDE");
+        error =  new BadRequestException(ddeResult, "error from MAFC SENT_DDE");
     }
     entity.fvStatus = "SENT_DDE";
     let ddeChangeResult = await this.sendData_procDDEChangeState(entity.loanNo);
     if (!ddeChangeResult.success) {
-      throw new BadRequestException(
+        error =  new BadRequestException(
         ddeChangeResult,
-        "error SENT_DDEChangeToPOL"
+        "error from MAFC SENT_DDEChangeToPOL"
       );
     }
     entity.fvStatus = "SENT_DDEChangeToPOL";
@@ -479,8 +489,11 @@ export class LoanProfileService extends BaseService {
       Reference,
       ReferenceDto
     );
-
-    return response;
+    if(error){
+      throw error;
+    }else {
+        return response;
+    }
   }
 
   private async sendData_inputQDE(dto: LoanProfileDto) {
