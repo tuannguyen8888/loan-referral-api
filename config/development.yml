@@ -49,6 +49,8 @@ database:
   synchronize: false
   entities:
   - "dist/entities/*.{js,ts}"
+  - "dist/entities/mafc-masterdata/*.{js,ts}"
+  - "dist//entities/ptf/*.{js,ts}"
   replication:
   
     master:
