@@ -23,6 +23,7 @@ import { SaleGroupController } from "./modules/sale-group/sale-group.controller"
 import { SaleGroupService } from "./modules/sale-group/sale-group.service";
 import { ScheduleModule } from "@nestjs/schedule";
 import { CronService } from "./cron/cron.service";
+import { PtfLoanProfileModule } from './modules/ptf/ptf-loan-profile/ptf-loan-profile.module';
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");

@@ -17,3 +17,8 @@ export * from "./mafc-masterdata/masterdata-loan-category";
 export * from "./mafc-masterdata/masterdata-saleoffice";
 export * from "./mafc-masterdata/masterdata-scheme";
 export * from "./mafc-masterdata/masterdata-secuser";
+export * from "./ptf/ptf-address";
+export * from "./ptf/ptf-attachFile";
+export * from "./ptf/ptf-employment-information";
+export * from "./ptf/ptf-loan-profile";
+export * from "./ptf/ptf-related-person";
