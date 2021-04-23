@@ -418,6 +418,7 @@ export class LoanProfileService extends BaseService {
     }
 
     async createLoanProfile(dto: LoanProfileDto) {
+        let response: LoanProfileDto;
         let entityOld = await this.connection
             .getCustomRepository(LoanProfileRepository)
             .findOne({
@@ -435,64 +436,68 @@ export class LoanProfileService extends BaseService {
         let entity: LoanProfile = this.convertDto2Entity(dto, LoanProfile);
         if (!qdeResult.success) {
             error = new BadRequestException(qdeResult, "error from MAFC SENT_QDE");
-        }
-        dto.loan_no = qdeResult.data;
-        entity.loanNo = qdeResult.data;
-        // entity.status = "ACTIVE";
-        entity.partnerId = 2; //MAFC
-        entity.fvStatus = "SENT_QDE";
-        entity.loanStatus = "QDE";
-        entity.createdAt = new Date();
-        let qdeChangeResult = await this.sendData_procQDEChangeState(entity.loanNo);
-        if (!qdeChangeResult.success) {
-            error = new BadRequestException(
-                qdeChangeResult,
-                "error from MAFC SENT_QDTChangeToDDE"
-            );
-        }
-        entity.fvStatus = "SENT_QDTChangeToDDE";
-        entity.loanStatus = "DDE";
-        let ddeResult = await this.sendData_inputDDE(dto);
-        if (!ddeResult.success) {
-            error = new BadRequestException(ddeResult, "error from MAFC SENT_DDE");
-        }
-        entity.fvStatus = "SENT_DDE";
-        let ddeChangeResult = await this.sendData_procDDEChangeState(entity.loanNo);
-        if (!ddeChangeResult.success) {
-            error = new BadRequestException(
-                ddeChangeResult,
-                "error from MAFC SENT_DDEChangeToPOL"
-            );
-        }
-        entity.fvStatus = "SENT_DDEChangeToPOL";
-        entity.loanStatus = "POL";
-        this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
-        let result = await this.connection
-            .getCustomRepository(LoanProfileRepository)
-            .save(entity);
-        this.logger.verbose(`insertResult = ${result}`);
-        let address = this.convertDtos2Entities(dto.address, Address);
-        address.forEach(item => (item.loanProfileId = result.id));
-        address = await this.connection
-            .getCustomRepository(AddressRepository)
-            .save(address);
-        let references = this.convertDtos2Entities(dto.references, Reference);
-        references.forEach(item => (item.loanProfileId = result.id));
+        }else {
+            dto.loan_no = qdeResult.data;
+            entity.loanNo = qdeResult.data;
+            // entity.status = "ACTIVE";
+            entity.partnerId = 2; //MAFC
+            entity.fvStatus = "SENT_QDE";
+            entity.loanStatus = "QDE";
+            entity.createdAt = new Date();
+            let qdeChangeResult = await this.sendData_procQDEChangeState(entity.loanNo);
+            if (!qdeChangeResult.success) {
+                error = new BadRequestException(
+                    qdeChangeResult,
+                    "error from MAFC SENT_QDTChangeToDDE"
+                );
+            }else {
+                entity.fvStatus = "SENT_QDTChangeToDDE";
+                entity.loanStatus = "DDE";
+                let ddeResult = await this.sendData_inputDDE(dto);
+                if (!ddeResult.success) {
+                    error = new BadRequestException(ddeResult, "error from MAFC SENT_DDE");
+                }else {
+                    entity.fvStatus = "SENT_DDE";
+                    let ddeChangeResult = await this.sendData_procDDEChangeState(entity.loanNo);
+                    if (!ddeChangeResult.success) {
+                        error = new BadRequestException(
+                            ddeChangeResult,
+                            "error from MAFC SENT_DDEChangeToPOL"
+                        );
+                    }else {
+                        entity.fvStatus = "SENT_DDEChangeToPOL";
+                        entity.loanStatus = "POL";
+                    }
+                }
+            }
+            this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
+            let result = await this.connection
+                .getCustomRepository(LoanProfileRepository)
+                .save(entity);
+            this.logger.verbose(`insertResult = ${result}`);
+            let address = this.convertDtos2Entities(dto.address, Address);
+            address.forEach(item => (item.loanProfileId = result.id));
+            address = await this.connection
+                .getCustomRepository(AddressRepository)
+                .save(address);
+            let references = this.convertDtos2Entities(dto.references, Reference);
+            references.forEach(item => (item.loanProfileId = result.id));
 
-        references = await this.connection
-            .getCustomRepository(ReferenceRepository)
-            .save(references);
-        let response: LoanProfileDto = this.convertEntity2Dto(
-            result,
-            LoanProfile,
-            LoanProfileDto
-        );
-        response.address = this.convertEntities2Dtos(address, Address, AddressDto);
-        response.references = this.convertEntities2Dtos(
-            references,
-            Reference,
-            ReferenceDto
-        );
+            references = await this.connection
+                .getCustomRepository(ReferenceRepository)
+                .save(references);
+            response = this.convertEntity2Dto(
+                result,
+                LoanProfile,
+                LoanProfileDto
+            );
+            response.address = this.convertEntities2Dtos(address, Address, AddressDto);
+            response.references = this.convertEntities2Dtos(
+                references,
+                Reference,
+                ReferenceDto
+            );
+        }
         if (error) {
             throw error;
         } else {
