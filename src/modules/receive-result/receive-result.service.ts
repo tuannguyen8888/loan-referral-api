@@ -19,7 +19,7 @@ import {
 import { IsNull } from "typeorm";
 import { LoanProfileDefer, Process } from "../../entities";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({ scope: Scope.DEFAULT })
 export class ReceiveResultService extends BaseService {
   constructor(
     @Inject(REQUEST) protected request: Request,

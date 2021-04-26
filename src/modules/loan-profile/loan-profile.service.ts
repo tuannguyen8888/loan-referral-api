@@ -53,7 +53,7 @@ import * as fs from "fs";
 import * as FormData from "form-data";
 import {LoanProfileDeferReplyRequestDto} from "./dto/loan-profile-defer-reply.request.dto";
 
-@Injectable({scope: Scope.REQUEST})
+@Injectable({ scope: Scope.DEFAULT })
 export class LoanProfileService extends BaseService {
     constructor(
         @Inject(REQUEST) protected request: Request,

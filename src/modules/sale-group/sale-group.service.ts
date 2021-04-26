@@ -23,7 +23,7 @@ import { SaleGroupDto } from "./dto";
 import * as moment from "moment";
 import { ReferenceDto } from "../loan-profile/dto/reference.dto";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({ scope: Scope.DEFAULT })
 export class SaleGroupService extends BaseService {
   constructor(
     @Inject(REQUEST) protected request: Request,
