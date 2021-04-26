@@ -1,5 +1,5 @@
 import { BankRepository } from "../../repositories/mafc-masterdata/masterdata-bank.repository";
-import { Inject, Injectable } from "@nestjs/common";
+import {Inject, Injectable, Scope} from "@nestjs/common";
 import { RequestUtil } from "../../common/utils";
 import * as config from "config";
 import { BaseService } from "../../common/services";
@@ -27,7 +27,7 @@ import {
   WardMasterData
 } from "src/entities";
 
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT })
 export class MasterDataService extends BaseService {
   constructor(
     @Inject(REQUEST) protected request: Request,
