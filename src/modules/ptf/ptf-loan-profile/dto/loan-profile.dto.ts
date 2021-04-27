@@ -7,7 +7,7 @@ import {
 } from "class-validator";
 import {ProcessDto} from "src/modules/loan-profile/dto";
 
-export class LoanProfileResponseDto {
+export class LoanProfileDto {
     id: number = null;
     partnerId: number = null;
     loanNo: string = null;

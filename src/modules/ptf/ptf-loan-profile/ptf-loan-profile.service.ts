@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import {GetPtfLoanProfilesRequestDto, LoanProfileResponseDto, LoanProfilesResponseDto} from "./dto";
+import {GetPtfLoanProfilesRequestDto, LoanProfileResponseDto, LoanProfilesResponseDto, LoanProfileDto} from "./dto";
 @Injectable()
 export class PtfLoanProfileService {
 
@@ -15,4 +15,28 @@ export class PtfLoanProfileService {
             return new LoanProfileResponseDto();
         });
     }
+
+    async checkCustomerInfo(customerNationalId, phone, taxCode = null) {
+        let response: any = {
+            success: true
+        };
+        if (response.success) {
+            response.statusCode = 200;
+        } else {
+            response.statusCode = 400;
+        }
+        return response;
+    }
+
+    async createLoanProfile(dto: LoanProfileDto) {
+        return new Promise<LoanProfileDto>(()=>{
+            return new LoanProfileDto();
+        });
+    }
+    async updateLoanProfile(dto: LoanProfileDto) {
+        return new Promise<LoanProfileDto>(()=>{
+            return new LoanProfileDto();
+        });
+    }
+
 }
