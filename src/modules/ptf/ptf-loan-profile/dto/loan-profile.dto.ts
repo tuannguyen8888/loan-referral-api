@@ -6,6 +6,7 @@ import {
     IsDateString
 } from "class-validator";
 import {ProcessDto} from "src/modules/loan-profile/dto";
+import {AttachFileDto, AddressDto, EmploymentInformationDto, RelatedPersonDto} from ".";
 
 export class LoanProfileDto {
     id: number = null;
@@ -42,12 +43,12 @@ export class LoanProfileDto {
     iCareLead: number = null;
     creationDate: Date = null;
     clientPhotoUrl: string = null;
-    documentPhoto: any[] = null;
-    currentAddress: any = null;
-    currentAndPermanentSame: string = null;
-    permanentAddress: any = null;
-    relatedPersons: any[] = null;
-    employmentInformation: any = null;
+    documentPhoto: AttachFileDto[] = null;
+    currentAddress: AddressDto = null;
+    currentAndPermanentSame: boolean = null;
+    permanentAddress: AddressDto = null;
+    relatedPersons: RelatedPersonDto[] = null;
+    employmentInformation: EmploymentInformationDto = null;
     creditProduct: string = null;
     stateCode: string = null;
     amount: number = null;

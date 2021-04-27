@@ -6,6 +6,7 @@ import {
     IsDateString
 } from "class-validator";
 import {ProcessDto} from "src/modules/loan-profile/dto";
+import {AddressDto, AttachFileDto, EmploymentInformationDto, RelatedPersonDto} from "./index";
 
 export class LoanProfileResponseDto {
     id: number = null;
@@ -42,12 +43,12 @@ export class LoanProfileResponseDto {
     iCareLead: number = null;
     creationDate: Date = null;
     clientPhotoUrl: string = null;
-    documentPhoto: any[] = null;
-    currentAddress: any = null;
-    currentAndPermanentSame: string = null;
-    permanentAddress: any = null;
-    relatedPersons: any[] = null;
-    employmentInformation: any = null;
+    documentPhoto: AttachFileDto[] = null;
+    currentAddress: AddressDto = null;
+    currentAndPermanentSame: boolean = null;
+    permanentAddress: AddressDto = null;
+    relatedPersons: RelatedPersonDto[] = null;
+    employmentInformation: EmploymentInformationDto = null;
     creditProduct: string = null;
     stateCode: string = null;
     amount: number = null;
@@ -67,6 +68,6 @@ export class LoanProfileResponseDto {
     deleted_at: string = null;
     deleted_by: string = null;
 
-    // process: ProcessDto[];
+    process: ProcessDto[];
     // defers: LoanProfileDeferDto[];
 }

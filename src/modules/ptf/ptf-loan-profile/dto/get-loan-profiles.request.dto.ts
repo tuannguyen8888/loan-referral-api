@@ -6,9 +6,9 @@ import {
 } from "class-validator";
 
 export class GetPtfLoanProfilesRequestDto{
-  @IsNumber()
-  @IsOptional()
-  partner_id?: number;
+  // @IsNumber()
+  // @IsOptional()
+  // partner_id?: number;
 
   @IsOptional()
   fv_status?: string;
