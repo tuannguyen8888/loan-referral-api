@@ -1,7 +1,7 @@
-import {Controller, Get, Headers, Param} from '@nestjs/common';
+import {Controller, Get, Headers, Param, Body} from '@nestjs/common';
 import {ApiOperation, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {PtfMasterDataService} from "./ptf-master-data.service";
-import {ProductDto, MasterDataDto} from "./dto";
+import {ProductDto, MasterDataDto, SearchMasterDataDto} from "./dto";
 
 @Controller('master-data')
 @ApiSecurity("api-key")
@@ -9,130 +9,133 @@ import {ProductDto, MasterDataDto} from "./dto";
 @ApiTags("PTF Master Data")
 export class PtfMasterDataController {
     constructor(private readonly service: PtfMasterDataService) {}
-    @Get("/products/:keyword")
+    @Get("/products")
     getProducts(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<ProductDto[]> {
-        return this.service.getAllProducts(params.keyword);
+        return this.service.getAllProducts(dto.keyword);
     }
-    @Get("/genders/:keyword")
+    @Get("/genders")
     getGenders(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('GENDER',null,null,params.keyword);
+        return this.service.getMasterDatas('GENDER',null,null,dto.keyword);
     }
-    @Get("/issue-cities/:keyword")
+    @Get("/issue-cities")
     getIssueCities(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('ISSUE_CITY',null,null,params.keyword);
+        return this.service.getMasterDatas('ISSUE_CITY',null,null,dto.keyword);
     }
-    @Get("/maritial-status/:keyword")
+    @Get("/maritial-status")
     getMaritialStatus(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('MARITIAL_STATUS',null,null,params.keyword);
+        return this.service.getMasterDatas('MARITIAL_STATUS',null,null,dto.keyword);
     }
-    @Get("/accompaniment-of-client/:keyword")
+    @Get("/accompaniment-of-client")
     getAccompanimentOfClient(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('ACCOMPANIMENT_OF_CLIENT',null,null,params.keyword);
+        return this.service.getMasterDatas('ACCOMPANIMENT_OF_CLIENT',null,null,dto.keyword);
     }
-    @Get("/economical-status/:keyword")
+    @Get("/economical-status")
     getEconomicalStatus(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('ECONOMICAL_STATUS',null,null,params.keyword);
+        return this.service.getMasterDatas('ECONOMICAL_STATUS',null,null,dto.keyword);
     }
-    @Get("/disbursement-method/:keyword")
+    @Get("/disbursement-method")
     getDisbursementMethod(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('DISBURSEMENT_METHOD',null,null,params.keyword);
+        return this.service.getMasterDatas('DISBURSEMENT_METHOD',null,null,dto.keyword);
     }
-    @Get("/banks/:keyword")
+    @Get("/banks")
     getBanks(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('BANK',null,null,params.keyword);
+        return this.service.getMasterDatas('BANK',null,null,dto.keyword);
     }
-    @Get("/bank-cities/:keyword")
+    @Get("/bank-cities")
     getBankCities(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('BANK_CITY',null,null,params.keyword);
+        return this.service.getMasterDatas('BANK_CITY',null,null,dto.keyword);
     }
-    @Get("/bank-branches/:bank_id/:bank_city_id/:keyword")
+    @Get("/bank-branches/:bank_id/:bank_city_id")
     getBankBranches(
         @Headers() headers,
-        @Param() params
+        @Param() params,
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getBankBranches(params.bank_id?params.bank_id.toString():null, params.bank_city_id?params.bank_city_id.toString():null,params.keyword);
+        return this.service.getBankBranches(params.bank_id?params.bank_id.toString():null, params.bank_city_id?params.bank_city_id.toString():null,dto.keyword);
     }
-    @Get("/loan-status/:keyword")
+    @Get("/loan-status")
     getLoanStatus(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getLoanStatus(params.keyword);
+        return this.service.getLoanStatus(dto.keyword);
     }
-    @Get("/loan-purposes/:keyword")
+    @Get("/loan-purposes")
     getLoanPurposes(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('LOAN_PURPOSE',null,null,params.keyword);
+        return this.service.getMasterDatas('LOAN_PURPOSE',null,null,dto.keyword);
     }
-    @Get("/educations/:keyword")
+    @Get("/educations")
     getEducations(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('EDUCATION',null,null,params.keyword);
+        return this.service.getMasterDatas('EDUCATION',null,null,dto.keyword);
     }
-    @Get("/related-persons/:keyword")
+    @Get("/related-persons")
     getRelatedPersons(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('RELATED_PERSON',null,null,params.keyword);
+        return this.service.getMasterDatas('RELATED_PERSON',null,null,dto.keyword);
     }
-    @Get("/professions/:keyword")
+    @Get("/professions")
     getProfessions(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('PROFESSION',null,null,params.keyword);
+        return this.service.getMasterDatas('PROFESSION',null,null,dto.keyword);
     }
-    @Get("/provinces/:keyword")
+    @Get("/provinces")
     getProvinces(
         @Headers() headers,
-        @Param() params
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('PROVINCE',null,null,params.keyword);
+        return this.service.getMasterDatas('PROVINCE',null,null,dto.keyword);
     }
-    @Get("/districts/:province_id/:keyword")
+    @Get("/districts/:province_id")
     getDistricts(
         @Headers() headers,
-        @Param() params
+        @Param() params,
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('DISTRICT', params.province_id?params.province_id.toString():null,null,params.keyword);
+        return this.service.getMasterDatas('DISTRICT', params.province_id?params.province_id.toString():null,null,dto.keyword);
     }
-    @Get("/wards/:district_id/:keyword")
+    @Get("/wards/:district_id")
     getWards(
         @Headers() headers,
-        @Param() params
+        @Param() params,
+        @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('WARD', params.province_id?params.province_id.toString():null,null,params.keyword);
+        return this.service.getMasterDatas('WARD', params.province_id?params.province_id.toString():null,null,dto.keyword);
     }
 }
