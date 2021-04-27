@@ -1,16 +1,28 @@
 import {Inject, Injectable, Scope} from '@nestjs/common';
 
-import {GetPtfLoanProfilesRequestDto, LoanProfileResponseDto, LoanProfilesResponseDto, LoanProfileDto} from "./dto";
+import {
+    GetPtfLoanProfilesRequestDto,
+    LoanProfileResponseDto,
+    LoanProfilesResponseDto,
+    LoanProfileDto,
+    AddressDto, EmploymentInformationDto, RelatedPersonDto
+} from "./dto";
 import {BaseService} from "../../../common/services";
 import {REQUEST} from "@nestjs/core";
 import {Request} from "express";
 import {Logger} from "../../../common/loggers";
 import {RedisClient} from "../../../common/shared";
 import {RequestUtil} from "../../../common/utils";
-import {LoanProfileRepository, PtfLoanProfileRepository, SaleGroupRepository} from "../../../repositories";
+import {
+    LoanProfileRepository, PtfAddressRepository,
+    PtfLoanProfileRepository,
+    SaleGroupRepository,
+    PtfEmploymentInformationRepository,
+    PtfRelatedPersonRepository
+} from "../../../repositories";
 import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
-import {LoanProfile, PtfLoanProfile} from "../../../entities";
+import {PtfAddress, PtfEmploymentInformation, PtfLoanProfile, PtfRelatedPerson} from "../../../entities";
 @Injectable({ scope: Scope.REQUEST })
 export class PtfLoanProfileService extends BaseService {
     constructor(
@@ -96,15 +108,56 @@ export class PtfLoanProfileService extends BaseService {
 
     async createLoanProfile(dto: LoanProfileDto) {
         let entity: PtfLoanProfile = this.convertDto2Entity(dto,PtfLoanProfile);
+        entity.fvStatus = 'NEW';
         this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
         let result = await this.connection
             .getCustomRepository(LoanProfileRepository)
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
+        let currentAddress:PtfAddress = this.convertDto2Entity(dto.currentAddress, PtfAddress);
+        currentAddress.loanProfileId = result.id;
+        currentAddress.addressType = 'CURRES';
+        let permanentAddress:PtfAddress = this.convertDto2Entity(dto.permanentAddress, PtfAddress);
+        permanentAddress.loanProfileId = result.id;
+        permanentAddress.addressType = 'PERMNENT';
+        let address = await this.connection
+            .getCustomRepository(PtfAddressRepository)
+            .save([currentAddress, permanentAddress]);
+        let employmentInformation:PtfEmploymentInformation = this.convertDto2Entity(dto.employmentInformation, PtfEmploymentInformation);
+        employmentInformation.loanProfileId = result.id;
+        employmentInformation = await this.connection
+            .getCustomRepository(PtfEmploymentInformationRepository)
+            .save(employmentInformation);
+        let relatedPersons:PtfRelatedPerson[] = this.convertDtos2Entities(dto.relatedPersons, PtfRelatedPerson);
+        relatedPersons.forEach(item=> item.loanProfileId = result.id);
+        relatedPersons = await this.connection
+            .getCustomRepository(PtfRelatedPersonRepository)
+            .save(relatedPersons);
+
         let response: LoanProfileDto = this.convertEntity2Dto(
             result,
             PtfLoanProfile,
             LoanProfileDto
+        );
+        response.currentAddress = this.convertEntity2Dto(
+            address[0],
+            PtfAddress,
+            AddressDto
+        );
+        response.currentAddress = this.convertEntity2Dto(
+            address[1],
+            PtfAddress,
+            AddressDto
+        );
+        response.employmentInformation = this.convertEntity2Dto(
+            employmentInformation,
+            PtfEmploymentInformation,
+            EmploymentInformationDto
+        );
+        response.relatedPersons = this.convertEntities2Dtos(
+            relatedPersons,
+            PtfRelatedPerson,
+            RelatedPersonDto
         );
         return response;
     }
