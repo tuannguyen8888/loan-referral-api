@@ -43,7 +43,7 @@ export class LoanProfileDto {
     iCareLead: number = null;
     creationDate: Date = null;
     clientPhotoUrl: string = null;
-    documentPhoto: AttachFileDto[] = null;
+    // documentPhoto: AttachFileDto[] = null;
     currentAddress: AddressDto = null;
     currentAndPermanentSame: boolean = null;
     permanentAddress: AddressDto = null;
@@ -57,16 +57,16 @@ export class LoanProfileDto {
 
     @IsOptional()
     @IsDateString()
-    created_at: string = null;
-    created_by: string = null;
+    createdAt: string = null;
+    createdBy: string = null;
     @IsOptional()
     @IsDateString()
-    updated_at: string = null;
-    updated_by: string = null;
+    updatedAt: string = null;
+    updatedBy: string = null;
     @IsOptional()
     @IsDateString()
-    deleted_at: string = null;
-    deleted_by: string = null;
+    deletedAt: string = null;
+    deletedBy: string = null;
 
     // process: ProcessDto[];
     // defers: LoanProfileDeferDto[];
