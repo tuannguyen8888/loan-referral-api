@@ -28,7 +28,7 @@ export class PtfMasterDataService extends BaseService {
         try {
             const repo = this.connection.getCustomRepository(PtfProductRepository);
             const where: any = {
-                deletedAt: IsNull()
+                //deletedAt: IsNull()
             };
             if(keyWord){
                 where.name = Like(`%${keyWord}%`)
@@ -48,7 +48,7 @@ export class PtfMasterDataService extends BaseService {
         try {
             const repo = this.connection.getCustomRepository(PtfMasterDataRepository);
             const where: any = {
-                deletedAt: IsNull(),
+                //deletedAt: IsNull(),
                 type: type
             };
             if(parent1_key)
@@ -73,7 +73,7 @@ export class PtfMasterDataService extends BaseService {
         try {
             const repo = this.connection.getCustomRepository(PtfMasterDataRepository);
             const where: any = {
-                deletedAt: IsNull(),
+                //deletedAt: IsNull(),
                 type: 'BANK_BRANCH'
             };
             if(parent1_key)
@@ -98,7 +98,7 @@ export class PtfMasterDataService extends BaseService {
         try {
             const repo = this.connection.getCustomRepository(PtfMasterDataRepository);
             const where: any = {
-                deletedAt: IsNull(),
+                //deletedAt: IsNull(),
                 type: 'LOAN_STATUS'
             };
             if(keyWord){
