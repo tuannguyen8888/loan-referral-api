@@ -32,7 +32,7 @@ import {
     SaleGroupRepository,
     SendDataLogRepository
 } from "../../repositories";
-import {IsNull, Like, Equal, In} from "typeorm";
+import {IsNull, Like, Equal, In, Not} from "typeorm";
 import {
     Address,
     AttachFile,
@@ -424,11 +424,12 @@ export class LoanProfileService extends BaseService {
             .findOne({
                 where: {
                     deletedAt: IsNull(),
-                    inNationalid: dto.in_nationalid
+                    inNationalid: dto.in_nationalid,
+                    loanStatus: Not(In(['CAN','REJ','FINISH']))
                 }
             });
         if (entityOld) {
-            throw new BadRequestException(`Số CMND ${dto.in_nationalid} đã tồn tại dữ liệu trong hệ thống. Vuiu lòng kiểm tra lại.`)
+            throw new BadRequestException(`Số CMND ${dto.in_nationalid} đã tồn tại hồ sơ đang xử lý trong hệ thống. Vuiu lòng kiểm tra lại.`)
         }
         let error = null;
         let qdeResult = await this.sendData_inputQDE(dto);
@@ -1456,6 +1457,7 @@ export class LoanProfileService extends BaseService {
                         "error SENT_QDTChangeToDDE"
                     );
                 }
+                entityOld.loanStatus = 'DDE';
                 let ddeChangeResult = await this.sendData_procDDEChangeState(
                     entityOld.loanNo
                 );
@@ -1465,6 +1467,7 @@ export class LoanProfileService extends BaseService {
                         "error SENT_DDEChangeToPOL"
                     );
                 }
+                entityOld.loanStatus = 'POL';
                 break;
             case "DDE":
             case "BDE":
@@ -1477,6 +1480,7 @@ export class LoanProfileService extends BaseService {
                         "error SENT_DDEChangeToPOL"
                     );
                 }
+                entityOld.loanStatus = 'POL';
                 break;
             default:
                 throw new BadRequestException(
