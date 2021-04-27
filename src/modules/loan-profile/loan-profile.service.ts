@@ -865,18 +865,20 @@ export class LoanProfileService extends BaseService {
             formData.append("password", "mafc123!");
             formData.append("vendor", "EXT_FIV");
             for (let i = 0; i < attachFiles.length; i++) {
-                let ext: any = attachFiles[i].url.split(".");
-                ext = ext[ext.length - 1];
-                let fileName = `${loanProfile.loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
-                let filePath = `${__dirname}/../../attach_files/${fileName}`;
-                let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(
-                    attachFiles[i].url,
-                    filePath
-                );
-                console.log("fileStream = ", fileStream.path);
-                files.push(fileStream.path);
-                formData.append(attachFiles[i].docCode, fs.createReadStream(filePath));
-                formData_log[attachFiles[i].docCode] = fileName;
+              if(attachFiles[i].url && attachFiles[i].url.trim() != '') {
+                  let ext: any = attachFiles[i].url.split(".");
+                  ext = ext[ext.length - 1];
+                  let fileName = `${loanProfile.loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
+                  let filePath = `${__dirname}/../../attach_files/${fileName}`;
+                  let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(
+                      attachFiles[i].url,
+                      filePath
+                  );
+                  console.log("fileStream = ", fileStream.path);
+                  files.push(fileStream.path);
+                  formData.append(attachFiles[i].docCode, fs.createReadStream(filePath));
+                  formData_log[attachFiles[i].docCode] = fileName;
+              }
             }
             console.log("call api uploadFile");
             result = await this.requestUtil.uploadFile(
@@ -932,7 +934,7 @@ export class LoanProfileService extends BaseService {
                 }
             ]);
             if (isError) {
-                log.result = "Error : " + result.message;
+                log.result = "Error : " + result.message + '. Stack: ' + result.stack;
             } else {
                 log.result = "API Result : " + JSON.stringify(result);
             }
