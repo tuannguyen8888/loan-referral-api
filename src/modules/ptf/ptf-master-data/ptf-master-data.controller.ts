@@ -136,6 +136,6 @@ export class PtfMasterDataController {
         @Param() params,
         @Body() dto: SearchMasterDataDto
     ): Promise<MasterDataDto[]> {
-        return this.service.getMasterDatas('WARD', params.province_id?params.province_id.toString():null,null,dto.keyword);
+        return this.service.getMasterDatas('WARD', params.district_id?params.district_id.toString():null,null,dto.keyword);
     }
 }
