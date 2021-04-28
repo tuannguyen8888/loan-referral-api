@@ -52,9 +52,9 @@ export class PtfMasterDataService extends BaseService {
                 type: type
             };
             if(parent1_key)
-                where.parent1_key = parent1_key;
+                where.parent1Key = parent1_key;
             if(parent2_key)
-                where.parent1_key = parent2_key;
+                where.parent2Key = parent2_key;
             if(keyWord){
                 where.value = Like(`%${keyWord}%`)
             }
@@ -77,9 +77,9 @@ export class PtfMasterDataService extends BaseService {
                 type: 'BANK_BRANCH'
             };
             if(parent1_key)
-                where.parent1_key = parent1_key;
+                where.parent1Key = parent1_key;
             if(parent2_key)
-                where.parent1_key = parent2_key;
+                where.parent2Key = parent2_key;
             if(keyWord){
                 where.value = Like(`%${keyWord}%`)
             }
