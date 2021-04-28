@@ -38,7 +38,8 @@ export class RequestUtil {
   async uploadFile<T>(
     url: string,
     formData: FormData,
-    auth = null
+    auth = null,
+    headers = null,
   ): Promise<T> {
     try {
       let config: any = {
@@ -51,6 +52,12 @@ export class RequestUtil {
       };
       if (auth) {
         config.auth = auth;
+      }
+      if(headers){
+          config.headers = {
+              ...config.headers,
+              ...headers
+          };
       }
       const { data } = await this.httpService
         .post<T>(url, formData, config)

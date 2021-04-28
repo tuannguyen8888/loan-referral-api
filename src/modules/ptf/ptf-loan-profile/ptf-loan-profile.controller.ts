@@ -1,7 +1,7 @@
 import {Body, Controller, Get, Headers, HttpCode, Param, Post, Put} from '@nestjs/common';
-import {ApiOperation, ApiSecurity, ApiTags} from "@nestjs/swagger";
+import {ApiBody, ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {PtfLoanProfileService} from "./ptf-loan-profile.service";
-import {GetPtfLoanProfilesRequestDto, LoanProfileDto, LoanProfileResponseDto, LoanProfilesResponseDto} from "./dto";
+import {GetPtfLoanProfilesRequestDto, LoanProfileDto, LoanProfileResponseDto, LoanProfilesResponseDto, AttachFileDto} from "./dto";
 import {CheckCustomerInfoRequestDto} from "../../loan-profile/dto";
 
 @Controller('loan-profile')
@@ -50,6 +50,17 @@ export class PtfLoanProfileController {
         @Body() dto: LoanProfileDto
     ): Promise<LoanProfileDto> {
         return this.service.createLoanProfile(dto);
+    }
+
+    @Put("/update-attach-files")
+    @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
+    @ApiBody({ type: [AttachFileDto] })
+    @ApiResponse({ type: [AttachFileDto] })
+    updateAttachFiles(
+        @Headers() headers,
+        @Body() dtos: AttachFileDto[]
+    ): Promise<AttachFileDto[]> {
+        return this.service.updateAttachFiles(dtos);
     }
 
     @Put("/")

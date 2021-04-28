@@ -94,6 +94,15 @@ mafc_api:
     username: 'mirae-3p'
     password: '123456'
 
+ptf_api:
+  partner_code: 'FinViet'
+  upload:
+    url: 'https://ptf-api.ptf.com.vn/ptf/ext/api-ptf-loan-file-rest-demo/process'
+  loan_request:
+    url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-rest-demo/process'
+  X_IBM_Client_Secret: aT7hL7gP1wH0uP0nJ7iH7bC6yA4rQ7pI7fI0eP4wR5uY4lU6bL
+  X_IBM_Client_Id: 215b0e37-f71e-419b-9565-f9b28c3d53bd
+
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
   backendUser: loan_referral-user
