@@ -118,8 +118,16 @@ export class PtfLoanProfileService extends BaseService {
     }
 
     async createLoanProfile(dto: LoanProfileDto) {
+        let ptfApiConfig = config.get("ptf_api");
         let entity: PtfLoanProfile = this.convertDto2Entity(dto, PtfLoanProfile);
         entity.fvStatus = 'NEW';
+        entity.partnerId = 3;
+        entity.socialAccountType = 1;
+        entity.socialAccountDetails = ptfApiConfig.partner_code;
+        entity.serviceName = 2;
+        entity.iCareLead = 2;
+        entity.stateCode = "SA";
+
         this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
         let result = await this.connection
             .getCustomRepository(LoanProfileRepository)
