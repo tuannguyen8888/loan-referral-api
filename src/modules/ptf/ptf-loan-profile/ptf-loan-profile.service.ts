@@ -18,12 +18,12 @@ import {
     PtfLoanProfileRepository,
     SaleGroupRepository,
     PtfEmploymentInformationRepository,
-    PtfRelatedPersonRepository, AttachFileRepository, PtfAttachFileRepository, SendDataLogRepository
+    PtfRelatedPersonRepository, AttachFileRepository, PtfAttachFileRepository, SendDataLogRepository, ProcessRepository
 } from "../../../repositories";
 import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
 import {
-    AttachFile, LoanProfile,
+    Process,
     PtfAddress,
     PtfAttachFile,
     PtfEmploymentInformation,
@@ -33,6 +33,7 @@ import {
 import * as FormData from "form-data";
 import * as fs from "fs";
 import * as config from "config";
+import {ProcessDto} from "../../loan-profile/dto";
 
 @Injectable({scope: Scope.REQUEST})
 export class PtfLoanProfileService extends BaseService {
@@ -100,9 +101,94 @@ export class PtfLoanProfileService extends BaseService {
     }
 
     async getLoanProfile(loanProfileId: number) {
-        return new Promise<LoanProfileResponseDto>(() => {
-            return new LoanProfileResponseDto();
-        });
+        let result = await this.connection
+            .getCustomRepository(LoanProfileRepository)
+            .findOne(loanProfileId);
+        let response: LoanProfileResponseDto = this.convertEntity2Dto(
+            result,
+            PtfLoanProfile,
+            LoanProfileResponseDto
+        );
+        const attachFiles = await this.connection
+            .getCustomRepository(PtfAttachFileRepository)
+            .find({
+                where: {
+                    deletedAt: IsNull(),
+                    loanProfileId: loanProfileId
+                }
+            });
+
+        const currentAddress = await this.connection
+            .getCustomRepository(PtfAddressRepository)
+            .findOne({
+                where: {
+                    deletedAt: IsNull(),
+                    loanProfileId: loanProfileId,
+                    addressType: 'CURRES'
+                }
+            });
+        const permanentAddress = await this.connection
+            .getCustomRepository(PtfAddressRepository)
+            .findOne({
+                where: {
+                    deletedAt: IsNull(),
+                    loanProfileId: loanProfileId,
+                    addressType: 'PERMNENT'
+                }
+            });
+        const employmentInformation = await this.connection
+            .getCustomRepository(PtfEmploymentInformationRepository)
+            .findOne({
+                where: {
+                    deletedAt: IsNull(),
+                    loanProfileId: loanProfileId
+                }
+            });
+        const relatedPersons = await this.connection
+            .getCustomRepository(PtfRelatedPersonRepository)
+            .find({
+                where: {
+                    deletedAt: IsNull(),
+                    loanProfileId: loanProfileId
+                }
+            });
+        const process = await this.connection
+            .getCustomRepository(ProcessRepository)
+            .find({
+                where: {
+                    deletedAt: IsNull(),
+                    refTable: 'ptf_loan_profile',
+                    loanProfileId: loanProfileId
+                }
+            });
+
+        response.documentPhoto = this.convertEntities2Dtos(attachFiles, PtfAttachFile, AttachFileDto);
+        response.currentAddress = this.convertEntity2Dto(
+            currentAddress,
+            PtfAddress,
+            AddressDto
+        );
+        response.currentAddress = this.convertEntity2Dto(
+            permanentAddress,
+            PtfAddress,
+            AddressDto
+        );
+        response.employmentInformation = this.convertEntity2Dto(
+            employmentInformation,
+            PtfEmploymentInformation,
+            EmploymentInformationDto
+        );
+        response.relatedPersons = this.convertEntities2Dtos(
+            relatedPersons,
+            PtfRelatedPerson,
+            RelatedPersonDto
+        );
+        response.process = this.convertEntities2Dtos(
+            process,
+            Process,
+            ProcessDto
+        );
+        return response;
     }
 
     async checkCustomerInfo(customerNationalId, phone, taxCode = null) {
@@ -282,11 +368,11 @@ export class PtfLoanProfileService extends BaseService {
         relatedPersonEntities: PtfRelatedPerson[]
     ) {
         let ptfApiConfig = config.get("ptf_api");
-        let body,requestConfig,result;
+        let body, requestConfig, result;
         try {
             let documentPhoto = [];
-            if(uploadResults && uploadResults.length)
-                uploadResults.forEach((item)=>{
+            if (uploadResults && uploadResults.length)
+                uploadResults.forEach((item) => {
                     documentPhoto.push({
                         "document": {
                             "id": item.documentId,
@@ -296,8 +382,8 @@ export class PtfLoanProfileService extends BaseService {
                     });
                 });
             let relatedPersons = [];
-            if(relatedPersonEntities && relatedPersonEntities.length)
-                relatedPersonEntities.forEach((item)=>{
+            if (relatedPersonEntities && relatedPersonEntities.length)
+                relatedPersonEntities.forEach((item) => {
                     relatedPersons.push({
                         "relatedPersonType": item.relatedPersonType,
                         "familyName": item.familyName,
@@ -308,9 +394,9 @@ export class PtfLoanProfileService extends BaseService {
                     });
                 });
             let clientPhoto = null;
-            if(loanProfile.clientPhotoUrl && loanProfile.idDocumentNumber){
+            if (loanProfile.clientPhotoUrl && loanProfile.idDocumentNumber) {
                 let resultUpload = await this.sendData_uploadFile(loanProfile.clientPhotoUrl, '1', loanProfile.idDocumentNumber);
-                if(resultUpload.status == 'OK'){
+                if (resultUpload.status == 'OK') {
                     clientPhoto = {
                         "document": {
                             "id": resultUpload.enquiry.documentId,
@@ -319,8 +405,8 @@ export class PtfLoanProfileService extends BaseService {
                     };
                 }
             }
-            let employmentInformation=null;
-            if(employmentInformationEntity){
+            let employmentInformation = null;
+            if (employmentInformationEntity) {
                 employmentInformation = {
                     "address": {
                         "houseNumberAndStreet": employmentInformationEntity.houseNumberAndStreet,
@@ -457,54 +543,54 @@ export class PtfLoanProfileService extends BaseService {
         let formData_logs = [];
         let files = [];
         try {
-                let formData = new FormData();
-                let formData_log = {};
-                formData_log["productDocumentId"] = type;
-                formData_log["idCardNo"] = idDocumentNumber;
-                formData.append("productDocumentId", type);
-                formData.append("idCardNo", idDocumentNumber);
-                let ext: any = url.split(".");
-                ext = ext[ext.length - 1];
-                let fileName = `${idDocumentNumber}_${type}_${(new Date()).getTime()}.${ext}`;
-                let filePath = `${__dirname}/../../attach_files/${fileName}`;
-                let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile( url, filePath );
-                console.log("fileStream = ", fileStream.path);
-                files.push(fileStream.path);
-                formData.append('file', fs.createReadStream(filePath));
-                formData_log['file'] = fileName;
+            let formData = new FormData();
+            let formData_log = {};
+            formData_log["productDocumentId"] = type;
+            formData_log["idCardNo"] = idDocumentNumber;
+            formData.append("productDocumentId", type);
+            formData.append("idCardNo", idDocumentNumber);
+            let ext: any = url.split(".");
+            ext = ext[ext.length - 1];
+            let fileName = `${idDocumentNumber}_${type}_${(new Date()).getTime()}.${ext}`;
+            let filePath = `${__dirname}/../../attach_files/${fileName}`;
+            let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(url, filePath);
+            console.log("fileStream = ", fileStream.path);
+            files.push(fileStream.path);
+            formData.append('file', fs.createReadStream(filePath));
+            formData_log['file'] = fileName;
 
-                let log = new SendDataLog();
-                formData_logs.push(log);
-                log.apiUrl = "uploadFile";
-                log.data = JSON.stringify([
-                    ptfApiConfig.upload.url,
-                    formData_log,
-                    null,
-                    {
-                        "X-IBM-Client-Secret": ptfApiConfig.X_IBM_Client_Secret,
-                        "X-IBM-Client-Id": ptfApiConfig.X_IBM_Client_Id
-                    }
-                ]);
-                log.createdAt = new Date();
-                console.log("call api uploadFile");
-                let result: any = await this.requestUtil.uploadFile(
-                    ptfApiConfig.upload.url,
-                    formData,
-                    null,
-                    {
-                        "X-IBM-Client-Secret": ptfApiConfig.X_IBM_Client_Secret,
-                        "X-IBM-Client-Id": ptfApiConfig.X_IBM_Client_Id
-                    }
-                );
-                console.log("call api uploadFile result = ", result);
-                log.result = JSON.stringify(result);
-                if (result.status == 'OK') {
-                    result.enquiry.type = type.toString();
-                    results.push(result);
-                } else {
-                    isError = true;
-                    apiError = result;
+            let log = new SendDataLog();
+            formData_logs.push(log);
+            log.apiUrl = "uploadFile";
+            log.data = JSON.stringify([
+                ptfApiConfig.upload.url,
+                formData_log,
+                null,
+                {
+                    "X-IBM-Client-Secret": ptfApiConfig.X_IBM_Client_Secret,
+                    "X-IBM-Client-Id": ptfApiConfig.X_IBM_Client_Id
                 }
+            ]);
+            log.createdAt = new Date();
+            console.log("call api uploadFile");
+            let result: any = await this.requestUtil.uploadFile(
+                ptfApiConfig.upload.url,
+                formData,
+                null,
+                {
+                    "X-IBM-Client-Secret": ptfApiConfig.X_IBM_Client_Secret,
+                    "X-IBM-Client-Id": ptfApiConfig.X_IBM_Client_Id
+                }
+            );
+            console.log("call api uploadFile result = ", result);
+            log.result = JSON.stringify(result);
+            if (result.status == 'OK') {
+                result.enquiry.type = type.toString();
+                results.push(result);
+            } else {
+                isError = true;
+                apiError = result;
+            }
         } catch (e) {
             console.error("call api uploadFile error : " + e);
             formData_logs[formData_logs.length - 1].result = e.message;
@@ -531,6 +617,7 @@ export class PtfLoanProfileService extends BaseService {
         }
         return results[0];
     }
+
     private async sendData_uploadDocuments(
         loanProfile: PtfLoanProfile,
         attachFiles: PtfAttachFile[]
