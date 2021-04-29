@@ -14,15 +14,23 @@ import {Logger} from "../../../common/loggers";
 import {RedisClient} from "../../../common/shared";
 import {RequestUtil} from "../../../common/utils";
 import {
-    LoanProfileRepository, PtfAddressRepository,
+    LoanProfileRepository,
+    PtfAddressRepository,
     PtfLoanProfileRepository,
     SaleGroupRepository,
     PtfEmploymentInformationRepository,
-    PtfRelatedPersonRepository, AttachFileRepository, PtfAttachFileRepository, SendDataLogRepository, ProcessRepository
+    PtfRelatedPersonRepository,
+    AttachFileRepository,
+    PtfAttachFileRepository,
+    SendDataLogRepository,
+    ProcessRepository,
+    AddressRepository
 } from "../../../repositories";
 import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
 import {
+    Address,
+    LoanProfile,
     Process,
     PtfAddress,
     PtfAttachFile,
@@ -353,9 +361,68 @@ export class PtfLoanProfileService extends BaseService {
     }
 
     async updateLoanProfile(dto: LoanProfileUpdateDto) {
-        return new Promise<LoanProfileResponseDto>(() => {
-            return new LoanProfileResponseDto();
+        let entityUpdate = this.convertDto2Entity(dto, PtfLoanProfile);
+        let result = await this.connection
+            .getCustomRepository(PtfLoanProfileRepository)
+            .save(entityUpdate);
+        let address = this.convertDtos2Entities([dto.currentAddress, dto.permanentAddress], PtfAddress);
+        address.forEach(item => {
+            item.loanProfileId = result.id;
         });
+        address = await this.connection
+            .getCustomRepository(PtfAddressRepository)
+            .save(address);
+
+        let employmentInformation = this.convertDto2Entity(dto.employmentInformation, PtfEmploymentInformation);
+        employmentInformation = await this.connection
+            .getCustomRepository(PtfEmploymentInformationRepository)
+            .save(employmentInformation);
+
+        let relatedPersons = this.convertDtos2Entities(dto.relatedPersons, PtfRelatedPerson);
+        relatedPersons = await this.connection
+            .getCustomRepository(PtfRelatedPersonRepository)
+            .save(relatedPersons);
+        const process = await this.connection
+            .getCustomRepository(ProcessRepository)
+            .find({
+                where: {
+                    deletedAt: IsNull(),
+                    refTable: 'ptf_loan_profile',
+                    loanProfileId: result.id
+                }
+            });
+
+        let response: LoanProfileResponseDto = this.convertEntity2Dto(
+            result,
+            PtfLoanProfile,
+            LoanProfileResponseDto
+        );
+        response.currentAddress = this.convertEntity2Dto(
+            address[0],
+            PtfAddress,
+            AddressDto
+        );
+        response.currentAddress = this.convertEntity2Dto(
+            address[1],
+            PtfAddress,
+            AddressDto
+        );
+        response.employmentInformation = this.convertEntity2Dto(
+            employmentInformation,
+            PtfEmploymentInformation,
+            EmploymentInformationDto
+        );
+        response.relatedPersons = this.convertEntities2Dtos(
+            relatedPersons,
+            PtfRelatedPerson,
+            RelatedPersonDto
+        );
+        response.process = this.convertEntities2Dtos(
+            process,
+            Process,
+            ProcessDto
+        );
+        return response;
     }
 
 
