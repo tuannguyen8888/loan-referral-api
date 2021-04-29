@@ -6,3 +6,4 @@ export * from "./address.dto";
 export * from "./attach-file.dto";
 export * from "./related-person.dto";
 export * from "./employment-information.dto";
+export * from "./loan-profile.update.dto";

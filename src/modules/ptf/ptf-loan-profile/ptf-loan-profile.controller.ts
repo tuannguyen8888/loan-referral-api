@@ -1,7 +1,14 @@
 import {Body, Controller, Get, Headers, HttpCode, Param, Post, Put} from '@nestjs/common';
 import {ApiBody, ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {PtfLoanProfileService} from "./ptf-loan-profile.service";
-import {GetPtfLoanProfilesRequestDto, LoanProfileDto, LoanProfileResponseDto, LoanProfilesResponseDto, AttachFileDto} from "./dto";
+import {
+    GetPtfLoanProfilesRequestDto,
+    LoanProfileDto,
+    LoanProfileResponseDto,
+    LoanProfilesResponseDto,
+    AttachFileDto,
+    LoanProfileUpdateDto
+} from "./dto";
 import {CheckCustomerInfoRequestDto} from "../../loan-profile/dto";
 
 @Controller('loan-profile')
@@ -67,8 +74,8 @@ export class PtfLoanProfileController {
     @ApiOperation({ summary: "Sửa thông tin hồ sơ vay" })
     updateLoanProfile(
         @Headers() headers,
-        @Body() dto: LoanProfileDto
-    ): Promise<LoanProfileDto> {
+        @Body() dto: LoanProfileUpdateDto
+    ): Promise<LoanProfileResponseDto> {
         return this.service.updateLoanProfile(dto);
     }
 }

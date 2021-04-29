@@ -5,7 +5,7 @@ import {
     LoanProfileResponseDto,
     LoanProfilesResponseDto,
     LoanProfileDto,
-    AddressDto, EmploymentInformationDto, RelatedPersonDto, AttachFileDto
+    AddressDto, EmploymentInformationDto, RelatedPersonDto, AttachFileDto, LoanProfileUpdateDto
 } from "./dto";
 import {BaseService} from "../../../common/services";
 import {REQUEST} from "@nestjs/core";
@@ -352,9 +352,9 @@ export class PtfLoanProfileService extends BaseService {
         return response;
     }
 
-    async updateLoanProfile(dto: LoanProfileDto) {
-        return new Promise<LoanProfileDto>(() => {
-            return new LoanProfileDto();
+    async updateLoanProfile(dto: LoanProfileUpdateDto) {
+        return new Promise<LoanProfileResponseDto>(() => {
+            return new LoanProfileResponseDto();
         });
     }
 
@@ -498,7 +498,9 @@ export class PtfLoanProfileService extends BaseService {
                     "trusted": "false",
                     "userID": "1365778600",
                     "requestAPI": "PTF_LOAN",
-                    "requestNode": "01"
+                    "requestNode": "01",
+                    "X-IBM-Client-Secret": ptfApiConfig.X_IBM_Client_Secret,
+                    "X-IBM-Client-Id": ptfApiConfig.X_IBM_Client_Id
                 }
             };
             console.log("call api PTF: ", [
