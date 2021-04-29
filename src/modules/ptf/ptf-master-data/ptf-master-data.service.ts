@@ -37,7 +37,7 @@ export class PtfMasterDataService extends BaseService {
                 where: where
             };
             const data = await repo.find(options);
-            const result: ProductDto[] = this.convertEntity2Dto(data, PtfProduct, ProductDto);
+            const result: ProductDto[] = this.convertEntities2Dtos(data, PtfProduct, ProductDto);
             return result;
         } catch (e) {
             console.error(e);

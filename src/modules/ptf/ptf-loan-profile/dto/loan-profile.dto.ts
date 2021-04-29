@@ -9,11 +9,16 @@ import {ProcessDto} from "src/modules/loan-profile/dto";
 import {AttachFileDto, AddressDto, EmploymentInformationDto, RelatedPersonDto} from ".";
 
 export class LoanProfileDto {
-    id: number = null;
-    partnerId: number = null;
-    loanNo: string = null;
-    fvStatus: string = null;
-    loanStatus: string = null;
+    @IsOptional()
+    id?: number = null;
+    @IsOptional()
+    partnerId?: number = null;
+    @IsOptional()
+    loanNo?: string = null;
+    @IsOptional()
+    fvStatus?: string = null;
+    @IsOptional()
+    loanStatus?: string = null;
     firstName: string = null;
     middleName: string = null;
     lastName: string = null;
