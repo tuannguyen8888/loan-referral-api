@@ -16,6 +16,15 @@ export class PtfMasterDataController {
     ): Promise<ProductDto[]> {
         return this.service.getAllProducts(dto.keyword);
     }
+
+    @Get("/doc-types")
+    getDocTypes(
+        @Headers() headers,
+        @Body() dto: SearchMasterDataDto
+    ): Promise<MasterDataDto[]> {
+        return this.service.getMasterDatas('DOC_TYPE',null,null,dto.keyword);
+    }
+
     @Get("/genders")
     getGenders(
         @Headers() headers,
