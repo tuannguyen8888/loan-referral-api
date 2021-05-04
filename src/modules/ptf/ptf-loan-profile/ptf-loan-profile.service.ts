@@ -221,6 +221,7 @@ export class PtfLoanProfileService extends BaseService {
         entity.serviceName = 2;
         entity.iCareLead = 2;
         entity.stateCode = "SA";
+        entity.creationDate = moment().format('YYYY-MM-DD');
 
         this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
         let result = await this.connection
