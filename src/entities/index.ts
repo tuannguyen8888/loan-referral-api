@@ -21,6 +21,7 @@ export * from "./ptf/ptf-address";
 export * from "./ptf/ptf-attachFile";
 export * from "./ptf/ptf-employment-information";
 export * from "./ptf/ptf-loan-profile";
+export * from "./ptf/ptf-loan-profile-defer";
 export * from "./ptf/ptf-related-person";
 export * from "./ptf/ptf-product";
 export * from "./ptf/ptf-master-data";

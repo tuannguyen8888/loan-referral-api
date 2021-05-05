@@ -29,19 +29,28 @@ export class LoanProfileDto {
     idIssueCity: number = null;
     frbDocumentNumber: string = null;
     primaryMobile: string = null;
+    @IsOptional()
     homePhone: string = null;
+    @IsOptional()
     secondaryMobile: string = null;
+    @IsOptional()
     email: string = null;
+    @IsOptional()
     socialAccountType: number = null;
+    @IsOptional()
     socialAccountDetails: string = null;
     maritalStatus: number = null;
     accompanimentOfClient: number = null;
     numberOfChildren: number = null;
     education: number = null;
     disbursementMethod: number = null;
+    @IsOptional()
     accountNumber: string = null;
+    @IsOptional()
     bankNameId: number = null;
+    @IsOptional()
     bankCityId: number = null;
+    @IsOptional()
     bankBranchId: number = null;
     bankCode: string = null;
     serviceName: number = null;
@@ -55,6 +64,7 @@ export class LoanProfileDto {
     relatedPersons: RelatedPersonDto[] = null;
     employmentInformation: EmploymentInformationDto = null;
     creditProduct: string = null;
+    @IsOptional()
     stateCode: string = null;
     amount: number = null;
     loanPurpose: number = null;
