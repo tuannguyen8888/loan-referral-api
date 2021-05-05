@@ -11,14 +11,14 @@ export class PtfLoanProfile {
   @Column("varchar", {
     name: "loan_application_id",
     comment: "Mã hồ sơ vay",
-    length: 45,
+    length: 45,nullable: true,
   })
   loanApplicationId: string;
 
   @Column("varchar", {
     name: "loan_public_id",
     comment: "Mã khoản vay public cho đối tác, khách hàng",
-    length: 45,
+    length: 45,nullable: true,
   })
   loanPublicId: string;
 
