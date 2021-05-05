@@ -5,7 +5,13 @@ import {
     LoanProfileResponseDto,
     LoanProfilesResponseDto,
     LoanProfileDto,
-    AddressDto, EmploymentInformationDto, RelatedPersonDto, AttachFileDto, LoanProfileUpdateDto
+    AddressDto,
+    EmploymentInformationDto,
+    RelatedPersonDto,
+    AttachFileDto,
+    LoanProfileUpdateDto,
+    CreateDeferRequestDto,
+    UpdateDeferRequestDto
 } from "./dto";
 import {BaseService} from "../../../common/services";
 import {REQUEST} from "@nestjs/core";
@@ -24,7 +30,7 @@ import {
     PtfAttachFileRepository,
     SendDataLogRepository,
     ProcessRepository,
-    AddressRepository
+    AddressRepository, PtfLoanProfileDeferRepository
 } from "../../../repositories";
 import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
@@ -35,7 +41,7 @@ import {
     PtfAddress,
     PtfAttachFile,
     PtfEmploymentInformation,
-    PtfLoanProfile,
+    PtfLoanProfile, PtfLoanProfileDefer,
     PtfRelatedPerson, SendDataLog
 } from "../../../entities";
 import * as FormData from "form-data";
@@ -431,6 +437,32 @@ export class PtfLoanProfileService extends BaseService {
         return response;
     }
 
+    async createDefer(dto: CreateDeferRequestDto){
+        let newDefer =  new PtfLoanProfileDefer();
+        newDefer.loanProfileId = dto.loanProfileId;
+        newDefer.status = 'NEW';
+        newDefer.deferCode = dto.deferCode;
+        newDefer.deferNote = dto.deferNote;
+        newDefer.createdAt = new Date();
+        newDefer.createdBy = dto.createdBy;
+        await this.connection
+            .getCustomRepository(PtfLoanProfileDeferRepository)
+            .save(newDefer);
+        return true;
+    }
+    async updateDefer(dto: UpdateDeferRequestDto){
+        let updateDefer = await this.connection
+            .getCustomRepository(PtfLoanProfileDeferRepository)
+            .findOne(dto.id);
+        updateDefer.status = 'UPDATED';
+        updateDefer.deferReply = dto.deferReply;
+        updateDefer.updatedAt = new Date();
+        updateDefer.updatedBy = dto.updatedBy;
+        await this.connection
+            .getCustomRepository(PtfLoanProfileDeferRepository)
+            .save(updateDefer);
+        return true;
+    }
 
     private async sendData_loanRequest(
         loanProfile: PtfLoanProfile,

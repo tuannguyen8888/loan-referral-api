@@ -22,6 +22,7 @@ export * from "./ptf/ptf-address.repository";
 export * from "./ptf/ptf-attach-file.repository";
 export * from "./ptf/ptf-employment-infomation.repository";
 export * from "./ptf/ptf-loan-profile.repository";
+export * from "./ptf/ptf-loan-profile-defer.repository";
 export * from "./ptf/ptf-master-data.repository";
 export * from "./ptf/ptf-product.repository";
 export * from "./ptf/ptf-related-person.repository";

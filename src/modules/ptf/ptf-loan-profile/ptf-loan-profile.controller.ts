@@ -7,7 +7,7 @@ import {
     LoanProfileResponseDto,
     LoanProfilesResponseDto,
     AttachFileDto,
-    LoanProfileUpdateDto
+    LoanProfileUpdateDto, CreateDeferRequestDto, UpdateDeferRequestDto
 } from "./dto";
 import {CheckCustomerInfoRequestDto} from "../../loan-profile/dto";
 
@@ -77,5 +77,23 @@ export class PtfLoanProfileController {
         @Body() dto: LoanProfileUpdateDto
     ): Promise<LoanProfileResponseDto> {
         return this.service.updateLoanProfile(dto);
+    }
+
+    @Post("/defer")
+    @ApiOperation({summary: "Tạo mới defer cho hồ sơ vay"})
+    createDefer(
+        @Headers() headers,
+        @Body() dto: CreateDeferRequestDto
+    ): Promise<boolean> {
+        return this.service.createDefer(dto);
+    }
+
+    @Put("/defer")
+    @ApiOperation({summary: "Update defer cho hồ sơ vay"})
+    updateDefer(
+        @Headers() headers,
+        @Body() dto: UpdateDeferRequestDto
+    ): Promise<boolean> {
+        return this.service.updateDefer(dto);
     }
 }
