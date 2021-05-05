@@ -225,7 +225,7 @@ export class PtfLoanProfileService extends BaseService {
 
         this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
         let result = await this.connection
-            .getCustomRepository(LoanProfileRepository)
+            .getCustomRepository(PtfLoanProfileRepository)
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
         let currentAddress: PtfAddress = this.convertDto2Entity(dto.currentAddress, PtfAddress);
