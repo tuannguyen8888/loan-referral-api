@@ -224,6 +224,7 @@ export class PtfLoanProfileService extends BaseService {
         entity.creationDate = moment().format('YYYY-MM-DD');
         entity.disbursementMethod = 1;
         entity.partnerIdCode = 'FinViet';
+        entity.createdBy = dto.createdBy;
 
         this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
         let result = await this.connection
@@ -364,7 +365,9 @@ export class PtfLoanProfileService extends BaseService {
     }
 
     async updateLoanProfile(dto: LoanProfileUpdateDto) {
-        let entityUpdate = this.convertDto2Entity(dto, PtfLoanProfile);
+        let entityUpdate: PtfLoanProfile = this.convertDto2Entity(dto, PtfLoanProfile);
+        entityUpdate.updatedBy = dto.updatedBy;
+        entityUpdate.updatedAt = new Date();
         let result = await this.connection
             .getCustomRepository(PtfLoanProfileRepository)
             .save(entityUpdate);
