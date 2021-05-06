@@ -180,7 +180,7 @@ export class PtfLoanProfileService extends BaseService {
             PtfAddress,
             AddressDto
         );
-        response.currentAddress = this.convertEntity2Dto(
+        response.permanentAddress = this.convertEntity2Dto(
             permanentAddress,
             PtfAddress,
             AddressDto
