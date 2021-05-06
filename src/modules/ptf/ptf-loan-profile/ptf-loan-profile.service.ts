@@ -797,7 +797,7 @@ export class PtfLoanProfileService extends BaseService {
                     profile.fvStatus = "SENT_FILES";
                     profile.updatedAt = new Date();
                     await this.connection
-                        .getCustomRepository(LoanProfileRepository)
+                        .getCustomRepository(PtfLoanProfileRepository)
                         .save(profile);
                 }
             }

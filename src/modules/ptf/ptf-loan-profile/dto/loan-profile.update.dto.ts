@@ -13,8 +13,8 @@ export class LoanProfileUpdateDto {
     id: number = null;
     @IsDefined()
     partnerId: number = null;
-    @IsNotEmpty()
-    loanNo: string = null;
+    loanApplicationId?: string = null;
+    loanPublicId?: string = null;
     @IsNotEmpty()
     fvStatus: string = null;
     @IsNotEmpty()

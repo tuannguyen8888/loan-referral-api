@@ -14,7 +14,9 @@ export class LoanProfileDto {
     @IsOptional()
     partnerId?: number = null;
     @IsOptional()
-    loanNo?: string = null;
+    loanApplicationId?: string = null;
+    @IsOptional()
+    loanPublicId?: string = null;
     @IsOptional()
     fvStatus?: string = null;
     @IsOptional()

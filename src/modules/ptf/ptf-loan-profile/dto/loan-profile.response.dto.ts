@@ -11,7 +11,8 @@ import {AddressDto, AttachFileDto, EmploymentInformationDto, RelatedPersonDto} f
 export class LoanProfileResponseDto {
     id: number = null;
     partnerId: number = null;
-    loanNo: string = null;
+    loanApplicationId?: string = null;
+    loanPublicId?: string = null;
     fvStatus: string = null;
     loanStatus: string = null;
     firstName: string = null;
