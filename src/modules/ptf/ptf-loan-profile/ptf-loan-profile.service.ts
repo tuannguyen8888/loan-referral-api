@@ -20,17 +20,15 @@ import {Logger} from "../../../common/loggers";
 import {RedisClient} from "../../../common/shared";
 import {RequestUtil} from "../../../common/utils";
 import {
-    LoanProfileRepository,
     PtfAddressRepository,
     PtfLoanProfileRepository,
     SaleGroupRepository,
     PtfEmploymentInformationRepository,
     PtfRelatedPersonRepository,
-    AttachFileRepository,
     PtfAttachFileRepository,
     SendDataLogRepository,
     ProcessRepository,
-    AddressRepository, PtfLoanProfileDeferRepository
+    PtfLoanProfileDeferRepository
 } from "../../../repositories";
 import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
@@ -116,7 +114,7 @@ export class PtfLoanProfileService extends BaseService {
 
     async getLoanProfile(loanProfileId: number) {
         let result = await this.connection
-            .getCustomRepository(LoanProfileRepository)
+            .getCustomRepository(PtfLoanProfileRepository)
             .findOne(loanProfileId);
         let response: LoanProfileResponseDto = this.convertEntity2Dto(
             result,
@@ -793,7 +791,7 @@ export class PtfLoanProfileService extends BaseService {
             }
             if (!isError) {
                 let profile = await this.connection
-                    .getCustomRepository(LoanProfileRepository)
+                    .getCustomRepository(PtfLoanProfileRepository)
                     .findOne(loanProfile.id);
                 if (profile) {
                     profile.fvStatus = "SENT_FILES";
