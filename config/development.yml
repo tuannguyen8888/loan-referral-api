@@ -51,20 +51,11 @@ database:
   - "dist/entities/*.{js,ts}"
   - "dist/entities/mafc-masterdata/*.{js,ts}"
   - "dist//entities/ptf/*.{js,ts}"
-  replication:
-  
-    master:
-      host: "10.50.50.5"
-      port: 3308
-      username: "finviet"
-      password: "yVREMIiso8BYPBAptGS8"
-      database: "loan_referral"
-    slaves:
-    - host: "10.50.50.5"
-      port: 3308
-      username: "finviet"
-      password: "yVREMIiso8BYPBAptGS8"
-      database: "loan_referral"
+  host: "10.50.50.5"
+  port: 3308
+  username: "finviet"
+  password: "yVREMIiso8BYPBAptGS8"
+  database: "loan_referral"
 
 mafc_api:
   partner_code: 'FIV'

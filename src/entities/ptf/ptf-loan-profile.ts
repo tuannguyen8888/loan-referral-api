@@ -11,14 +11,16 @@ export class PtfLoanProfile {
   @Column("varchar", {
     name: "loan_application_id",
     comment: "Mã hồ sơ vay",
-    length: 45,nullable: true,
+    length: 45,
+    nullable: true
   })
   loanApplicationId: string;
 
   @Column("varchar", {
     name: "loan_public_id",
     comment: "Mã khoản vay public cho đối tác, khách hàng",
-    length: 45,nullable: true,
+    length: 45,
+    nullable: true
   })
   loanPublicId: string;
 
@@ -31,7 +33,7 @@ export class PtfLoanProfile {
   @Column("varchar", {
     name: "first_name",
     comment: "Tên khách hàng",
-    length: 30,
+    length: 30
   })
   firstName: string;
 
@@ -39,14 +41,14 @@ export class PtfLoanProfile {
     name: "middle_name",
     nullable: true,
     comment: "Tên đệm khách hàng",
-    length: 30,
+    length: 30
   })
   middleName: string | null;
 
   @Column("varchar", {
     name: "last_name",
     comment: "Họ khách hàng",
-    length: 30,
+    length: 30
   })
   lastName: string;
 
@@ -59,14 +61,14 @@ export class PtfLoanProfile {
   @Column("varchar", {
     name: "id_document_number",
     comment: "Số CMND/CCCD",
-    length: 20,
+    length: 20
   })
   idDocumentNumber: string;
 
   @Column("varchar", {
     name: "id_issue_date",
     comment: "Ngày cấp CMND/CCCD",
-    length: 10,
+    length: 10
   })
   idIssueDate: string;
 
@@ -76,14 +78,14 @@ export class PtfLoanProfile {
   @Column("varchar", {
     name: "frb_document_number",
     comment: "Sổ hộ khẩu",
-    length: 20,
+    length: 20
   })
   frbDocumentNumber: string;
 
   @Column("varchar", {
     name: "client_photo_url",
     comment: "Ảnh khách hàng",
-    length: 255,
+    length: 255
   })
   clientPhotoUrl: string;
 
@@ -135,7 +137,7 @@ export class PtfLoanProfile {
   @Column("int", {
     name: "bank_branch_id",
     nullable: true,
-    default: () => "'0'",
+    default: () => "'0'"
   })
   bankBranchId: number | null;
 
@@ -157,7 +159,7 @@ export class PtfLoanProfile {
   @Column("varchar", {
     name: "credit_product",
     comment: "Mã sản phẩm vay",
-    length: 45,
+    length: 45
   })
   creditProduct: string;
 
@@ -168,7 +170,7 @@ export class PtfLoanProfile {
     name: "amount",
     comment: "Số tiền vay",
     precision: 18,
-    scale: 0,
+    scale: 0
   })
   amount: string;
 
@@ -180,7 +182,7 @@ export class PtfLoanProfile {
 
   @Column("timestamp", {
     name: "created_at",
-    default: () => "CURRENT_TIMESTAMP",
+    default: () => "CURRENT_TIMESTAMP"
   })
   createdAt: Date;
 
@@ -188,7 +190,7 @@ export class PtfLoanProfile {
     name: "created_by",
     nullable: true,
     comment: "user id who create ",
-    length: 255,
+    length: 255
   })
   createdBy: string | null;
 

@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { PtfMasterDataService } from './ptf-master-data.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { PtfMasterDataService } from "./ptf-master-data.service";
 
-describe('PtfMasterDataService', () => {
+describe("PtfMasterDataService", () => {
   let service: PtfMasterDataService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PtfMasterDataService],
+      providers: [PtfMasterDataService]
     }).compile();
 
     service = module.get<PtfMasterDataService>(PtfMasterDataService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 });

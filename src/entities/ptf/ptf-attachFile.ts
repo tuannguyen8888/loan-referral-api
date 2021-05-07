@@ -16,7 +16,7 @@ export class PtfAttachFile {
 
   @Column("timestamp", {
     name: "created_at",
-    default: () => "CURRENT_TIMESTAMP",
+    default: () => "CURRENT_TIMESTAMP"
   })
   createdAt: Date;
 

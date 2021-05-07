@@ -18,7 +18,7 @@ export class PtfProduct {
     name: "min_amount",
     nullable: true,
     precision: 18,
-    scale: 0,
+    scale: 0
   })
   minAmount: string | null;
 
@@ -26,7 +26,7 @@ export class PtfProduct {
     name: "max_amount",
     nullable: true,
     precision: 18,
-    scale: 0,
+    scale: 0
   })
   maxAmount: string | null;
 

@@ -3,7 +3,7 @@ import { RequestUtil } from "src/common/utils";
 import { Logger } from "src/common/loggers";
 import { MasterDataService } from "./../modules/master-data/master-data.service";
 import { Cron, Timeout } from "@nestjs/schedule";
-import {PtfReceiveResultService} from "../modules/ptf/ptf-receive-result/ptf-receive-result.service";
+import { PtfReceiveResultService } from "../modules/ptf/ptf-receive-result/ptf-receive-result.service";
 
 @Injectable()
 export class CronService {
@@ -35,19 +35,19 @@ export class CronService {
     return;
   }
 
-    @Cron("0 0 * * * *") // chạy mỗi giờ
-    async ptfCron() {
-        console.info(`START CRON PTF AT ======= ${new Date()}`);
-        await this.ptfGetLoanStatus();
-    }
+  @Cron("0 0 * * * *") // chạy mỗi giờ
+  async ptfCron() {
+    console.info(`START CRON PTF AT ======= ${new Date()}`);
+    await this.ptfGetLoanStatus();
+  }
 
-    async ptfGetLoanStatus(){
-        const service = new PtfReceiveResultService(
-            null,
-            this.logger,
-            null,
-            this.requestUtil
-        );
-        await service.getData_loanStatus();
-    }
+  async ptfGetLoanStatus() {
+    const service = new PtfReceiveResultService(
+      null,
+      this.logger,
+      null,
+      this.requestUtil
+    );
+    await service.getData_loanStatus();
+  }
 }

@@ -11,7 +11,7 @@ export class PtfEmploymentInformation {
   @Column("varchar", {
     name: "house_number_and_street",
     nullable: true,
-    length: 255,
+    length: 255
   })
   houseNumberAndStreet: string | null;
 
@@ -30,7 +30,7 @@ export class PtfEmploymentInformation {
   @Column("varchar", {
     name: "company_university_name",
     nullable: true,
-    length: 255,
+    length: 255
   })
   companyUniversityName: string | null;
 
@@ -40,7 +40,7 @@ export class PtfEmploymentInformation {
   @Column("varchar", {
     name: "employed_at_last_work",
     nullable: true,
-    length: 10,
+    length: 10
   })
   employedAtLastWork: string | null;
 
@@ -50,13 +50,13 @@ export class PtfEmploymentInformation {
   @Column("double", {
     name: "monthly_payments_other_loans",
     nullable: true,
-    precision: 22,
+    precision: 22
   })
   monthlyPaymentsOtherLoans: number | null;
 
   @Column("timestamp", {
     name: "created_at",
-    default: () => "CURRENT_TIMESTAMP",
+    default: () => "CURRENT_TIMESTAMP"
   })
   createdAt: Date;
 

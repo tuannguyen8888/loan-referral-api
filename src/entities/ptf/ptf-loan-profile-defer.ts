@@ -22,7 +22,7 @@ export class PtfLoanProfileDefer {
 
   @Column("timestamp", {
     name: "created_at",
-    default: () => "CURRENT_TIMESTAMP",
+    default: () => "CURRENT_TIMESTAMP"
   })
   createdAt: Date;
 
@@ -30,7 +30,7 @@ export class PtfLoanProfileDefer {
     name: "created_by",
     nullable: true,
     comment: "user id who create ",
-    length: 255,
+    length: 255
   })
   createdBy: string | null;
 

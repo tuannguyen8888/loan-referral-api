@@ -1,10 +1,8 @@
-import { Controller } from '@nestjs/common';
-import {ApiSecurity, ApiTags} from "@nestjs/swagger";
+import { Controller } from "@nestjs/common";
+import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 
-@Controller('receive-result')
+@Controller("receive-result")
 @ApiSecurity("api-key")
 @ApiSecurity("checksum")
 @ApiTags("PTF Receive Result")
-export class PtfReceiveResultController {
-
-}
+export class PtfReceiveResultController {}
