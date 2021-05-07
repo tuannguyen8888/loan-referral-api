@@ -779,9 +779,9 @@ export class PtfLoanProfileService extends BaseService {
                 );
                 console.log("call api uploadFile result = ", result);
                 log.result = JSON.stringify(result);
-                if (result.status == 'OK') {
-                    result.enquiry.type = attachFiles[i].type.toString();
-                    results.push(result.enquiry);
+                if (result.body.status == 'OK' && (!result.error || !result.error.code)) {
+                    result.body.enquiry.type = attachFiles[i].type.toString();
+                    results.push(result.body.enquiry);
                 } else {
                     isError = true;
                     apiError = result;
