@@ -11,11 +11,11 @@ export class RelatedPersonDto {
   id?: number = null;
   @IsDefined()
   loanProfileId: number = null;
-  related_person_type: number = null;
-  family_name: string = null;
+  relatedPersonType: number = null;
+  familyName: string = null;
   @IsOptional()
-  middle_name: string = null;
-  first_name: string = null;
+  middleName: string = null;
+  firstName: string = null;
   phone: string = null;
   @IsOptional()
   @IsDateString()
