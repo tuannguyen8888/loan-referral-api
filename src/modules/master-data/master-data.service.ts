@@ -1,5 +1,5 @@
 import { BankRepository } from "../../repositories/mafc-masterdata/masterdata-bank.repository";
-import { Inject, Injectable } from "@nestjs/common";
+import {Inject, Injectable, Scope} from "@nestjs/common";
 import { RequestUtil } from "../../common/utils";
 import * as config from "config";
 import { BaseService } from "../../common/services";
@@ -27,7 +27,7 @@ import {
   WardMasterData
 } from "src/entities";
 
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT })
 export class MasterDataService extends BaseService {
   constructor(
     @Inject(REQUEST) protected request: Request,
@@ -46,6 +46,14 @@ export class MasterDataService extends BaseService {
   districtMD = this.connection.getCustomRepository(DistrictRepository);
   wardMD = this.connection.getCustomRepository(WardRepository);
   loanCateMD = this.connection.getCustomRepository(LoanCategoryRepository);
+
+  convertStringToCharCode(str:string){
+    let finalString = "";
+    for (var i=0; i<str.length; i++) {
+      finalString += str.charCodeAt(i).toString(16);
+    }
+    return finalString;
+  }
 
   //#region  FIND
   async getBanks() {
@@ -187,7 +195,9 @@ export class MasterDataService extends BaseService {
       }
     );
     const banks: BankMasterData[] = response.data;
-    this.bankMD.save(banks);
+    const res = await this.bankMD.save(banks);
+    console.log("SAVED BANK");
+    return res;
   }
 
   async mafcFetchSchemes() {
@@ -232,26 +242,10 @@ export class MasterDataService extends BaseService {
         return m;
       }
     });
-    this.schemeMD.save(schemes);
+    const res = await this.schemeMD.save(schemes);
+    console.log("SAVED SCHEME");
+    return res;
   }
-
-  /*   async mafcFetchSaleOffice() {
-      let mafc_api_config = config.get("mafc_api");
-      let response = await this.requestUtil.post(
-        mafc_api_config.master_data.url,
-        { msgName: "getSaleOffice" },
-        {
-          auth: {
-            username: mafc_api_config.master_data.username,
-            password: mafc_api_config.master_data.password
-          }
-        }
-      );
-      const saleoffices: SaleOfficeMasterData[] = response.data.filter(d =>
-        d.inspectorname.includes("FIV-TLS")
-      );
-      this.saleMD.save(saleoffices);
-    } */
 
   async mafcFetchSecUser() {
     let mafc_api_config = config.get("mafc_api");
@@ -265,8 +259,14 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    response.data = response.data.map(d => {
+      d["id"] = this.convertStringToCharCode(d["lsu_USER_ID_C"]);
+      return d;
+    });
     const secusers: SecUserMasterData[] = response.data;
-    this.secMD.save(secusers);
+    const res = await this.secMD.save(secusers, { chunk: 500 });
+    console.log("SAVED SEC USER");
+    return res;
   }
 
   async mafcFetchCity() {
@@ -282,7 +282,9 @@ export class MasterDataService extends BaseService {
       }
     );
     const cities: CityMasterData[] = response.data;
-    this.cityMD.save(cities);
+    const res = await this.cityMD.save(cities);
+    console.log("SAVED CITY");
+    return res;
   }
 
   async mafcFetchDistrict() {
@@ -298,7 +300,9 @@ export class MasterDataService extends BaseService {
       }
     );
     const districts: DistrictMasterData[] = response.data;
-    this.districtMD.save(districts);
+    const res = await this.districtMD.save(districts);
+    console.log("SAVED DISTRICT");
+    return res;
   }
 
   async mafcFetchWard() {
@@ -314,7 +318,9 @@ export class MasterDataService extends BaseService {
       }
     );
     const wards: WardMasterData[] = response.data;
-    this.wardMD.save(wards);
+    const res = await this.wardMD.save([...wards], { chunk: 700 });
+    console.log("SAVED WARD");
+    return res;
   }
 
   async mafcFetchLoanCategory() {
@@ -330,7 +336,9 @@ export class MasterDataService extends BaseService {
       }
     );
     const loanCategories: LoanCategoryMasterData[] = response.data;
-    this.loanCateMD.save(loanCategories);
+    const res = await this.loanCateMD.save(loanCategories);
+    console.log("SAVED LOAN CATEGORY");
+    return res;
   }
 
   //#endregion
@@ -347,8 +355,8 @@ export class MasterDataService extends BaseService {
     return res;
   }
 
-  cronMasterDataMafc() {
-    return Promise.all([
+  async cronMasterDataMafc() {
+    const success = await Promise.all([
       this.mafcFetchBanks(),
       this.mafcFetchSecUser(),
       this.mafcFetchSchemes(),
@@ -357,5 +365,7 @@ export class MasterDataService extends BaseService {
       this.mafcFetchDistrict(),
       this.mafcFetchWard()
     ]);
+    console.log("FETCH AND SAVE MASTER DATA COMPLETED !!!!!");
+    return success;
   }
 }

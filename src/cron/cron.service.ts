@@ -32,6 +32,7 @@ export class CronService {
       this.requestUtil
     );
     masterData.cronMasterDataMafc();
+    return;
   }
 
     @Cron("0 0 * * * *") // chạy mỗi giờ
