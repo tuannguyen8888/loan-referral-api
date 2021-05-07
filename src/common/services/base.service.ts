@@ -12,7 +12,7 @@ import { Logger } from "../loggers";
 import { Partner } from "../../entities";
 import { PartnerRepository } from "../../repositories";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({ scope: Scope.DEFAULT })
 export class BaseService {
   constructor(
     @Inject(REQUEST) protected request: Request,
