@@ -358,7 +358,7 @@ export class PtfLoanProfileService extends BaseService {
         .findOne(attachFiles[0].loanProfileId);
       if (loanProfile) {
         if (loanProfile.fvStatus == "NEED_UPDATE") {
-        } else {
+        } else if(loanProfile.fvStatus == "NEW" || loanProfile.fvStatus == "UPLOADED" || loanProfile.fvStatus == "SENT_FILES" ){
           let uploadResults = await this.sendData_uploadDocuments(
             loanProfile,
             attachFiles
@@ -717,7 +717,7 @@ export class PtfLoanProfileService extends BaseService {
       let ext: any = url.split(".");
       ext = ext[ext.length - 1];
       let fileName = `${idDocumentNumber}_${type}_${new Date().getTime()}.${ext}`;
-      let filePath = `${__dirname}/../../attach_files/${fileName}`;
+      let filePath = `${__dirname}/../../../attach_files/${fileName}`;
       let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(
         url,
         filePath
