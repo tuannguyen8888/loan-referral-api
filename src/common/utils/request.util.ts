@@ -30,7 +30,7 @@ export class RequestUtil {
       // console.log("api result data = ", data);
       return data;
     } catch (error) {
-      console.error('error call '+url+': '+error.message);
+      console.error("error call " + url + ": " + error.message);
       throw error;
     }
   }
@@ -38,7 +38,8 @@ export class RequestUtil {
   async uploadFile<T>(
     url: string,
     formData: FormData,
-    auth = null
+    auth = null,
+    headers = null,
   ): Promise<T> {
     try {
       let config: any = {
@@ -51,6 +52,12 @@ export class RequestUtil {
       };
       if (auth) {
         config.auth = auth;
+      }
+      if(headers){
+          config.headers = {
+              ...config.headers,
+              ...headers
+          };
       }
       const { data } = await this.httpService
         .post<T>(url, formData, config)
