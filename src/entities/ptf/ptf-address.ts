@@ -11,14 +11,14 @@ export class PtfAddress {
   @Column("varchar", {
     name: "address_type",
     comment: "PERMNENT, CURRES",
-    length: 45,
+    length: 45
   })
   addressType: string;
 
   @Column("varchar", {
     name: "house_number_and_street",
     nullable: true,
-    length: 255,
+    length: 255
   })
   houseNumberAndStreet: string | null;
 
@@ -33,7 +33,7 @@ export class PtfAddress {
 
   @Column("timestamp", {
     name: "created_at",
-    default: () => "CURRENT_TIMESTAMP",
+    default: () => "CURRENT_TIMESTAMP"
   })
   createdAt: Date;
 

@@ -7,7 +7,7 @@ import {
   Min
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import {LoanProfileResponseDto} from "./loan-profile.response.dto";
+import { LoanProfileResponseDto } from "./loan-profile.response.dto";
 
 export class LoanProfilesResponseDto {
   rows: LoanProfileResponseDto[];

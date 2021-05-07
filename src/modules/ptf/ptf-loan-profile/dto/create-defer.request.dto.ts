@@ -1,25 +1,25 @@
 import {
-    IsString,
-    IsNotEmpty,
-    IsDateString,
-    IsDefined,
-    IsOptional
+  IsString,
+  IsNotEmpty,
+  IsDateString,
+  IsDefined,
+  IsOptional
 } from "class-validator";
 
 export class CreateDeferRequestDto {
-    @IsDefined()
-    id: number;
+  @IsDefined()
+  id: number;
 
-    loanProfileId
+  loanProfileId;
 
-    @IsOptional()
-    deferCode: string;
+  @IsOptional()
+  deferCode: string;
 
-    @IsString()
-    @IsNotEmpty()
-    deferNote: string;
+  @IsString()
+  @IsNotEmpty()
+  deferNote: string;
 
-    @IsDateString()
-    createdAt: string = null;
-    createdBy: string = null;
+  @IsDateString()
+  createdAt: string = null;
+  createdBy: string = null;
 }
