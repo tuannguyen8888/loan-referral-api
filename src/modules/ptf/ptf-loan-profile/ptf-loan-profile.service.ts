@@ -397,7 +397,7 @@ export class PtfLoanProfileService extends BaseService {
                 loanProfileId: loanProfile.id
               }
             });
-          await this.sendData_loanRequest(
+          let requestRessult = await this.sendData_loanRequest(
             loanProfile,
             uploadResults,
             currentAddress,
@@ -405,6 +405,16 @@ export class PtfLoanProfileService extends BaseService {
             employmentInformation,
             relatedPersons
           );
+          if(requestRessult.body.status == 'OK' && (!requestRessult.error || !requestRessult.error.code)){
+              loanProfile.fvStatus = 'SENT';
+              loanProfile.loanApplicationId = requestRessult.body.enquiry.loanApplicationId;
+              loanProfile.loanPublicId = requestRessult.body.enquiry.loanPublicId;
+              await this.connection
+                  .getCustomRepository(PtfLoanProfileRepository)
+                  .save(loanProfile);
+          }else{
+            throw new BadRequestException(requestRessult.error);
+          }
         }
       }
     }
