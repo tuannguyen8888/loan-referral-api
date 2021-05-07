@@ -521,6 +521,7 @@ export class PtfLoanProfileService extends BaseService {
     employmentInformationEntity: PtfEmploymentInformation,
     relatedPersonEntities: PtfRelatedPerson[]
   ) {
+    console.log('=======sendData_loanRequest=======');
     let ptfApiConfig = config.get("ptf_api");
     let body, requestConfig, result;
     try {
@@ -549,6 +550,7 @@ export class PtfLoanProfileService extends BaseService {
         });
       let clientPhoto = null;
       if (loanProfile.clientPhotoUrl && loanProfile.idDocumentNumber) {
+        console.log('call api upload client photo =========')
         let resultUpload = await this.sendData_uploadFile(
           loanProfile.clientPhotoUrl,
           "1",
