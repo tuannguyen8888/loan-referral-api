@@ -454,6 +454,7 @@ export class PtfLoanProfileService extends BaseService {
       dto.relatedPersons,
       PtfRelatedPerson
     );
+      relatedPersons.forEach((item:PtfRelatedPerson)=>item.loanProfileId = result.id);
     relatedPersons = await this.connection
       .getCustomRepository(PtfRelatedPersonRepository)
       .save(relatedPersons);
