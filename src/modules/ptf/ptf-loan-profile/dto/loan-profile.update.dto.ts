@@ -23,7 +23,7 @@ export class LoanProfileUpdateDto {
   loanPublicId?: string = null;
   @IsNotEmpty()
   fvStatus: string = null;
-  @IsNotEmpty()
+  @IsOptional()
   loanStatus: string = null;
   @IsNotEmpty()
   firstName: string = null;
