@@ -405,7 +405,7 @@ export class PtfLoanProfileService extends BaseService {
             employmentInformation,
             relatedPersons
           );
-          if(requestRessult.body.status == 'OK' && (!requestRessult.error || !requestRessult.error.code)){
+          if(requestRessult.body && requestRessult.body.status == 'OK' && (!requestRessult.error || !requestRessult.error.code)){
               loanProfile.fvStatus = 'SENT';
               loanProfile.loanApplicationId = requestRessult.body.enquiry.loanApplicationId;
               loanProfile.loanPublicId = requestRessult.body.enquiry.loanPublicId;
@@ -567,7 +567,7 @@ export class PtfLoanProfileService extends BaseService {
           "1",
           loanProfile.idDocumentNumber
         );
-        if (resultUpload.status == "OK") {
+        if (resultUpload && resultUpload.status == "OK") {
           clientPhoto = {
             document: {
               id: resultUpload.enquiry.documentId,
@@ -763,7 +763,7 @@ export class PtfLoanProfileService extends BaseService {
       );
       console.log("call api uploadFile result = ", result);
       log.result = JSON.stringify(result);
-      if (result.status == "OK") {
+      if (result && result.status == "OK") {
         result.enquiry.type = type.toString();
         results.push(result);
       } else {
@@ -854,7 +854,7 @@ export class PtfLoanProfileService extends BaseService {
         console.log("call api uploadFile result = ", result);
         log.result = JSON.stringify(result);
         if (
-          result.body.status == "OK" &&
+            result && result.body.status == "OK" &&
           (!result.error || !result.error.code)
         ) {
           result.body.enquiry.type = attachFiles[i].type.toString();
