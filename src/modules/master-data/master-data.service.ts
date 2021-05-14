@@ -1,5 +1,5 @@
 import { BankRepository } from "../../repositories/mafc-masterdata/masterdata-bank.repository";
-import {Inject, Injectable, Scope} from "@nestjs/common";
+import { Inject, Injectable, Scope } from "@nestjs/common";
 import { RequestUtil } from "../../common/utils";
 import * as config from "config";
 import { BaseService } from "../../common/services";
@@ -47,9 +47,9 @@ export class MasterDataService extends BaseService {
   wardMD = this.connection.getCustomRepository(WardRepository);
   loanCateMD = this.connection.getCustomRepository(LoanCategoryRepository);
 
-  convertStringToCharCode(str:string){
+  convertStringToCharCode(str: string) {
     let finalString = "";
-    for (var i=0; i<str.length; i++) {
+    for (var i = 0; i < str.length; i++) {
       finalString += str.charCodeAt(i).toString(16);
     }
     return finalString;

@@ -39,10 +39,10 @@ export class PtfReceiveResultService extends BaseService {
         .getCustomRepository(PtfLoanProfileRepository)
         .find({
           where: {
-              deletedAt: IsNull(),
-              loanPublicId: Not(IsNull()),
-              loanApplicationId: Not(IsNull()),
-              fvStatus: Not("DONE")
+            deletedAt: IsNull(),
+            loanPublicId: Not(IsNull()),
+            loanApplicationId: Not(IsNull()),
+            fvStatus: Not("DONE")
           }
         });
       console.info("profiles count = ", profiles.length);

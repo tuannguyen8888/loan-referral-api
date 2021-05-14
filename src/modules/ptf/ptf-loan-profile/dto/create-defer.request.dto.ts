@@ -11,7 +11,7 @@ export class CreateDeferRequestDto {
   @IsOptional()
   id: number = null;
 
-  loanProfileId:number = null;
+  loanProfileId: number = null;
 
   @IsOptional()
   deferCode: string = null;

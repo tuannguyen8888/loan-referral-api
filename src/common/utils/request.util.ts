@@ -30,7 +30,10 @@ export class RequestUtil {
       // console.log("api result data = ", data);
       return data;
     } catch (error) {
-      console.error("error call " + url + ": " + error.message + " body = ", body);
+      console.error(
+        "error call " + url + ": " + error.message + " body = ",
+        body
+      );
       throw error;
     }
   }
@@ -64,7 +67,7 @@ export class RequestUtil {
         .toPromise();
       return data;
     } catch (error) {
-        console.error("error call uploadFile " + url + ": " + error.message);
+      console.error("error call uploadFile " + url + ": " + error.message);
       throw error;
     }
   }
