@@ -618,83 +618,87 @@ export class PtfLoanProfileService extends BaseService {
       }
       console.log("4");
       body = {
-        command: "GET_ENQUIRY",
-        enquiry: {
-          authenType: "createLoanApplication",
-          lastName: loanProfile.lastName,
-          middleName: loanProfile.middleName,
-          firstName: loanProfile.firstName,
-          gender: loanProfile.gender,
-          birthDate: loanProfile.birthDate,
-          idDocumentNumber: loanProfile.idDocumentNumber,
-          idIssueDate: loanProfile.idIssueDate,
-          idIssueCity: loanProfile.idIssueCity.toString(),
-          frbDocumentNumber: loanProfile.frbDocumentNumber,
-          primaryMobile: loanProfile.primaryMobile,
-          homePhone: loanProfile.homePhone,
-          secondaryMobile: loanProfile.secondaryMobile,
-          email: loanProfile.email,
-          socialAccountType: 1,
-          socialAccountDetails: ptfApiConfig.partner_code,
-          maritalStatus: loanProfile.maritalStatus,
-          accompanimentOfClient: loanProfile.accompanimentOfClient,
-          numberOfChildren: loanProfile.numberOfChildren,
-          education: loanProfile.education,
-          disbursementMethod: loanProfile.disbursementMethod,
-          accountNumber: loanProfile.accountNumber,
-          bankNameId: loanProfile.bankNameId,
-          bankCityId: loanProfile.bankCityId,
-          bankBranchId: loanProfile.bankBranchId,
-          bankCode: loanProfile.bankCode,
-          partnerId: ptfApiConfig.partner_code,
-          serviceName: 2,
-          iCareLead: 2,
-          creationDate: loanProfile.creationDate,
-          bankBranch: null,
-          bankCity: null,
-          bankName: null,
-          clientPhoto: clientPhoto,
-          documentPhoto: documentPhoto,
-          currentAddress: {
-            houseNumberAndStreet: currentAddressEntity.houseNumberAndStreet,
-            cityId: currentAddressEntity.cityId,
-            districtId: currentAddressEntity.districtId,
-            wardId: currentAddressEntity.wardId
+          header: {
+              reqType: "REQUEST",
+              api: "PTF_LOAN",
+              apiKey: "MS0809ZIDANDWYSB2C193VARNAAH",
+              priority: "3",
+              channel: "PTF_LOAN",
+              subChannel: "PTF_LOAN",
+              location: "localhost",
+              context: "PC",
+              trusted: "false",
+              userID: "1365778600",
+              requestAPI: "PTF_LOAN",
+              requestNode: "01"
           },
-          currentAndPermanentSame: loanProfile.currentAndPermanentSame,
-          permanentAddress: {
-            houseNumberAndStreet: permanentAddressEntity.houseNumberAndStreet,
-            cityId: permanentAddressEntity.cityId,
-            districtId: permanentAddressEntity.districtId,
-            wardId: permanentAddressEntity.wardId
-          },
-          relatedPersons: relatedPersons,
-          employmentInformation: employmentInformation,
-          creditProduct: loanProfile.creditProduct,
-          stateCode: "SA",
-          amount: loanProfile.amount,
-          loanPurpose: loanProfile.loanPurpose,
-          loanTerm: {
-            value: loanProfile.loanTerm,
-            periodKind: "Month"
+          body: {
+              command: "GET_ENQUIRY",
+              enquiry: {
+                  authenType: "createLoanApplication",
+                  lastName: loanProfile.lastName,
+                  middleName: loanProfile.middleName,
+                  firstName: loanProfile.firstName,
+                  gender: loanProfile.gender,
+                  birthDate: loanProfile.birthDate,
+                  idDocumentNumber: loanProfile.idDocumentNumber,
+                  idIssueDate: loanProfile.idIssueDate,
+                  idIssueCity: loanProfile.idIssueCity.toString(),
+                  frbDocumentNumber: loanProfile.frbDocumentNumber,
+                  primaryMobile: loanProfile.primaryMobile,
+                  homePhone: loanProfile.homePhone,
+                  secondaryMobile: loanProfile.secondaryMobile,
+                  email: loanProfile.email,
+                  socialAccountType: 1,
+                  socialAccountDetails: ptfApiConfig.partner_code,
+                  maritalStatus: loanProfile.maritalStatus,
+                  accompanimentOfClient: loanProfile.accompanimentOfClient,
+                  numberOfChildren: loanProfile.numberOfChildren,
+                  education: loanProfile.education,
+                  disbursementMethod: loanProfile.disbursementMethod,
+                  accountNumber: loanProfile.accountNumber,
+                  bankNameId: loanProfile.bankNameId,
+                  bankCityId: loanProfile.bankCityId,
+                  bankBranchId: loanProfile.bankBranchId,
+                  bankCode: loanProfile.bankCode,
+                  partnerId: ptfApiConfig.partner_code,
+                  serviceName: 2,
+                  iCareLead: 2,
+                  creationDate: loanProfile.creationDate,
+                  bankBranch: null,
+                  bankCity: null,
+                  bankName: null,
+                  clientPhoto: clientPhoto,
+                  documentPhoto: documentPhoto,
+                  currentAddress: {
+                      houseNumberAndStreet: currentAddressEntity.houseNumberAndStreet,
+                      cityId: currentAddressEntity.cityId,
+                      districtId: currentAddressEntity.districtId,
+                      wardId: currentAddressEntity.wardId
+                  },
+                  currentAndPermanentSame: loanProfile.currentAndPermanentSame,
+                  permanentAddress: {
+                      houseNumberAndStreet: permanentAddressEntity.houseNumberAndStreet,
+                      cityId: permanentAddressEntity.cityId,
+                      districtId: permanentAddressEntity.districtId,
+                      wardId: permanentAddressEntity.wardId
+                  },
+                  relatedPersons: relatedPersons,
+                  employmentInformation: employmentInformation,
+                  creditProduct: loanProfile.creditProduct,
+                  stateCode: "SA",
+                  amount: loanProfile.amount,
+                  loanPurpose: loanProfile.loanPurpose,
+                  loanTerm: {
+                      value: loanProfile.loanTerm,
+                      periodKind: "Month"
+                  }
+              }
           }
-        }
       };
       console.log("5");
       requestConfig = {
         headers: {
-          reqType: "REQUEST",
-          api: "PTF_LOAN",
-          apiKey: "MS0809ZIDANDWYSB2C193VARNAAH",
-          priority: "3",
-          channel: "PTF_LOAN",
-          subChannel: "PTF_LOAN",
-          location: "localhost",
-          context: "PC",
-          trusted: "false",
-          userID: "1365778600",
-          requestAPI: "PTF_LOAN",
-          requestNode: "01",
           "X-IBM-Client-Secret": ptfApiConfig.X_IBM_Client_Secret,
           "X-IBM-Client-Id": ptfApiConfig.X_IBM_Client_Id
         }
