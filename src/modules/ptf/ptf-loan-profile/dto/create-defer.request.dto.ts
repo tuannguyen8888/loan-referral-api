@@ -8,16 +8,17 @@ import {
 
 export class CreateDeferRequestDto {
   @IsDefined()
-  id: number;
+  @IsOptional()
+  id: number = null;
 
-  loanProfileId;
+  loanProfileId:number = null;
 
   @IsOptional()
-  deferCode: string;
+  deferCode: string = null;
 
   @IsString()
   @IsNotEmpty()
-  deferNote: string;
+  deferNote: string = null;
 
   @IsDateString()
   createdAt: string = null;
