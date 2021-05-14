@@ -7,10 +7,10 @@ import {
 } from "class-validator";
 import { ProcessDto } from "src/modules/loan-profile/dto";
 import {
-  AddressDto,
-  AttachFileDto,
-  EmploymentInformationDto,
-  RelatedPersonDto
+    AddressDto,
+    AttachFileDto, DeferResponseDto,
+    EmploymentInformationDto,
+    RelatedPersonDto
 } from "./index";
 
 export class LoanProfileResponseDto {
@@ -75,5 +75,5 @@ export class LoanProfileResponseDto {
   deletedBy: string = null;
 
   process: ProcessDto[];
-  // defers: LoanProfileDeferDto[];
+  defers: DeferResponseDto[];
 }
