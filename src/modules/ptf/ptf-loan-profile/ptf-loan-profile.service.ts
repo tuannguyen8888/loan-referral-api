@@ -559,6 +559,7 @@ export class PtfLoanProfileService extends BaseService {
             addDate: item.createdAt.toISOString()
           });
         });
+        console.log("0");
       let clientPhoto = null;
       if (loanProfile.clientPhotoUrl && loanProfile.idDocumentNumber) {
         console.log('call api upload client photo =========')
@@ -574,8 +575,10 @@ export class PtfLoanProfileService extends BaseService {
               name: resultUpload.enquiry.documentName
             }
           };
+            console.log("1");
         }
       }
+        console.log("2");
       let employmentInformation = null;
       if (employmentInformationEntity) {
         employmentInformation = {
@@ -595,7 +598,9 @@ export class PtfLoanProfileService extends BaseService {
           monthlyPaymentsOtherLoans:
             employmentInformationEntity.monthlyPaymentsOtherLoans
         };
+          console.log("3");
       }
+        console.log("4");
       body = {
         command: "GET_ENQUIRY",
         enquiry: {
@@ -659,6 +664,7 @@ export class PtfLoanProfileService extends BaseService {
           }
         }
       };
+        console.log("5");
       requestConfig = {
         headers: {
           reqType: "REQUEST",
@@ -677,7 +683,7 @@ export class PtfLoanProfileService extends BaseService {
           "X-IBM-Client-Id": ptfApiConfig.X_IBM_Client_Id
         }
       };
-      console.log("call api PTF: ", [
+      console.log("==========call api PTF create loan request========: ", [
         ptfApiConfig.loan_request.url,
         body,
         requestConfig
