@@ -587,8 +587,8 @@ export class PtfLoanProfileService extends BaseService {
         ) {
           clientPhoto = {
             document: {
-              id: resultUpload.enquiry.documentId,
-              name: resultUpload.enquiry.documentName
+              id: resultUpload.body.enquiry.documentId,
+              name: resultUpload.body.enquiry.documentName
             }
           };
           console.log("1");
@@ -786,7 +786,7 @@ export class PtfLoanProfileService extends BaseService {
       console.log("call api uploadFile result = ", result);
       log.result = JSON.stringify(result);
       if (result && result.body && result.body.status == "OK") {
-        result.enquiry.type = type.toString();
+        result.body.enquiry.type = type.toString();
         results.push(result);
       } else {
         isError = true;
