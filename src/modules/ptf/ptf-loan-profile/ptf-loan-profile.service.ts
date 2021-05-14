@@ -568,7 +568,7 @@ export class PtfLoanProfileService extends BaseService {
           "1",
           loanProfile.idDocumentNumber
         );
-        if (resultUpload && resultUpload.status == "OK") {
+        if (resultUpload && resultUpload.body && resultUpload.body.status == "OK") {
           clientPhoto = {
             document: {
               id: resultUpload.enquiry.documentId,
