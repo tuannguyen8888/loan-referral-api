@@ -358,7 +358,11 @@ export class PtfLoanProfileService extends BaseService {
         .findOne(attachFiles[0].loanProfileId);
       if (loanProfile) {
         if (loanProfile.fvStatus == "NEED_UPDATE") {
-        } else if(loanProfile.fvStatus == "NEW" || loanProfile.fvStatus == "UPLOADED" || loanProfile.fvStatus == "SENT_FILES" ){
+        } else if (
+          loanProfile.fvStatus == "NEW" ||
+          loanProfile.fvStatus == "UPLOADED" ||
+          loanProfile.fvStatus == "SENT_FILES"
+        ) {
           let uploadResults = await this.sendData_uploadDocuments(
             loanProfile,
             attachFiles
@@ -405,14 +409,19 @@ export class PtfLoanProfileService extends BaseService {
             employmentInformation,
             relatedPersons
           );
-          if(requestRessult.body && requestRessult.body.status == 'OK' && (!requestRessult.error || !requestRessult.error.code)){
-              loanProfile.fvStatus = 'SENT';
-              loanProfile.loanApplicationId = requestRessult.body.enquiry.loanApplicationId;
-              loanProfile.loanPublicId = requestRessult.body.enquiry.loanPublicId;
-              await this.connection
-                  .getCustomRepository(PtfLoanProfileRepository)
-                  .save(loanProfile);
-          }else{
+          if (
+            requestRessult.body &&
+            requestRessult.body.status == "OK" &&
+            (!requestRessult.error || !requestRessult.error.code)
+          ) {
+            loanProfile.fvStatus = "SENT";
+            loanProfile.loanApplicationId =
+              requestRessult.body.enquiry.loanApplicationId;
+            loanProfile.loanPublicId = requestRessult.body.enquiry.loanPublicId;
+            await this.connection
+              .getCustomRepository(PtfLoanProfileRepository)
+              .save(loanProfile);
+          } else {
             throw new BadRequestException(requestRessult.error);
           }
         }
@@ -454,7 +463,9 @@ export class PtfLoanProfileService extends BaseService {
       dto.relatedPersons,
       PtfRelatedPerson
     );
-      relatedPersons.forEach((item:PtfRelatedPerson)=>item.loanProfileId = result.id);
+    relatedPersons.forEach(
+      (item: PtfRelatedPerson) => (item.loanProfileId = result.id)
+    );
     relatedPersons = await this.connection
       .getCustomRepository(PtfRelatedPersonRepository)
       .save(relatedPersons);
@@ -532,7 +543,7 @@ export class PtfLoanProfileService extends BaseService {
     employmentInformationEntity: PtfEmploymentInformation,
     relatedPersonEntities: PtfRelatedPerson[]
   ) {
-    console.log('=======sendData_loanRequest=======');
+    console.log("=======sendData_loanRequest=======");
     let ptfApiConfig = config.get("ptf_api");
     let body, requestConfig, result;
     try {
@@ -559,26 +570,31 @@ export class PtfLoanProfileService extends BaseService {
             addDate: item.createdAt.toISOString()
           });
         });
-        console.log("0");
+      console.log("0");
       let clientPhoto = null;
       if (loanProfile.clientPhotoUrl && loanProfile.idDocumentNumber) {
-        console.log('call api upload client photo =========')
+        console.log("call api upload client photo =========");
         let resultUpload = await this.sendData_uploadFile(
           loanProfile.clientPhotoUrl,
           "1",
           loanProfile.idDocumentNumber
         );
-        if (resultUpload && resultUpload.body && resultUpload.body.status == "OK") {
+        console.log("resultUpload = ", resultUpload);
+        if (
+          resultUpload &&
+          resultUpload.body &&
+          resultUpload.body.status == "OK"
+        ) {
           clientPhoto = {
             document: {
               id: resultUpload.enquiry.documentId,
               name: resultUpload.enquiry.documentName
             }
           };
-            console.log("1");
+          console.log("1");
         }
       }
-        console.log("2");
+      console.log("2");
       let employmentInformation = null;
       if (employmentInformationEntity) {
         employmentInformation = {
@@ -598,9 +614,9 @@ export class PtfLoanProfileService extends BaseService {
           monthlyPaymentsOtherLoans:
             employmentInformationEntity.monthlyPaymentsOtherLoans
         };
-          console.log("3");
+        console.log("3");
       }
-        console.log("4");
+      console.log("4");
       body = {
         command: "GET_ENQUIRY",
         enquiry: {
@@ -664,7 +680,7 @@ export class PtfLoanProfileService extends BaseService {
           }
         }
       };
-        console.log("5");
+      console.log("5");
       requestConfig = {
         headers: {
           reqType: "REQUEST",
@@ -769,7 +785,7 @@ export class PtfLoanProfileService extends BaseService {
       );
       console.log("call api uploadFile result = ", result);
       log.result = JSON.stringify(result);
-      if (result && result.status == "OK") {
+      if (result && result.body && result.body.status == "OK") {
         result.enquiry.type = type.toString();
         results.push(result);
       } else {
@@ -860,7 +876,8 @@ export class PtfLoanProfileService extends BaseService {
         console.log("call api uploadFile result = ", result);
         log.result = JSON.stringify(result);
         if (
-            result && result.body.status == "OK" &&
+          result &&
+          result.body.status == "OK" &&
           (!result.error || !result.error.code)
         ) {
           result.body.enquiry.type = attachFiles[i].type.toString();

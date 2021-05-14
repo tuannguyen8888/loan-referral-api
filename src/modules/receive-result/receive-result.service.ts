@@ -92,8 +92,12 @@ export class ReceiveResultService extends BaseService {
         responseItem.data = dto;
         if (loanProfile) {
           loanProfile.loanStatus = dto.status_f1;
-          if(dto.status_f1 == 'CAN' || dto.status_f1 == 'REJ' || dto.status_f1 == 'FINISH' ){
-              loanProfile.fvStatus = 'DONE';
+          if (
+            dto.status_f1 == "CAN" ||
+            dto.status_f1 == "REJ" ||
+            dto.status_f1 == "FINISH"
+          ) {
+            loanProfile.fvStatus = "DONE";
           }
           loanProfile = await repoLP.save(loanProfile);
 
