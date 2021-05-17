@@ -531,17 +531,21 @@ export class PtfLoanProfileService extends BaseService {
         return true;
     }
 
-    async updateDefer(dto: UpdateDeferRequestDto) {
-        let updateDefer = await this.connection
-            .getCustomRepository(PtfLoanProfileDeferRepository)
-            .findOne(dto.id);
-        updateDefer.status = "UPDATED";
-        updateDefer.deferReply = dto.deferReply;
-        updateDefer.updatedAt = new Date();
-        updateDefer.updatedBy = dto.updatedBy;
-        await this.connection
-            .getCustomRepository(PtfLoanProfileDeferRepository)
-            .save(updateDefer);
+    async updateDefer(dtos: UpdateDeferRequestDto[]) {
+        if(dtos && dtos.length)
+            for (let i = 0; i < dtos.length; i++) {
+                let dto = dtos[i];
+                let updateDefer = await this.connection
+                    .getCustomRepository(PtfLoanProfileDeferRepository)
+                    .findOne(dto.id);
+                updateDefer.status = "UPDATED";
+                updateDefer.deferReply = dto.deferReply;
+                updateDefer.updatedAt = new Date();
+                updateDefer.updatedBy = dto.updatedBy;
+                await this.connection
+                    .getCustomRepository(PtfLoanProfileDeferRepository)
+                    .save(updateDefer);
+            }
         return true;
     }
 
