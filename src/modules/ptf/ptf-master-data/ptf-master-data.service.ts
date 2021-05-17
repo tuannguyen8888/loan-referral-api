@@ -202,7 +202,7 @@ export class PtfMasterDataService extends BaseService {
   private convertMasterDatas2Dtos(entities, dtoClass = MasterDataDto) {
     let dtos = [];
     if (entities && entities.length) {
-      entities.forEach(entity => dtos.push(this.convertMasterData2Dto(entity)));
+      entities.forEach(entity => dtos.push(this.convertMasterData2Dto(entity, dtoClass)));
     }
     return dtos;
   }
