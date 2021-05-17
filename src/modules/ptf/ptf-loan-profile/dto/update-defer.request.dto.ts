@@ -14,7 +14,5 @@ export class UpdateDeferRequestDto {
   @IsNotEmpty()
   deferReply: string;
 
-  @IsDateString()
-  updatedAt: string = null;
   updatedBy: string = null;
 }
