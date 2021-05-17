@@ -51,13 +51,9 @@ export class LoanProfileDto {
   numberOfChildren: number = null;
   education: number = null;
   disbursementMethod: number = null;
-  @IsOptional()
   accountNumber: string = null;
-  @IsOptional()
   bankNameId: number = null;
-  @IsOptional()
   bankCityId: number = null;
-  @IsOptional()
   bankBranchId: number = null;
   bankCode: string = null;
   serviceName: number = null;

@@ -109,8 +109,8 @@ export class PtfLoanProfileController {
   @ApiOperation({ summary: "Update defer cho hồ sơ vay" })
   updateDefer(
     @Headers() headers,
-    @Body() dto: UpdateDeferRequestDto
+    @Body() dtos: UpdateDeferRequestDto[]
   ): Promise<boolean> {
-    return this.service.updateDefer(dto);
+    return this.service.updateDefer(dtos);
   }
 }

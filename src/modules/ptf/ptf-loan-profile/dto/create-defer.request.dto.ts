@@ -20,7 +20,5 @@ export class CreateDeferRequestDto {
   @IsNotEmpty()
   deferNote: string = null;
 
-  @IsDateString()
-  createdAt: string = null;
   createdBy: string = null;
 }

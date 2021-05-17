@@ -2,6 +2,7 @@ import { Controller, Get, Headers, Param, Body } from "@nestjs/common";
 import { ApiOperation, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { PtfMasterDataService } from "./ptf-master-data.service";
 import { ProductDto, MasterDataDto, SearchMasterDataDto } from "./dto";
+import {BankBranchDto} from "./dto/bank-branch.dto";
 
 @Controller("master-data")
 @ApiSecurity("api-key")
@@ -106,7 +107,7 @@ export class PtfMasterDataController {
     @Headers() headers,
     @Param() params,
     @Body() dto: SearchMasterDataDto
-  ): Promise<MasterDataDto[]> {
+  ): Promise<BankBranchDto[]> {
     return this.service.getBankBranches(
       params.bank_id ? params.bank_id.toString() : null,
       params.bank_city_id ? params.bank_city_id.toString() : null,
