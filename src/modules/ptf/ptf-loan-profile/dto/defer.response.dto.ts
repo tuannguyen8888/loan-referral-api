@@ -22,7 +22,7 @@ export class DeferResponseDto {
 
     @IsString()
     @IsNotEmpty()
-    deferReply: string;
+    deferReply: string = null;
 
     @IsDateString()
     createdAt: string = null;
