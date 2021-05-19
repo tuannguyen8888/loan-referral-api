@@ -9,7 +9,7 @@ export class LoanProfileDeferDto {
     defer_code: string = null;
     defer_note: string = null;
     @IsOptional()
-    defer_reply: string = null;
+    reply_comment: string = null;
     defer_time: Date = null;
     status: string = null;
     @IsOptional()
