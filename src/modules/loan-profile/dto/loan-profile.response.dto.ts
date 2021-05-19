@@ -96,5 +96,6 @@ export class LoanProfileResponseDto {
   attach_files: AttachFileDto[];
   process: ProcessDto[];
   defers: LoanProfileDeferDto[];
+  old_defers: LoanProfileDeferDto[];
   change_logs: LoanProfileChangeLogDto[];
 }

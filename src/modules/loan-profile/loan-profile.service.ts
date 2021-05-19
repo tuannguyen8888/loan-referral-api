@@ -51,7 +51,7 @@ import * as moment from "moment";
 import {ReferenceDto} from "./dto/reference.dto";
 import * as fs from "fs";
 import * as FormData from "form-data";
-import {LoanProfileDeferReplyRequestDto} from "./dto/loan-profile-defer-reply.request.dto";
+import {LoanProfileDeferReplyRequestDto, DeferReplyDto} from "./dto/loan-profile-defer-reply.request.dto";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class LoanProfileService extends BaseService {
@@ -373,6 +373,15 @@ export class LoanProfileService extends BaseService {
                         status: "NEW"
                     }
                 });
+            const oldDefers = await this.connection
+                .getCustomRepository(LoanProfileDeferRepository)
+                .find({
+                    where: {
+                        deletedAt: IsNull(),
+                        loanProfileId: loanProfile.id,
+                        status: Not("NEW")
+                    }
+                });
             const changeLogs = await this.connection
                 .getCustomRepository(LoanProfileChangeLogRepository)
                 .find({
@@ -404,6 +413,28 @@ export class LoanProfileService extends BaseService {
                 LoanProfileDefer,
                 LoanProfileDeferDto
             );
+            result.old_defers = this.convertEntities2Dtos(
+                oldDefers,
+                LoanProfileDefer,
+                LoanProfileDeferDto
+            );
+            if(result.old_defers && result.old_defers.length){
+                for (let i = 0; i < oldDefers.length; i++) {
+                    let replies = await this.connection
+                        .getCustomRepository(LoanProfileDeferReplyRepository)
+                        .find({
+                            where: {
+                                deletedAt: IsNull(),
+                                deferId: result.old_defers[i].id
+                            }
+                        });
+                    result.old_defers[i].details = this.convertEntities2Dtos(
+                        replies,
+                        LoanProfileDeferReply,
+                        DeferReplyDto
+                    );
+                }
+            }
             result.change_logs = this.convertEntities2Dtos(
                 changeLogs,
                 LoanProfileChangeLog,

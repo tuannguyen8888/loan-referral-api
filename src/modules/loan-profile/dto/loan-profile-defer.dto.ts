@@ -1,4 +1,5 @@
 import { IsDateString, IsOptional } from "class-validator";
+import {DeferReplyDto} from "./loan-profile-defer-reply.request.dto";
 
 export class LoanProfileDeferDto {
   id: number = null;
@@ -21,4 +22,7 @@ export class LoanProfileDeferDto {
   @IsDateString()
   deleted_at: string = null;
   deleted_by: string = null;
+
+  @IsOptional()
+  details: DeferReplyDto[] = [];
 }
