@@ -674,7 +674,7 @@ export class PtfLoanProfileService extends BaseService {
                         bankNameId: loanProfile.bankNameId,
                         bankCityId: loanProfile.bankCityId,
                         bankBranchId: loanProfile.bankBranchId,
-                        bankCode: loanProfile.bankCode,
+                        bankCode: null,//loanProfile.bankCode,
                         partnerId: ptfApiConfig.partner_code,
                         serviceName: 2,
                         iCareLead: 2,
