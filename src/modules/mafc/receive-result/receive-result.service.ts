@@ -1,23 +1,23 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
-import { Logger } from "../../common/loggers";
-import { RedisClient } from "../../common/shared";
-import { BaseService } from "../../common/services";
-import { LoanProfileDto } from "../loan-profile/dto";
+import { Logger } from "../../../common/loggers/index";
+import { RedisClient } from "../../../common/shared/index";
+import { BaseService } from "../../../common/services/index";
+import { LoanProfileDto } from "../loan-profile/dto/index";
 import {
   LoanProfileDeferRepository,
   LoanProfileRepository,
   ProcessRepository
-} from "../../repositories";
+} from "../../../repositories/index";
 import {
   UploadDeferRequestDto,
   UploadDeferReponseDto,
   UploadStatusF1RequestDto,
   UploadStatusF1ReponseDto
-} from "./dto";
+} from "./dto/index";
 import { IsNull } from "typeorm";
-import { LoanProfileDefer, Process } from "../../entities";
+import { LoanProfileDefer, Process } from "../../../entities/index";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReceiveResultService extends BaseService {

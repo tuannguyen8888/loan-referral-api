@@ -26,7 +26,7 @@ import {
   CreateDeferRequestDto,
   UpdateDeferRequestDto
 } from "./dto";
-import { CheckCustomerInfoRequestDto } from "../../loan-profile/dto";
+import { CheckCustomerInfoRequestDto } from "../../mafc/loan-profile/dto";
 
 @Controller("loan-profile")
 @ApiSecurity("api-key")
