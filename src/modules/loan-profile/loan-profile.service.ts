@@ -379,7 +379,7 @@ export class LoanProfileService extends BaseService {
                     where: {
                         deletedAt: IsNull(),
                         loanProfileId: loanProfile.id,
-                        status: Not("NEW")
+                        status: Not(Equal("NEW"))
                     }
                 });
             const changeLogs = await this.connection
