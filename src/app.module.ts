@@ -23,6 +23,9 @@ import { SaleGroupController } from "./modules/sale-group/sale-group.controller"
 import { SaleGroupService } from "./modules/sale-group/sale-group.service";
 import { ScheduleModule } from "@nestjs/schedule";
 import { CronService } from "./cron/cron.service";
+import { PtfLoanProfileModule } from "./modules/ptf/ptf-loan-profile/ptf-loan-profile.module";
+import { PtfMasterDataModule } from "./modules/ptf/ptf-master-data/ptf-master-data.module";
+import { PtfReceiveResultModule } from "./modules/ptf/ptf-receive-result/ptf-receive-result.module";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -32,7 +35,10 @@ const imports = [
   LoanProfileModule,
   MasterDataModule,
   ReceiveResultModule,
-  ScheduleModule.forRoot()
+  ScheduleModule.forRoot(),
+  PtfLoanProfileModule,
+  PtfMasterDataModule,
+  PtfReceiveResultModule
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));
