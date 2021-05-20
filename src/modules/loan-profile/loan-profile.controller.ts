@@ -107,7 +107,7 @@ export class LoanProfileController {
     return this.service.updateAttachFiles(dtos);
   }
   @Put("/reply-defers")
-  @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
+  @ApiOperation({ summary: "Phản hồi defer cho hồ sơ vay" })
   @ApiBody({ type: [LoanProfileDeferReplyRequestDto] })
   replyDeffers(
     @Headers() headers,
