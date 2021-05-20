@@ -47,7 +47,7 @@ import {
 import * as FormData from "form-data";
 import * as fs from "fs";
 import * as config from "config";
-import {ProcessDto} from "../../loan-profile/dto";
+import {ProcessDto} from "../../mafc/loan-profile/dto";
 
 @Injectable({scope: Scope.REQUEST})
 export class PtfLoanProfileService extends BaseService {

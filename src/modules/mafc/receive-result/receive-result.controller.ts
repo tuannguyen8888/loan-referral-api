@@ -6,7 +6,7 @@ import {
   UploadDeferReponseDto,
   UploadStatusF1RequestDto,
   UploadStatusF1ReponseDto
-} from "./dto";
+} from "./dto/index";
 
 @Controller("receive-result")
 @ApiTags("Receive Result from MAFC")

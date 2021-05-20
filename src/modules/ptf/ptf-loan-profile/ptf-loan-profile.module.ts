@@ -4,7 +4,7 @@ import { PtfLoanProfileService } from "./ptf-loan-profile.service";
 import { Logger } from "../../../common/loggers";
 import { RedisClient } from "../../../common/shared";
 import { BaseService } from "../../../common/services";
-import { LoanProfileService } from "../../loan-profile/loan-profile.service";
+import { LoanProfileService } from "../../mafc/loan-profile/loan-profile.service";
 import { RequestUtil } from "../../../common/utils";
 
 @Module({

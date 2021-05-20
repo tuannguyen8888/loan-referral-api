@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsDateString } from "class-validator";
-import { UploadDeferRequestDto } from ".";
+import { UploadDeferRequestDto } from "./index";
 
 export class UploadDeferReponseDto {
   data: UploadDeferRequestDto;

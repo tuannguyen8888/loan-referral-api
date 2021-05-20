@@ -1,12 +1,12 @@
-import { BankRepository } from "../../repositories/mafc-masterdata/masterdata-bank.repository";
+import { BankRepository } from "../../../repositories/mafc/masterdata-bank.repository";
 import { Inject, Injectable, Scope } from "@nestjs/common";
-import { RequestUtil } from "../../common/utils";
+import { RequestUtil } from "../../../common/utils/index";
 import * as config from "config";
-import { BaseService } from "../../common/services";
+import { BaseService } from "../../../common/services/index";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
-import { Logger } from "../../common/loggers";
-import { RedisClient } from "../../common/shared";
+import { Logger } from "../../../common/loggers/index";
+import { RedisClient } from "../../../common/shared/index";
 import {
   CityRepository,
   DistrictRepository,
@@ -15,7 +15,7 @@ import {
   SchemeRepository,
   SecUserRepository,
   WardRepository
-} from "../../repositories";
+} from "../../../repositories/index";
 import { Repository } from "typeorm";
 import {
   BankMasterData,
@@ -25,7 +25,7 @@ import {
   SchemeMasterData,
   SecUserMasterData,
   WardMasterData
-} from "src/entities";
+} from "src/entities/index";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class MasterDataService extends BaseService {

@@ -10,7 +10,7 @@ import {
   GetLoanProfilesRequestDto,
   LoanProfileDto,
   LoanProfilesResponseDto
-} from "../loan-profile/dto";
+} from "../mafc/loan-profile/dto";
 import {
   AddressRepository,
   LoanProfileRepository,
@@ -21,7 +21,7 @@ import { Equal, IsNull, Like } from "typeorm";
 import { Address, LoanProfile, Reference, SaleGroup } from "../../entities";
 import { SaleGroupDto } from "./dto";
 import * as moment from "moment";
-import { ReferenceDto } from "../loan-profile/dto/reference.dto";
+import { ReferenceDto } from "../mafc/loan-profile/dto/reference.dto";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class SaleGroupService extends BaseService {

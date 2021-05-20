@@ -23,7 +23,7 @@ import {
   LoanProfileDto,
   CheckCustomerInfoRequestDto,
   LoanProfileResponseDto
-} from "./dto";
+} from "./dto/index";
 import { AttachFileDto } from "./dto/attach-file.dto";
 import { LoanProfileDeferReplyRequestDto } from "./dto/loan-profile-defer-reply.request.dto";
 

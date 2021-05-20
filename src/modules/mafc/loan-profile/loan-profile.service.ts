@@ -1,9 +1,9 @@
 import { Injectable, Scope, Inject, BadRequestException } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
-import { BaseService } from "../../common/services";
-import { Logger } from "../../common/loggers";
-import { RedisClient } from "../../common/shared";
+import { BaseService } from "../../../common/services/index";
+import { Logger } from "../../../common/loggers/index";
+import { RedisClient } from "../../../common/shared/index";
 import {
   AddressDto,
   GetLoanProfilesRequestDto,
@@ -19,7 +19,7 @@ import {
   InputDdeDto,
   InputDataUpdateDto,
   InputDataUpdateAddressDto
-} from "./dto";
+} from "./dto/index";
 import {
   AddressRepository,
   AttachFileRepository,
@@ -31,7 +31,7 @@ import {
   ReferenceRepository,
   SaleGroupRepository,
   SendDataLogRepository
-} from "../../repositories";
+} from "../../../repositories/index";
 import { IsNull, Like, Equal, In, Not } from "typeorm";
 import {
   Address,
@@ -43,8 +43,8 @@ import {
   LoanProfileChangeLog,
   SendDataLog,
   LoanProfileDeferReply
-} from "../../entities";
-import { RequestUtil } from "../../common/utils";
+} from "../../../entities/index";
+import { RequestUtil } from "../../../common/utils/index";
 import * as config from "config";
 import { AttachFileDto } from "./dto/attach-file.dto";
 import * as moment from "moment";
@@ -447,7 +447,6 @@ export class LoanProfileService extends BaseService {
             ]);
         }
     }
-  }
 
   async createLoanProfile(dto: LoanProfileDto) {
     let response: LoanProfileDto;

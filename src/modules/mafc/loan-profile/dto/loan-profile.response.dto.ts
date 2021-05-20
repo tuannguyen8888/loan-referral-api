@@ -9,7 +9,7 @@ import { AddressDto } from "./address.dto";
 import { ReferenceDto } from "./reference.dto";
 import { AttachFileDto } from "./attach-file.dto";
 import { ProcessDto } from "./process.dto";
-import { LoanProfileChangeLogDto, LoanProfileDeferDto } from ".";
+import { LoanProfileChangeLogDto, LoanProfileDeferDto } from "./index";
 
 export class LoanProfileResponseDto {
   id: number = null;
