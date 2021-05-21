@@ -1,9 +1,9 @@
 import { Injectable, Scope, Inject, BadRequestException } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
-import { BaseService } from "../../common/services";
-import { Logger } from "../../common/loggers";
-import { RedisClient } from "../../common/shared";
+import { BaseService } from "../../../common/services/index";
+import { Logger } from "../../../common/loggers/index";
+import { RedisClient } from "../../../common/shared/index";
 import {
   AddressDto,
   GetLoanProfilesRequestDto,
@@ -19,7 +19,7 @@ import {
   InputDdeDto,
   InputDataUpdateDto,
   InputDataUpdateAddressDto
-} from "./dto";
+} from "./dto/index";
 import {
   AddressRepository,
   AttachFileRepository,
@@ -31,7 +31,7 @@ import {
   ReferenceRepository,
   SaleGroupRepository,
   SendDataLogRepository
-} from "../../repositories";
+} from "../../../repositories/index";
 import { IsNull, Like, Equal, In, Not } from "typeorm";
 import {
   Address,
@@ -43,15 +43,18 @@ import {
   LoanProfileChangeLog,
   SendDataLog,
   LoanProfileDeferReply
-} from "../../entities";
-import { RequestUtil } from "../../common/utils";
+} from "../../../entities/index";
+import { RequestUtil } from "../../../common/utils/index";
 import * as config from "config";
 import { AttachFileDto } from "./dto/attach-file.dto";
 import * as moment from "moment";
 import { ReferenceDto } from "./dto/reference.dto";
 import * as fs from "fs";
 import * as FormData from "form-data";
-import { LoanProfileDeferReplyRequestDto } from "./dto/loan-profile-defer-reply.request.dto";
+import {
+  LoanProfileDeferReplyRequestDto,
+  DeferReplyDto
+} from "./dto/loan-profile-defer-reply.request.dto";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class LoanProfileService extends BaseService {
@@ -373,6 +376,15 @@ export class LoanProfileService extends BaseService {
             status: "NEW"
           }
         });
+      const oldDefers = await this.connection
+        .getCustomRepository(LoanProfileDeferRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id,
+            status: Not(Equal("NEW"))
+          }
+        });
       const changeLogs = await this.connection
         .getCustomRepository(LoanProfileChangeLogRepository)
         .find({
@@ -404,6 +416,28 @@ export class LoanProfileService extends BaseService {
         LoanProfileDefer,
         LoanProfileDeferDto
       );
+      result.old_defers = this.convertEntities2Dtos(
+        oldDefers,
+        LoanProfileDefer,
+        LoanProfileDeferDto
+      );
+      if (result.old_defers && result.old_defers.length) {
+        for (let i = 0; i < oldDefers.length; i++) {
+          let replies = await this.connection
+            .getCustomRepository(LoanProfileDeferReplyRepository)
+            .find({
+              where: {
+                deletedAt: IsNull(),
+                deferId: result.old_defers[i].id
+              }
+            });
+          result.old_defers[i].details = this.convertEntities2Dtos(
+            replies,
+            LoanProfileDeferReply,
+            DeferReplyDto
+          );
+        }
+      }
       result.change_logs = this.convertEntities2Dtos(
         changeLogs,
         LoanProfileChangeLog,
@@ -1200,7 +1234,9 @@ export class LoanProfileService extends BaseService {
     let mafc_api_config = config.get("mafc_api");
     let inputDatatUpdateDto = new InputDataUpdateDto();
     let updateResult;
-    let hasChange = false;
+      let hasChange = false;
+      let isError = false;
+      let apiError = null;
     try {
       inputDatatUpdateDto.in_channel = mafc_api_config.partner_code;
       inputDatatUpdateDto.in_userid = "EXT_FIV"; //dto.in_userid;
@@ -1423,6 +1459,10 @@ export class LoanProfileService extends BaseService {
         }
       );
       console.log("updateResult = ", updateResult);
+      if(!updateResult.success){
+          isError = false;
+          apiError = updateResult;
+      }
     } catch (e) {
       console.log(e);
       updateResult = e;
@@ -1444,6 +1484,9 @@ export class LoanProfileService extends BaseService {
       await this.connection
         .getCustomRepository(SendDataLogRepository)
         .save(log);
+      if(isError){
+          throw new BadRequestException(apiError);
+      }
     }
     return updateResult;
   }

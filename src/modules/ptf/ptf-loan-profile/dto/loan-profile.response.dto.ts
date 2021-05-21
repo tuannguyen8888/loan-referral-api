@@ -5,12 +5,13 @@ import {
   IsOptional,
   IsDateString
 } from "class-validator";
-import { ProcessDto } from "src/modules/loan-profile/dto";
+import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 import {
-    AddressDto,
-    AttachFileDto, DeferResponseDto,
-    EmploymentInformationDto,
-    RelatedPersonDto
+  AddressDto,
+  AttachFileDto,
+  DeferResponseDto,
+  EmploymentInformationDto,
+  RelatedPersonDto
 } from "./index";
 
 export class LoanProfileResponseDto {

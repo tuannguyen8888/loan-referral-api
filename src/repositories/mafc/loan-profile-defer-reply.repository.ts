@@ -3,7 +3,7 @@ import {
   LoanProfile,
   LoanProfileDefer,
   LoanProfileDeferReply
-} from "../entities";
+} from "../../entities/index";
 
 @EntityRepository(LoanProfileDeferReply)
 export class LoanProfileDeferReplyRepository extends Repository<

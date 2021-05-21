@@ -6,7 +6,7 @@ import {
   IsDateString,
   IsDefined
 } from "class-validator";
-import { ProcessDto } from "src/modules/loan-profile/dto";
+import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 import {
   AddressDto,
   AttachFileDto,
