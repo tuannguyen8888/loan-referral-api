@@ -6,6 +6,7 @@ import {Logger} from "../../../common/loggers";
 import {RedisClient} from "../../../common/shared";
 import {RequestUtil} from "../../../common/utils";
 import {
+    Process,
     PtfAddress,
     PtfEmploymentInformation,
     PtfLoanProfile,
@@ -13,6 +14,7 @@ import {
     SendDataLog
 } from "../../../entities";
 import {
+    ProcessRepository,
     PtfLoanProfileRepository,
     SendDataLogRepository
 } from "../../../repositories";
@@ -92,12 +94,38 @@ export class PtfReceiveResultService extends BaseService {
                             body,
                             requestConfig
                         ]);
-                        let result = await this.requestUtil.post(
+                        result = await this.requestUtil.post(
                             ptfApiConfig.loan_status.url,
                             body,
                             requestConfig
                         );
                         console.log("result = ", result);
+                        if(result.body && result.body.status == 'OK'){
+                            loanProfile = await this.connection
+                                .getCustomRepository(PtfLoanProfileRepository)
+                                .findOne(loanProfile.id);
+                            if(loanProfile && result.body && result.body.enquiry && loanProfile.loanStatus != result.body.enquiry.loanStatus){
+                                loanProfile.loanStatus = result.body.enquiry.loanStatus;
+                                if(['canceled','closed','rejected','active'].indexOf(loanProfile.loanStatus.toLowerCase())>=0){
+                                    loanProfile.fvStatus = 'DONE';
+                                }
+                                loanProfile.updatedAt = new Date();
+                                loanProfile.updatedBy = null;
+                                loanProfile = await this.connection
+                                    .getCustomRepository(PtfLoanProfileRepository)
+                                    .save(loanProfile);
+                                let newProcess = new Process();
+                                newProcess.loanProfileId = loanProfile.id;
+                                newProcess.processStatus = "GET_STATUS";
+                                newProcess.description = loanProfile.loanStatus;
+                                newProcess.refTable = "ptf_loan_profile";
+                                newProcess.idRef = loanProfile.id;
+                                newProcess.createdAt = new Date();
+                                await this.connection
+                                    .getCustomRepository(ProcessRepository)
+                                    .save(newProcess);
+                            }
+                        }
                     } catch (e) {
                         console.log(e);
                         result = e;
