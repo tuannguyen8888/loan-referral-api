@@ -7,10 +7,11 @@ import {
 } from "class-validator";
 import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 import {
-    AddressDto,
-    AttachFileDto, DeferResponseDto,
-    EmploymentInformationDto,
-    RelatedPersonDto
+  AddressDto,
+  AttachFileDto,
+  DeferResponseDto,
+  EmploymentInformationDto,
+  RelatedPersonDto
 } from "./index";
 
 export class LoanProfileResponseDto {
