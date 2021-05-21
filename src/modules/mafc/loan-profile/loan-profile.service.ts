@@ -51,7 +51,10 @@ import * as moment from "moment";
 import { ReferenceDto } from "./dto/reference.dto";
 import * as fs from "fs";
 import * as FormData from "form-data";
-import {LoanProfileDeferReplyRequestDto, DeferReplyDto} from "./dto/loan-profile-defer-reply.request.dto";
+import {
+  LoanProfileDeferReplyRequestDto,
+  DeferReplyDto
+} from "./dto/loan-profile-defer-reply.request.dto";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class LoanProfileService extends BaseService {
@@ -327,126 +330,126 @@ export class LoanProfileService extends BaseService {
   //     return dtos;
   // }
 
-    async getLoanProfile(loanProfileId: number) {
-        const loanProfile = await this.connection
-            .getCustomRepository(LoanProfileRepository)
-            .findOne(loanProfileId);
-        if (loanProfile) {
-            const address = await this.connection
-                .getCustomRepository(AddressRepository)
-                .find({
-                    where: {
-                        deletedAt: IsNull(),
-                        loanProfileId: loanProfile.id
-                    }
-                });
-            const references = await this.connection
-                .getCustomRepository(ReferenceRepository)
-                .find({
-                    where: {
-                        deletedAt: IsNull(),
-                        loanProfileId: loanProfile.id
-                    }
-                });
-            const attachFiles = await this.connection
-                .getCustomRepository(AttachFileRepository)
-                .find({
-                    where: {
-                        deletedAt: IsNull(),
-                        loanProfileId: loanProfile.id
-                    }
-                });
-            const process = await this.connection
-                .getCustomRepository(ProcessRepository)
-                .find({
-                    where: {
-                        deletedAt: IsNull(),
-                        loanProfileId: loanProfile.id
-                    }
-                });
-            const defers = await this.connection
-                .getCustomRepository(LoanProfileDeferRepository)
-                .find({
-                    where: {
-                        deletedAt: IsNull(),
-                        loanProfileId: loanProfile.id,
-                        status: "NEW"
-                    }
-                });
-            const oldDefers = await this.connection
-                .getCustomRepository(LoanProfileDeferRepository)
-                .find({
-                    where: {
-                        deletedAt: IsNull(),
-                        loanProfileId: loanProfile.id,
-                        status: Not(Equal("NEW"))
-                    }
-                });
-            const changeLogs = await this.connection
-                .getCustomRepository(LoanProfileChangeLogRepository)
-                .find({
-                    where: {
-                        deletedAt: IsNull(),
-                        loanProfileId: loanProfile.id
-                    }
-                });
+  async getLoanProfile(loanProfileId: number) {
+    const loanProfile = await this.connection
+      .getCustomRepository(LoanProfileRepository)
+      .findOne(loanProfileId);
+    if (loanProfile) {
+      const address = await this.connection
+        .getCustomRepository(AddressRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id
+          }
+        });
+      const references = await this.connection
+        .getCustomRepository(ReferenceRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id
+          }
+        });
+      const attachFiles = await this.connection
+        .getCustomRepository(AttachFileRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id
+          }
+        });
+      const process = await this.connection
+        .getCustomRepository(ProcessRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id
+          }
+        });
+      const defers = await this.connection
+        .getCustomRepository(LoanProfileDeferRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id,
+            status: "NEW"
+          }
+        });
+      const oldDefers = await this.connection
+        .getCustomRepository(LoanProfileDeferRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id,
+            status: Not(Equal("NEW"))
+          }
+        });
+      const changeLogs = await this.connection
+        .getCustomRepository(LoanProfileChangeLogRepository)
+        .find({
+          where: {
+            deletedAt: IsNull(),
+            loanProfileId: loanProfile.id
+          }
+        });
 
-            let result: LoanProfileResponseDto = this.convertEntity2Dto(
-                loanProfile,
-                LoanProfile,
-                LoanProfileResponseDto
-            );
-            result.address = this.convertEntities2Dtos(address, Address, AddressDto);
-            result.references = this.convertEntities2Dtos(
-                references,
-                Reference,
-                ReferenceDto
-            );
-            result.attach_files = this.convertEntities2Dtos(
-                attachFiles,
-                AttachFile,
-                AttachFileDto
-            );
-            result.process = this.convertEntities2Dtos(process, Process, ProcessDto);
-            result.defers = this.convertEntities2Dtos(
-                defers,
-                LoanProfileDefer,
-                LoanProfileDeferDto
-            );
-            result.old_defers = this.convertEntities2Dtos(
-                oldDefers,
-                LoanProfileDefer,
-                LoanProfileDeferDto
-            );
-            if(result.old_defers && result.old_defers.length){
-                for (let i = 0; i < oldDefers.length; i++) {
-                    let replies = await this.connection
-                        .getCustomRepository(LoanProfileDeferReplyRepository)
-                        .find({
-                            where: {
-                                deletedAt: IsNull(),
-                                deferId: result.old_defers[i].id
-                            }
-                        });
-                    result.old_defers[i].details = this.convertEntities2Dtos(
-                        replies,
-                        LoanProfileDeferReply,
-                        DeferReplyDto
-                    );
-                }
-            }
-            result.change_logs = this.convertEntities2Dtos(
-                changeLogs,
-                LoanProfileChangeLog,
-                LoanProfileChangeLogDto
-            );
-            return result;
-        } else {
-            throw new BadRequestException([
-                `loan_profile_id ${loanProfileId} is not exits.`
-            ]);
+      let result: LoanProfileResponseDto = this.convertEntity2Dto(
+        loanProfile,
+        LoanProfile,
+        LoanProfileResponseDto
+      );
+      result.address = this.convertEntities2Dtos(address, Address, AddressDto);
+      result.references = this.convertEntities2Dtos(
+        references,
+        Reference,
+        ReferenceDto
+      );
+      result.attach_files = this.convertEntities2Dtos(
+        attachFiles,
+        AttachFile,
+        AttachFileDto
+      );
+      result.process = this.convertEntities2Dtos(process, Process, ProcessDto);
+      result.defers = this.convertEntities2Dtos(
+        defers,
+        LoanProfileDefer,
+        LoanProfileDeferDto
+      );
+      result.old_defers = this.convertEntities2Dtos(
+        oldDefers,
+        LoanProfileDefer,
+        LoanProfileDeferDto
+      );
+      if (result.old_defers && result.old_defers.length) {
+        for (let i = 0; i < oldDefers.length; i++) {
+          let replies = await this.connection
+            .getCustomRepository(LoanProfileDeferReplyRepository)
+            .find({
+              where: {
+                deletedAt: IsNull(),
+                deferId: result.old_defers[i].id
+              }
+            });
+          result.old_defers[i].details = this.convertEntities2Dtos(
+            replies,
+            LoanProfileDeferReply,
+            DeferReplyDto
+          );
         }
+      }
+      result.change_logs = this.convertEntities2Dtos(
+        changeLogs,
+        LoanProfileChangeLog,
+        LoanProfileChangeLogDto
+      );
+      return result;
+    } else {
+      throw new BadRequestException([
+        `loan_profile_id ${loanProfileId} is not exits.`
+      ]);
     }
+  }
 
   async createLoanProfile(dto: LoanProfileDto) {
     let response: LoanProfileDto;
