@@ -49,20 +49,13 @@ database:
   synchronize: false
   entities:
   - "dist/entities/*.{js,ts}"
-  replication:
-  
-    master:
-      host: "10.50.50.5"
-      port: 3308
-      username: "finviet"
-      password: "yVREMIiso8BYPBAptGS8"
-      database: "loan_referral"
-    slaves:
-    - host: "10.50.50.5"
-      port: 3308
-      username: "finviet"
-      password: "yVREMIiso8BYPBAptGS8"
-      database: "loan_referral"
+  - "dist/entities/mafc-masterdata/*.{js,ts}"
+  - "dist//entities/ptf/*.{js,ts}"
+  host: "10.50.50.5"
+  port: 3308
+  username: "finviet"
+  password: "yVREMIiso8BYPBAptGS8"
+  database: "loan_referral"
 
 mafc_api:
   partner_code: 'FIV'
@@ -91,6 +84,17 @@ mafc_api:
     reply_defer_url: 'https://apigw-staging.mafc.vn/thirdparty/pushpenhistory'
     username: 'mirae-3p'
     password: '123456'
+
+ptf_api:
+  partner_code: 'FinViet'
+  upload:
+    url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-file-rest-demo/process'
+  loan_request:
+    url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-rest-demo/process'
+  loan_status:
+    url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-rest-demo/process'
+  X_IBM_Client_Secret: 'aT7hL7gP1wH0uP0nJ7iH7bC6yA4rQ7pI7fI0eP4wR5uY4lU6bL'
+  X_IBM_Client_Id: '215b0e37-f71e-419b-9565-f9b28c3d53bd'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload

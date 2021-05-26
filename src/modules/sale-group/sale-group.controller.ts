@@ -11,8 +11,8 @@ import {
 import { ApiBody, ApiOperation, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { SaleGroupService } from "./sale-group.service";
 import { SaleGroupDto } from "./dto";
-import { AttachFileDto } from "../loan-profile/dto/attach-file.dto";
-import { LoanProfileDto } from "../loan-profile/dto";
+import { AttachFileDto } from "../mafc/loan-profile/dto/attach-file.dto";
+import { LoanProfileDto } from "../mafc/loan-profile/dto";
 
 @ApiTags("Sale Group")
 @ApiSecurity("api-key")
