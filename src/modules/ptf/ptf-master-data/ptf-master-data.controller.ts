@@ -2,7 +2,7 @@ import { Controller, Get, Headers, Param, Body } from "@nestjs/common";
 import { ApiOperation, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { PtfMasterDataService } from "./ptf-master-data.service";
 import { ProductDto, MasterDataDto, SearchMasterDataDto } from "./dto";
-import {BankBranchDto} from "./dto/bank-branch.dto";
+import { BankBranchDto } from "./dto/bank-branch.dto";
 
 @Controller("master-data")
 @ApiSecurity("api-key")

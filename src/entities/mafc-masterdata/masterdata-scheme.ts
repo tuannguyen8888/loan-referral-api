@@ -28,4 +28,7 @@ export class SchemeMasterData {
 
   @Column("text", { name: "payment_channel" })
   paymentchannel: string;
+
+  @Column("text", { name: "priority_c" })
+  priorityc: string;
 }
