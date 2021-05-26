@@ -912,7 +912,7 @@ export class LoanProfileService extends BaseService {
           let ext: any = attachFiles[i].url.split(".");
           ext = ext[ext.length - 1];
           let fileName = `${loanProfile.loanNo}_${customerName}_${attachFiles[i].docCode}.${ext}`;
-          let filePath = `${__dirname}/../../attach_files/${fileName}`;
+          let filePath = `${__dirname}/../../../attach_files/${fileName}`;
           let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(
             attachFiles[i].url,
             filePath
@@ -1164,7 +1164,7 @@ export class LoanProfileService extends BaseService {
         let ext: any = url.split(".");
         ext = ext[ext.length - 1];
         let fileName = `${loanNo}_${customerName}_${docCode}.${ext}`;
-        let filePath = `${__dirname}/../../attach_files/${fileName}`;
+        let filePath = `${__dirname}/../../../attach_files/${fileName}`;
         let fileStream: fs.ReadStream = await this.requestUtil.downloadPublicFile(
           url,
           filePath
