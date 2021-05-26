@@ -236,12 +236,34 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const schemes: SchemeMasterData[] = response.data.filter(m => {
-      const filt = listFilter.some(x => m.schemename.includes(x));
-      if (filt) {
-        return m;
+    const schemes: SchemeMasterData[] = response.data.filter(
+      (m: SchemeMasterData) => {
+        const filt = listFilter.some(x => m.schemename.includes(x));
+        if (filt) {
+          if (
+            m.schemename.startsWith("EVN") ||
+            m.schemename.startsWith("LIFE") ||
+            m.schemename.startsWith("UBS") ||
+            m.schemename.startsWith("CC") ||
+            m.schemename.startsWith("UCCC") ||
+            m.schemename.startsWith("WATER BILL") ||
+            m.schemename.startsWith("FAST LOAN") ||
+            m.schemename.startsWith("POST-PAID")
+          ) {
+            m.priorityc = "None";
+          } else if (
+            m.schemename.startsWith("EMPLOYEE AT 210") ||
+            m.schemename.startsWith("EMPLOYEE POUYUEN 209") ||
+            m.schemename.startsWith("BAS")
+          ) {
+            m.priorityc = "Bank Statement";
+          } else {
+            m.priorityc = "Pay Slip,Bank Statement";
+          }
+          return m;
+        }
       }
-    });
+    );
     const res = await this.schemeMD.save(schemes);
     console.log("SAVED SCHEME");
     return res;
