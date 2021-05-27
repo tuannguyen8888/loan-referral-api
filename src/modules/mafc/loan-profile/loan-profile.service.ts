@@ -1234,9 +1234,9 @@ export class LoanProfileService extends BaseService {
     let mafc_api_config = config.get("mafc_api");
     let inputDatatUpdateDto = new InputDataUpdateDto();
     let updateResult;
-    let hasChange = false;
-    let isError = false;
-    let apiError = null;
+      let hasChange = false;
+      let isError = false;
+      let apiError = null;
     try {
       inputDatatUpdateDto.in_channel = mafc_api_config.partner_code;
       inputDatatUpdateDto.in_userid = "EXT_FIV"; //dto.in_userid;
@@ -1459,9 +1459,9 @@ export class LoanProfileService extends BaseService {
         }
       );
       console.log("updateResult = ", updateResult);
-      if (!updateResult.success) {
-        isError = false;
-        apiError = updateResult;
+      if(!updateResult.success){
+          isError = false;
+          apiError = updateResult;
       }
     } catch (e) {
       console.log(e);
@@ -1484,8 +1484,8 @@ export class LoanProfileService extends BaseService {
       await this.connection
         .getCustomRepository(SendDataLogRepository)
         .save(log);
-      if (isError) {
-        throw new BadRequestException(apiError);
+      if(isError){
+          throw new BadRequestException(apiError);
       }
     }
     return updateResult;
