@@ -236,8 +236,8 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const schemes: SchemeMasterData[] = response.data.filter(
-      (m: SchemeMasterData) => {
+    const schemes: SchemeMasterData[] =
+      response.data.filter((m: SchemeMasterData) => {
         const filt = listFilter.some(x => m.schemename.includes(x));
         if (filt) {
           if (
@@ -268,8 +268,7 @@ export class MasterDataService extends BaseService {
           }
           return m;
         }
-      }
-    );
+      });
     const res = await this.schemeMD.save(schemes);
     console.log("SAVED SCHEME");
     return res;
