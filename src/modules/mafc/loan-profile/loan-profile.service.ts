@@ -1041,7 +1041,7 @@ export class LoanProfileService extends BaseService {
             where: {
               deletedAt: IsNull(),
               status: "NEW",
-              id: dtos[0].defer_id
+              id: dtos[i].defer_id
             }
           });
         if (defer) {
