@@ -223,7 +223,8 @@ export class MasterDataService extends BaseService {
       "320",
       "321",
       "311",
-      "322"
+      "322",
+      "335"
     ];
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
@@ -259,9 +260,10 @@ export class MasterDataService extends BaseService {
           } else {
             m.priorityc = "Pay Slip,Bank Statement";
           }
-          if(m.schemename.includes("316") || m.schemename.includes("322")){ // Không triển khai EVN BASIC + BAS VIP nữa
+          if (m.schemename.includes("316") || m.schemename.includes("322")) {
+            // Không triển khai EVN BASIC + BAS VIP nữa
             m.isactive = false;
-          }else{
+          } else {
             m.isactive = true;
           }
           return m;
