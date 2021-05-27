@@ -31,4 +31,7 @@ export class SchemeMasterData {
 
   @Column("text", { name: "priority_c" })
   priorityc: string;
+
+  @Column("tinyint", {name: "is_active"})
+  isactive: boolean;
 }
