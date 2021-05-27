@@ -16,7 +16,6 @@ import {
   SecUserRepository,
   WardRepository
 } from "../../../repositories/index";
-import { Repository } from "typeorm";
 import {
   BankMasterData,
   CityMasterData,
@@ -236,8 +235,8 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const schemes: SchemeMasterData[] = response.data.filter(
-      (m: SchemeMasterData) => {
+    const schemes: SchemeMasterData[] =
+      response.data.filter((m: SchemeMasterData) => {
         const filt = listFilter.some(x => m.schemename.includes(x));
         if (filt) {
           if (
@@ -260,10 +259,14 @@ export class MasterDataService extends BaseService {
           } else {
             m.priorityc = "Pay Slip,Bank Statement";
           }
+          if(m.schemename.includes("316") || m.schemename.includes("322")){ // Không triển khai EVN BASIC + BAS VIP nữa
+            m.isactive = false;
+          }else{
+            m.isactive = true;
+          }
           return m;
         }
-      }
-    );
+      });
     const res = await this.schemeMD.save(schemes);
     console.log("SAVED SCHEME");
     return res;
