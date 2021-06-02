@@ -93,4 +93,7 @@ export class LoanProfileDto {
 
   address: AddressDto[];
   references: ReferenceDto[];
+
+  @IsOptional()
+  disbursement_date: string = null;
 }
