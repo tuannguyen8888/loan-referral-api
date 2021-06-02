@@ -92,6 +92,7 @@ export class ReceiveResultService extends BaseService {
         responseItem.data = dto;
         if (loanProfile) {
           loanProfile.loanStatus = dto.status_f1;
+          loanProfile.econtract = dto.econtract;
           if (
             dto.status_f1 == "CAN" ||
             dto.status_f1 == "REJ" ||
