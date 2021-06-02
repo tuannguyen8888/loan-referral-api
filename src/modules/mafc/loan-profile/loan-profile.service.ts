@@ -92,8 +92,8 @@ export class LoanProfileService extends BaseService {
         // where["fvStatus"] = Equal(dto.fv_status);
       }
       if (dto.loan_status) {
-          query = query.andWhere("fv_status = :fvStatus", {
-              fvStatus: dto.fv_status
+          query = query.andWhere("loan_status = :loanStatus", {
+              loanStatus: dto.fv_status
           });
         // where["loanStatus"] = Equal(dto.loan_status);
       }
