@@ -25,6 +25,8 @@ export class UploadStatusF1RequestDto {
   rejected_code?: string;
 
   @IsString()
-  @IsNotEmpty()
   reason?: string;
+
+  @IsString()
+  econtract?: string;
 }

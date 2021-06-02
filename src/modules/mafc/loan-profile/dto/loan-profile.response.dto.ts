@@ -98,4 +98,6 @@ export class LoanProfileResponseDto {
   defers: LoanProfileDeferDto[];
   old_defers: LoanProfileDeferDto[];
   change_logs: LoanProfileChangeLogDto[];
+  @IsOptional()
+  disbursement_date: string = null;
 }
