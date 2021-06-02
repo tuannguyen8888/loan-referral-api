@@ -473,7 +473,16 @@ export class LoanProfile {
   })
   inNotedetails: string | null;
 
-  @Column("timestamp", {
+  @Column("varchar", {
+      name: "econtract",
+      nullable: true,
+      comment: "Hợp đồng điện tử",
+      length: 10
+  })
+  econtract: string | null;
+
+
+    @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"
   })
