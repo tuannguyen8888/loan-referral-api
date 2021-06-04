@@ -269,7 +269,7 @@ export class MasterDataService extends BaseService {
           return m;
         }
       });
-    const res = await this.schemeMD.save(schemes);
+    const res = await this.schemeMD.save(schemes,{ chunk: 500 });
     console.log("SAVED SCHEME");
     return res;
   }
