@@ -533,14 +533,24 @@ export class PtfLoanProfileService extends BaseService {
     await this.connection
       .getCustomRepository(PtfLoanProfileDeferRepository)
       .save(newDefer);
+    let profile = await this.connection
+        .getCustomRepository(PtfLoanProfileRepository)
+        .findOne(dto.loanProfileId);
+      profile.updatedAt = new Date();
+      profile.updatedBy = dto.createdBy;
+      profile.fvStatus = 'NEED_UPDATE';
+    let result = await this.connection
+        .getCustomRepository(PtfLoanProfileRepository)
+        .save(profile);
     return true;
   }
 
   async updateDefer(dtos: UpdateDeferRequestDto[]) {
+    let updateDefer: PtfLoanProfileDefer;
     if (dtos && dtos.length)
       for (let i = 0; i < dtos.length; i++) {
         let dto = dtos[i];
-        let updateDefer = await this.connection
+        updateDefer = await this.connection
           .getCustomRepository(PtfLoanProfileDeferRepository)
           .findOne(dto.id);
         updateDefer.status = "UPDATED";
@@ -551,6 +561,15 @@ export class PtfLoanProfileService extends BaseService {
           .getCustomRepository(PtfLoanProfileDeferRepository)
           .save(updateDefer);
       }
+      let profile = await this.connection
+          .getCustomRepository(PtfLoanProfileRepository)
+          .findOne(updateDefer.loanProfileId);
+      profile.updatedAt = new Date();
+      profile.updatedBy = dtos[0].updatedBy;
+      profile.fvStatus = 'UPDATED';
+      let result = await this.connection
+          .getCustomRepository(PtfLoanProfileRepository)
+          .save(profile);
     return true;
   }
 
