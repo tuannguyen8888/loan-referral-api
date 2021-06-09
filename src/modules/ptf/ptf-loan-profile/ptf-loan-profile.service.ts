@@ -67,13 +67,13 @@ export class PtfLoanProfileService extends BaseService {
         PtfLoanProfileRepository
       );
       let query = repo.createQueryBuilder().where("deleted_at is null");
-      if (dto.fv_status)
+      if (dto.fvStatus)
         query = query.andWhere("fv_status = :fvStatus", {
-          fvStatus: dto.fv_status
+          fvStatus: dto.fvStatus
         });
-      if (dto.loan_status)
+      if (dto.loanStatus)
         query = query.andWhere("loan_status = :loanStatus", {
-          loanStatus: dto.loan_status
+          loanStatus: dto.loanStatus
         });
       if (dto.keyword)
         query = query.andWhere(
