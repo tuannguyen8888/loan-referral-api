@@ -534,14 +534,14 @@ export class PtfLoanProfileService extends BaseService {
       .getCustomRepository(PtfLoanProfileDeferRepository)
       .save(newDefer);
     let profile = await this.connection
-        .getCustomRepository(PtfLoanProfileRepository)
-        .findOne(dto.loanProfileId);
-      profile.updatedAt = new Date();
-      profile.updatedBy = dto.createdBy;
-      profile.fvStatus = 'NEED_UPDATE';
+      .getCustomRepository(PtfLoanProfileRepository)
+      .findOne(dto.loanProfileId);
+    profile.updatedAt = new Date();
+    profile.updatedBy = dto.createdBy;
+    profile.fvStatus = "NEED_UPDATE";
     let result = await this.connection
-        .getCustomRepository(PtfLoanProfileRepository)
-        .save(profile);
+      .getCustomRepository(PtfLoanProfileRepository)
+      .save(profile);
     return true;
   }
 
@@ -561,15 +561,15 @@ export class PtfLoanProfileService extends BaseService {
           .getCustomRepository(PtfLoanProfileDeferRepository)
           .save(updateDefer);
       }
-      let profile = await this.connection
-          .getCustomRepository(PtfLoanProfileRepository)
-          .findOne(updateDefer.loanProfileId);
-      profile.updatedAt = new Date();
-      profile.updatedBy = dtos[0].updatedBy;
-      profile.fvStatus = 'UPDATED';
-      let result = await this.connection
-          .getCustomRepository(PtfLoanProfileRepository)
-          .save(profile);
+    let profile = await this.connection
+      .getCustomRepository(PtfLoanProfileRepository)
+      .findOne(updateDefer.loanProfileId);
+    profile.updatedAt = new Date();
+    profile.updatedBy = dtos[0].updatedBy;
+    profile.fvStatus = "UPDATED";
+    let result = await this.connection
+      .getCustomRepository(PtfLoanProfileRepository)
+      .save(profile);
     return true;
   }
 
