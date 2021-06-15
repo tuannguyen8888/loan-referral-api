@@ -10,4 +10,7 @@ export class DistrictMasterData {
 
   @Column("varchar", { name: "lmc_STATE_N", length: 7 })
   lmc_STATE_N: string;
+
+  @Column("tinyint", { name: "is_active", default: false })
+  isactive: boolean;
 }
