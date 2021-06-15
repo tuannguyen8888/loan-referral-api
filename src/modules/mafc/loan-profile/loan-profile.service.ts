@@ -73,35 +73,35 @@ export class LoanProfileService extends BaseService {
       const repo = this.connection.getCustomRepository(LoanProfileRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
       if (dto.fv_status)
-      query = query.andWhere("fv_status = :fvStatus", {
+        query = query.andWhere("fv_status = :fvStatus", {
           fvStatus: dto.fv_status
-      });
+        });
       // const where = {
       //   deletedAt: IsNull()
       // };
       if (dto.partner_id) {
         query = query.andWhere("partner_id = :partnerId", {
-            partnerId: dto.partner_id
+          partnerId: dto.partner_id
         });
         // where["partnerId"] = dto.partner_id;
       }
       if (dto.fv_status) {
-          query = query.andWhere("fv_status = :fvStatus", {
-              fvStatus: dto.fv_status
-          });
+        query = query.andWhere("fv_status = :fvStatus", {
+          fvStatus: dto.fv_status
+        });
         // where["fvStatus"] = Equal(dto.fv_status);
       }
       if (dto.loan_status) {
-          query = query.andWhere("loan_status = :loanStatus", {
-              loanStatus: dto.loan_status
-          });
+        query = query.andWhere("loan_status = :loanStatus", {
+          loanStatus: dto.loan_status
+        });
         // where["loanStatus"] = Equal(dto.loan_status);
       }
       if (dto.keyword) {
-          query = query.andWhere(
-              "concat(in_fname,' ', in_mname, ' ', in_lname) like :keyword OR in_nationalid like :keyword OR loan_no like :keyword ",
-              { keyword: "%" + dto.keyword + "%" }
-          );
+        query = query.andWhere(
+          "concat(in_fname,' ', in_mname, ' ', in_lname) like :keyword OR in_nationalid like :keyword OR loan_no like :keyword ",
+          { keyword: "%" + dto.keyword + "%" }
+        );
         // where["$or"] = [
         //   { inFname: Like(`%${dto.keyword}%`) },
         //   { inMname: Like(`%${dto.keyword}%`) },
@@ -134,29 +134,32 @@ export class LoanProfileService extends BaseService {
             userGroups.forEach(ug => userEmails.push(ug.email));
           }
           // where["createdBy"] = In(userEmails);
-            query = query.andWhere("created_by IN (:...userEmails)", {
-                userEmails: userEmails
-            });
+          query = query.andWhere("created_by IN (:...userEmails)", {
+            userEmails: userEmails
+          });
         } else {
           // where["createdBy"] = dto.user_id;
-            query = query.andWhere("created_by = :userId", {
-                userId: dto.user_id
-            });
+          query = query.andWhere("created_by = :userId", {
+            userId: dto.user_id
+          });
         }
       }
       const result = new LoanProfilesResponseDto();
       result.rows = [];
       if (!dto.sort) {
-          query = query
-              .orderBy("id", "DESC")
-              .skip((dto.page - 1) * dto.pagesize)
-              .take(dto.pagesize);
+        query = query
+          .orderBy("id", "DESC")
+          .skip((dto.page - 1) * dto.pagesize)
+          .take(dto.pagesize);
         // dto.sort = { id: -1 };
-      }else{
-          query = query
-              .orderBy(Object.keys(dto.sort)[0], Object.values(dto.sort)[0] == -1?"DESC":"ASC")
-              .skip((dto.page - 1) * dto.pagesize)
-              .take(dto.pagesize);
+      } else {
+        query = query
+          .orderBy(
+            Object.keys(dto.sort)[0],
+            Object.values(dto.sort)[0] == -1 ? "DESC" : "ASC"
+          )
+          .skip((dto.page - 1) * dto.pagesize)
+          .take(dto.pagesize);
       }
       let data, count;
       [data, count] = await query.getManyAndCount();
@@ -166,9 +169,9 @@ export class LoanProfileService extends BaseService {
         data.forEach(item => {
           let lp = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
           // lp = Object.assign(lp, item);
-            if(lp.loan_status == 'FINISH'){
-                lp.disbursement_date = lp.updated_at;
-            }
+          if (lp.loan_status == "FINISH") {
+            lp.disbursement_date = lp.updated_at;
+          }
           result.rows.push(lp);
         });
       }
@@ -475,9 +478,9 @@ export class LoanProfileService extends BaseService {
         LoanProfileChangeLog,
         LoanProfileChangeLogDto
       );
-        if(result.loan_status == 'FINISH'){
-            result.disbursement_date = result.updated_at;
-        }
+      if (result.loan_status == "FINISH") {
+        result.disbursement_date = result.updated_at;
+      }
       return result;
     } else {
       throw new BadRequestException([
@@ -1088,9 +1091,11 @@ export class LoanProfileService extends BaseService {
                 defer.clientName,
                 dtos[i].details[j].doc_code,
                 dtos[i].details[j].url,
-                  (i == dtos.length - 1 && j == dtos[i].details.length - 1) ? dtos[i].reply_comment : null,
+                i == dtos.length - 1 && j == dtos[i].details.length - 1
+                  ? dtos[i].reply_comment
+                  : null,
                 defer.deferCode,
-                  (i == dtos.length - 1 && j == dtos[i].details.length - 1)
+                i == dtos.length - 1 && j == dtos[i].details.length - 1
                   ? "N"
                   : "Y"
               );

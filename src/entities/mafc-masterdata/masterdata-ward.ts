@@ -10,4 +10,7 @@ export class WardMasterData {
 
   @Column("varchar", { name: "city", length: 255 })
   city: string;
+
+  @Column("tinyint", { name: "is_active", default: false })
+  isactive: boolean;
 }
