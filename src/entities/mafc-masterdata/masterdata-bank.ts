@@ -7,4 +7,7 @@ export class BankMasterData {
 
   @Column("varchar", { name: "bank_desc", length: 255 })
   bankdesc: string;
+
+  @Column("tinyint", { name: "is_active", default: false })
+  isactive: boolean;
 }
