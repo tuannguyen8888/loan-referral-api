@@ -193,6 +193,10 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    response.data = response.data.map((b: BankMasterData) => {
+      b.isactive = true;
+      return b;
+    });
     const banks: BankMasterData[] = response.data;
     const res = await this.bankMD.save(banks);
     console.log("SAVED BANK");
@@ -236,8 +240,8 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    const schemes: SchemeMasterData[] =
-      response.data.filter((m: SchemeMasterData) => {
+    const schemes: SchemeMasterData[] = response.data.filter(
+      (m: SchemeMasterData) => {
         const filt = listFilter.some(x => m.schemename.includes(x));
         if (filt) {
           if (
@@ -260,16 +264,19 @@ export class MasterDataService extends BaseService {
           } else {
             m.priorityc = "Pay Slip,Bank Statement";
           }
+
           if (m.schemename.includes("316") || m.schemename.includes("322")) {
             // Không triển khai EVN BASIC + BAS VIP nữa
             m.isactive = false;
           } else {
             m.isactive = true;
           }
+
           return m;
         }
-      });
-    const res = await this.schemeMD.save(schemes,{ chunk: 500 });
+      }
+    );
+    const res = await this.schemeMD.save(schemes, { chunk: 500 });
     console.log("SAVED SCHEME");
     return res;
   }
@@ -286,8 +293,9 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    response.data = response.data.map(d => {
-      d["id"] = this.convertStringToCharCode(d["lsu_USER_ID_C"]);
+    response.data = response.data.map((d: SecUserMasterData) => {
+      d.id = this.convertStringToCharCode(d["lsu_USER_ID_C"]);
+      d.isactive = true;
       return d;
     });
     const secusers: SecUserMasterData[] = response.data;
@@ -308,6 +316,11 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+
+    response.data = response.data.map((c: CityMasterData) => {
+      c.isactive = true;
+      return c;
+    });
     const cities: CityMasterData[] = response.data;
     const res = await this.cityMD.save(cities);
     console.log("SAVED CITY");
@@ -326,6 +339,10 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    response.data = response.data.map((d: DistrictMasterData) => {
+      d.isactive = true;
+      return d;
+    });
     const districts: DistrictMasterData[] = response.data;
     const res = await this.districtMD.save(districts);
     console.log("SAVED DISTRICT");
@@ -344,8 +361,12 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    response.data = response.data.map((w: WardMasterData) => {
+      w.isactive = true;
+      return w;
+    });
     const wards: WardMasterData[] = response.data;
-    const res = await this.wardMD.save([...wards], { chunk: 700 });
+    const res = await this.wardMD.save(wards, { chunk: 700 });
     console.log("SAVED WARD");
     return res;
   }
@@ -362,6 +383,10 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    response.data = response.data.map((l: LoanCategoryMasterData) => {
+      l.isactive = true;
+      return l;
+    });
     const loanCategories: LoanCategoryMasterData[] = response.data;
     const res = await this.loanCateMD.save(loanCategories);
     console.log("SAVED LOAN CATEGORY");
@@ -385,7 +410,7 @@ export class MasterDataService extends BaseService {
   async cronMasterDataMafc() {
     const success = await Promise.all([
       this.mafcFetchBanks(),
-      this.mafcFetchSecUser(),
+      // this.mafcFetchSecUser(),
       this.mafcFetchSchemes(),
       this.mafcFetchLoanCategory(),
       this.mafcFetchCity(),

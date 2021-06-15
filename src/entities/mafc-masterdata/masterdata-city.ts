@@ -10,4 +10,7 @@ export class CityMasterData {
 
   @Column("varchar", { name: "country_id", length: 255 })
   countryid: string;
+
+  @Column("tinyint", { name: "is_active", default: false })
+  isactive: boolean;
 }
