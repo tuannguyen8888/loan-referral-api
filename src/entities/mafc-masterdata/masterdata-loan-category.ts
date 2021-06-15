@@ -7,4 +7,7 @@ export class LoanCategoryMasterData {
 
   @Column("varchar", { name: "lmc_STATE_N", length: 255 })
   description: string;
+
+  @Column("tinyint", { name: "is_active", default: false })
+  isactive: boolean;
 }

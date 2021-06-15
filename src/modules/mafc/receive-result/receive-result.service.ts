@@ -77,6 +77,7 @@ export class ReceiveResultService extends BaseService {
   }
 
   async receiveStatus(dtos: UploadStatusF1RequestDto[]) {
+    console.log("receiveStatus dtos = ", dtos);
     let response = [];
     let repoLP = this.connection.getCustomRepository(LoanProfileRepository);
     if (dtos && dtos.length) {

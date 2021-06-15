@@ -7,4 +7,7 @@ export class SaleOfficeMasterData {
 
   @Column("varchar", { name: "inspector_name", length: 255 })
   inspectorname: string;
+
+  @Column("tinyint", { name: "is_active", default: false })
+  isactive: boolean;
 }

@@ -10,4 +10,7 @@ export class SecUserMasterData {
 
   @Column("varchar", { name: "lsu_USER_NAME_C", length: 255 })
   lsu_USER_NAME_C: string;
+
+  @Column("tinyint", { name: "is_active", default: false })
+  isactive: boolean;
 }
