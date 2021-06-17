@@ -366,7 +366,7 @@ export class MasterDataService extends BaseService {
       return w;
     });
     const wards: WardMasterData[] = response.data;
-    const res = await this.wardMD.save(wards, { chunk: 700 });
+    const res = await this.wardMD.save(wards, { chunk: 500 });
     console.log("SAVED WARD");
     return res;
   }
