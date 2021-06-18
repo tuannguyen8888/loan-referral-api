@@ -35,7 +35,7 @@ export class CronService {
     return;
   }
 
-  @Cron("0 0 * * * *") // chạy mỗi 10phút
+  @Cron("0 0 * * * *") // chạy mỗi tiếng
   async ptfCron() {
     console.info(`START CRON PTF AT ======= ${new Date()}`);
     await this.ptfGetLoanStatus();
