@@ -6,10 +6,10 @@ export class GetPtfLoanProfilesRequestDto {
   // partner_id?: number;
 
   @IsOptional()
-  fv_status?: string;
+  fvStatus?: string;
 
   @IsOptional()
-  loan_status?: string;
+  loanStatus?: string;
 
   @IsDefined()
   @IsString()

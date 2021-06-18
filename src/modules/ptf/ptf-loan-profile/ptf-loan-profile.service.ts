@@ -67,13 +67,13 @@ export class PtfLoanProfileService extends BaseService {
         PtfLoanProfileRepository
       );
       let query = repo.createQueryBuilder().where("deleted_at is null");
-      if (dto.fv_status)
+      if (dto.fvStatus)
         query = query.andWhere("fv_status = :fvStatus", {
-          fvStatus: dto.fv_status
+          fvStatus: dto.fvStatus
         });
-      if (dto.loan_status)
+      if (dto.loanStatus)
         query = query.andWhere("loan_status = :loanStatus", {
-          loanStatus: dto.loan_status
+          loanStatus: dto.loanStatus
         });
       if (dto.keyword)
         query = query.andWhere(
@@ -533,14 +533,24 @@ export class PtfLoanProfileService extends BaseService {
     await this.connection
       .getCustomRepository(PtfLoanProfileDeferRepository)
       .save(newDefer);
+    let profile = await this.connection
+      .getCustomRepository(PtfLoanProfileRepository)
+      .findOne(dto.loanProfileId);
+    profile.updatedAt = new Date();
+    profile.updatedBy = dto.createdBy;
+    profile.fvStatus = "NEED_UPDATE";
+    let result = await this.connection
+      .getCustomRepository(PtfLoanProfileRepository)
+      .save(profile);
     return true;
   }
 
   async updateDefer(dtos: UpdateDeferRequestDto[]) {
+    let updateDefer: PtfLoanProfileDefer;
     if (dtos && dtos.length)
       for (let i = 0; i < dtos.length; i++) {
         let dto = dtos[i];
-        let updateDefer = await this.connection
+        updateDefer = await this.connection
           .getCustomRepository(PtfLoanProfileDeferRepository)
           .findOne(dto.id);
         updateDefer.status = "UPDATED";
@@ -551,6 +561,15 @@ export class PtfLoanProfileService extends BaseService {
           .getCustomRepository(PtfLoanProfileDeferRepository)
           .save(updateDefer);
       }
+    let profile = await this.connection
+      .getCustomRepository(PtfLoanProfileRepository)
+      .findOne(updateDefer.loanProfileId);
+    profile.updatedAt = new Date();
+    profile.updatedBy = dtos[0].updatedBy;
+    profile.fvStatus = "UPDATED";
+    let result = await this.connection
+      .getCustomRepository(PtfLoanProfileRepository)
+      .save(profile);
     return true;
   }
 
