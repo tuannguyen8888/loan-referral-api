@@ -11,14 +11,14 @@ export class CronService {
   private httpService = new HttpService();
   private requestUtil = new RequestUtil(this.httpService);
 
-  @Timeout(0)
-  async firstCron() {
-    console.info(`RUN ONCE AT ======= ${new Date()}`);
-    this.cronService();
-    await this.ptfGetLoanStatus();
-  }
+  // @Timeout(0)
+  // async firstCron() {
+  //   console.info(`RUN ONCE AT ======= ${new Date()}`);
+  //   this.cronService();
+  //   await this.ptfGetLoanStatus();
+  // }
 
-  @Cron("* * 0 * * *") // chạy mỗi ngày
+  @Cron("0 0 0 * * *") // chạy mỗi ngày
   mafcCron() {
     console.info(`START CRON AT ======= ${new Date()}`);
     this.cronService();
@@ -35,7 +35,7 @@ export class CronService {
     return;
   }
 
-  @Cron("0 */5 * * * *") // chạy mỗi 10phút
+  @Cron("0 0 * * * *") // chạy mỗi 10phút
   async ptfCron() {
     console.info(`START CRON PTF AT ======= ${new Date()}`);
     await this.ptfGetLoanStatus();
