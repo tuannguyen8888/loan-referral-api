@@ -1,9 +1,9 @@
 import {
-  IsString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsDateString
+    IsString,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsDateString, maxLength
 } from "class-validator";
 import { AddressDto } from "./address.dto";
 import { ReferenceDto } from "./reference.dto";
