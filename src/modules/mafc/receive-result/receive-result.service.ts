@@ -99,7 +99,8 @@ export class ReceiveResultService extends BaseService {
             dto.status_f1 == "REJ" ||
             dto.status_f1 == "FINISH"
           ) {
-            loanProfile.fvStatus = "DONE";
+              loanProfile.fvStatus = "DONE";
+              loanProfile.updatedAt = new Date();;
           }
           loanProfile = await repoLP.save(loanProfile);
 
