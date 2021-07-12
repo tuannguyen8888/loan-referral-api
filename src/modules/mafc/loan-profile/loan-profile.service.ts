@@ -91,28 +91,22 @@ export class LoanProfileService extends BaseService {
         });
         // where["fvStatus"] = Equal(dto.fv_status);
       }
-      if (dto.loan_status) {
-        query = query.andWhere("loan_status = :loanStatus", {
-          loanStatus: dto.loan_status
-        });
-        // where["loanStatus"] = Equal(dto.loan_status);
-      }
-      if (dto.disbursement_date_from) {
-        query = query.andWhere(
-          "loan_status = 'FINISH' and updated_at >= :disbursementDateFrom",
-          {
-            disbursementDateFrom: dto.disbursement_date_from
-          }
-        );
-      }
-      if (dto.disbursement_date_to) {
-        query = query.andWhere(
-          "loan_status = 'FINISH' and updated_at < DATE_ADD(:disbursementDateTo, INTERVAL 1 DAY)",
-          {
-            disbursementDateTo: dto.disbursement_date_to
-          }
-        );
-      }
+        if (dto.loan_status) {
+            query = query.andWhere("loan_status = :loanStatus", {
+                loanStatus: dto.loan_status
+            });
+            // where["loanStatus"] = Equal(dto.loan_status);
+        }
+        if (dto.disbursement_date_from) {
+            query = query.andWhere("loan_status = 'FINISH' and updated_at >= :disbursementDateFrom", {
+                disbursementDateFrom: dto.disbursement_date_from
+            });
+        }
+        if (dto.disbursement_date_to) {
+            query = query.andWhere("loan_status = 'FINISH' and updated_at < DATE_ADD(:disbursementDateTo, INTERVAL 1 DAY)", {
+                disbursementDateTo: dto.disbursement_date_to
+            });
+        }
       if (dto.keyword) {
         query = query.andWhere(
           "concat(in_fname,' ', in_mname, ' ', in_lname) like :keyword OR in_nationalid like :keyword OR loan_no like :keyword ",
