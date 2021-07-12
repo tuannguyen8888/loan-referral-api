@@ -3,7 +3,8 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsDateString
+  IsDateString,
+  maxLength
 } from "class-validator";
 import { AddressDto } from "./address.dto";
 import { ReferenceDto } from "./reference.dto";
