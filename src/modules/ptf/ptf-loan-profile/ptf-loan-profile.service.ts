@@ -374,8 +374,8 @@ export class PtfLoanProfileService extends BaseService {
         if (loanProfile.fvStatus == "NEED_UPDATE") {
         } else if (
           loanProfile.fvStatus == "NEW" ||
-          loanProfile.fvStatus == "UPLOADED" ||
-          loanProfile.fvStatus == "SENT_FILES"
+          loanProfile.fvStatus == "UPLOADED" //||
+          //loanProfile.fvStatus == "SENT_FILES"
         ) {
           let uploadResults = await this.sendData_uploadDocuments(
             loanProfile,
