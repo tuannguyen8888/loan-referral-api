@@ -1092,6 +1092,7 @@ export class LoanProfileService extends BaseService {
               id: dtos[i].defer_id
             }
           });
+        let replySuccess = true;
         if (defer) {
           let newReplys = [];
           if (dtos[i].details && dtos[i].details.length) {
@@ -1115,6 +1116,8 @@ export class LoanProfileService extends BaseService {
                 newReply.docCode = dtos[i].details[j].doc_code;
                 newReply.url = dtos[i].details[j].url;
                 newReplys.push(newReply);
+              }else{
+                  replySuccess = false;
               }
             }
           } else {
@@ -1127,17 +1130,32 @@ export class LoanProfileService extends BaseService {
               defer.deferCode,
               i == dtos.length - 1 ? "N" : "Y"
             );
+              if (result.success) {
+                  let newReply = new LoanProfileDeferReply();
+                  newReply.deferId = defer.defer_id;
+                  newReply.docCode = defer.doc_code;
+                  newReply.url = defer.url;
+                  newReplys.push(newReply);
+              }else{
+                  replySuccess = false;
+              }
           }
-          defer.replyComment = dtos[i].reply_comment;
-          defer.status = "SENT";
-          defer.updatedAt = new Date();
-          defer = await this.connection
-            .getCustomRepository(LoanProfileDeferRepository)
-            .save(defer);
-          if (newReplys && newReplys.length) {
-            await this.connection
-              .getCustomRepository(LoanProfileDeferReplyRepository)
-              .save(newReplys);
+          if(replySuccess) {
+              defer.replyComment = dtos[i].reply_comment;
+              defer.status = "SENT";
+              defer.updatedAt = new Date();
+              defer = await this.connection
+                  .getCustomRepository(LoanProfileDeferRepository)
+                  .save(defer);
+              if (newReplys && newReplys.length) {
+                  await this.connection
+                      .getCustomRepository(LoanProfileDeferReplyRepository)
+                      .save(newReplys);
+              }
+          }else {
+              throw new BadRequestException(
+                  "Reply defer fail, please try again."
+              );
           }
         } else {
           throw new BadRequestException(
