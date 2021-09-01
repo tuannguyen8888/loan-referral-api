@@ -91,25 +91,65 @@ export class LoanProfileService extends BaseService {
         });
         // where["fvStatus"] = Equal(dto.fv_status);
       }
-        if (dto.loan_status) {
-            query = query.andWhere("loan_status = :loanStatus", {
-                loanStatus: dto.loan_status
-            });
-            // where["loanStatus"] = Equal(dto.loan_status);
-        }
-        if (dto.disbursement_date_from) {
-            query = query.andWhere("loan_status = 'FINISH' and updated_at >= :disbursementDateFrom", {
-                disbursementDateFrom: dto.disbursement_date_from
-            });
-        }
-        if (dto.disbursement_date_to) {
-            query = query.andWhere("loan_status = 'FINISH' and updated_at < DATE_ADD(:disbursementDateTo, INTERVAL 1 DAY)", {
-                disbursementDateTo: dto.disbursement_date_to
-            });
+      if (dto.loan_status) {
+        query = query.andWhere("loan_status = :loanStatus", {
+          loanStatus: dto.loan_status
+        });
+        // where["loanStatus"] = Equal(dto.loan_status);
+      }
+      if (dto.disbursement_date_from) {
+        query = query.andWhere(
+          "loan_status = 'FINISH' and updated_at >= :disbursementDateFrom",
+          {
+            disbursementDateFrom: dto.disbursement_date_from
+          }
+        );
+      }
+      if (dto.disbursement_date_to) {
+        query = query.andWhere(
+          "loan_status = 'FINISH' and updated_at < DATE_ADD(:disbursementDateTo, INTERVAL 1 DAY)",
+          {
+            disbursementDateTo: dto.disbursement_date_to
+          }
+        );
+      }
+        if (dto.user_id) {
+            let userGroup = await this.connection
+                .getCustomRepository(SaleGroupRepository)
+                .findOne({
+                    where: {
+                        deletedAt: IsNull(),
+                        email: dto.user_id
+                    }
+                });
+            if (userGroup) {
+                let userGroups = await this.connection
+                    .getCustomRepository(SaleGroupRepository)
+                    .find({
+                        where: {
+                            deletedAt: IsNull(),
+                            treePath: Like(`${userGroup.treePath}%`)
+                        }
+                    });
+                let userEmails = [];
+                if (userGroups && userGroups.length) {
+                    userGroups.forEach(ug => userEmails.push(ug.email));
+                }
+                // where["createdBy"] = In(userEmails);
+                query = query.andWhere("created_by IN (:...userEmails)", {
+                    userEmails: userEmails
+                });
+            } else {
+                // where["createdBy"] = dto.user_id;
+                query = query.andWhere("created_by = :userId", {
+                    userId: dto.user_id
+                });
+            }
         }
       if (dto.keyword) {
         query = query.andWhere(
-          "concat(in_fname,' ', in_mname, ' ', in_lname) like :keyword OR in_nationalid like :keyword OR loan_no like :keyword ",
+          // "concat(in_fname,' ', in_mname, ' ', in_lname) like :keyword OR in_nationalid like :keyword OR loan_no like :keyword ",
+            "( in_nationalid like :keyword OR loan_no like :keyword )",
           { keyword: "%" + dto.keyword + "%" }
         );
         // where["$or"] = [
@@ -120,39 +160,6 @@ export class LoanProfileService extends BaseService {
         //   { inNationalid: Like(`%${dto.keyword}%`) },
         //   { loanNo: Like(`%${dto.keyword}%`) }
         // ];
-      }
-      if (dto.user_id) {
-        let userGroup = await this.connection
-          .getCustomRepository(SaleGroupRepository)
-          .findOne({
-            where: {
-              deletedAt: IsNull(),
-              email: dto.user_id
-            }
-          });
-        if (userGroup) {
-          let userGroups = await this.connection
-            .getCustomRepository(SaleGroupRepository)
-            .find({
-              where: {
-                deletedAt: IsNull(),
-                treePath: Like(`${userGroup.treePath}%`)
-              }
-            });
-          let userEmails = [];
-          if (userGroups && userGroups.length) {
-            userGroups.forEach(ug => userEmails.push(ug.email));
-          }
-          // where["createdBy"] = In(userEmails);
-          query = query.andWhere("created_by IN (:...userEmails)", {
-            userEmails: userEmails
-          });
-        } else {
-          // where["createdBy"] = dto.user_id;
-          query = query.andWhere("created_by = :userId", {
-            userId: dto.user_id
-          });
-        }
       }
       const result = new LoanProfilesResponseDto();
       result.rows = [];
