@@ -1087,9 +1087,10 @@ export class LoanProfileService extends BaseService {
   }
 
   async replyDeffers(dtos: LoanProfileDeferReplyRequestDto[]) {
-    let defer;
+    let defer, allReplySuccess = true;
     if (dtos && dtos.length) {
       for (let i = 0; i < dtos.length; i++) {
+        if(!dtos[i].defer_id) continue;
         defer = await this.connection
           .getCustomRepository(LoanProfileDeferRepository)
           .findOne({
@@ -1117,7 +1118,7 @@ export class LoanProfileService extends BaseService {
                   ? "N"
                   : "Y"
               );
-              if (result.success) {
+              if (Boolean(result.success) == true) {
                 let newReply = new LoanProfileDeferReply();
                 newReply.deferId = dtos[i].defer_id;
                 newReply.docCode = dtos[i].details[j].doc_code;
@@ -1125,6 +1126,7 @@ export class LoanProfileService extends BaseService {
                 newReplys.push(newReply);
               }else{
                   replySuccess = false;
+                  allReplySuccess = false;
               }
             }
           } else {
@@ -1137,7 +1139,7 @@ export class LoanProfileService extends BaseService {
               defer.deferCode,
               i == dtos.length - 1 ? "N" : "Y"
             );
-              if (result.success) {
+              if (Boolean(result.success) == true) {
                   let newReply = new LoanProfileDeferReply();
                   newReply.deferId = defer.defer_id;
                   newReply.docCode = defer.doc_code;
@@ -1145,6 +1147,7 @@ export class LoanProfileService extends BaseService {
                   newReplys.push(newReply);
               }else{
                   replySuccess = false;
+                  allReplySuccess = false;
               }
           }
           if(replySuccess) {
@@ -1171,7 +1174,7 @@ export class LoanProfileService extends BaseService {
         }
       }
       // update status profile
-      if (defer) {
+      if (defer && allReplySuccess) {
         let profile = await this.connection
           .getCustomRepository(LoanProfileRepository)
           .findOne(defer.loanProfileId);
