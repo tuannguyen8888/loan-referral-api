@@ -11,12 +11,12 @@ export class CronService {
   private httpService = new HttpService();
   private requestUtil = new RequestUtil(this.httpService);
 
-  // @Timeout(0)
-  // async firstCron() {
-  //   console.info(`RUN ONCE AT ======= ${new Date()}`);
-  //   this.cronService();
-  //   await this.ptfGetLoanStatus();
-  // }
+  @Timeout(0)
+  async firstCron() {
+    console.info(`RUN ONCE AT ======= ${new Date()}`);
+    this.cronService();
+    await this.ptfGetLoanStatus();
+  }
 
   @Cron("0 0 0 * * *") // chạy mỗi ngày
   mafcCron() {
