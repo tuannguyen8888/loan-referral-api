@@ -1140,11 +1140,11 @@ export class LoanProfileService extends BaseService {
               i == dtos.length - 1 ? "N" : "Y"
             );
               if (Boolean(result.success) == true) {
-                  let newReply = new LoanProfileDeferReply();
-                  newReply.deferId = defer.defer_id;
-                  newReply.docCode = defer.doc_code;
-                  newReply.url = defer.url;
-                  newReplys.push(newReply);
+                  // let newReply = new LoanProfileDeferReply();
+                  // newReply.deferId = defer.defer_id;
+                  // newReply.docCode = defer.doc_code;
+                  // newReply.url = defer.url;
+                  // newReplys.push(newReply);
               }else{
                   replySuccess = false;
                   allReplySuccess = false;
