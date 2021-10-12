@@ -5,6 +5,8 @@ import { ReceiveResultModule } from "./modules/mafc/receive-result/receive-resul
 import { PtfLoanProfileModule } from "./modules/ptf/ptf-loan-profile/ptf-loan-profile.module";
 import { PtfMasterDataModule } from "./modules/ptf/ptf-master-data/ptf-master-data.module";
 import { PtfReceiveResultModule } from "./modules/ptf/ptf-receive-result/ptf-receive-result.module";
+import { McLoanProfileModule } from "./modules/mc/mc-loan-profile/mc-loan-profile.module";
+import { McKiosModule } from "./modules/mc/mc-kios/mc-kios.module";
 
 export const ROUTES: Routes = [
   {
@@ -23,5 +25,9 @@ export const ROUTES: Routes = [
       PtfLoanProfileModule,
       PtfReceiveResultModule
     ]
+  },
+  {
+    path: "/api/mc",
+    children: [McLoanProfileModule, McKiosModule]
   }
 ];
