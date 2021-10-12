@@ -10,3 +10,4 @@ export * from "./loan-profile.update.dto";
 export * from "./create-defer.request.dto";
 export * from "./update-defer.request.dto";
 export * from "./defer.response.dto";
+export * from "./mc-category.response.dto";

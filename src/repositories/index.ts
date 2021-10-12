@@ -28,3 +28,5 @@ export * from "./ptf/ptf-product.repository";
 export * from "./ptf/ptf-related-person.repository";
 export * from "./mc/mc-loan-profile.repository";
 export * from "./mc/mc-kios.repository";
+export * from "./mc/mc-product.repository";
+export * from "./mc/mc-category.repository";

@@ -191,12 +191,12 @@ export class McLoanProfile {
   cicDescription: number;
 
   @Column("int", {
-    name: "loanid",
+    name: "appNumber",
     nullable: true,
     default: 0,
     comment: "Mã hồ sơ vừa khởi tạo của Mobile For Sale"
   })
-  loanid: number;
+  appNumber: number;
 
   @Column("timestamp", {
     name: "created_at",
