@@ -26,6 +26,8 @@ import { CronService } from "./cron/cron.service";
 import { PtfLoanProfileModule } from "./modules/ptf/ptf-loan-profile/ptf-loan-profile.module";
 import { PtfMasterDataModule } from "./modules/ptf/ptf-master-data/ptf-master-data.module";
 import { PtfReceiveResultModule } from "./modules/ptf/ptf-receive-result/ptf-receive-result.module";
+import { McLoanProfileModule } from "./modules/mc/mc-loan-profile/mc-loan-profile.module";
+import { McKiosModule } from "./modules/mc/mc-kios/mc-kios.module";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -35,10 +37,12 @@ const imports = [
   LoanProfileModule,
   MasterDataModule,
   ReceiveResultModule,
-  ScheduleModule.forRoot(),
+  //ScheduleModule.forRoot(),
   PtfLoanProfileModule,
   PtfMasterDataModule,
-  PtfReceiveResultModule
+  PtfReceiveResultModule,
+  McLoanProfileModule,
+  McKiosModule
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));

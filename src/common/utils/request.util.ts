@@ -37,7 +37,31 @@ export class RequestUtil {
       throw error;
     }
   }
-
+  async get<T>(
+    url: string,
+    body: unknown,
+    config?: axios.AxiosRequestConfig
+  ): Promise<any> {
+    try {
+      if (!config) {
+        config = {};
+      }
+      config.timeout = 60 * 1000;
+      // config.timeoutErrorMessage =
+      //   "Timeout roi cha noi, api gi ma cham qua vay";
+      console.log("call partner api: ", url);
+      console.log("body = ", body);
+      const { data } = await this.httpService.get<T>(url, body).toPromise();
+      // console.log("api result data = ", data);
+      return data;
+    } catch (error) {
+      console.error(
+        "error call " + url + ": " + error.message + " body = ",
+        body
+      );
+      throw error;
+    }
+  }
   async uploadFile<T>(
     url: string,
     formData: FormData,

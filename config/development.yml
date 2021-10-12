@@ -43,19 +43,20 @@ addon:
     version: 2.0
 
 database:
-- name: "default"
-  type: "mysql"
-  logging: true
-  synchronize: false
-  entities:
-  - "dist/entities/*.{js,ts}"
-  - "dist/entities/mafc-masterdata/*.{js,ts}"
-  - "dist//entities/ptf/*.{js,ts}"
-  host: "10.50.50.5"
-  port: 3308
-  username: "finviet"
-  password: "yVREMIiso8BYPBAptGS8"
-  database: "loan_referral"
+  - name: "default"
+    type: "mysql"
+    logging: true
+    synchronize: false
+    entities:
+      - "dist/entities/*.{js,ts}"
+      - "dist/entities/mc/*.{js,ts}"
+      - "dist/entities/mafc-masterdata/*.{js,ts}"
+      - "dist//entities/ptf/*.{js,ts}"
+    host: "10.50.50.5"
+    port: 3308
+    username: "finviet"
+    password: "yVREMIiso8BYPBAptGS8"
+    database: "loan_referral"
 
 mafc_api:
   partner_code: 'FIV'
@@ -95,6 +96,21 @@ ptf_api:
     url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-rest-demo/process'
   X_IBM_Client_Secret: 'aT7hL7gP1wH0uP0nJ7iH7bC6yA4rQ7pI7fI0eP4wR5uY4lU6bL'
   X_IBM_Client_Id: '215b0e37-f71e-419b-9565-f9b28c3d53bd'
+
+mc_api:
+  partner_code: 'FIV'
+  checkCIC:
+    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/check-cic/check'
+    username: 'test'
+    password: '123456'
+  checkCitizenId:
+    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/check-cic/check'
+    username: 'test'
+    password: '123456'
+  getKios:
+    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/kiosks'
+    username: 'test'
+    password: '123456'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload

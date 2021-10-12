@@ -4,18 +4,19 @@ import {
   IsNumber,
   IsOptional,
   IsDateString,
-  IsDefined,
-  IsUrl,
-  Matches
+  IsDefined
 } from "class-validator";
 
-export class AttachFileDto {
+export class RelatedPersonDto {
   id?: number = null;
   @IsDefined()
   loanProfileId: number = null;
-  type: string = null;
-  @Matches(/http[\s\S]*.[jpg,jpeg,png,pdf]/, { message: "url invalid" })
-  url: string = null;
+  relatedPersonType: number = null;
+  familyName: string = null;
+  @IsOptional()
+  middleName: string = null;
+  firstName: string = null;
+  phone: string = null;
   @IsOptional()
   @IsDateString()
   createdAt: string = null;

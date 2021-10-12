@@ -4,18 +4,23 @@ import {
   IsNumber,
   IsOptional,
   IsDateString,
-  IsDefined,
-  IsUrl,
-  Matches
+  IsDefined
 } from "class-validator";
+import { Column, PrimaryGeneratedColumn } from "typeorm";
 
-export class AttachFileDto {
+export class AddressDto {
+  @IsOptional()
   id?: number = null;
-  @IsDefined()
-  loanProfileId: number = null;
-  type: string = null;
-  @Matches(/http[\s\S]*.[jpg,jpeg,png,pdf]/, { message: "url invalid" })
-  url: string = null;
+  @IsOptional()
+  addressType?: string = null;
+  @IsOptional()
+  houseNumberAndStreet?: string = null;
+  @IsOptional()
+  cityId?: number = null;
+  @IsOptional()
+  districtId?: number = null;
+  @IsOptional()
+  wardId?: number = null;
   @IsOptional()
   @IsDateString()
   createdAt: string = null;
@@ -23,9 +28,11 @@ export class AttachFileDto {
   @IsOptional()
   @IsDateString()
   updatedAt?: string = null;
+  @IsOptional()
   updatedBy?: string = null;
   @IsOptional()
   @IsDateString()
   deletedAt?: string = null;
+  @IsOptional()
   deletedBy?: string = null;
 }

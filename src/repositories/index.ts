@@ -26,3 +26,5 @@ export * from "./ptf/ptf-loan-profile-defer.repository";
 export * from "./ptf/ptf-master-data.repository";
 export * from "./ptf/ptf-product.repository";
 export * from "./ptf/ptf-related-person.repository";
+export * from "./mc/mc-loan-profile.repository";
+export * from "./mc/mc-kios.repository";

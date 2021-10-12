@@ -25,3 +25,4 @@ export * from "./ptf/ptf-loan-profile-defer";
 export * from "./ptf/ptf-related-person";
 export * from "./ptf/ptf-product";
 export * from "./ptf/ptf-master-data";
+export * from "./mc/mc-loan-profile";
