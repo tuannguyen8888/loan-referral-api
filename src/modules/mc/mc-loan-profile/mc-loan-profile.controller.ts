@@ -21,26 +21,21 @@ import {
     LoanProfileDto,
     LoanProfileResponseDto,
     LoanProfilesResponseDto,
-    AttachFileDto,
     LoanProfileUpdateDto,
-    CreateDeferRequestDto,
-    UpdateDeferRequestDto, McCategoryResponseDto
+    McCategoryResponseDto
 } from "./dto";
-import {CheckCustomerInfoRequestDto} from "../../mafc/loan-profile/dto";
-import {PtfLoanProfileService} from "../../ptf/ptf-loan-profile/ptf-loan-profile.service";
-import {GetPtfLoanProfilesRequestDto} from "../../ptf/ptf-loan-profile/dto";
+
 import {CheckCICRequestDto} from "./dto/check-cic.request.dto";
 import {CheckCitizenidRequestDto} from "./dto/check-citizenid.request.dto";
-import {assignCustomParameterMetadata} from "@nestjs/common/utils/assign-custom-metadata.util";
 import {CheckInitContractRequestDto} from "./dto/check-init-contract.request.dto";
+import {McCheckListrequestDto} from "./dto/mc-check-listrequest.dto";
 
 @Controller("mc-loan-profile")
 @ApiSecurity("api-key")
 @ApiSecurity("checksum")
 @ApiTags("MC Loan Profile")
 export class McLoanProfileController {
-    constructor(private readonly service: McLoanProfileService) {
-    }
+    constructor(private readonly service: McLoanProfileService) {}
 
     @Get("/")
     @ApiOperation({summary: "Lấy danh sách hồ sơ vay"})
@@ -81,7 +76,12 @@ export class McLoanProfileController {
     checkInitContract(@Headers() headers, @Body() dto: CheckInitContractRequestDto) {
         return this.service.checkInitContract(dto);
     }
-
+    @Post("/checkList")
+    @ApiOperation({summary: ""})
+    @HttpCode(200)
+    checkList(@Headers() headers, @Body() dto: McCheckListrequestDto) {
+        return this.service.checkList(dto);
+    }
     @Get("/getCategory/:companyTaxNumber")
     @ApiOperation({summary: "Lấy chi tiết hồ sơ vay"})
     getCategory(

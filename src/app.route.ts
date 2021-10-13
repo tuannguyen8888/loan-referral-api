@@ -8,6 +8,7 @@ import {PtfReceiveResultModule} from "./modules/ptf/ptf-receive-result/ptf-recei
 import {McLoanProfileModule} from "./modules/mc/mc-loan-profile/mc-loan-profile.module";
 import {McKiosModule} from "./modules/mc/mc-kios/mc-kios.module";
 import {McProductModule} from "./modules/mc/mc-product/mc-product.module";
+import {McCicresultModule} from "./modules/mc/mc-cicresult/mc-cicresult.module";
 
 export const ROUTES: Routes = [
     {
@@ -32,7 +33,8 @@ export const ROUTES: Routes = [
         children: [
             McLoanProfileModule,
             McKiosModule,
-            McProductModule
+            McProductModule,
+            McCicresultModule,
         ]
     }
 ];
