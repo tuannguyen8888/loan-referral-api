@@ -5,6 +5,14 @@ export class McCicResult {
     @PrimaryGeneratedColumn({type: "int", name: "id"})
     id: number;
 
+    @Column("int", {
+        name: "appNumber",
+        nullable: true,
+        default: 0,
+        comment: "Mã hồ sơ vừa khởi tạo của Mobile For Sale"
+    })
+    appNumber: number;
+
     @Column("varchar", {
         name: "requestId",
         length: 20,

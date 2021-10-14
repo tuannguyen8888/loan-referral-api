@@ -27,3 +27,4 @@ export * from "./ptf/ptf-product";
 export * from "./ptf/ptf-master-data";
 export * from "./mc/mc-loan-profile";
 export * from "./mc/mc-cic-result";
+export * from "./mc/mc-case";

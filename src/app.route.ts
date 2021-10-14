@@ -9,6 +9,7 @@ import {McLoanProfileModule} from "./modules/mc/mc-loan-profile/mc-loan-profile.
 import {McKiosModule} from "./modules/mc/mc-kios/mc-kios.module";
 import {McProductModule} from "./modules/mc/mc-product/mc-product.module";
 import {McCicresultModule} from "./modules/mc/mc-cicresult/mc-cicresult.module";
+import {McCaseModule} from "./modules/mc/mc-case/mc-case.module";
 
 export const ROUTES: Routes = [
     {
@@ -35,6 +36,7 @@ export const ROUTES: Routes = [
             McKiosModule,
             McProductModule,
             McCicresultModule,
+            McCaseModule
         ]
     }
 ];
