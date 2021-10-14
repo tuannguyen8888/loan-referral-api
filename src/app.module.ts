@@ -31,6 +31,7 @@ import { McKiosModule } from "./modules/mc/mc-kios/mc-kios.module";
 import { McProductModule } from "./modules/mc/mc-product/mc-product.module";
 import { McCicresultModule } from "./modules/mc/mc-cicresult/mc-cicresult.module";
 import { McCaseModule } from "./modules/mc/mc-case/mc-case.module";
+import { McCaseNoteModule } from './modules/mc/mc-case-note/mc-case-note.module';
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -48,7 +49,8 @@ const imports = [
   McKiosModule,
   McProductModule,
   McCicresultModule,
-  McCaseModule
+  McCaseModule,
+  McCaseNoteModule
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));

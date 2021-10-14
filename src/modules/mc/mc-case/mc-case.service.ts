@@ -11,7 +11,7 @@ import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
 import * as config from "config";
 
-import {McCase, McCicResult} from "../../../entities";
+import {McCase} from "../../../entities";
 import {GetMCCaseRequestDto} from "./dto/get-case.request.dto";
 import {McCasesResponseDto} from "./dto/mc-cases.response.dto";
 import {McCaseDto} from "./dto/mc-case.dto";
@@ -95,7 +95,7 @@ export class McCaseService extends BaseService {
         return response;
     }
 
-    async updateCicResult(dto: McCaseUpdateDto) {
+    async updateCase(dto: McCaseUpdateDto) {
         let entityUpdate: McCase = this.convertDto2Entity(dto, McCase);
         entityUpdate.reasons = JSON.stringify(dto.reasons);
         entityUpdate.pdfFiles = JSON.stringify(dto.pdfFiles);
