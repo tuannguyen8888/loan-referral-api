@@ -6,20 +6,17 @@ import {Request} from "express";
 import {Logger} from "../../../common/loggers";
 import {RedisClient} from "../../../common/shared";
 import {RequestUtil} from "../../../common/utils";
-import {
-    McCaseRepository,
-} from "../../../repositories";
+import {McCaseRepository, McCicresultRepository} from "../../../repositories";
 import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
 import * as config from "config";
 
-import {
-    McCase, McCicResult
-} from "../../../entities";
+import {McCase, McCicResult} from "../../../entities";
 import {GetMCCaseRequestDto} from "./dto/get-case.request.dto";
-import {McCicresultsResponseDto} from "../mc-cicresult/dto/mc-cicresults.response.dto";
-import {McCicresultResponseDto} from "../mc-cicresult/dto/mc-cicresult.response.dto";
 import {McCasesResponseDto} from "./dto/mc-cases.response.dto";
+import {McCaseDto} from "./dto/mc-case.dto";
+import {McCaseUpdateDto} from "./dto/mc-case.update.dto";
+import {McCaseResponseDto} from "./dto/mc-case.response.dto";
 
 @Injectable()
 export class McCaseService extends BaseService {
@@ -50,16 +47,69 @@ export class McCaseService extends BaseService {
             let data, count;
             [data, count] = await query.getManyAndCount();
             result.count = count;
-            result.rows = this.convertEntities2Dtos(
-                data,
-                McCase,
-                McCasesResponseDto
-            );
+            result.rows = this.convertEntities2Dtos(data, McCase, McCasesResponseDto);
             return result;
         } catch (e) {
             console.error(e);
             throw e;
         }
+    }
+
+    async getCase(id: number) {
+        let result = await this.connection
+            .getCustomRepository(McCaseRepository)
+            .findOne(id);
+        let response: McCaseResponseDto = this.convertEntity2Dto(
+            result,
+            McCase,
+            McCaseResponseDto
+        );
+        try {
+            response.reasons = JSON.parse(response.reasons);
+        }catch (e) {
+            console.log(e);
+        }
+        try {
+            response.pdfFiles = JSON.parse(response.pdfFiles);
+        }catch (e) {
+            console.log(e);
+        }
+
+        return response;
+    }
+
+    async createCase(dto: McCaseDto) {
+        console.log(dto);
+        let entity: McCase = this.convertDto2Entity(dto, McCase);
+        entity.reasons = JSON.stringify(dto.reasons);
+        entity.pdfFiles = JSON.stringify(dto.pdfFiles);
+        entity.createdAt = new Date();
+        console.log(entity);
+        this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
+        let result = await this.connection
+            .getCustomRepository(McCaseRepository)
+            .save(entity);
+        this.logger.verbose(`insertResult = ${result}`);
+
+        let response: McCaseDto = this.convertEntity2Dto(result, McCase, McCaseDto);
+        return response;
+    }
+
+    async updateCicResult(dto: McCaseUpdateDto) {
+        let entityUpdate: McCase = this.convertDto2Entity(dto, McCase);
+        entityUpdate.reasons = JSON.stringify(dto.reasons);
+        entityUpdate.pdfFiles = JSON.stringify(dto.pdfFiles);
+        entityUpdate.updatedBy = dto.updatedBy;
+        entityUpdate.updatedAt = new Date();
+        let result = await this.connection
+            .getCustomRepository(McCaseRepository)
+            .save(entityUpdate);
+        let response: McCaseUpdateDto = this.convertEntity2Dto(
+            result,
+            McCase,
+            McCaseUpdateDto
+        );
+        return response;
     }
 
     private convertEntity2Dto(entity, entityClass, dtoClass) {

@@ -5,7 +5,6 @@ export class GetMCCicResultRequestDto {
   // @IsOptional()
   // partner_id?: number;
 
-
   @IsDefined()
   @IsString()
   keyword: string;

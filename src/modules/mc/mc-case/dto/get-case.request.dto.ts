@@ -5,7 +5,6 @@ export class GetMCCaseRequestDto {
   // @IsOptional()
   // partner_id?: number;
 
-
   @IsDefined()
   @IsString()
   keyword: string;

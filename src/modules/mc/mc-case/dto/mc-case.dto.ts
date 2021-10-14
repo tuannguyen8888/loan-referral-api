@@ -22,14 +22,9 @@ export class McCaseDto {
   tempResidence: number = null;
   kioskAddress: string = null;
   bpmStatus: string = null;
-  reasonsid: number = null;
-  reason: string = null;
-  reasonDetail: string = null;
-  userComment: string = null;
-  pdfFilesid: number = null;
-  pdfCreatedDate: string = null;
-  remotePathServer: string = null;
-  fileName: string = null;
+  checklist: string = null;
+  reasons: string = null;
+  pdfFiles: string = null;
 
   @IsOptional()
   @IsDateString()

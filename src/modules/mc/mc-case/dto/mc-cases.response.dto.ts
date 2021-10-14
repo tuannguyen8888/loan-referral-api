@@ -7,7 +7,7 @@ import {
   Min
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import {McCaseResponseDto} from "./mc-case.response.dto";
+import { McCaseResponseDto } from "./mc-case.response.dto";
 
 export class McCasesResponseDto {
   rows: McCaseResponseDto[];

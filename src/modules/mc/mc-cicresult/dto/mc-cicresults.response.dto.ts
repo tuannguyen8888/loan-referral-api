@@ -7,7 +7,7 @@ import {
   Min
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import {McCicresultUpdateDto} from "./mc-cicresult.update.dto";
+import { McCicresultUpdateDto } from "./mc-cicresult.update.dto";
 
 export class McCicresultsResponseDto {
   rows: McCicresultUpdateDto[];

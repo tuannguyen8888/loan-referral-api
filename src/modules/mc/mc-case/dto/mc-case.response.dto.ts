@@ -7,7 +7,6 @@ import {
 } from "class-validator";
 import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 
-
 export class McCaseResponseDto {
   id: number = null;
   appNumber: number = null;
@@ -22,14 +21,9 @@ export class McCaseResponseDto {
   tempResidence: number = null;
   kioskAddress: string = null;
   bpmStatus: string = null;
-  reasonsid: number = null;
-  reason: string = null;
-  reasonDetail: string = null;
-  userComment: string = null;
-  pdfFilesid: number = null;
-  pdfCreatedDate: string = null;
-  remotePathServer: string = null;
-  fileName: string = null;
+  checklist: string = null;
+  reasons: string = null;
+  pdfFiles: string = null;
 
   @IsOptional()
   @IsDateString()

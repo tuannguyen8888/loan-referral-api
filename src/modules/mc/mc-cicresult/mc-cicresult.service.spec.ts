@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { McCicresultService } from './mc-cicresult.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { McCicresultService } from "./mc-cicresult.service";
 
-describe('McCicresultService', () => {
+describe("McCicresultService", () => {
   let service: McCicresultService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [McCicresultService],
+      providers: [McCicresultService]
     }).compile();
 
     service = module.get<McCicresultService>(McCicresultService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 });

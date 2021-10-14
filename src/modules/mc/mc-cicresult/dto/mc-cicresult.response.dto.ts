@@ -7,7 +7,6 @@ import {
 } from "class-validator";
 import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 
-
 export class McCicresultResponseDto {
   id: number = null;
   requestId: string = null;
