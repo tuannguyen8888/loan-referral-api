@@ -99,34 +99,9 @@ ptf_api:
 
 mc_api:
   partner_code: 'FIV'
-  checkCIC:
-    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/check-cic/check'
-    username: 'test'
-    password: '123456'
-  checkCitizenId:
-    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/check-cic/check'
-    username: 'test'
-    password: '123456'
-  getKios:
-    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/kiosks'
-    username: 'test'
-    password: '123456'
-  getProduct:
-    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/products'
-    username: 'test'
-    password: '123456'
-  getCategory:
-    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/check-cat'
-    username: 'test'
-    password: '123456'
-  checkInitContract:
-    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/check-init-contract'
-    username: 'test'
-    password: '123456'
-  checkList:
-    url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/check-list'
-    username: 'test'
-    password: '123456'
+  endpoint: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/'
+  username: 'test'
+  password: '123456'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload
