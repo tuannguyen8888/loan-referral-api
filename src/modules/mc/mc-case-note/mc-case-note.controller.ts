@@ -50,6 +50,7 @@ export class McCaseNoteController {
         return this.service.createCaseNote(dto);
     }
 
+    @Put("/")
     @ApiOperation({summary: "Sửa Case Note"})
     updateCaseNote(@Headers() headers, @Body() dto: McCaseNoteUpdateDto): Promise<McCaseNoteUpdateDto> {
         return this.service.updateCaseNote(dto);

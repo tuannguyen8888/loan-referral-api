@@ -52,7 +52,7 @@ export class McCaseNoteService extends BaseService {
             let data, count;
             [data, count] = await query.getManyAndCount();
             result.count = count;
-            result.rows = this.convertEntities2Dtos(data, McCaseNote, McCaseNotesResponseDto);
+            result.rows = this.convertEntities2Dtos(data, McCaseNote, McCaseNoteResponseDto);
             return result;
         } catch (e) {
             console.error(e);

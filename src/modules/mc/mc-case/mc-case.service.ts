@@ -47,7 +47,7 @@ export class McCaseService extends BaseService {
             let data, count;
             [data, count] = await query.getManyAndCount();
             result.count = count;
-            result.rows = this.convertEntities2Dtos(data, McCase, McCasesResponseDto);
+            result.rows = this.convertEntities2Dtos(data, McCase, McCaseResponseDto);
             return result;
         } catch (e) {
             console.error(e);
