@@ -32,3 +32,4 @@ export * from "./mc/mc-product.repository";
 export * from "./mc/mc-category.repository";
 export * from "./mc/mc-cicresult.repository";
 export * from "./mc/mc-case.repository";
+export * from "./mc/mc-notification.repository";

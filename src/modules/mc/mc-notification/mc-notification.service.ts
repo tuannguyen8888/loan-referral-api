@@ -6,21 +6,20 @@ import {Request} from "express";
 import {Logger} from "../../../common/loggers";
 import {RedisClient} from "../../../common/shared";
 import {RequestUtil} from "../../../common/utils";
-
-
 import * as moment from "moment";
 import * as config from "config";
 
-import {McCaseNote} from "../../../entities";
-import {GetMCCaseNoteRequestDto} from "./dto/get-case-note.request.dto";
-import {McCaseNoteRepository} from "../../../repositories/mc/mc-case-note.repository";
-import {McCaseNotesResponseDto} from "./dto/mc-case-notes.response.dto";
-import {McCaseNoteResponseDto} from "./dto/mc-case-note.response.dto";
-import {McCaseNoteDto} from "./dto/mc-case-note.dto";
-import {McCaseNoteUpdateDto} from "./dto/mc-case-note.update.dto";
+import {McNotification} from "../../../entities";
+
+import {GetMCnotificationRequestDto} from "./dto/get-notification.request.dto";
+import {McNotificationRepository} from "../../../repositories";
+import {McNotificationResponseDto} from "./dto/mc-notification.response.dto";
+import {McNotificationsResponseDto} from "./dto/mc-notifications.response.dto";
+import {McNotificationDto} from "./dto/mc-notification.dto";
+import {McNotificationUpdateDto} from "./dto/mc-notification.update.dto";
 
 @Injectable()
-export class McCaseNoteService extends BaseService {
+export class McNotificationService extends BaseService{
     constructor(
         @Inject(REQUEST) protected request: Request,
         protected readonly logger: Logger,
@@ -29,10 +28,9 @@ export class McCaseNoteService extends BaseService {
     ) {
         super(request, logger, redisClient);
     }
-
-    async getAllCaseNotes(dto: GetMCCaseNoteRequestDto) {
+    async getAllNotification(dto: GetMCnotificationRequestDto) {
         try {
-            const repo = this.connection.getCustomRepository(McCaseNoteRepository);
+            const repo = this.connection.getCustomRepository(McNotificationRepository);
             let query = repo.createQueryBuilder().where("deleted_at is null");
             if (dto.keyword)
                 query = query.andWhere(
@@ -43,61 +41,68 @@ export class McCaseNoteService extends BaseService {
                 .orderBy("id", "DESC")
                 .skip((dto.page - 1) * dto.pagesize)
                 .take(dto.pagesize);
-            const result = new McCaseNotesResponseDto();
+            const result = new McNotificationsResponseDto();
 
             let data, count;
             [data, count] = await query.getManyAndCount();
             result.count = count;
-            result.rows = this.convertEntities2Dtos(data, McCaseNote, McCaseNoteResponseDto);
+            result.rows = this.convertEntities2Dtos(data, McNotification, McNotificationResponseDto);
             return result;
         } catch (e) {
             console.error(e);
             throw e;
         }
     }
-
-    async getCaseNote(id: number) {
+    async getNotification(id: number) {
         let result = await this.connection
-            .getCustomRepository(McCaseNoteRepository)
+            .getCustomRepository(McNotificationRepository)
             .findOne(id);
-        let response: McCaseNoteResponseDto = this.convertEntity2Dto(
+        let response: McNotificationResponseDto = this.convertEntity2Dto(
             result,
-            McCaseNote,
-            McCaseNoteResponseDto
+            McNotification,
+            McNotificationResponseDto
         );
         return response;
     }
 
-    async createCaseNote(dto: McCaseNoteDto) {
+    async createNotification(dto: McNotificationDto) {
         console.log(dto);
-        let entity: McCaseNote = this.convertDto2Entity(dto, McCaseNote);
+        let entity: McNotification = this.convertDto2Entity(dto, McNotification);
         entity.createdAt = new Date();
         console.log(entity);
         this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
         let result = await this.connection
-            .getCustomRepository(McCaseNoteRepository)
+            .getCustomRepository(McNotificationRepository)
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
 
-        let response: McCaseNoteDto = this.convertEntity2Dto(result, McCaseNote, McCaseNoteDto);
+        let response: McNotificationDto = this.convertEntity2Dto(result, McNotification, McNotificationDto);
         return response;
     }
 
-    async updateCaseNote(dto: McCaseNoteUpdateDto) {
-        let entityUpdate: McCaseNote = this.convertDto2Entity(dto, McCaseNote);
+    async updateNotification(dto: McNotificationUpdateDto) {
+        let entityUpdate: McNotification = this.convertDto2Entity(dto, McNotification);
         entityUpdate.updatedBy = dto.updatedBy;
         entityUpdate.updatedAt = new Date();
         let result = await this.connection
-            .getCustomRepository(McCaseNoteRepository)
+            .getCustomRepository(McNotificationRepository)
             .save(entityUpdate);
-        let response: McCaseNoteUpdateDto = this.convertEntity2Dto(
+        let response: McNotificationUpdateDto = this.convertEntity2Dto(
             result,
-            McCaseNote,
-            McCaseNoteUpdateDto
+            McNotification,
+            McNotificationUpdateDto
         );
         return response;
     }
-
+    private convertEntities2Dtos(entities, entityClass, dtoClass) {
+        let dtos = [];
+        if (entities && entities.length) {
+            entities.forEach(entity =>
+                dtos.push(this.convertEntity2Dto(entity, entityClass, dtoClass))
+            );
+        }
+        return dtos;
+    }
     private convertEntity2Dto(entity, entityClass, dtoClass) {
         let dto = new dtoClass();
         let dtoKeys = Object.getOwnPropertyNames(dto);
@@ -144,17 +149,6 @@ export class McCaseNoteService extends BaseService {
                 : null;
         return dto;
     }
-
-    private convertEntities2Dtos(entities, entityClass, dtoClass) {
-        let dtos = [];
-        if (entities && entities.length) {
-            entities.forEach(entity =>
-                dtos.push(this.convertEntity2Dto(entity, entityClass, dtoClass))
-            );
-        }
-        return dtos;
-    }
-
     private convertDto2Entity(dto, entityClass) {
         let entity = new entityClass();
         let entityKeys = this.connection

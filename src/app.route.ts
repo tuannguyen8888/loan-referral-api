@@ -11,6 +11,7 @@ import {McProductModule} from "./modules/mc/mc-product/mc-product.module";
 import {McCicresultModule} from "./modules/mc/mc-cicresult/mc-cicresult.module";
 import {McCaseModule} from "./modules/mc/mc-case/mc-case.module";
 import {McCaseNoteModule} from "./modules/mc/mc-case-note/mc-case-note.module";
+import {McNotificationModule} from "./modules/mc/mc-notification/mc-notification.module";
 
 export const ROUTES: Routes = [
     {
@@ -38,7 +39,8 @@ export const ROUTES: Routes = [
             McProductModule,
             McCicresultModule,
             McCaseModule,
-            McCaseNoteModule
+            McCaseNoteModule,
+            McNotificationModule
         ]
     }
 ];

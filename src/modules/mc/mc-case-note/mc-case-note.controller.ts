@@ -21,7 +21,6 @@ import {McCaseNotesResponseDto} from "./dto/mc-case-notes.response.dto";
 import {McCaseNoteResponseDto} from "./dto/mc-case-note.response.dto";
 import {McCaseNoteDto} from "./dto/mc-case-note.dto";
 import {McCaseNoteUpdateDto} from "./dto/mc-case-note.update.dto";
-import {McCaseNoteRepository} from "../../../repositories/mc/mc-case-note.repository";
 
 @Controller('mc-case-note')
 export class McCaseNoteController {
