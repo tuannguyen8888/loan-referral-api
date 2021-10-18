@@ -34,6 +34,7 @@ import {McCaseModule} from "./modules/mc/mc-case/mc-case.module";
 import {McCaseNoteModule} from './modules/mc/mc-case-note/mc-case-note.module';
 import {McNotificationModule} from './modules/mc/mc-notification/mc-notification.module';
 import {McNotificationResponseDto} from "./modules/mc/mc-notification/dto/mc-notification.response.dto";
+import { McAttachfileModule } from './modules/mc/mc-attachfile/mc-attachfile.module';
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -53,7 +54,8 @@ const imports = [
     McCicresultModule,
     McCaseModule,
     McCaseNoteModule,
-    McNotificationModule
+    McNotificationModule,
+    McAttachfileModule
 ];
 databaseConfig.forEach(db => {
     imports.push(TypeOrmModule.forRoot(db));

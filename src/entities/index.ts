@@ -30,3 +30,4 @@ export * from "./mc/mc-cic-result";
 export * from "./mc/mc-case";
 export * from "./mc/mc-case-note";
 export * from "./mc/mc-notification";
+export * from "./mc/mc-attachfile";

@@ -12,6 +12,7 @@ import {McCicresultModule} from "./modules/mc/mc-cicresult/mc-cicresult.module";
 import {McCaseModule} from "./modules/mc/mc-case/mc-case.module";
 import {McCaseNoteModule} from "./modules/mc/mc-case-note/mc-case-note.module";
 import {McNotificationModule} from "./modules/mc/mc-notification/mc-notification.module";
+import {McAttachfileModule} from "./modules/mc/mc-attachfile/mc-attachfile.module";
 
 export const ROUTES: Routes = [
     {
@@ -40,7 +41,8 @@ export const ROUTES: Routes = [
             McCicresultModule,
             McCaseModule,
             McCaseNoteModule,
-            McNotificationModule
+            McNotificationModule,
+            McAttachfileModule
         ]
     }
 ];
