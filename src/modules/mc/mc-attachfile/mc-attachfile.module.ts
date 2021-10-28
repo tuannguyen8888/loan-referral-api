@@ -9,6 +9,6 @@ import {RequestUtil} from "../../../common/utils";
 @Module({
   imports: [HttpModule],
   controllers: [McAttachfileController],
-  providers: [McAttachfileService,,Logger, RedisClient, BaseService, RequestUtil]
+  providers: [McAttachfileService,Logger, RedisClient, BaseService, RequestUtil]
 })
 export class McAttachfileModule {}
