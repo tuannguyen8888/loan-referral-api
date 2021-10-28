@@ -158,7 +158,7 @@ export class McLoanProfile {
 
   @Column("varchar", {
     name: "mobileProductType",
-    length: 10,
+    length: 20,
     nullable: true,
     default: "",
     comment: "Loại sản phẩm(Cash Loan,Credit Card)"
