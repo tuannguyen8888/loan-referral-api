@@ -38,6 +38,10 @@ export class LoanProfileUpdateDto {
   kiosid: number = null;
   mobileProductType: string = null;
   mobileIssueDateCitizen: string = null;
+  appNumber: number = null;
+  cicResult: number = null;
+  cicDescription: string = null;
+  status: string = null;
 
   @IsOptional()
   @IsDateString()
