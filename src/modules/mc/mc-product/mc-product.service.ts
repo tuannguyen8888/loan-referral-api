@@ -174,23 +174,7 @@ export class McProductService extends BaseService {
       console.error("call api getProduct error : " + e);
       response = e.message;
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = "getProduct";
-      log.data = JSON.stringify([
-        mc_api_config.getProduct.url,
-        {},
-        {
-          auth: {
-            username: mc_api_config.getProduct.username,
-            password: mc_api_config.getProduct.password
-          }
-        }
-      ]);
-      log.result = JSON.stringify(response);
-      log.createdAt = new Date();
-      await this.connection
-        .getCustomRepository(SendDataLogRepository)
-        .save(log);
+
     }
     return response;
   }

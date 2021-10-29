@@ -5,14 +5,7 @@ import {
     LoanProfileResponseDto,
     LoanProfilesResponseDto,
     LoanProfileDto,
-    AddressDto,
-    EmploymentInformationDto,
-    RelatedPersonDto,
-    AttachFileDto,
     LoanProfileUpdateDto,
-    CreateDeferRequestDto,
-    UpdateDeferRequestDto,
-    DeferResponseDto
 } from "./dto";
 import {BaseService} from "../../../common/services";
 import {REQUEST} from "@nestjs/core";
@@ -39,6 +32,7 @@ import {ProcessDto} from "../../mafc/loan-profile/dto";
 import {McLoanProfileRepository} from "../../../repositories/mc/mc-loan-profile.repository";
 import {CheckInitContractRequestDto} from "./dto/check-init-contract.request.dto";
 import {McCheckListrequestDto} from "./dto/mc-check-listrequest.dto";
+import {McapiUtil} from "../../../common/utils/mcapi.util";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -109,68 +103,71 @@ export class McLoanProfileService extends BaseService {
         console.log(
             "Check cic citizenID: " + citizenID + " customerName: " + customerName
         );
-        let mc_api_config = config.get("mc_api");
-        let response: any;
-        try {
-            //let url =mc_api_config.endpoint+"check-cic/check";
-            // response = await this.requestUtil.get(
-            //     url,
-            //     {
-            //         citizenID: citizenID,
-            //         customerName: customerName
-            //     },
-            //     {
-            //         auth: {
-            //             username: mc_api_config.checkCIC.username,
-            //             password: mc_api_config.checkCIC.password
-            //         }
-            //     }
-            // );
-            response = [
-                {
-                    requestId: "1000",
-                    identifier: citizenID,
-                    customerName: customerName,
-                    cicResult: "2",
-                    description: "Đang có dư nợ, đang có nợ cần chú ý",
-                    cicImageLink: "CICS37_CHECKCIC_123456789.PNG",
-                    lastUpdateTime: "06-01-2020 11:31:26",
-                    status: "SUCCESS",
-                    numberOfRelationOrganize: "6"
-                }
-            ];
-            console.log(response);
-            if (response.success) {
-                response.statusCode = 200;
-            } else {
-                response.statusCode = 400;
-            }
-        } catch (e) {
-            console.error("call api checkCIC error : " + e);
-            response = e.message;
-        } finally {
-            let log = new SendDataLog();
-            log.apiUrl = "checkCIC";
-            log.data = JSON.stringify([
-                mc_api_config.checkCIC.url,
-                {
-                    citizenID: citizenID,
-                    customerName: customerName
-                },
-                {
-                    auth: {
-                        username: mc_api_config.checkCIC.username,
-                        password: mc_api_config.checkCIC.password
-                    }
-                }
-            ]);
-            log.result = JSON.stringify(response);
-            log.createdAt = new Date();
-            await this.connection
-                .getCustomRepository(SendDataLogRepository)
-                .save(log);
-        }
+        let mcapi = new McapiUtil();
+        let response = mcapi.login();
         return response;
+        // let mc_api_config = config.get("mc_api");
+        // let response: any;
+        // try {
+        //     //let url =mc_api_config.endpoint+"check-cic/check";
+        //     // response = await this.requestUtil.get(
+        //     //     url,
+        //     //     {
+        //     //         citizenID: citizenID,
+        //     //         customerName: customerName
+        //     //     },
+        //     //     {
+        //     //         auth: {
+        //     //             username: mc_api_config.checkCIC.username,
+        //     //             password: mc_api_config.checkCIC.password
+        //     //         }
+        //     //     }
+        //     // );
+        //     response = [
+        //         {
+        //             requestId: "1000",
+        //             identifier: citizenID,
+        //             customerName: customerName,
+        //             cicResult: "2",
+        //             description: "Đang có dư nợ, đang có nợ cần chú ý",
+        //             cicImageLink: "CICS37_CHECKCIC_123456789.PNG",
+        //             lastUpdateTime: "06-01-2020 11:31:26",
+        //             status: "SUCCESS",
+        //             numberOfRelationOrganize: "6"
+        //         }
+        //     ];
+        //     console.log(response);
+        //     if (response.success) {
+        //         response.statusCode = 200;
+        //     } else {
+        //         response.statusCode = 400;
+        //     }
+        // } catch (e) {
+        //     console.error("call api checkCIC error : " + e);
+        //     response = e.message;
+        // } finally {
+        //     let log = new SendDataLog();
+        //     log.apiUrl = "checkCIC";
+        //     log.data = JSON.stringify([
+        //         mc_api_config.checkCIC.url,
+        //         {
+        //             citizenID: citizenID,
+        //             customerName: customerName
+        //         },
+        //         {
+        //             auth: {
+        //                 username: mc_api_config.checkCIC.username,
+        //                 password: mc_api_config.checkCIC.password
+        //             }
+        //         }
+        //     ]);
+        //     log.result = JSON.stringify(response);
+        //     log.createdAt = new Date();
+        //     await this.connection
+        //         .getCustomRepository(SendDataLogRepository)
+        //         .save(log);
+        // }
+        // return response;
     }
 
     async checkCitizenId(citizenID) {
@@ -205,25 +202,7 @@ export class McLoanProfileService extends BaseService {
             console.error("call api checkCitizenId error : " + e);
             response = e.message;
         } finally {
-            let log = new SendDataLog();
-            log.apiUrl = "checkCitizenId";
-            log.data = JSON.stringify([
-                mc_api_config.checkCitizenId.url,
-                {
-                    citizenID: citizenID
-                },
-                {
-                    auth: {
-                        username: mc_api_config.checkCitizenId.username,
-                        password: mc_api_config.checkCitizenId.password
-                    }
-                }
-            ]);
-            log.result = JSON.stringify(response);
-            log.createdAt = new Date();
-            await this.connection
-                .getCustomRepository(SendDataLogRepository)
-                .save(log);
+
         }
         return response;
     }
@@ -259,25 +238,7 @@ export class McLoanProfileService extends BaseService {
             console.error("call api checkInitContract error : " + e);
             response = e.message;
         } finally {
-            let log = new SendDataLog();
-            log.apiUrl = "checkInitContract";
-            log.data = JSON.stringify([
-                mc_api_config.checkInitContract.url,
-                {
-                    dto
-                },
-                {
-                    auth: {
-                        username: mc_api_config.checkInitContract.username,
-                        password: mc_api_config.checkInitContract.password
-                    }
-                }
-            ]);
-            log.result = JSON.stringify(response);
-            log.createdAt = new Date();
-            await this.connection
-                .getCustomRepository(SendDataLogRepository)
-                .save(log);
+
         }
         return response;
     }
@@ -720,25 +681,7 @@ export class McLoanProfileService extends BaseService {
             console.error("call api checkInitContract error : " + e);
             response = e.message;
         } finally {
-            let log = new SendDataLog();
-            log.apiUrl = "checkInitContract";
-            log.data = JSON.stringify([
-                mc_api_config.checkInitContract.url,
-                {
-                    dto
-                },
-                {
-                    auth: {
-                        username: mc_api_config.checkInitContract.username,
-                        password: mc_api_config.checkInitContract.password
-                    }
-                }
-            ]);
-            log.result = JSON.stringify(response);
-            log.createdAt = new Date();
-            await this.connection
-                .getCustomRepository(SendDataLogRepository)
-                .save(log);
+
         }
         return response;
     }
@@ -776,25 +719,7 @@ export class McLoanProfileService extends BaseService {
             console.error("call api check_customer_info error : " + e);
             response = e.message;
         } finally {
-            let log = new SendDataLog();
-            log.apiUrl = "checkcic";
-            log.data = JSON.stringify([
-                mc_api_config.getCategory.url,
-                {
-                    companyTaxNumber: companyTaxNumber
-                },
-                {
-                    auth: {
-                        username: mc_api_config.getCategory.username,
-                        password: mc_api_config.getCategory.password
-                    }
-                }
-            ]);
-            log.result = JSON.stringify(response);
-            log.createdAt = new Date();
-            await this.connection
-                .getCustomRepository(SendDataLogRepository)
-                .save(log);
+
         }
         return response;
     }
