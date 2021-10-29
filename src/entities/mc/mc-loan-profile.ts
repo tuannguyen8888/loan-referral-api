@@ -23,9 +23,10 @@ export class McLoanProfile {
   })
   customerName: string;
 
-  @Column("int", {
+  @Column("varchar", {
     name: "gender",
-    default: 0,
+    length: 1,
+    default: "",
     nullable: true
   })
   gender: number;
@@ -173,6 +174,23 @@ export class McLoanProfile {
     comment: "Ngày đăng ký CMND Định dạng: dd/mm/yyyy"
   })
   mobileIssueDateCitizen: string;
+
+  @Column("int", {
+    name: "profileid",
+    nullable: true,
+    default: 0,
+    comment: "Mã hồ sơ vừa khởi tạo của Mobile For Sale"
+  })
+  profileid: number;
+
+  @Column("varchar", {
+    name: "appid",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Mã hồ sơ vừa khởi tạo của Mobile For Sale"
+  })
+  appid: number;
 
   @Column("int", {
     name: "appNumber",

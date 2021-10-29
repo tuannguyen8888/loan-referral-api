@@ -174,7 +174,6 @@ export class McProductService extends BaseService {
       console.error("call api getProduct error : " + e);
       response = e.message;
     } finally {
-
     }
     return response;
   }

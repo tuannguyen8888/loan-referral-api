@@ -39,6 +39,8 @@ export class LoanProfileUpdateDto {
   mobileProductType: string = null;
   mobileIssueDateCitizen: string = null;
   appNumber: number = null;
+  profileid: number = null;
+  appid: string = null;
   cicResult: number = null;
   cicDescription: string = null;
   status: string = null;

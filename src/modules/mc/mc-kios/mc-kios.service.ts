@@ -75,7 +75,6 @@ export class McKiosService extends BaseService {
       console.error("call api getKios error : " + e);
       response = e.message;
     } finally {
-
     }
     return response;
   }

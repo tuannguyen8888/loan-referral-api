@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { McNotificationService } from './mc-notification.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { McNotificationService } from "./mc-notification.service";
 
-describe('McNotificationService', () => {
+describe("McNotificationService", () => {
   let service: McNotificationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [McNotificationService],
+      providers: [McNotificationService]
     }).compile();
 
     service = module.get<McNotificationService>(McNotificationService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 });

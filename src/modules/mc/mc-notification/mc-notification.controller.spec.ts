@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { McNotificationController } from './mc-notification.controller';
+import { Test, TestingModule } from "@nestjs/testing";
+import { McNotificationController } from "./mc-notification.controller";
 
-describe('McNotificationController', () => {
+describe("McNotificationController", () => {
   let controller: McNotificationController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [McNotificationController],
+      controllers: [McNotificationController]
     }).compile();
 
     controller = module.get<McNotificationController>(McNotificationController);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 });

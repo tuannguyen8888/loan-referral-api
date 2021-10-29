@@ -11,7 +11,7 @@ export class McCaseNoteResponseDto {
   id: number = null;
   appNumber: number = null;
   app_uid: string = null;
-  note_content:string = null;
+  note_content: string = null;
   note_date: string = null;
   usr_uid: string = null;
 
