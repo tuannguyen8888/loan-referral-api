@@ -75,6 +75,23 @@ export class McKiosService extends BaseService {
       console.error("call api getKios error : " + e);
       response = e.message;
     } finally {
+      let log = new SendDataLog();
+      log.apiUrl = "getKios";
+      log.data = JSON.stringify([
+        mc_api_config.getKios.url,
+        {},
+        {
+          auth: {
+            username: mc_api_config.getKios.username,
+            password: mc_api_config.getKios.password
+          }
+        }
+      ]);
+      log.result = JSON.stringify(response);
+      log.createdAt = new Date();
+      await this.connection
+        .getCustomRepository(SendDataLogRepository)
+        .save(log);
     }
     return response;
   }

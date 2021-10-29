@@ -13,14 +13,11 @@ import { Request } from "express";
 import { Logger } from "../../../common/loggers";
 import { RedisClient } from "../../../common/shared";
 import { RequestUtil } from "../../../common/utils";
-import { SendDataLogRepository } from "../../../repositories";
-import { In, IsNull, Like } from "typeorm";
+
 import * as moment from "moment";
 import { McLoanProfile, SendDataLog } from "../../../entities";
-import * as FormData from "form-data";
-import * as fs from "fs";
+
 import * as config from "config";
-import { ProcessDto } from "../../mafc/loan-profile/dto";
 
 import { McLoanProfileRepository } from "../../../repositories/mc/mc-loan-profile.repository";
 import { CheckInitContractRequestDto } from "./dto/check-init-contract.request.dto";
@@ -97,72 +94,8 @@ export class McLoanProfileService extends BaseService {
       "Check cic citizenID: " + citizenID + " customerName: " + customerName
     );
     let mcapi = new McapiUtil();
-
-    var response = await mcapi.login();
-    console.log(response.token);
+    var response = await mcapi.checkCIC(citizenID, customerName);
     return response;
-    // let mc_api_config = config.get("mc_api");
-    // let response: any;
-    // try {
-    //     //let url =mc_api_config.endpoint+"check-cic/check";
-    //     // response = await this.requestUtil.get(
-    //     //     url,
-    //     //     {
-    //     //         citizenID: citizenID,
-    //     //         customerName: customerName
-    //     //     },
-    //     //     {
-    //     //         auth: {
-    //     //             username: mc_api_config.checkCIC.username,
-    //     //             password: mc_api_config.checkCIC.password
-    //     //         }
-    //     //     }
-    //     // );
-    //     response = [
-    //         {
-    //             requestId: "1000",
-    //             identifier: citizenID,
-    //             customerName: customerName,
-    //             cicResult: "2",
-    //             description: "Đang có dư nợ, đang có nợ cần chú ý",
-    //             cicImageLink: "CICS37_CHECKCIC_123456789.PNG",
-    //             lastUpdateTime: "06-01-2020 11:31:26",
-    //             status: "SUCCESS",
-    //             numberOfRelationOrganize: "6"
-    //         }
-    //     ];
-    //     console.log(response);
-    //     if (response.success) {
-    //         response.statusCode = 200;
-    //     } else {
-    //         response.statusCode = 400;
-    //     }
-    // } catch (e) {
-    //     console.error("call api checkCIC error : " + e);
-    //     response = e.message;
-    // } finally {
-    //     let log = new SendDataLog();
-    //     log.apiUrl = "checkCIC";
-    //     log.data = JSON.stringify([
-    //         mc_api_config.checkCIC.url,
-    //         {
-    //             citizenID: citizenID,
-    //             customerName: customerName
-    //         },
-    //         {
-    //             auth: {
-    //                 username: mc_api_config.checkCIC.username,
-    //                 password: mc_api_config.checkCIC.password
-    //             }
-    //         }
-    //     ]);
-    //     log.result = JSON.stringify(response);
-    //     log.createdAt = new Date();
-    //     await this.connection
-    //         .getCustomRepository(SendDataLogRepository)
-    //         .save(log);
-    // }
-    // return response;
   }
 
   async checkCitizenId(citizenID) {
