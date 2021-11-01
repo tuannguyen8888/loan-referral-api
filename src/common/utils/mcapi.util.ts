@@ -61,7 +61,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
-                this.checkCIC(citizenId, customerName);
+                await this.checkCIC(citizenId, customerName);
             }
         }
         return response;
@@ -93,7 +93,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
-                this.checkCitizenId(citizenId);
+                await this.checkCitizenId(citizenId);
             }
         }
         return response;
@@ -122,7 +122,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
-                this.getKios();
+                await this.getKios();
             }
         }
         return response;
@@ -151,7 +151,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
-                this.getProducts();
+                await this.getProducts();
             }
         }
         return response;
@@ -184,7 +184,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
-                this.checkList(productCode, mobileTemResidence, loanAmount,shopCode);
+                await this.checkList(productCode, mobileTemResidence, loanAmount,shopCode);
             }
         }
         return response;
@@ -227,7 +227,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
-                this.checkInitContract(dto);
+                await this.checkInitContract(dto);
             }
         }
         return response;
@@ -346,7 +346,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
-                this.uploadDocument();
+                await this.uploadDocument();
             }
         }
         return response;
