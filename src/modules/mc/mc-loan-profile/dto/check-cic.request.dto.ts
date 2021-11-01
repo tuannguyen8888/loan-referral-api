@@ -11,7 +11,7 @@ import {
 
 export class CheckCICRequestDto {
   @IsNumberString()
-  citizenID: string;
+  citizenId: string;
 
   @IsString()
   customerName: string;

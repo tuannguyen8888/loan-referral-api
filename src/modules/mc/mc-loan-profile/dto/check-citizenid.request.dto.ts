@@ -11,5 +11,5 @@ import {
 
 export class CheckCitizenidRequestDto {
   @IsNumberString()
-  citizenID: string;
+  citizenId: string;
 }

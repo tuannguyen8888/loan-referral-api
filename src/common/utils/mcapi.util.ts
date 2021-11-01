@@ -29,7 +29,7 @@ export class McapiUtil {
         return result.data;
     }
 
-    async checkCIC(citizenID, customerName): Promise<any> {
+    async checkCIC(citizenId, customerName): Promise<any> {
         var axios = require("axios");
         let login = await this.login();
         let token = login.token;
@@ -37,8 +37,8 @@ export class McapiUtil {
         let mc_api_config = config.get("mc_api");
         let url =
             mc_api_config.endpoint +
-            "mobile-4sales/check-cic/check?citizenID=" +
-            citizenID +
+            "mobile-4sales/check-cic/check?citizenId=" +
+            citizenId +
             "&customerName=" +
             customerName;
         let headers = {

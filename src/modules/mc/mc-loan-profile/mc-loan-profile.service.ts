@@ -89,16 +89,16 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async checkCIC(citizenID, customerName) {
+  async checkCIC(citizenId, customerName) {
     console.log(
-      "Check cic citizenID: " + citizenID + " customerName: " + customerName
+      "Check cic citizenId: " + citizenId + " customerName: " + customerName
     );
     let mcapi = new McapiUtil();
-    var response = await mcapi.checkCIC(citizenID, customerName);
+    var response = await mcapi.checkCIC(citizenId, customerName);
     return response;
   }
 
-  async checkCitizenId(citizenID) {
+  async checkCitizenId(citizenId) {
     let mc_api_config = config.get("mc_api");
     let response: any;
     try {
@@ -106,7 +106,7 @@ export class McLoanProfileService extends BaseService {
       // response = await this.requestUtil.get(
       //     mc_api_config.checkCitizenId.url,
       //     {
-      //         citizenID: citizenID
+      //         citizenId: citizenId
       //     },
       //     {
       //         auth: {
@@ -140,7 +140,7 @@ export class McLoanProfileService extends BaseService {
       // response = await this.requestUtil.get(
       //     mc_api_config.checkInitContract.url,
       //     {
-      //         citizenID: citizenID
+      //         citizenId: citizenId
       //     },
       //     {
       //         auth: {
@@ -175,7 +175,7 @@ export class McLoanProfileService extends BaseService {
       // response = await this.requestUtil.get(
       //     mc_api_config.checkInitContract.url,
       //     {
-      //         citizenID: citizenID
+      //         citizenId: citizenId
       //     },
       //     {
       //         auth: {

@@ -60,14 +60,14 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "Kiểm tra thông tin CIC" })
   @HttpCode(200)
   checkCIC(@Headers() headers, @Body() dto: CheckCICRequestDto) {
-    return this.service.checkCIC(dto.citizenID, dto.customerName);
+    return this.service.checkCIC(dto.citizenId, dto.customerName);
   }
 
   @Post("/checkCitizenId")
   @ApiOperation({ summary: "Kiểm tra thông tin khách hàng" })
   @HttpCode(200)
   checkCitizenId(@Headers() headers, @Body() dto: CheckCitizenidRequestDto) {
-    return this.service.checkCitizenId(dto.citizenID);
+    return this.service.checkCitizenId(dto.citizenId);
   }
 
   @Post("/checkInitContract")
