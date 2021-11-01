@@ -98,7 +98,36 @@ export class McapiUtil {
         }
         return response;
     }
-
+    async checkCategory(companyTaxNumber): Promise<any> {
+        var axios = require("axios");
+        let token = await this.redisClient.get('token');
+        if (token == null) {
+            let login = await this.login();
+            token = login.token;
+        }
+        let response;
+        let mc_api_config = config.get("mc_api");
+        let url =
+            mc_api_config.endpoint +
+            "/mobile-4sales/check-cat?companyTaxNumber="+companyTaxNumber;
+        let headers = {
+            "Content-Type": "application/json",
+            "x-security": mc_api_config.security,
+            Authorization: "Bearer " + token
+        };
+        try {
+            let result = await axios.get(url, {
+                headers: headers
+            });
+            response = result.data;
+        } catch (e) {
+            response = e.response.data;
+            if (response.returnCode == '401') {
+                await this.checkCategory(companyTaxNumber);
+            }
+        }
+        return response;
+    }
     async getKios(): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
@@ -242,8 +271,9 @@ export class McapiUtil {
         }
         let response;
         let mc_api_config = config.get("mc_api");
-        let url = mc_api_config.endpoint + "mobile-4sales/check-init-contract";
+        let url = mc_api_config.endpoint + "mobile-4sales/upload-document";
         var fs = require('fs');
+        var FormData = require('form-data');
         var data = new FormData();
         var obj = JSON.stringify({
             "request": {
@@ -330,24 +360,20 @@ export class McapiUtil {
         });
         data.append('file', fs.createReadStream('/C:/Users/luthi/OneDrive/FinViet/MCredit/upload/upload1.zip'));
         data.append('object', obj);
-
-        console.log(data);
         let headers = {
             "Content-Type": "application/json",
             "x-security": mc_api_config.security,
             Authorization: "Bearer " + token
         };
-        console.log(headers);
+
         try {
             let result = await axios.post(url, data, {
                 headers: headers
             });
             response = result.data;
         } catch (e) {
-            response = e.response.data;
-            if (response.returnCode == '401') {
-                await this.uploadDocument();
-            }
+            response = e.response;
+            console.log(e);
         }
         return response;
     }

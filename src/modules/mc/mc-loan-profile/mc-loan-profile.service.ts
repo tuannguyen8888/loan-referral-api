@@ -118,41 +118,16 @@ export class McLoanProfileService extends BaseService {
         var response = await mcapi.checkList(dto.mobileSchemaProductCode,dto.mobileTemResidence,dto.loanAmountAfterInsurrance,dto.shopCode);
         return response;
     }
-
-    async getCategory(companyTaxNumber) {
-        let mc_api_config = config.get("mc_api");
-        let response: any;
-        try {
-            // response = await this.requestUtil.get(
-            //     mc_api_config.getCategory.url,
-            //     {
-            //         companyTaxNumber: companyTaxNumber
-            //     },
-            //     {
-            //         auth: {
-            //             username: mc_api_config.getCategory.username,
-            //             password: mc_api_config.getCategory.password
-            //         }
-            //     }
-            // );
-            response = {
-                compName: "CÔNG TY TNHH EB CẦN THƠ",
-                catType: "CAT B",
-                compAddrStreet:
-                    "LÔ SỐ 1, KDC HƯNG PHÚ 1, PHƯỜNG HƯNG PHÚ, QUẬN CÁI RĂNG, TP CẦN THƠ",
-                officeNumber: "",
-                companyTaxNumber: companyTaxNumber
-            };
-            if (response.success) {
-                response.statusCode = 200;
-            } else {
-                response.statusCode = 400;
-            }
-        } catch (e) {
-            console.error("call api check_customer_info error : " + e);
-            response = e.message;
-        } finally {
-        }
+    async uploadDocument() {
+        console.log("uploadDocument");
+        let mcapi = new McapiUtil(this.redisClient);
+        var response = await mcapi.uploadDocument();
+        return response;
+    }
+    async checkCategory(companyTaxNumber) {
+        console.log("getCategory");
+        let mcapi = new McapiUtil(this.redisClient);
+        var response = await mcapi.checkCategory(companyTaxNumber);
         return response;
     }
 
