@@ -61,6 +61,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
+                await this.login();
                 await this.checkCIC(citizenId, customerName);
             }
         }
@@ -93,6 +94,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
+                await this.login();
                 await this.checkCitizenId(citizenId);
             }
         }
@@ -123,6 +125,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
+                await this.login();
                 await this.checkCategory(companyTaxNumber);
             }
         }
@@ -151,6 +154,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
+                await this.login();
                 await this.getKios();
             }
         }
@@ -180,6 +184,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
+                await this.login();
                 await this.getProducts();
             }
         }
@@ -213,6 +218,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
+                await this.login();
                 await this.checkList(productCode, mobileTemResidence, loanAmount,shopCode);
             }
         }
@@ -256,6 +262,7 @@ export class McapiUtil {
         } catch (e) {
             response = e.response.data;
             if (response.returnCode == '401') {
+                await this.login();
                 await this.checkInitContract(dto);
             }
         }
