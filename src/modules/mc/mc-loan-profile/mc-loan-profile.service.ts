@@ -119,7 +119,7 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
     async uploadDocument() {
-        console.log("uploadDocument");
+        console.log("uploadDocument service");
         let mcapi = new McapiUtil(this.redisClient);
         var response = await mcapi.uploadDocument();
         return response;
