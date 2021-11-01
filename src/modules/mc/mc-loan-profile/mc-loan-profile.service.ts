@@ -106,37 +106,9 @@ export class McLoanProfileService extends BaseService {
     }
 
     async checkInitContract(dto: CheckInitContractRequestDto) {
-        let mc_api_config = config.get("mc_api");
-        let response: any;
-        try {
-            // response = await this.requestUtil.get(
-            //     mc_api_config.checkInitContract.url,
-            //     {
-            //         citizenId: citizenId
-            //     },
-            //     {
-            //         auth: {
-            //             username: mc_api_config.checkInitContract.username,
-            //             password: mc_api_config.checkInitContract.password
-            //         }
-            //     }
-            // );
-            response = {
-                returnCode: "200",
-                returnMes:
-                    '[{"outputType":"RED","outputValue":"Dự tính KH có PTI ở mức rủi ro cao, không phù hợp khoản vay\\nĐề nghị giảm Số tiền vay hoặc tăng kỳ hạn vay "},{"outputType":"RED","outputValue":"Dự tính KH có DTI ở mức rủi ro cao, không phù hợp khoản vay\\nĐề nghị giảm Số tiền vay hoặc tăng kỳ hạn vay"}]'
-            };
-            response.statusCode = 200;
-            // if (response.success) {
-            //     response.statusCode = 200;
-            // } else {
-            //     response.statusCode = 400;
-            // }
-        } catch (e) {
-            console.error("call api checkInitContract error : " + e);
-            response = e.message;
-        } finally {
-        }
+        console.log("checkInitContract");
+        let mcapi = new McapiUtil();
+        var response = await mcapi.checkInitContract(dto);
         return response;
     }
 

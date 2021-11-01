@@ -138,25 +138,26 @@ export class McapiUtil {
         let url = mc_api_config.endpoint + "mobile-4sales/check-init-contract";
         var data = JSON.stringify({
             "productId": dto.productId,
-            "customerName": "Lư Thiết Hồ",
-            "citizenId": "079082013285",
-            "loanAmount": 20000000,
-            "loanTenor": 12,
-            "customerIncome": 10000000,
-            "dateOfBirth": "01/10/1990",
-            "gender": "M",
-            "issuePlace": "",
-            "hasInsurance": 1
+            "customerName": dto.customerName,
+            "citizenId": dto.citizenId,
+            "loanAmount": dto.loanAmount,
+            "loanTenor": dto.loanTenor,
+            "customerIncome": dto.customerIncome,
+            "dateOfBirth": dto.dateOfBirth,
+            "gender": dto.gender,
+            "issuePlace": dto.issuePlace,
+            "hasInsurance": dto.hasInsurance
         });
+        console.log(data);
         let headers = {
             "Content-Type": "application/json",
             "x-security": mc_api_config.security,
             Authorization: "Bearer " + token
         };
+        console.log(headers);
         try {
-            let result = await axios.post(url, {
-                headers: headers,
-                data : data
+            let result = await axios.post(url, data,{
+                headers:headers
             });
             response = result.data;
         } catch (e) {
