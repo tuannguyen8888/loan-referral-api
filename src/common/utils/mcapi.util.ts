@@ -129,6 +129,28 @@ export class McapiUtil {
         }
         return response;
     }
+    async checkList(): Promise<any> {
+        var axios = require("axios");
+        let login = await this.login();
+        let token = login.token;
+        let response;
+        let mc_api_config = config.get("mc_api");
+        let url = mc_api_config.endpoint + "mobile-4sales/products";
+        let headers = {
+            "Content-Type": "application/json",
+            "x-security": mc_api_config.security,
+            Authorization: "Bearer " + token
+        };
+        try {
+            let result = await axios.get(url, {
+                headers: headers
+            });
+            response = result.data;
+        } catch (e) {
+            response = e.response.data;
+        }
+        return response;
+    }
     async checkInitContract(dto: CheckInitContractRequestDto): Promise<any> {
         var axios = require("axios");
         let login = await this.login();
@@ -148,6 +170,118 @@ export class McapiUtil {
             "issuePlace": dto.issuePlace,
             "hasInsurance": dto.hasInsurance
         });
+        console.log(data);
+        let headers = {
+            "Content-Type": "application/json",
+            "x-security": mc_api_config.security,
+            Authorization: "Bearer " + token
+        };
+        console.log(headers);
+        try {
+            let result = await axios.post(url, data,{
+                headers:headers
+            });
+            response = result.data;
+        } catch (e) {
+            response = e.response.data;
+        }
+        return response;
+    }
+    async uploadDocument(): Promise<any> {
+        var axios = require("axios");
+        let login = await this.login();
+        let token = login.token;
+        let response;
+        let mc_api_config = config.get("mc_api");
+        let url = mc_api_config.endpoint + "mobile-4sales/check-init-contract";
+        var fs = require('fs');
+        var data = new FormData();
+        var obj = JSON.stringify({
+            "request": {
+                "id": "",
+                "saleCode": "RD014100001",
+                "customerName": "Lư Thiết Hồ",
+                "productId": 3214,
+                "citizenId": "079082013285",
+                "tempResidence": 1,
+                "loanAmount": 20000000,
+                "loanTenor": 12,
+                "hasInsurance": 1,
+                "issuePlace": "54 Nguyễn Chí Thanh,Láng Thượng, Đống Đa, Hà Nội",
+                "shopCode": "KIK280001",
+                "companyTaxNumber": 432432343242,
+                "hasCourier": "0"
+            },
+            "mobileProductType": "Cash Loan",
+            "mobileIssueDateCitizen": "15/12/2008",
+            "appStatus": 1,
+            "md5": "db8d77f46bb8e309fff7bb17e0cc5dd4",
+            "info": [
+                {
+                    "fileName": "1.jpg",
+                    "documentCode": "CivicIdentity",
+                    "mimeType": "jpg",
+                    "groupId": 22
+                },
+                {
+                    "fileName": "2.jpg",
+                    "documentCode": "DOC_salarySuspension",
+                    "mimeType": "jpg",
+                    "groupId": 139
+                },
+                {
+                    "fileName": "3.jpg",
+                    "documentCode": "FamilyBook",
+                    "mimeType": "jpg",
+                    "groupId": 19
+                },
+                {
+                    "fileName": "4.jpg",
+                    "documentCode": "FacePhoto",
+                    "mimeType": "jpg",
+                    "groupId": 26
+                },
+                {
+                    "fileName": "5.jpg",
+                    "documentCode": "TemporaryResidenceConfirmation",
+                    "mimeType": "jpg",
+                    "groupId": 23
+                },
+                {
+                    "fileName": "6.jpg",
+                    "documentCode": "HomeOwnershipCertification",
+                    "mimeType": "jpg",
+                    "groupId": 25
+                },
+                {
+                    "fileName": "7.jpg",
+                    "documentCode": "InternetBill",
+                    "mimeType": "jpg",
+                    "groupId": 24
+                },
+                {
+                    "fileName": "8.jpg",
+                    "documentCode": "StatementPaymentAccount",
+                    "mimeType": "jpg",
+                    "groupId": 30
+                },
+                {
+                    "fileName": "9.jpg",
+                    "documentCode": "CustomerInformationSheet",
+                    "mimeType": "jpg",
+                    "groupId": 34
+                },
+                {
+                    "fileName": "10.jpg",
+                    "documentCode": "BirthCertificate",
+                    "mimeType": "jpg",
+                    "groupId": 37
+                }
+            ]
+        });
+        data.append('file', fs.createReadStream('/C:/Users/luthi/OneDrive/FinViet/MCredit/upload/upload1.zip'));
+        data.append('object', obj);
+
         console.log(data);
         let headers = {
             "Content-Type": "application/json",
