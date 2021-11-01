@@ -62,7 +62,7 @@ export class McapiUtil {
             response = e.response.data;
             if (response.returnCode == '401') {
                 await this.login();
-                await this.checkCIC(citizenId, customerName);
+                return await this.checkCIC(citizenId, customerName);
             }
         }
         return response;
@@ -95,11 +95,12 @@ export class McapiUtil {
             response = e.response.data;
             if (response.returnCode == '401') {
                 await this.login();
-                await this.checkCitizenId(citizenId);
+                return await this.checkCitizenId(citizenId);
             }
         }
         return response;
     }
+
     async checkCategory(companyTaxNumber): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
@@ -111,7 +112,7 @@ export class McapiUtil {
         let mc_api_config = config.get("mc_api");
         let url =
             mc_api_config.endpoint +
-            "/mobile-4sales/check-cat?companyTaxNumber="+companyTaxNumber;
+            "/mobile-4sales/check-cat?companyTaxNumber=" + companyTaxNumber;
         let headers = {
             "Content-Type": "application/json",
             "x-security": mc_api_config.security,
@@ -131,6 +132,7 @@ export class McapiUtil {
         }
         return response;
     }
+
     async getKios(): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
@@ -155,7 +157,7 @@ export class McapiUtil {
             response = e.response.data;
             if (response.returnCode == '401') {
                 await this.login();
-                await this.getKios();
+                return await this.getKios();
             }
         }
         return response;
@@ -185,13 +187,13 @@ export class McapiUtil {
             response = e.response.data;
             if (response.returnCode == '401') {
                 await this.login();
-                await this.getProducts();
+                return await this.getProducts();
             }
         }
         return response;
     }
 
-    async checkList(productCode, mobileTemResidence, loanAmount,shopCode): Promise<any> {
+    async checkList(productCode, mobileTemResidence, loanAmount, shopCode): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
         if (token == null) {
@@ -219,7 +221,7 @@ export class McapiUtil {
             response = e.response.data;
             if (response.returnCode == '401') {
                 await this.login();
-                await this.checkList(productCode, mobileTemResidence, loanAmount,shopCode);
+                await this.checkList(productCode, mobileTemResidence, loanAmount, shopCode);
             }
         }
         return response;
@@ -270,118 +272,36 @@ export class McapiUtil {
     }
 
     async uploadDocument(): Promise<any> {
-        var axios = require("axios");
-        let token = await this.redisClient.get('token');
-        if (token == null) {
-            let login = await this.login();
-            token = login.token;
-        }
-        let response;
-        let mc_api_config = config.get("mc_api");
-        let url = mc_api_config.endpoint + "mobile-4sales/upload-document";
-        var fs = require('fs');
+        let login = await this.login();
+        let token = login.token;
+        console.log(token);
+        var axios = require('axios');
         var FormData = require('form-data');
+        var fs = require('fs');
         var data = new FormData();
-        var obj = JSON.stringify({
-            "request": {
-                "id": "",
-                "saleCode": "RD014100001",
-                "customerName": "Lư Thiết Hồ",
-                "productId": 3214,
-                "citizenId": "079082013285",
-                "tempResidence": 1,
-                "loanAmount": 20000000,
-                "loanTenor": 12,
-                "hasInsurance": 1,
-                "issuePlace": "54 Nguyễn Chí Thanh,Láng Thượng, Đống Đa, Hà Nội",
-                "shopCode": "KIK280001",
-                "companyTaxNumber": 432432343242,
-                "hasCourier": "0"
+        data.append('file', fs.createReadStream('/C:/Users/ho.lu/OneDrive/FinViet/MCredit/upload/upload1.zip'));
+        data.append('object', '{\n    "request": {\n        "id": "",\n        "saleCode": "RD014100001",\n        "customerName": "Lư Thiết Hồ",\n        "productId": 3214,\n        "citizenId": "079082013285",\n        "tempResidence": 1,\n        "loanAmount": 20000000,\n        "loanTenor": 12,\n        "hasInsurance": 1,\n        "issuePlace": "54 Nguyễn Chí Thanh,Láng Thượng, Đống Đa, Hà Nội",\n        "shopCode": "KIK280001",\n        "companyTaxNumber": 432432343242,\n        "hasCourier": "0"\n    },\n    "mobileProductType": "Cash Loan",\n    "mobileIssueDateCitizen": "15/12/2008",\n    "appStatus": 1,\n    "md5": "db8d77f46bb8e309fff7bb17e0cc5dd4",\n    "info": [\n        {\n            "fileName": "1.jpg",\n            "documentCode": "CivicIdentity",\n            "mimeType": "jpg",\n            "groupId": 22\n        },\n        {\n            "fileName": "2.jpg",\n            "documentCode": "DOC_salarySuspension",\n            "mimeType": "jpg",\n            "groupId": 139\n        },\n        {\n            "fileName": "3.jpg",\n            "documentCode": "FamilyBook",\n            "mimeType": "jpg",\n            "groupId": 19\n        },\n        {\n            "fileName": "4.jpg",\n            "documentCode": "FacePhoto",\n            "mimeType": "jpg",\n            "groupId": 26\n        },\n        {\n            "fileName": "5.jpg",\n            "documentCode": "TemporaryResidenceConfirmation",\n            "mimeType": "jpg",\n            "groupId": 23\n        },\n        {\n            "fileName": "6.jpg",\n            "documentCode": "HomeOwnershipCertification",\n            "mimeType": "jpg",\n            "groupId": 25\n        },\n        {\n            "fileName": "7.jpg",\n            "documentCode": "InternetBill",\n            "mimeType": "jpg",\n            "groupId": 24\n        },\n        {\n            "fileName": "8.jpg",\n            "documentCode": "StatementPaymentAccount",\n            "mimeType": "jpg",\n            "groupId": 30\n        },\n        {\n            "fileName": "9.jpg",\n            "documentCode": "CustomerInformationSheet",\n            "mimeType": "jpg",\n            "groupId": 34\n        },\n        {\n            "fileName": "10.jpg",\n            "documentCode": "BirthCertificate",\n            "mimeType": "jpg",\n            "groupId": 37\n        }\n    ]\n}');
+
+        var config = {
+            method: 'post',
+            url: 'https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/upload-document',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'x-security': 'FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d',
+                'Authorization': 'Bearer '+token,
+                ...data.getHeaders()
             },
-            "mobileProductType": "Cash Loan",
-            "mobileIssueDateCitizen": "15/12/2008",
-            "appStatus": 1,
-            "md5": "db8d77f46bb8e309fff7bb17e0cc5dd4",
-            "info": [
-                {
-                    "fileName": "1.jpg",
-                    "documentCode": "CivicIdentity",
-                    "mimeType": "jpg",
-                    "groupId": 22
-                },
-                {
-                    "fileName": "2.jpg",
-                    "documentCode": "DOC_salarySuspension",
-                    "mimeType": "jpg",
-                    "groupId": 139
-                },
-                {
-                    "fileName": "3.jpg",
-                    "documentCode": "FamilyBook",
-                    "mimeType": "jpg",
-                    "groupId": 19
-                },
-                {
-                    "fileName": "4.jpg",
-                    "documentCode": "FacePhoto",
-                    "mimeType": "jpg",
-                    "groupId": 26
-                },
-                {
-                    "fileName": "5.jpg",
-                    "documentCode": "TemporaryResidenceConfirmation",
-                    "mimeType": "jpg",
-                    "groupId": 23
-                },
-                {
-                    "fileName": "6.jpg",
-                    "documentCode": "HomeOwnershipCertification",
-                    "mimeType": "jpg",
-                    "groupId": 25
-                },
-                {
-                    "fileName": "7.jpg",
-                    "documentCode": "InternetBill",
-                    "mimeType": "jpg",
-                    "groupId": 24
-                },
-                {
-                    "fileName": "8.jpg",
-                    "documentCode": "StatementPaymentAccount",
-                    "mimeType": "jpg",
-                    "groupId": 30
-                },
-                {
-                    "fileName": "9.jpg",
-                    "documentCode": "CustomerInformationSheet",
-                    "mimeType": "jpg",
-                    "groupId": 34
-                },
-                {
-                    "fileName": "10.jpg",
-                    "documentCode": "BirthCertificate",
-                    "mimeType": "jpg",
-                    "groupId": 37
-                }
-            ]
-        });
-        data.append('file', fs.createReadStream('/C:/Users/luthi/OneDrive/FinViet/MCredit/upload/upload1.zip'));
-        data.append('object', obj);
-        let headers = {
-            "Content-Type": "application/json",
-            "x-security": mc_api_config.security,
-            Authorization: "Bearer " + token
+            data : data
         };
 
-        try {
-            let result = await axios.post(url, data, {
-                headers: headers
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
             });
-            response = result.data;
-        } catch (e) {
-            response = e.response;
-            console.log(e);
-        }
-        return response;
+
+
     }
 }
