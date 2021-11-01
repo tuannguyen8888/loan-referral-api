@@ -36,7 +36,7 @@ export class McapiUtil {
     async checkCIC(citizenId, customerName): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
-        if(token == null){
+        if (token == null) {
             let login = await this.login();
             token = login.token;
         }
@@ -60,8 +60,8 @@ export class McapiUtil {
             response = result.data[0];
         } catch (e) {
             response = e.response.data;
-            if(response.returnCode == '401'){
-                this.checkCIC(citizenId,customerName);
+            if (response.returnCode == '401') {
+                this.checkCIC(citizenId, customerName);
             }
         }
         return response;
@@ -70,7 +70,7 @@ export class McapiUtil {
     async checkCitizenId(citizenId): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
-        if(token == null){
+        if (token == null) {
             let login = await this.login();
             token = login.token;
         }
@@ -92,7 +92,7 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
-            if(response.returnCode == '401'){
+            if (response.returnCode == '401') {
                 this.checkCitizenId(citizenId);
             }
         }
@@ -102,7 +102,7 @@ export class McapiUtil {
     async getKios(): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
-        if(token == null){
+        if (token == null) {
             let login = await this.login();
             token = login.token;
         }
@@ -121,7 +121,7 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
-            if(response.returnCode == '401'){
+            if (response.returnCode == '401') {
                 this.getKios();
             }
         }
@@ -131,7 +131,7 @@ export class McapiUtil {
     async getProducts(): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
-        if(token == null){
+        if (token == null) {
             let login = await this.login();
             token = login.token;
         }
@@ -150,25 +150,27 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
-            if(response.returnCode == '401'){
+            if (response.returnCode == '401') {
                 this.getProducts();
             }
         }
         return response;
     }
-    async checkList(productCode,mobileTemResidence,loanAmount): Promise<any> {
+
+    async checkList(productCode, mobileTemResidence, loanAmount,shopCode): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
-        if(token == null){
+        if (token == null) {
             let login = await this.login();
             token = login.token;
         }
         let response;
         let mc_api_config = config.get("mc_api");
         let url = mc_api_config.endpoint + "mobile-4sales/check-list?" +
-            "mobileSchemaProductCode=" + productCode+
-            "&mobileTemResidence=" + mobileTemResidence
-            "&loanAmountAfterInsurrance="+loanAmount;
+            "mobileSchemaProductCode=" + productCode +
+            "&mobileTemResidence=" + mobileTemResidence +
+            "&shopCode=" + shopCode +
+            "&loanAmountAfterInsurrance=" + loanAmount;
         let headers = {
             "Content-Type": "application/json",
             "x-security": mc_api_config.security,
@@ -181,16 +183,17 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
-            if(response.returnCode == '401'){
-                this.checkList(productCode,mobileTemResidence,loanAmount);
+            if (response.returnCode == '401') {
+                this.checkList(productCode, mobileTemResidence, loanAmount,shopCode);
             }
         }
         return response;
     }
+
     async checkInitContract(dto: CheckInitContractRequestDto): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
-        if(token == null){
+        if (token == null) {
             let login = await this.login();
             token = login.token;
         }
@@ -217,22 +220,23 @@ export class McapiUtil {
         };
         console.log(headers);
         try {
-            let result = await axios.post(url, data,{
-                headers:headers
+            let result = await axios.post(url, data, {
+                headers: headers
             });
             response = result.data;
         } catch (e) {
             response = e.response.data;
-            if(response.returnCode == '401'){
+            if (response.returnCode == '401') {
                 this.checkInitContract(dto);
             }
         }
         return response;
     }
+
     async uploadDocument(): Promise<any> {
         var axios = require("axios");
         let token = await this.redisClient.get('token');
-        if(token == null){
+        if (token == null) {
             let login = await this.login();
             token = login.token;
         }
@@ -335,13 +339,13 @@ export class McapiUtil {
         };
         console.log(headers);
         try {
-            let result = await axios.post(url, data,{
-                headers:headers
+            let result = await axios.post(url, data, {
+                headers: headers
             });
             response = result.data;
         } catch (e) {
             response = e.response.data;
-            if(response.returnCode == '401'){
+            if (response.returnCode == '401') {
                 this.uploadDocument();
             }
         }
