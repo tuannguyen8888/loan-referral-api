@@ -93,21 +93,21 @@ export class McLoanProfileService extends BaseService {
         console.log(
             "Check cic citizenId: " + citizenId + " customerName: " + customerName
         );
-        let mcapi = new McapiUtil();
+        let mcapi = new McapiUtil(this.redisClient);
         var response = await mcapi.checkCIC(citizenId, customerName);
         return response;
     }
 
     async checkCitizenId(citizenId) {
         console.log("Check cic citizenId: " + citizenId + " customerName: ");
-        let mcapi = new McapiUtil();
+        let mcapi = new McapiUtil(this.redisClient);
         var response = await mcapi.checkCitizenId(citizenId);
         return response;
     }
 
     async checkInitContract(dto: CheckInitContractRequestDto) {
         console.log("checkInitContract");
-        let mcapi = new McapiUtil();
+        let mcapi = new McapiUtil(this.redisClient);
         var response = await mcapi.checkInitContract(dto);
         return response;
     }

@@ -1,10 +1,12 @@
 import {Injectable} from "@nestjs/common";
 import * as config from "config";
 import {CheckInitContractRequestDto} from "../../modules/mc/mc-loan-profile/dto/check-init-contract.request.dto";
+import {RedisClient} from "../shared";
 
 @Injectable()
 export class McapiUtil {
-    constructor() {
+    constructor(protected readonly redisClient: RedisClient) {
+
     }
 
     async login(): Promise<any> {
@@ -27,13 +29,17 @@ export class McapiUtil {
             headers: headers
         });
         //console.log(result.data);
+        await this.redisClient.set('token', result.data.token);
         return result.data;
     }
 
     async checkCIC(citizenId, customerName): Promise<any> {
         var axios = require("axios");
-        let login = await this.login();
-        let token = login.token;
+        let token = await this.redisClient.get('token');
+        if(token == null){
+            let login = await this.login();
+            token = login.token;
+        }
         let response;
         let mc_api_config = config.get("mc_api");
         let url =
@@ -54,14 +60,20 @@ export class McapiUtil {
             response = result.data[0];
         } catch (e) {
             response = e.response.data;
+            if(response.returnCode == '401'){
+                this.checkCIC(citizenId,customerName);
+            }
         }
         return response;
     }
 
     async checkCitizenId(citizenId): Promise<any> {
         var axios = require("axios");
-        let login = await this.login();
-        let token = login.token;
+        let token = await this.redisClient.get('token');
+        if(token == null){
+            let login = await this.login();
+            token = login.token;
+        }
         let response;
         let mc_api_config = config.get("mc_api");
         let url =
@@ -80,14 +92,20 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
+            if(response.returnCode == '401'){
+                this.checkCitizenId(citizenId);
+            }
         }
         return response;
     }
 
     async getKios(): Promise<any> {
         var axios = require("axios");
-        let login = await this.login();
-        let token = login.token;
+        let token = await this.redisClient.get('token');
+        if(token == null){
+            let login = await this.login();
+            token = login.token;
+        }
         let response;
         let mc_api_config = config.get("mc_api");
         let url = mc_api_config.endpoint + "mobile-4sales/kiosks";
@@ -103,14 +121,20 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
+            if(response.returnCode == '401'){
+                this.getKios();
+            }
         }
         return response;
     }
 
     async getProducts(): Promise<any> {
         var axios = require("axios");
-        let login = await this.login();
-        let token = login.token;
+        let token = await this.redisClient.get('token');
+        if(token == null){
+            let login = await this.login();
+            token = login.token;
+        }
         let response;
         let mc_api_config = config.get("mc_api");
         let url = mc_api_config.endpoint + "mobile-4sales/products";
@@ -126,16 +150,25 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
+            if(response.returnCode == '401'){
+                this.getProducts();
+            }
         }
         return response;
     }
-    async checkList(): Promise<any> {
+    async checkList(productCode,mobileTemResidence,loanAmount): Promise<any> {
         var axios = require("axios");
-        let login = await this.login();
-        let token = login.token;
+        let token = await this.redisClient.get('token');
+        if(token == null){
+            let login = await this.login();
+            token = login.token;
+        }
         let response;
         let mc_api_config = config.get("mc_api");
-        let url = mc_api_config.endpoint + "mobile-4sales/products";
+        let url = mc_api_config.endpoint + "mobile-4sales/check-list?" +
+            "mobileSchemaProductCode=" + productCode+
+            "&mobileTemResidence=" + mobileTemResidence
+            "&loanAmountAfterInsurrance="+loanAmount;
         let headers = {
             "Content-Type": "application/json",
             "x-security": mc_api_config.security,
@@ -148,13 +181,19 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
+            if(response.returnCode == '401'){
+                this.checkList(productCode,mobileTemResidence,loanAmount);
+            }
         }
         return response;
     }
     async checkInitContract(dto: CheckInitContractRequestDto): Promise<any> {
         var axios = require("axios");
-        let login = await this.login();
-        let token = login.token;
+        let token = await this.redisClient.get('token');
+        if(token == null){
+            let login = await this.login();
+            token = login.token;
+        }
         let response;
         let mc_api_config = config.get("mc_api");
         let url = mc_api_config.endpoint + "mobile-4sales/check-init-contract";
@@ -184,13 +223,19 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
+            if(response.returnCode == '401'){
+                this.checkInitContract(dto);
+            }
         }
         return response;
     }
     async uploadDocument(): Promise<any> {
         var axios = require("axios");
-        let login = await this.login();
-        let token = login.token;
+        let token = await this.redisClient.get('token');
+        if(token == null){
+            let login = await this.login();
+            token = login.token;
+        }
         let response;
         let mc_api_config = config.get("mc_api");
         let url = mc_api_config.endpoint + "mobile-4sales/check-init-contract";
@@ -296,6 +341,9 @@ export class McapiUtil {
             response = result.data;
         } catch (e) {
             response = e.response.data;
+            if(response.returnCode == '401'){
+                this.uploadDocument();
+            }
         }
         return response;
     }

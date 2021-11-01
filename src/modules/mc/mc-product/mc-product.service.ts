@@ -45,7 +45,7 @@ export class McProductService extends BaseService {
 
   async getProducts() {
     console.log("Get Products");
-    let mcapi = new McapiUtil();
+    let mcapi = new McapiUtil(this.redisClient);
     var response = await mcapi.getProducts();
     return response;
   }
