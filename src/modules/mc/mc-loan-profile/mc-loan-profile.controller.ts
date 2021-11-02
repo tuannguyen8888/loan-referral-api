@@ -87,13 +87,15 @@ export class McLoanProfileController {
     checkList(@Headers() headers, @Body() dto: McCheckListrequestDto) {
         return this.service.checkList(dto);
     }
+
     @Post("/uploadDocument")
     @ApiOperation({summary: "uploadDocument"})
     @HttpCode(200)
     uploadDocument(@Headers() headers) {
-        console.log('uploadDocument');
+        console.log("uploadDocument");
         return this.service.uploadDocument();
     }
+
     @Get("/checkCategory/:companyTaxNumber")
     @ApiOperation({summary: "Kiểm tra thông tin công ty"})
     checkCategory(

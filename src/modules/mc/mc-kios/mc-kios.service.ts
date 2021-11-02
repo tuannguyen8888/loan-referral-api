@@ -1,5 +1,5 @@
-import { BadRequestException, Inject, Injectable, Scope } from "@nestjs/common";
-import { In, IsNull, Like } from "typeorm";
+import {BadRequestException, HttpService, Inject, Injectable, Scope} from "@nestjs/common";
+import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
 import {
   Address,
@@ -32,17 +32,18 @@ import { McapiUtil } from "../../../common/utils/mcapi.util";
 @Injectable()
 export class McKiosService extends BaseService {
   constructor(
-    @Inject(REQUEST) protected request: Request,
-    protected readonly logger: Logger,
-    protected readonly redisClient: RedisClient,
-    private readonly requestUtil: RequestUtil
+      @Inject(REQUEST) protected request: Request,
+      protected readonly logger: Logger,
+      protected readonly redisClient: RedisClient,
+      private readonly requestUtil: RequestUtil,
+      @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
   }
 
   async getKios() {
     console.log("Get Kios");
-    let mcapi = new McapiUtil(this.redisClient);
+    let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.getKios();
     return response;
   }
