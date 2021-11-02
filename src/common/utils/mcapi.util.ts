@@ -280,8 +280,91 @@ export class McapiUtil {
         var fs = require('fs');
         var data = new FormData();
         //data.append('file', fs.createReadStream('C:/Users/ho.lu/OneDrive/FinViet/MCredit/upload/upload1.zip'));
+        var obj = '{' +
+            '    "request": {' +
+            '        "id": "",' +
+            '        "saleCode": "RD014100001",' +
+            '        "customerName": "Lư Thiết Hồ",' +
+            '        "productId": 3214,' +
+            '        "citizenId": "079082013285",' +
+            '        "tempResidence": 1,' +
+            '        "loanAmount": 20000000,' +
+            '        "loanTenor": 12,' +
+            '        "hasInsurance": 1,' +
+            '        "issuePlace": "54 Nguyễn Chí Thanh,Láng Thượng, Đống Đa, Hà Nội",' +
+            '        "shopCode": "KIK280001",' +
+            '        "companyTaxNumber": 432432343242,' +
+            '        "hasCourier": "0"' +
+            '    },' +
+            '    "mobileProductType": "Cash Loan",' +
+            '    "mobileIssueDateCitizen": "15/12/2008",' +
+            '    "appStatus": 1,' +
+            '    "md5": "db8d77f46bb8e309fff7bb17e0cc5dd4",' +
+            '    "info": [' +
+            '        {' +
+            '            "fileName": "1.jpg",' +
+            '            "documentCode": "CivicIdentity",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 22' +
+            '        },' +
+            '        {' +
+            '            "fileName": "2.jpg",' +
+            '            "documentCode": "DOC_salarySuspension",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 139' +
+            '        },' +
+            '        {' +
+            '            "fileName": "3.jpg",' +
+            '            "documentCode": "FamilyBook",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 19' +
+            '        },' +
+            '        {' +
+            '            "fileName": "4.jpg",' +
+            '            "documentCode": "FacePhoto",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 26' +
+            '        },' +
+            '        {' +
+            '            "fileName": "5.jpg",' +
+            '            "documentCode": "TemporaryResidenceConfirmation",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 23' +
+            '        },' +
+            '        {' +
+            '            "fileName": "6.jpg",' +
+            '            "documentCode": "HomeOwnershipCertification",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 25' +
+            '        },' +
+            '        {' +
+            '            "fileName": "7.jpg",' +
+            '            "documentCode": "InternetBill",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 24' +
+            '        },' +
+            '        {' +
+            '            "fileName": "8.jpg",' +
+            '            "documentCode": "StatementPaymentAccount",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 30' +
+            '        },' +
+            '        {' +
+            '            "fileName": "9.jpg",' +
+            '            "documentCode": "CustomerInformationSheet",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 34' +
+            '        },' +
+            '        {' +
+            '            "fileName": "10.jpg",' +
+            '            "documentCode": "BirthCertificate",' +
+            '            "mimeType": "jpg",' +
+            '            "groupId": 37' +
+            '        }' +
+            '    ]' +
+            '}'
         data.append('file', '');
-        data.append('object', '{    "request": {        "id": "",        "saleCode": "RD014100001",        "customerName": "Lư Thiết Hồ",        "productId": 3214,        "citizenId": "079082013285",        "tempResidence": 1,        "loanAmount": 20000000,        "loanTenor": 12,        "hasInsurance": 1,        "issuePlace": "54 Nguyễn Chí Thanh,Láng Thượng, Đống Đa, Hà Nội",        "shopCode": "KIK280001",        "companyTaxNumber": 432432343242,        "hasCourier": "0"    },    "mobileProductType": "Cash Loan",    "mobileIssueDateCitizen": "15/12/2008",    "appStatus": 1,    "md5": "db8d77f46bb8e309fff7bb17e0cc5dd4",    "info": [        {            "fileName": "1.jpg",            "documentCode": "CivicIdentity",            "mimeType": "jpg",            "groupId": 22        },        {            "fileName": "2.jpg",            "documentCode": "DOC_salarySuspension",            "mimeType": "jpg",            "groupId": 139        },        {            "fileName": "3.jpg",            "documentCode": "FamilyBook",            "mimeType": "jpg",            "groupId": 19        },        {            "fileName": "4.jpg",            "documentCode": "FacePhoto",            "mimeType": "jpg",            "groupId": 26        },        {            "fileName": "5.jpg",            "documentCode": "TemporaryResidenceConfirmation",            "mimeType": "jpg",            "groupId": 23        },        {            "fileName": "6.jpg",            "documentCode": "HomeOwnershipCertification",            "mimeType": "jpg",            "groupId": 25        },        {            "fileName": "7.jpg",            "documentCode": "InternetBill",            "mimeType": "jpg",            "groupId": 24        },        {            "fileName": "8.jpg",            "documentCode": "StatementPaymentAccount",            "mimeType": "jpg",            "groupId": 30        },        {            "fileName": "9.jpg",            "documentCode": "CustomerInformationSheet",            "mimeType": "jpg",            "groupId": 34        },        {            "fileName": "10.jpg",            "documentCode": "BirthCertificate",            "mimeType": "jpg",            "groupId": 37        }    ]}');
+        data.append('object', JSON.stringify(obj));
         //console.log(data);
         var config = {
             method: 'post',
@@ -289,8 +372,7 @@ export class McapiUtil {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'x-security': 'FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d',
-                'Authorization': 'Bearer '+token,
-                'Cookie': 'f5avraaaaaaaaaaaaaaaa_session_=OOAJODNPAGPDJOHNLADBLIHKBALLPHEBFIMOKACJKLIOAPBKEBJAHKLBENFFHHCMLEODBNCBLGLMCMFHCAJAFCNGELGENODDDGENHGHBBPABOBHHHOGOIBANPFDGNFNP; BIGipServerP_UAT_Mobile_For_Sale_Backend=1019875756.36895.0000; TS0134f3d1=0139baac52d5f0ce13a9d3426724362988579c62b11cfd8f4223c9130797ad652e2815dd335a552d60c890fcbada54195382ffe998',
+                'Authorization': 'Bearer ' + token,
                 ...data.getHeaders()
             },
             data : data

@@ -18,7 +18,7 @@ export class LoanProfileResponseDto {
   id: number = null;
   citizenId: string = null;
   customerName: string = null;
-  gender: number = null;
+  gender: string = null;
   address: string = null;
   compName: string = null;
   catType: string = null;

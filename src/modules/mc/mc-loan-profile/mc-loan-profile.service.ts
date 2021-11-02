@@ -125,7 +125,7 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
     async checkCategory(companyTaxNumber) {
-        console.log("getCategory");
+        console.log("checkCategory");
         let mcapi = new McapiUtil(this.redisClient);
         var response = await mcapi.checkCategory(companyTaxNumber);
         return response;
