@@ -1,24 +1,27 @@
-import { IsString, IsNumber, IsOptional, IsDefined } from "class-validator";
+import {IsString, IsNumber, IsOptional, IsDefined} from "class-validator";
 
 export class GetMCAttachfileRequestDto {
-  // @IsNumber()
-  // @IsOptional()
-  // partner_id?: number;
+    // @IsNumber()
+    // @IsOptional()
+    // partner_id?: number;
 
-  @IsDefined()
-  @IsString()
-  keyword: string;
+    @IsOptional()
+    profileid: number;
 
-  @IsDefined()
-  @IsNumber()
-  page: number;
+    @IsDefined()
+    @IsString()
+    keyword: string;
 
-  @IsDefined()
-  @IsNumber()
-  pagesize: number;
+    @IsDefined()
+    @IsNumber()
+    page: number;
 
-  @IsDefined()
-  sort: any;
+    @IsDefined()
+    @IsNumber()
+    pagesize: number;
 
-  user_id: string;
+    @IsDefined()
+    sort: any;
+
+    user_id: string;
 }
