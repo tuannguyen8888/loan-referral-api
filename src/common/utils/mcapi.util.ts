@@ -293,17 +293,9 @@ export class McapiUtil {
         return response;
     }
 
-    async uploadDocument(dtoMcLoanProfile: McLoanProfileDto, dtoAttachFiles: McAttachfilesResponseDto): Promise<any> {
-        console.log("Call API");
-        console.log(dtoMcLoanProfile);
-        console.log(dtoAttachFiles);
-        /*let login = await this.login();
-        let token = login.token;
-
+    async createUploadFile(arrurl) {
         var fs = require("fs");
-        let arrurl = new Array();
-        arrurl.push('https://uat.finviet.com.vn:1791/download?f=0937712034_1610071549894_Screenshot20210108-090428_ECO.jpg');
-        arrurl.push('https://uat.finviet.com.vn:1791/download?f=1616052368123_2021032021TtrnhCTKMJasminepdf.pdf');
+        let fileZipName = `${Date.now()}.zip`;
         let filePath = `${__dirname}/../../attach_files/`;
         var dir = filePath + 'upload';
         if (!fs.existsSync(dir)) {
@@ -323,10 +315,49 @@ export class McapiUtil {
             );
         }
         var zipper = require('zip-local');
-        zipper.sync.zip(dir).compress().save(`${filePath}/upload.zip`);
+        zipper.sync.zip(dir).compress().save(`${filePath}/${fileZipName}`);
         const md5File = require('md5-file');
-        const md5checksum = md5File.sync(`${filePath}/upload.zip`)
-        console.log(`The MD5 sum of LICENSE.md is: ${md5checksum}`)
+        const md5checksum = md5File.sync(`${filePath}/${fileZipName}`)
+        console.log(`The MD5 sum of LICENSE.md is: ${md5checksum}`);
+        return {
+            filePath: `${filePath}/${fileZipName}`,
+            md5checksum: md5checksum
+        }
+    }
+
+    async uploadDocument(dtoMcLoanProfile: McLoanProfileDto, dtoAttachFiles: McAttachfilesResponseDto): Promise<any> {
+        console.log("Call API");
+        console.log(dtoMcLoanProfile);
+        console.log(dtoAttachFiles);
+        let token = await this.redisClient.get("token");
+        if (token == null) {
+            let login = await this.login();
+            token = login.token;
+        }
+        let response;
+        let arrurl = new Array();
+        // for (const i in dtoAttachFiles) {
+        //     console.log(dtoAttachFiles.rows[i]);
+        //     arrurl.push(dtoAttachFiles.rows[i].url);
+        // }
+        for (const attachFile of dtoAttachFiles.rows) {
+            console.log(attachFile);
+            console.log(attachFile.url);
+            arrurl.push(attachFile.url);
+        }
+        console.log(arrurl);
+        let fileUpload = await this.createUploadFile(arrurl);
+        console.log(fileUpload);
+        response = fileUpload;
+        return response;
+        /*let login = await this.login();
+        let token = login.token;
+
+        var fs = require("fs");
+        let arrurl = new Array();
+        arrurl.push('https://uat.finviet.com.vn:1791/download?f=0937712034_1610071549894_Screenshot20210108-090428_ECO.jpg');
+        arrurl.push('https://uat.finviet.com.vn:1791/download?f=1616052368123_2021032021TtrnhCTKMJasminepdf.pdf');
+
         /*var axios = require("axios");
         var FormData = require("form-data");
         var fs = require("fs");
