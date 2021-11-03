@@ -294,6 +294,7 @@ export class McapiUtil {
         console.log("Call API");
         let login = await this.login();
         let token = login.token;
+
         var fs = require("fs");
         let arrurl = new Array();
         arrurl.push('https://uat.finviet.com.vn:1791/download?f=0937712034_1610071549894_Screenshot20210108-090428_ECO.jpg');

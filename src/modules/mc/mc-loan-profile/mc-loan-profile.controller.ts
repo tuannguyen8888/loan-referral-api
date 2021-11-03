@@ -88,12 +88,12 @@ export class McLoanProfileController {
         return this.service.checkList(dto);
     }
 
-    @Post("/uploadDocument")
+    @Post("/uploadDocument/:loan_profile_id")
     @ApiOperation({summary: "uploadDocument"})
     @HttpCode(200)
-    uploadDocument(@Headers() headers) {
+    uploadDocument(@Headers() headers, @Param() params) {
         console.log("uploadDocument");
-        return this.service.uploadDocument();
+        return this.service.uploadDocument(params.loan_profile_id);
     }
 
     @Get("/checkCategory/:companyTaxNumber")
