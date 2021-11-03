@@ -4,6 +4,9 @@ import {CheckInitContractRequestDto} from "../../modules/mc/mc-loan-profile/dto/
 import {RedisClient} from "../shared";
 import fs from "fs";
 import {RequestUtil} from "./request.util";
+import {McLoanProfile} from "../../entities";
+import {McLoanProfileDto} from "../../modules/mc/mc-loan-profile/dto";
+import {McAttachfilesResponseDto} from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
 
 @Injectable()
 export class McapiUtil {
@@ -290,9 +293,11 @@ export class McapiUtil {
         return response;
     }
 
-    async uploadDocument(): Promise<any> {
+    async uploadDocument(dtoMcLoanProfile: McLoanProfileDto, dtoAttachFiles: McAttachfilesResponseDto): Promise<any> {
         console.log("Call API");
-        let login = await this.login();
+        console.log(dtoMcLoanProfile);
+        console.log(dtoAttachFiles);
+        /*let login = await this.login();
         let token = login.token;
 
         var fs = require("fs");

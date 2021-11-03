@@ -44,10 +44,16 @@ export class McAttachfileService extends BaseService {
                     "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
                     {keyword: "%" + dto.keyword + "%"}
                 );
-            query = query
-                .orderBy("id", "DESC")
-                .skip((dto.page - 1) * dto.pagesize)
-                .take(dto.pagesize);
+            if (dto.pagesize > 0) {
+                query = query
+                    .orderBy("id", "DESC")
+                    .skip((dto.page - 1) * dto.pagesize)
+                    .take(dto.pagesize);
+            } else {
+                query = query
+                    .orderBy("id", "DESC");
+            }
+
             const result = new McAttachfilesResponseDto();
 
             let data, count;

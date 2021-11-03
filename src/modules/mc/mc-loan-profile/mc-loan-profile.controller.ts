@@ -18,7 +18,7 @@ import {
 import {McLoanProfileService} from "./mc-loan-profile.service";
 import {
     GetMCLoanProfilesRequestDto,
-    LoanProfileDto,
+    McLoanProfileDto,
     LoanProfileResponseDto,
     LoanProfilesResponseDto,
     LoanProfileUpdateDto,
@@ -109,8 +109,8 @@ export class McLoanProfileController {
     @ApiOperation({summary: "Tạo mới hồ sơ vay"})
     createLoanProfile(
         @Headers() headers,
-        @Body() dto: LoanProfileDto
-    ): Promise<LoanProfileDto> {
+        @Body() dto: McLoanProfileDto
+    ): Promise<McLoanProfileDto> {
         return this.service.createLoanProfile(dto);
     }
 

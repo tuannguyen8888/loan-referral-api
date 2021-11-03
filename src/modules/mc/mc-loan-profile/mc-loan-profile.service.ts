@@ -4,7 +4,7 @@ import {
     GetMCLoanProfilesRequestDto,
     LoanProfileResponseDto,
     LoanProfilesResponseDto,
-    LoanProfileDto,
+    McLoanProfileDto,
     LoanProfileUpdateDto
 } from "./dto";
 import {BaseService} from "../../../common/services";
@@ -26,6 +26,7 @@ import {McapiUtil} from "../../../common/utils/mcapi.util";
 import {McAttachfilesResponseDto} from "../mc-attachfile/dto/mc-attachfiles.response.dto";
 import {McAttachfileRepository} from "../../../repositories";
 import {GetMCAttachfileRequestDto} from "../mc-attachfile/dto/mc-get-attachfile.request.dto";
+import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -135,7 +136,13 @@ export class McLoanProfileService extends BaseService {
         console.log(loanProfileDTO);
         let attachRequest = new GetMCAttachfileRequestDto();
         attachRequest.profileid = id;
-
+        attachRequest.page = 1;
+        attachRequest.pagesize = 0;
+        let attachserviec = new McAttachfileService(this.request, this.logger, this.redisClient, this.requestUtil);
+        let attachFiles = new McAttachfilesResponseDto();
+        attachFiles = await attachserviec.getAllAttachfile(attachRequest);
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles);
         // let loanprofileEntity = await this.connection
         //     .getCustomRepository(McLoanProfileRepository)
         //     .findOne(id);
@@ -153,7 +160,7 @@ export class McLoanProfileService extends BaseService {
         // [data, count] = await query.getManyAndCount();
         // result.count = count;
         // console.log(data);
-        return loanProfileDTO;
+        return response;
     }
 
     async checkCategory(companyTaxNumber) {
@@ -163,7 +170,7 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
 
-    async createLoanProfile(dto: LoanProfileDto) {
+    async createLoanProfile(dto: McLoanProfileDto) {
         let ptfApiConfig = config.get("ptf_api");
         console.log(dto);
         let entity: McLoanProfile = this.convertDto2Entity(dto, McLoanProfile);
@@ -180,10 +187,10 @@ export class McLoanProfileService extends BaseService {
             .save(entity);
         this.logger.verbose(`insertResult = ${result}`);
 
-        let response: LoanProfileDto = this.convertEntity2Dto(
+        let response: McLoanProfileDto = this.convertEntity2Dto(
             result,
             McLoanProfile,
-            LoanProfileDto
+            McLoanProfileDto
         );
         return response;
     }

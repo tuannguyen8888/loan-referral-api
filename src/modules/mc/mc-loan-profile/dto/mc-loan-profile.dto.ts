@@ -14,7 +14,7 @@ import {
   RelatedPersonDto
 } from ".";
 
-export class LoanProfileDto {
+export class McLoanProfileDto {
   @IsOptional()
   id?: number = null;
   citizenId: string = null;
