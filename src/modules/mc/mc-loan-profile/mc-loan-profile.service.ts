@@ -30,7 +30,7 @@ import {CheckInitContractRequestDto} from "./dto/check-init-contract.request.dto
 import {McCheckListrequestDto} from "./dto/mc-check-listrequest.dto";
 import {McapiUtil} from "../../../common/utils/mcapi.util";
 import {McAttachfilesResponseDto} from "../mc-attachfile/dto/mc-attachfiles.response.dto";
-import {McAttachfileRepository} from "../../../repositories";
+import {LoanProfileRepository, McAttachfileRepository} from "../../../repositories";
 import {GetMCAttachfileRequestDto} from "../mc-attachfile/dto/mc-get-attachfile.request.dto";
 import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
 
@@ -154,23 +154,12 @@ export class McLoanProfileService extends BaseService {
         attachFiles = await attachserviec.getAllAttachfile(attachRequest);
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
         var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles);
-        // let loanprofileEntity = await this.connection
-        //     .getCustomRepository(McLoanProfileRepository)
-        //     .findOne(id);
-        // console.log(loanprofileEntity);
-        // // let mcapi = new McapiUtil(this.redisClient, this.httpService);
-        // // var response = await mcapi.uploadDocument();
-        // const repo = this.connection.getCustomRepository(McAttachfileRepository);
-        // let query = repo.createQueryBuilder().where("deleted_at is null");
-        // query = query.andWhere("profileid = :profileid", {
-        //     profileid: id
-        // });
-        // const result = new McAttachfilesResponseDto();
-        //
-        // let data, count;
-        // [data, count] = await query.getManyAndCount();
-        // result.count = count;
-        // console.log(data);
+        //Update profileid
+        let profileid = response.id;
+        const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+        let query = repo.createQueryBuilder().update().set({profileid: profileid}).where("id = :id", {id: id});
+        await query.execute();
+
         return response;
     }
 

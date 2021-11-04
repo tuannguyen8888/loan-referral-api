@@ -334,7 +334,8 @@ export class McapiUtil {
 
         return {
             info: info,
-            md5checksum: md5checksum
+            md5checksum: md5checksum,
+            filePath: `${filePath}/${fileZipName}`,
         };
         /*var fs = require("fs");
         let fileZipName = `${Date.now()}.zip`;
@@ -375,26 +376,16 @@ export class McapiUtil {
         dtoAttachFiles: McAttachfilesResponseDto
     ): Promise<any> {
         console.log("Call API");
-        console.log(dtoMcLoanProfile);
-        console.log(dtoAttachFiles);
         let token = await this.redisClient.get("token");
         if (token == null) {
             let login = await this.login();
             token = login.token;
         }
-        let response;
-        let arrurl = new Array();
-        // for (const i in dtoAttachFiles) {
-        //     console.log(dtoAttachFiles.rows[i]);
-        //     arrurl.push(dtoAttachFiles.rows[i].url);
-        // }
         var result = await this.createUploadFile(dtoAttachFiles);
-
         var axios = require("axios");
         var FormData = require("form-data");
         var fs = require("fs");
         var data = new FormData();
-        //data.append('file', fs.createReadStream('C:/Users/ho.lu/OneDrive/FinViet/MCredit/upload/upload1.zip'));
         var obj = {
             request: {
                 id: "",
@@ -417,10 +408,9 @@ export class McapiUtil {
             md5: result.md5checksum,
             info: result.info
         };
-        response = obj
-        return response;
-        /*data.append("file", fs.createReadStream(fileUpload.filePath));
-        data.append("object", obj);
+        console.log(obj);
+        data.append("file", fs.createReadStream(result.filePath));
+        data.append("object", JSON.stringify(obj));
         var config = {
             method: "post",
             url:
@@ -442,8 +432,7 @@ export class McapiUtil {
             return result.data;
         } catch (e) {
             console.log("ERROR");
-            console.log(e);
             return e.response.data;
-        }*/
+        }
     }
 }
