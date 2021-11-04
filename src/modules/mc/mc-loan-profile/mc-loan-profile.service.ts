@@ -1,4 +1,10 @@
-import {BadRequestException, HttpService, Inject, Injectable, Scope} from "@nestjs/common";
+import {
+    BadRequestException,
+    HttpService,
+    Inject,
+    Injectable,
+    Scope
+} from "@nestjs/common";
 
 import {
     GetMCLoanProfilesRequestDto,
@@ -138,7 +144,12 @@ export class McLoanProfileService extends BaseService {
         attachRequest.profileid = id;
         attachRequest.page = 1;
         attachRequest.pagesize = 0;
-        let attachserviec = new McAttachfileService(this.request, this.logger, this.redisClient, this.requestUtil);
+        let attachserviec = new McAttachfileService(
+            this.request,
+            this.logger,
+            this.redisClient,
+            this.requestUtil
+        );
         let attachFiles = new McAttachfilesResponseDto();
         attachFiles = await attachserviec.getAllAttachfile(attachRequest);
         let mcapi = new McapiUtil(this.redisClient, this.httpService);

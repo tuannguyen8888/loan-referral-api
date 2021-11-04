@@ -1,15 +1,21 @@
-import {BadRequestException, HttpService, Inject, Injectable, Scope} from "@nestjs/common";
+import {
+    BadRequestException,
+    HttpService,
+    Inject,
+    Injectable,
+    Scope
+} from "@nestjs/common";
 import {In, IsNull, Like} from "typeorm";
 import * as moment from "moment";
 import {
-  Address,
-  LoanProfile,
-  McLoanProfile,
-  Process,
-  PtfAddress,
-  PtfAttachFile,
-  PtfEmploymentInformation,
-  PtfLoanProfile,
+    Address,
+    LoanProfile,
+    McLoanProfile,
+    Process,
+    PtfAddress,
+    PtfAttachFile,
+    PtfEmploymentInformation,
+    PtfLoanProfile,
   PtfLoanProfileDefer,
   PtfRelatedPerson,
   SendDataLog

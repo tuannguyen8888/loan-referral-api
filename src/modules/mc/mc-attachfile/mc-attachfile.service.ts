@@ -50,8 +50,7 @@ export class McAttachfileService extends BaseService {
                     .skip((dto.page - 1) * dto.pagesize)
                     .take(dto.pagesize);
             } else {
-                query = query
-                    .orderBy("id", "DESC");
+                query = query.orderBy("id", "DESC");
             }
 
             const result = new McAttachfilesResponseDto();

@@ -43,6 +43,7 @@ export class LoanProfileUpdateDto {
   appid: string = null;
   cicResult: number = null;
   cicDescription: string = null;
+  hasCourier: number = null;
   status: string = null;
 
   @IsOptional()

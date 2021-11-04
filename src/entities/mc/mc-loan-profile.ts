@@ -208,23 +208,32 @@ export class McLoanProfile {
   })
   cicResult: number;
 
-  @Column("varchar", {
-    name: "cicDescription",
-    length: 255,
-    nullable: true,
-    default: "",
-    comment: "Mô tả cic"
-  })
-  cicDescription: string;
+    @Column("varchar", {
+        name: "cicDescription",
+        length: 255,
+        nullable: true,
+        default: "",
+        comment: "Mô tả cic"
+    })
+    cicDescription: string;
 
-  @Column("varchar", {
-    name: "status",
-    nullable: true,
-    default: "",
-    comment: "Trạng thái hồ sơ"
-  })
-  status: string;
-  @Column("timestamp", {
+    @Column("int", {
+        name: "hasCourier",
+        nullable: true,
+        default: 0,
+        comment: "mã cic"
+    })
+    hasCourier: number;
+
+    @Column("varchar", {
+        name: "status",
+        nullable: true,
+        default: "",
+        comment: "Trạng thái hồ sơ"
+    })
+    status: string;
+
+    @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"
   })
