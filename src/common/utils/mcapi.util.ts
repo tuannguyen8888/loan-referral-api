@@ -295,7 +295,7 @@ export class McapiUtil {
         return response;
     }
 
-    async createUploadFile(arrurl) {
+    async createUploadFile(dtoAttachFiles: McAttachfilesResponseDto) {
         var fs = require("fs");
         let fileZipName = `${Date.now()}.zip`;
         let filePath = `${__dirname}/../../attach_files/`;
@@ -303,13 +303,55 @@ export class McapiUtil {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }
+        var info = [];
+        let i = 1;
+        for (const attachFile of dtoAttachFiles.rows) {
+            console.log(attachFile);
+            console.log(attachFile.url);
+            let ext: any = attachFile.url.split(".");
+            ext = ext[ext.length - 1];
+            let fileName = `${i}.${ext}`;
+            let filePath = `${dir}/${fileName}`;
+            var requestUtil = new RequestUtil(this.httpService);
+            await requestUtil.downloadPublicFile(attachFile.url, filePath);
+            let item = {
+                fileName: fileName,
+                documentCode: attachFile.documentCode,
+                mimeType: attachFile.mimeType,
+                groupId: attachFile.groupId
+            };
+            info.push(item);
+            i++;
+        }
+        var zipper = require("zip-local");
+        zipper.sync
+            .zip(dir)
+            .compress()
+            .save(`${filePath}/${fileZipName}`);
+        const md5File = require("md5-file");
+        const md5checksum = md5File.sync(`${filePath}/${fileZipName}`);
+        console.log(`The MD5 sum of LICENSE.md is: ${md5checksum}`);
+
+        return {
+            info: info,
+            md5checksum: md5checksum
+        };
+        /*var fs = require("fs");
+        let fileZipName = `${Date.now()}.zip`;
+        let filePath = `${__dirname}/../../attach_files/`;
+        var dir = filePath + "upload";
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        let listfilename = [];
         for (const i in arrurl) {
             let url = arrurl[i];
             let ext: any = url.split(".");
             ext = ext[ext.length - 1];
-            let fileName = `${i}.${ext}`;
+            let fileName = `${i+1}.${ext}`;
             let filePath = `${dir}/${fileName}`;
             console.log(filePath);
+            listfilename.push(fileName);
             var requestUtil = new RequestUtil(this.httpService);
             await requestUtil.downloadPublicFile(url, filePath);
         }
@@ -323,8 +365,9 @@ export class McapiUtil {
         console.log(`The MD5 sum of LICENSE.md is: ${md5checksum}`);
         return {
             filePath: `${filePath}/${fileZipName}`,
-            md5checksum: md5checksum
-        };
+            md5checksum: md5checksum,
+            listFile:listfilename
+        };*/
     }
 
     async uploadDocument(
@@ -345,24 +388,7 @@ export class McapiUtil {
         //     console.log(dtoAttachFiles.rows[i]);
         //     arrurl.push(dtoAttachFiles.rows[i].url);
         // }
-        var info = [];
-        for (const attachFile of dtoAttachFiles.rows) {
-            console.log(attachFile);
-            console.log(attachFile.url);
-            arrurl.push(attachFile.url);
-            let item = {
-                fileName: attachFile.fileName,
-                documentCode: attachFile.documentCode,
-                mimeType: attachFile.mimeType,
-                groupId: attachFile.groupId
-            };
-            info.push(item)
-        }
-        console.log(arrurl);
-        let fileUpload = await this.createUploadFile(arrurl);
-        console.log(fileUpload);
-        response = fileUpload;
-        return response;
+        var result = await this.createUploadFile(dtoAttachFiles);
 
         var axios = require("axios");
         var FormData = require("form-data");
@@ -388,122 +414,12 @@ export class McapiUtil {
             mobileProductType: dtoMcLoanProfile.mobileProductType,
             mobileIssueDateCitizen: dtoMcLoanProfile.mobileIssueDateCitizen,
             appStatus: 1,
-            md5: fileUpload.md5checksum,
-            info: info
+            md5: result.md5checksum,
+            info: result.info
         };
-
-        var obj1 =
-            "{" +
-            '    "request": {' +
-            '        "id": "",' +
-            '        "saleCode": "RD014100001",' +
-            '        "customerName": "' +
-            dtoMcLoanProfile.customerName +
-            '",' +
-            '        "productId": ' +
-            dtoMcLoanProfile.productId +
-            "," +
-            '        "citizenId": "' +
-            dtoMcLoanProfile.citizenId +
-            '",' +
-            '        "tempResidence": ' +
-            dtoMcLoanProfile.tempResidence +
-            "," +
-            '        "loanAmount": ' +
-            dtoMcLoanProfile.loanAmount +
-            "," +
-            '        "loanTenor": ' +
-            dtoMcLoanProfile.loanTenor +
-            "," +
-            '        "hasInsurance": ' +
-            dtoMcLoanProfile.hasInsurance +
-            "," +
-            '        "issuePlace": "' +
-            dtoMcLoanProfile.issuePlace +
-            '",' +
-            '        "shopCode": "' +
-            dtoMcLoanProfile.shopCode +
-            '",' +
-            '        "companyTaxNumber": "' +
-            dtoMcLoanProfile.companyTaxNumber +
-            '":,' +
-            '        "hasCourier": "' +
-            dtoMcLoanProfile.hasCourier +
-            '"' +
-            "    }," +
-            '    "mobileProductType": "' + dtoMcLoanProfile.mobileProductType + '",' +
-            '    "mobileIssueDateCitizen": "' + dtoMcLoanProfile.mobileProductType + '",' +
-            '    "appStatus": 1,' +
-            '    "md5": "' + fileUpload.md5checksum + '",' +
-            '    "info": [' +
-            "        {" +
-            '            "fileName": "1.jpg",' +
-            '            "documentCode": "CivicIdentity",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 22' +
-            "        }," +
-            "        {" +
-            '            "fileName": "2.jpg",' +
-            '            "documentCode": "DOC_salarySuspension",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 139' +
-            "        }," +
-            "        {" +
-            '            "fileName": "3.jpg",' +
-            '            "documentCode": "FamilyBook",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 19' +
-            "        }," +
-            "        {" +
-            '            "fileName": "4.jpg",' +
-            '            "documentCode": "FacePhoto",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 26' +
-            "        }," +
-            "        {" +
-            '            "fileName": "5.jpg",' +
-            '            "documentCode": "TemporaryResidenceConfirmation",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 23' +
-            "        }," +
-            "        {" +
-            '            "fileName": "6.jpg",' +
-            '            "documentCode": "HomeOwnershipCertification",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 25' +
-            "        }," +
-            "        {" +
-            '            "fileName": "7.jpg",' +
-            '            "documentCode": "InternetBill",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 24' +
-            "        }," +
-            "        {" +
-            '            "fileName": "8.jpg",' +
-            '            "documentCode": "StatementPaymentAccount",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 30' +
-            "        }," +
-            "        {" +
-            '            "fileName": "9.jpg",' +
-            '            "documentCode": "CustomerInformationSheet",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 34' +
-            "        }," +
-            "        {" +
-            '            "fileName": "10.jpg",' +
-            '            "documentCode": "BirthCertificate",' +
-            '            "mimeType": "jpg",' +
-            '            "groupId": 37' +
-            "        }" +
-            "    ]" +
-            "}";
-
-        // var strdata = JSON.stringify(obj).replace(/\\"/g,'"');
-        // strdata = strdata.replace(/"{/g,'{');
-        // strdata = strdata.replace(/}"/g,'}');
-        console.log(`${__dirname}`);
-        data.append("file", fs.createReadStream(fileUpload.filePath));
+        response = obj
+        return response;
+        /*data.append("file", fs.createReadStream(fileUpload.filePath));
         data.append("object", obj);
         var config = {
             method: "post",
@@ -517,10 +433,9 @@ export class McapiUtil {
             },
             data: data
         };
-        let url =
-            "https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/upload-document";
+
         try {
-            let result = await axios.post(url, data, {
+            let result = await axios.post(config.url, data, {
                 headers: config.headers
             });
 
@@ -529,6 +444,6 @@ export class McapiUtil {
             console.log("ERROR");
             console.log(e);
             return e.response.data;
-        }
+        }*/
     }
 }
