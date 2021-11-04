@@ -9,7 +9,8 @@ import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 
 export class McCaseNoteResponseDto {
   id: number = null;
-  appNumber: number = null;
+    profileid: number = null;
+    appNumber: number = null;
   app_uid: string = null;
   note_content: string = null;
   note_date: string = null;

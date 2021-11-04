@@ -1,9 +1,17 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("mc_case_note", { schema: "loan_referral" })
+@Entity("mc_case_note", {schema: "loan_referral"})
 export class McCaseNote {
-  @PrimaryGeneratedColumn({ type: "int", name: "id" })
+  @PrimaryGeneratedColumn({type: "int", name: "id"})
   id: number;
+
+  @Column("int", {
+    name: "profileid",
+    nullable: true,
+    default: 0,
+    comment: "Id cua ban profile"
+  })
+  profileid: number;
 
   @Column("int", {
     name: "appNumber",
