@@ -106,6 +106,7 @@ mc_api:
   imei: 'imei.finviet.3rd'
   osType: 'IOS'
   security: 'FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d'
+  saleCode: 'RD014100001'
 
 upload:
   backendUrl: http://sandbox.finviet.com.vn:3000/upload

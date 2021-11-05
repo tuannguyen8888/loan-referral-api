@@ -36,6 +36,8 @@ import {
 } from "../../../repositories";
 import {GetMCAttachfileRequestDto} from "../mc-attachfile/dto/mc-get-attachfile.request.dto";
 import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
+import {GetMCCaseRequestDto} from "../mc-case/dto/get-case.request.dto";
+import {GetMcCaseRequestDto} from "./dto/get-mc-case.request.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -177,6 +179,13 @@ export class McLoanProfileService extends BaseService {
         console.log("checkCategory");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
         var response = await mcapi.checkCategory(companyTaxNumber);
+        return response;
+    }
+
+    async getCases(dto: GetMcCaseRequestDto) {
+        console.log("checkCategory");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        var response = await mcapi.getCases(dto);
         return response;
     }
 

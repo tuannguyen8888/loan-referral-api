@@ -7,6 +7,7 @@ import {RequestUtil} from "./request.util";
 import {McLoanProfile} from "../../entities";
 import {McLoanProfileDto} from "../../modules/mc/mc-loan-profile/dto";
 import {McAttachfilesResponseDto} from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
+import {GetMcCaseRequestDto} from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
 
 @Injectable()
 export class McapiUtil {
@@ -289,7 +290,7 @@ export class McapiUtil {
       response = e.response.data;
       if (response.returnCode == "401") {
         await this.login();
-        await this.checkInitContract(dto);
+        return await this.checkInitContract(dto);
       }
     }
     return response;
@@ -297,9 +298,10 @@ export class McapiUtil {
 
   async createUploadFile(dtoAttachFiles: McAttachfilesResponseDto) {
     var fs = require("fs");
-    let fileZipName = `${Date.now()}.zip`;
+    let dirname = Date.now()
+    let fileZipName = `${dirname}.zip`;
     let filePath = `${__dirname}/../../attach_files/`;
-    var dir = filePath + "upload";
+    var dir = filePath + dirname;
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
@@ -309,7 +311,7 @@ export class McapiUtil {
       console.log(attachFile);
       console.log(attachFile.url);
       let ext: any = attachFile.url.split(".");
-      ext = ext[ext.length - 1];
+      ext = ext[ext.length - 1].toLowerCase();
       let fileName = `${i}.${ext}`;
       let filePath = `${dir}/${fileName}`;
       var requestUtil = new RequestUtil(this.httpService);
@@ -317,7 +319,7 @@ export class McapiUtil {
       let item = {
         fileName: fileName,
         documentCode: attachFile.documentCode,
-        mimeType: attachFile.mimeType,
+        mimeType: ext,
         groupId: attachFile.groupId
       };
       info.push(item);
@@ -337,38 +339,6 @@ export class McapiUtil {
       md5checksum: md5checksum,
       filePath: `${filePath}/${fileZipName}`
     };
-    /*var fs = require("fs");
-        let fileZipName = `${Date.now()}.zip`;
-        let filePath = `${__dirname}/../../attach_files/`;
-        var dir = filePath + "upload";
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
-        }
-        let listfilename = [];
-        for (const i in arrurl) {
-            let url = arrurl[i];
-            let ext: any = url.split(".");
-            ext = ext[ext.length - 1];
-            let fileName = `${i+1}.${ext}`;
-            let filePath = `${dir}/${fileName}`;
-            console.log(filePath);
-            listfilename.push(fileName);
-            var requestUtil = new RequestUtil(this.httpService);
-            await requestUtil.downloadPublicFile(url, filePath);
-        }
-        var zipper = require("zip-local");
-        zipper.sync
-            .zip(dir)
-            .compress()
-            .save(`${filePath}/${fileZipName}`);
-        const md5File = require("md5-file");
-        const md5checksum = md5File.sync(`${filePath}/${fileZipName}`);
-        console.log(`The MD5 sum of LICENSE.md is: ${md5checksum}`);
-        return {
-            filePath: `${filePath}/${fileZipName}`,
-            md5checksum: md5checksum,
-            listFile:listfilename
-        };*/
   }
 
   async uploadDocument(
@@ -381,6 +351,7 @@ export class McapiUtil {
       let login = await this.login();
       token = login.token;
     }
+    let mc_api_config = config.get("mc_api");
     var result = await this.createUploadFile(dtoAttachFiles);
     var axios = require("axios");
     var FormData = require("form-data");
@@ -389,7 +360,7 @@ export class McapiUtil {
     var obj = {
       request: {
         id: "",
-        saleCode: "RD014100001",
+        saleCode: mc_api_config.saleCode,
         customerName: dtoMcLoanProfile.customerName,
         productId: dtoMcLoanProfile.productId,
         citizenId: dtoMcLoanProfile.citizenId,
@@ -411,7 +382,7 @@ export class McapiUtil {
     console.log(obj);
     data.append("file", fs.createReadStream(result.filePath));
     data.append("object", JSON.stringify(obj));
-    var config = {
+    var configdata = {
       method: "post",
       url:
           "https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/upload-document",
@@ -421,18 +392,57 @@ export class McapiUtil {
         Authorization: "Bearer " + token,
         ...data.getHeaders()
       },
-      data: data
     };
 
     try {
-      let result = await axios.post(config.url, data, {
-        headers: config.headers
+      let result = await axios.post(configdata.url, data, {
+        headers: configdata.headers
       });
-
+      //fs.unlinkSync(result.filePath);
       return result.data;
     } catch (e) {
       console.log("ERROR");
+      //fs.unlinkSync(result.filePath);
+      if (e.response.data.returnCode == "401") {
+        await this.login();
+        return await this.uploadDocument(dtoMcLoanProfile, dtoAttachFiles);
+      }
       return e.response.data;
     }
+  }
+
+  async getCases(dto: GetMcCaseRequestDto): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "mobile-4sales/cases?" +
+        "pageNumber=" + dto.pageNumber +
+        "&pageSize=" + dto.pageSize +
+        "&keyword=" + dto.keyword +
+        "&status=" + dto.status +
+        "&saleCode=" + mc_api_config.saleCode;
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.get(url, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        return await this.getCases(dto);
+      }
+    }
+    return response;
   }
 }
