@@ -26,6 +26,15 @@ import { CronService } from "./cron/cron.service";
 import { PtfLoanProfileModule } from "./modules/ptf/ptf-loan-profile/ptf-loan-profile.module";
 import { PtfMasterDataModule } from "./modules/ptf/ptf-master-data/ptf-master-data.module";
 import { PtfReceiveResultModule } from "./modules/ptf/ptf-receive-result/ptf-receive-result.module";
+import { McLoanProfileModule } from "./modules/mc/mc-loan-profile/mc-loan-profile.module";
+import { McKiosModule } from "./modules/mc/mc-kios/mc-kios.module";
+import { McProductModule } from "./modules/mc/mc-product/mc-product.module";
+import { McCicresultModule } from "./modules/mc/mc-cicresult/mc-cicresult.module";
+import { McCaseModule } from "./modules/mc/mc-case/mc-case.module";
+import { McCaseNoteModule } from "./modules/mc/mc-case-note/mc-case-note.module";
+import { McNotificationModule } from "./modules/mc/mc-notification/mc-notification.module";
+import { McNotificationResponseDto } from "./modules/mc/mc-notification/dto/mc-notification.response.dto";
+import { McAttachfileModule } from "./modules/mc/mc-attachfile/mc-attachfile.module";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -38,7 +47,15 @@ const imports = [
   ScheduleModule.forRoot(),
   PtfLoanProfileModule,
   PtfMasterDataModule,
-  PtfReceiveResultModule
+  PtfReceiveResultModule,
+  McLoanProfileModule,
+  McKiosModule,
+  McProductModule,
+  McCicresultModule,
+  McCaseModule,
+  McCaseNoteModule,
+  McNotificationModule,
+  McAttachfileModule
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));
@@ -63,11 +80,8 @@ export class AppModule implements NestModule {
       consumer.apply(SetHeadersMiddleware).forRoutes("*");
     } else {
       consumer
-        .apply(SetHeadersMiddleware)
-        // .apply(SetHeadersMiddleware, CheckPartnerMiddleware)
-        // .exclude(
-        //   { path: 'page/checkout', method: RequestMethod.ALL },
-        // )
+        .apply(SetHeadersMiddleware, CheckPartnerMiddleware)
+        .exclude({ path: "page/checkout", method: RequestMethod.ALL })
         .forRoutes("*");
     }
   }

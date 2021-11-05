@@ -17,7 +17,9 @@ export class Address {
 
   @Column("varchar", {
     name: "property_status",
+    default: "",
     comment: "O, R, F ",
+    nullable: true,
     length: 45
   })
   propertyStatus: string;
