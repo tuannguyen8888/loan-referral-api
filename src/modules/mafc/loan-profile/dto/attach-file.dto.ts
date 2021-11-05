@@ -1,10 +1,11 @@
 import {
-    IsString,
-    IsNotEmpty,
-    IsNumber,
-    IsOptional,
-    IsDateString,
-    IsDefined, Matches
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsDateString,
+  IsDefined,
+  Matches
 } from "class-validator";
 
 export class AttachFileDto {
@@ -12,7 +13,7 @@ export class AttachFileDto {
   @IsDefined()
   loan_profile_id: number = null;
   doc_code: string = null;
-  @Matches(/http[\s\S]*.[jpg,jpeg,png,pdf]/,{message: 'url invalid'})
+  @Matches(/http[\s\S]*.[jpg,jpeg,png,pdf]/, { message: "url invalid" })
   url: string = null;
   @IsOptional()
   @IsDateString()
