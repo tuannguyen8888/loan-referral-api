@@ -33,15 +33,21 @@ export class McCaseNoteService extends BaseService {
     try {
       const repo = this.connection.getCustomRepository(McCaseNoteRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
+      if (dto.profileid) {
+        query = query.andWhere("profileid = :profileid", {
+          profileid: dto.profileid
+        });
+        // where["partnerId"] = dto.partner_id;
+      }
       if (dto.keyword)
         query = query.andWhere(
-          "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
-          { keyword: "%" + dto.keyword + "%" }
+            "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
+            {keyword: "%" + dto.keyword + "%"}
         );
       query = query
-        .orderBy("id", "DESC")
-        .skip((dto.page - 1) * dto.pagesize)
-        .take(dto.pagesize);
+          .orderBy("id", "DESC")
+          .skip((dto.page - 1) * dto.pagesize)
+          .take(dto.pagesize);
       const result = new McCaseNotesResponseDto();
 
       let data, count;
