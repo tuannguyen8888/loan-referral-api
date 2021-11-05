@@ -30,9 +30,14 @@ import {CheckInitContractRequestDto} from "./dto/check-init-contract.request.dto
 import {McCheckListrequestDto} from "./dto/mc-check-listrequest.dto";
 import {McapiUtil} from "../../../common/utils/mcapi.util";
 import {McAttachfilesResponseDto} from "../mc-attachfile/dto/mc-attachfiles.response.dto";
-import {LoanProfileRepository, McAttachfileRepository} from "../../../repositories";
+import {
+    LoanProfileRepository,
+    McAttachfileRepository
+} from "../../../repositories";
 import {GetMCAttachfileRequestDto} from "../mc-attachfile/dto/mc-get-attachfile.request.dto";
 import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
+import {GetMCCaseRequestDto} from "../mc-case/dto/get-case.request.dto";
+import {GetMcCaseRequestDto} from "./dto/get-mc-case.request.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -157,7 +162,14 @@ export class McLoanProfileService extends BaseService {
         //Update profileid
         let profileid = response.id;
         const repo = this.connection.getCustomRepository(McLoanProfileRepository);
-        let query = repo.createQueryBuilder().update().set({profileid: profileid}).where("id = :id", {id: id});
+        let query = repo
+            .createQueryBuilder()
+            .update()
+            .set({
+                profileid: profileid,
+                status: "hadsend"
+            })
+            .where("id = :id", {id: id});
         await query.execute();
 
         return response;
@@ -167,6 +179,13 @@ export class McLoanProfileService extends BaseService {
         console.log("checkCategory");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
         var response = await mcapi.checkCategory(companyTaxNumber);
+        return response;
+    }
+
+    async getCases(dto: GetMcCaseRequestDto) {
+        console.log("checkCategory");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        var response = await mcapi.getCases(dto);
         return response;
     }
 

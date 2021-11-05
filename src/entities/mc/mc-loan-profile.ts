@@ -200,13 +200,13 @@ export class McLoanProfile {
   })
   appNumber: number;
 
-  @Column("int", {
-    name: "cicResult",
-    nullable: true,
-    default: 0,
-    comment: "mã cic"
-  })
-  cicResult: number;
+    @Column("int", {
+        name: "cicResult",
+        nullable: true,
+        default: 0,
+        comment: "mã cic"
+    })
+    cicResult: number;
 
     @Column("varchar", {
         name: "cicDescription",
@@ -234,14 +234,14 @@ export class McLoanProfile {
     status: string;
 
     @Column("timestamp", {
-    name: "created_at",
-    default: () => "CURRENT_TIMESTAMP"
-  })
-  createdAt: Date;
+        name: "created_at",
+        default: () => "CURRENT_TIMESTAMP"
+    })
+    createdAt: Date;
 
-  @Column("varchar", {
-    name: "created_by",
-    length: 255,
+    @Column("varchar", {
+        name: "created_by",
+        length: 255,
     default: ""
   })
   createdBy: string | null;

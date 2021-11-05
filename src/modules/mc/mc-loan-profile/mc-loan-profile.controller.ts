@@ -29,6 +29,7 @@ import {CheckCICRequestDto} from "./dto/check-cic.request.dto";
 import {CheckCitizenidRequestDto} from "./dto/check-citizenid.request.dto";
 import {CheckInitContractRequestDto} from "./dto/check-init-contract.request.dto";
 import {McCheckListrequestDto} from "./dto/mc-check-listrequest.dto";
+import {GetMcCaseRequestDto} from "./dto/get-mc-case.request.dto";
 
 @Controller("mc-loan-profile")
 @ApiSecurity("api-key")
@@ -79,6 +80,16 @@ export class McLoanProfileController {
         @Body() dto: CheckInitContractRequestDto
     ) {
         return this.service.checkInitContract(dto);
+    }
+
+    @Post("/getCases")
+    @ApiOperation({summary: "Lấy thông tin hợp đồng trả về"})
+    @HttpCode(200)
+    getCases(
+        @Headers() headers,
+        @Body() dto: GetMcCaseRequestDto
+    ) {
+        return this.service.getCases(dto);
     }
 
     @Post("/checkList")
