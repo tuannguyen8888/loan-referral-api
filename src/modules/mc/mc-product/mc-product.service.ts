@@ -16,9 +16,9 @@ import {
     PtfAttachFile,
     PtfEmploymentInformation,
     PtfLoanProfile,
-  PtfLoanProfileDefer,
-  PtfRelatedPerson,
-  SendDataLog
+    PtfLoanProfileDefer,
+    PtfRelatedPerson,
+    SendDataLog
 } from "../../../entities";
 import * as FormData from "form-data";
 import * as fs from "fs";
