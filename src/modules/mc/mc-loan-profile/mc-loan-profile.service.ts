@@ -30,7 +30,10 @@ import {CheckInitContractRequestDto} from "./dto/check-init-contract.request.dto
 import {McCheckListrequestDto} from "./dto/mc-check-listrequest.dto";
 import {McapiUtil} from "../../../common/utils/mcapi.util";
 import {McAttachfilesResponseDto} from "../mc-attachfile/dto/mc-attachfiles.response.dto";
-import {LoanProfileRepository, McAttachfileRepository} from "../../../repositories";
+import {
+    LoanProfileRepository,
+    McAttachfileRepository
+} from "../../../repositories";
 import {GetMCAttachfileRequestDto} from "../mc-attachfile/dto/mc-get-attachfile.request.dto";
 import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
 
@@ -157,7 +160,14 @@ export class McLoanProfileService extends BaseService {
         //Update profileid
         let profileid = response.id;
         const repo = this.connection.getCustomRepository(McLoanProfileRepository);
-        let query = repo.createQueryBuilder().update().set({profileid: profileid}).where("id = :id", {id: id});
+        let query = repo
+            .createQueryBuilder()
+            .update()
+            .set({
+                profileid: profileid,
+                status: "hadsend"
+            })
+            .where("id = :id", {id: id});
         await query.execute();
 
         return response;

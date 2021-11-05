@@ -11,8 +11,8 @@ import {
 export class McCaseNoteUpdateDto {
   @IsDefined()
   id: number = null;
-    profileid: number = null;
-    appNumber: number = null;
+  profileid: number = null;
+  appNumber: number = null;
   app_uid: string = null;
   note_content: string = null;
   note_date: string = null;
