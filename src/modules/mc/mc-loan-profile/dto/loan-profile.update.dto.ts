@@ -46,6 +46,8 @@ export class LoanProfileUpdateDto {
   hasCourier: number = null;
   status: string = null;
   bpmStatus: string = null;
+  dateOfBirth: string = null;
+  customerIncome: number = null;
 
   @IsOptional()
   @IsDateString()

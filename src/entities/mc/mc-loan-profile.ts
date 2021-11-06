@@ -182,6 +182,15 @@ export class McLoanProfile {
   })
   mobileIssueDateCitizen: string;
 
+  @Column("varchar", {
+    name: "dateOfBirth",
+    length: 20,
+    nullable: true,
+    default: "",
+    comment: "Ngày sinh Định dạng: dd/mm/yyyy"
+  })
+  dateOfBirth: string;
+
   @Column("int", {
     name: "profileid",
     nullable: true,
@@ -231,6 +240,14 @@ export class McLoanProfile {
     comment: "mã cic"
   })
   hasCourier: number;
+
+  @Column("int", {
+    name: "customerIncome",
+    nullable: true,
+    default: 0,
+    comment: "mã cic"
+  })
+  customerIncome: number;
 
   @Column("varchar", {
     name: "status",

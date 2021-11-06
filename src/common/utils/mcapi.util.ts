@@ -452,4 +452,139 @@ export class McapiUtil {
     }
     return response;
   }
+
+  async listCaseNote(appNumber): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url =
+        mc_api_config.endpoint +
+        "/mobile-4sales/list-case-note/" + appNumber;
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.get(url, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.listCaseNote(appNumber);
+      }
+    }
+    return response;
+  }
+
+  async sendCaseNote(appNumber, noteContent): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url =
+        mc_api_config.endpoint +
+        "/mobile-4sales/send-case-note";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(url, {
+        appNumber: appNumber,
+        noteContent: noteContent
+      }, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.sendCaseNote(appNumber, noteContent);
+      }
+    }
+    return response;
+  }
+
+  async cancelCase(profileid, reason, comment): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url =
+        mc_api_config.endpoint +
+        "/mobile-4sales/cancel-case";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(url, {
+        id: profileid,
+        reason: reason,
+        comment: comment,
+      }, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.cancelCase(profileid, reason, comment);
+      }
+    }
+    return response;
+  }
+
+  async getReturnChecklist(appId): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url =
+        mc_api_config.endpoint +
+        "/mobile-4sales/third-party/checklist?appId=" + appId;
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.get(url, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.getReturnChecklist(appId);
+      }
+    }
+    return response;
+  }
 }
