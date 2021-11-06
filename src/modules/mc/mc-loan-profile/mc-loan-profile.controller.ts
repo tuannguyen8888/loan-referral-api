@@ -85,10 +85,7 @@ export class McLoanProfileController {
     @Post("/getCases")
     @ApiOperation({summary: "Lấy thông tin hợp đồng trả về"})
     @HttpCode(200)
-    getCases(
-        @Headers() headers,
-        @Body() dto: GetMcCaseRequestDto
-    ) {
+    getCases(@Headers() headers, @Body() dto: GetMcCaseRequestDto) {
         return this.service.getCases(dto);
     }
 

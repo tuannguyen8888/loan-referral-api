@@ -38,6 +38,7 @@ import {GetMCAttachfileRequestDto} from "../mc-attachfile/dto/mc-get-attachfile.
 import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
 import {GetMCCaseRequestDto} from "../mc-case/dto/get-case.request.dto";
 import {GetMcCaseRequestDto} from "./dto/get-mc-case.request.dto";
+import {McCaseNoteRepository} from "../../../repositories/mc/mc-case-note.repository";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -183,9 +184,30 @@ export class McLoanProfileService extends BaseService {
     }
 
     async getCases(dto: GetMcCaseRequestDto) {
-        console.log("checkCategory");
+        console.log("getCases");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        const repo = this.connection.getCustomRepository(McLoanProfileRepository);
         var response = await mcapi.getCases(dto);
+        for (const item of response) {
+            let query = repo.createQueryBuilder().where("deleted_at is null");
+            query = query.andWhere("profileid = :profileid", {
+                profileid: item.id
+            });
+            let data, count;
+            data = await query.getOne();
+            console.log(data);
+            //console.log(count);
+            //Cập nhât Profile
+            let queryupdate = repo
+                .createQueryBuilder()
+                .update()
+                .set({
+                    appNumber: item.appNumber,
+                    appid: item.appId
+                })
+                .where("id = :id", {id: data.id});
+            await queryupdate.execute();
+        }
         return response;
     }
 

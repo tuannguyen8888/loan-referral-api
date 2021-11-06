@@ -140,7 +140,14 @@ export class McLoanProfile {
     comment: "Địa điểm đăng ký VKTD"
   })
   issuePlace: string;
-
+  @Column("varchar", {
+    name: "bpmStatus",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Trạng thái hồ sơ"
+  })
+  bpmStatus: string;
   @Column("varchar", {
     name: "shopCode",
     length: 50,
@@ -200,56 +207,56 @@ export class McLoanProfile {
   })
   appNumber: number;
 
-    @Column("int", {
-        name: "cicResult",
-        nullable: true,
-        default: 0,
-        comment: "mã cic"
-    })
-    cicResult: number;
+  @Column("int", {
+    name: "cicResult",
+    nullable: true,
+    default: 0,
+    comment: "mã cic"
+  })
+  cicResult: number;
 
-    @Column("varchar", {
-        name: "cicDescription",
-        length: 255,
-        nullable: true,
-        default: "",
-        comment: "Mô tả cic"
-    })
-    cicDescription: string;
+  @Column("varchar", {
+    name: "cicDescription",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Mô tả cic"
+  })
+  cicDescription: string;
 
-    @Column("int", {
-        name: "hasCourier",
-        nullable: true,
-        default: 0,
-        comment: "mã cic"
-    })
-    hasCourier: number;
+  @Column("int", {
+    name: "hasCourier",
+    nullable: true,
+    default: 0,
+    comment: "mã cic"
+  })
+  hasCourier: number;
 
-    @Column("varchar", {
-        name: "status",
-        nullable: true,
-        default: "",
-        comment: "Trạng thái hồ sơ"
-    })
-    status: string;
+  @Column("varchar", {
+    name: "status",
+    nullable: true,
+    default: "",
+    comment: "Trạng thái hồ sơ"
+  })
+  status: string;
 
-    @Column("timestamp", {
-        name: "created_at",
-        default: () => "CURRENT_TIMESTAMP"
-    })
-    createdAt: Date;
+  @Column("timestamp", {
+    name: "created_at",
+    default: () => "CURRENT_TIMESTAMP"
+  })
+  createdAt: Date;
 
-    @Column("varchar", {
-        name: "created_by",
-        length: 255,
+  @Column("varchar", {
+    name: "created_by",
+    length: 255,
     default: ""
   })
   createdBy: string | null;
 
-  @Column("timestamp", { name: "updated_at", nullable: true })
+  @Column("timestamp", {name: "updated_at", nullable: true})
   updatedAt: Date | null;
 
-  @Column("varchar", { name: "updated_by", nullable: true, length: 255 })
+  @Column("varchar", {name: "updated_by", nullable: true, length: 255})
   updatedBy: string | null;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })

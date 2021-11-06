@@ -298,7 +298,7 @@ export class McapiUtil {
 
   async createUploadFile(dtoAttachFiles: McAttachfilesResponseDto) {
     var fs = require("fs");
-    let dirname = Date.now()
+    let dirname = Date.now();
     let fileZipName = `${dirname}.zip`;
     let filePath = `${__dirname}/../../attach_files/`;
     var dir = filePath + dirname;
@@ -391,7 +391,7 @@ export class McapiUtil {
         "x-security": "FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d",
         Authorization: "Bearer " + token,
         ...data.getHeaders()
-      },
+      }
     };
 
     try {
@@ -420,12 +420,19 @@ export class McapiUtil {
     }
     let response;
     let mc_api_config = config.get("mc_api");
-    let url = mc_api_config.endpoint + "mobile-4sales/cases?" +
-        "pageNumber=" + dto.pageNumber +
-        "&pageSize=" + dto.pageSize +
-        "&keyword=" + dto.keyword +
-        "&status=" + dto.status +
-        "&saleCode=" + mc_api_config.saleCode;
+    let url =
+        mc_api_config.endpoint +
+        "mobile-4sales/cases?" +
+        "pageNumber=" +
+        dto.pageNumber +
+        "&pageSize=" +
+        dto.pageSize +
+        "&keyword=" +
+        dto.keyword +
+        "&status=" +
+        dto.status +
+        "&saleCode=" +
+        mc_api_config.saleCode;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,

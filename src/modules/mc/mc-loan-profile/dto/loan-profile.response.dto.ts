@@ -43,6 +43,7 @@ export class LoanProfileResponseDto {
   cicDescription: string = null;
   hasCourier: number = null;
   status: string = null;
+  bpmStatus: string = null;
 
   @IsOptional()
   @IsDateString()
