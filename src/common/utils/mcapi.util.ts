@@ -288,6 +288,7 @@ export class McapiUtil {
       response = result.data;
     } catch (e) {
       response = e.response.data;
+      console.log('Errors');
       if (response.returnCode == "401") {
         await this.login();
         return await this.checkInitContract(dto);

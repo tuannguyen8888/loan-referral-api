@@ -72,16 +72,6 @@ export class McLoanProfileController {
         return this.service.checkCitizenId(dto.citizenId);
     }
 
-    @Post("/checkInitContract")
-    @ApiOperation({summary: "Kiểm tra thông tin khách hàng"})
-    @HttpCode(200)
-    checkInitContract(
-        @Headers() headers,
-        @Body() dto: CheckInitContractRequestDto
-    ) {
-        return this.service.checkInitContract(dto);
-    }
-
     @Post("/getCases")
     @ApiOperation({summary: "Lấy thông tin hợp đồng trả về"})
     @HttpCode(200)
@@ -111,6 +101,14 @@ export class McLoanProfileController {
         @Param() params
     ): Promise<McCategoryResponseDto> {
         return this.service.checkCategory(params.companyTaxNumber);
+    }
+
+    @Get("/checkInitContract/:loan_profile_id")
+    @ApiOperation({summary: "Kiểm tra khả năng cho vay"})
+    @HttpCode(200)
+    checkInitContract(@Headers() headers, @Param() params) {
+        console.log(params.loan_profile_id);
+        return this.service.checkInitContract(params.loan_profile_id);
     }
 
     @Post("/")

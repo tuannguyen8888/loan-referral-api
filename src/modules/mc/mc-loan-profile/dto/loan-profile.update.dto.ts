@@ -38,26 +38,28 @@ export class LoanProfileUpdateDto {
   kiosid: number = null;
   mobileProductType: string = null;
   mobileIssueDateCitizen: string = null;
-  appNumber: number = null;
-  profileid: number = null;
-  appid: string = null;
-  cicResult: number = null;
-  cicDescription: string = null;
-  hasCourier: number = null;
-  status: string = null;
-  bpmStatus: string = null;
-  dateOfBirth: string = null;
-  customerIncome: number = null;
+    appNumber: number = null;
+    profileid: number = null;
+    appid: string = null;
+    cicResult: number = null;
+    cicDescription: string = null;
+    hasCourier: number = null;
+    status: string = null;
+    bpmStatus: string = null;
+    dateOfBirth: string = null;
+    customerIncome: number = null;
+    checkcontract: string = null;
+    checkcontractdes: string = null;
 
-  @IsOptional()
-  @IsDateString()
-  updatedAt: string = null;
-  updatedBy: string = null;
+    @IsOptional()
+    @IsDateString()
+    updatedAt: string = null;
+    updatedBy: string = null;
 
-  @IsOptional()
-  @IsDateString()
-  deletedAt: string = null;
-  deletedBy: string = null;
+    @IsOptional()
+    @IsDateString()
+    deletedAt: string = null;
+    deletedBy: string = null;
 
   // process: ProcessDto[];
   // defers: LoanProfileDeferDto[];

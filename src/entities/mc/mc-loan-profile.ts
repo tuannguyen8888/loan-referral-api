@@ -257,6 +257,22 @@ export class McLoanProfile {
   })
   status: string;
 
+  @Column("varchar", {
+    name: "checkcontract",
+    nullable: true,
+    default: "",
+    comment: "Check hồ sơ RED|YELLOW|BLUE"
+  })
+  checkcontract: string;
+
+  @Column("varchar", {
+    name: "checkcontractdes",
+    nullable: true,
+    default: "",
+    comment: "Nội dung kiểm tra hồ sơ"
+  })
+  checkcontractdes: string;
+
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"

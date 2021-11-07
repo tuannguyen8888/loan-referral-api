@@ -47,6 +47,8 @@ export class McLoanProfileDto {
     bpmStatus: string = null;
     dateOfBirth: string = null;
     customerIncome: number = null;
+    checkcontract: string = null;
+    checkcontractdes: string = null;
 
     @IsOptional()
     @IsDateString()

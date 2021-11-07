@@ -122,10 +122,57 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
 
-    async checkInitContract(dto: CheckInitContractRequestDto) {
+    async checkInitContract(loan_profile_id) {
         console.log("checkInitContract");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        let dto = new CheckInitContractRequestDto();
+        var loanProfile = await this.getLoanProfile(loan_profile_id);
+        dto.productId = loanProfile.productId;
+        dto.customerName = loanProfile.customerName;
+        dto.citizenId = loanProfile.citizenId;
+        dto.loanAmount = loanProfile.loanAmount;
+        dto.loanTenor = loanProfile.loanTenor;
+        dto.customerIncome = loanProfile.customerIncome;
+        dto.dateOfBirth = loanProfile.dateOfBirth;
+        dto.gender = loanProfile.gender;
+        dto.issuePlace = loanProfile.issuePlace;
+        dto.hasInsurance = loanProfile.hasInsurance;
         var response = await mcapi.checkInitContract(dto);
+        const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+
+        let queryupdate;
+        switch (response.returnCode) {
+            case "200":
+                let returnMes = JSON.parse(response.returnMes);
+                console.log(returnMes[0]);
+                //Cập nhât Profile
+                queryupdate = repo
+                    .createQueryBuilder()
+                    .update()
+                    .set({
+                        status: 'checkpass',
+                        checkcontract: returnMes[0].outputType,
+                        checkcontractdes: returnMes[0].outputValue
+                    })
+                    .where("id = :id", {id: loan_profile_id});
+                await queryupdate.execute();
+                break;
+            case "400":
+                console.log(response.returnMes);
+                //Cập nhât Profile
+                queryupdate = repo
+                    .createQueryBuilder()
+                    .update()
+                    .set({
+                        status: 'checkfaile',
+                        checkcontract: 'RED',
+                        checkcontractdes: response.returnMes
+                    })
+                    .where("id = :id", {id: loan_profile_id});
+                await queryupdate.execute();
+                break;
+
+        }
         return response;
     }
 
