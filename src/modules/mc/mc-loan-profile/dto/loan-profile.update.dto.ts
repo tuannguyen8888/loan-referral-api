@@ -50,6 +50,8 @@ export class LoanProfileUpdateDto {
     customerIncome: number = null;
     checkcontract: string = null;
     checkcontractdes: string = null;
+    reasons: string = null;
+    pdfFiles: string = null;
 
     @IsOptional()
     @IsDateString()

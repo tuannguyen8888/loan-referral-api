@@ -273,6 +273,22 @@ export class McLoanProfile {
   })
   checkcontractdes: string;
 
+  @Column("text", {
+    name: "reasons",
+    nullable: true,
+    default: "[]",
+    comment: "List lý do"
+  })
+  reasons: string;
+
+  @Column("text", {
+    name: "pdfFiles",
+    nullable: true,
+    default: "[]",
+    comment: "Danh sách file"
+  })
+  pdfFiles: string;
+
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"

@@ -250,7 +250,10 @@ export class McLoanProfileService extends BaseService {
                 .update()
                 .set({
                     appNumber: item.appNumber,
-                    appid: item.appId
+                    appid: item.appId,
+                    bpmStatus: item.bpmStatus,
+                    reasons: JSON.stringify(item.reasons),
+                    pdfFiles: JSON.stringify(item.pdfFiles),
                 })
                 .where("id = :id", {id: data.id});
             await queryupdate.execute();

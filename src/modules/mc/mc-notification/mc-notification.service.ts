@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, Scope } from "@nestjs/common";
+import {BadRequestException, HttpService, Inject, Injectable, Scope} from "@nestjs/common";
 
 import { BaseService } from "../../../common/services";
 import { REQUEST } from "@nestjs/core";
@@ -11,20 +11,22 @@ import * as config from "config";
 
 import { McNotification } from "../../../entities";
 
-import { GetMCnotificationRequestDto } from "./dto/get-notification.request.dto";
-import { McNotificationRepository } from "../../../repositories";
-import { McNotificationResponseDto } from "./dto/mc-notification.response.dto";
+import {GetMCnotificationRequestDto} from "./dto/get-notification.request.dto";
+import {McLoanProfileRepository, McNotificationRepository} from "../../../repositories";
+import {McNotificationResponseDto} from "./dto/mc-notification.response.dto";
 import { McNotificationsResponseDto } from "./dto/mc-notifications.response.dto";
 import { McNotificationDto } from "./dto/mc-notification.dto";
-import { McNotificationUpdateDto } from "./dto/mc-notification.update.dto";
+import {McNotificationUpdateDto} from "./dto/mc-notification.update.dto";
+import {McLoanProfileService} from "../mc-loan-profile/mc-loan-profile.service";
 
 @Injectable()
 export class McNotificationService extends BaseService {
   constructor(
-    @Inject(REQUEST) protected request: Request,
-    protected readonly logger: Logger,
-    protected readonly redisClient: RedisClient,
-    private readonly requestUtil: RequestUtil
+      @Inject(REQUEST) protected request: Request,
+      protected readonly logger: Logger,
+      protected readonly redisClient: RedisClient,
+      private readonly requestUtil: RequestUtil,
+      @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
   }
@@ -73,21 +75,39 @@ export class McNotificationService extends BaseService {
 
   async createNotification(dto: McNotificationDto) {
     console.log(dto);
-    let entity: McNotification = this.convertDto2Entity(dto, McNotification);
-    entity.createdAt = new Date();
-    console.log(entity);
-    this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
-    let result = await this.connection
-      .getCustomRepository(McNotificationRepository)
-      .save(entity);
-    this.logger.verbose(`insertResult = ${result}`);
+      let entity: McNotification = this.convertDto2Entity(dto, McNotification);
+      entity.profileid = dto.id;
+      entity.createdAt = new Date();
+      console.log(entity);
+      this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
+      let result = await this.connection
+          .getCustomRepository(McNotificationRepository)
+          .save(entity);
+      this.logger.verbose(`insertResult = ${result}`);
 
-    let response: McNotificationDto = this.convertEntity2Dto(
-      result,
-      McNotification,
-      McNotificationDto
-    );
-    return response;
+      //let loanProfileService = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+      const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+      let query = repo.createQueryBuilder().where("deleted_at is null");
+      query = query.andWhere("profileid = :profileid", {
+          profileid: entity.profileid
+      });
+      let loanProfileResponse = await query.getOne();
+      //Cập nhật trạng thái
+      let queryupdate = repo
+          .createQueryBuilder()
+          .update()
+          .set({
+              bpmStatus: dto.currentStatus
+          })
+          .where("id = :id", {id: loanProfileResponse.id});
+      await queryupdate.execute();
+
+      let response: McNotificationDto = this.convertEntity2Dto(
+          result,
+          McNotification,
+          McNotificationDto
+      );
+      return response;
   }
 
   async updateNotification(dto: McNotificationUpdateDto) {

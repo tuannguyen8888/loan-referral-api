@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, Scope } from "@nestjs/common";
+import {BadRequestException, HttpService, Inject, Injectable, Scope} from "@nestjs/common";
 
 import { BaseService } from "../../../common/services";
 import { REQUEST } from "@nestjs/core";
@@ -10,21 +10,24 @@ import { RequestUtil } from "../../../common/utils";
 import * as moment from "moment";
 import * as config from "config";
 
-import { McCaseNote } from "../../../entities";
-import { GetMCCaseNoteRequestDto } from "./dto/get-case-note.request.dto";
-import { McCaseNoteRepository } from "../../../repositories/mc/mc-case-note.repository";
-import { McCaseNotesResponseDto } from "./dto/mc-case-notes.response.dto";
-import { McCaseNoteResponseDto } from "./dto/mc-case-note.response.dto";
-import { McCaseNoteDto } from "./dto/mc-case-note.dto";
-import { McCaseNoteUpdateDto } from "./dto/mc-case-note.update.dto";
+import {McCaseNote} from "../../../entities";
+import {GetMCCaseNoteRequestDto} from "./dto/get-case-note.request.dto";
+import {McCaseNoteRepository} from "../../../repositories/mc/mc-case-note.repository";
+import {McCaseNotesResponseDto} from "./dto/mc-case-notes.response.dto";
+import {McCaseNoteResponseDto} from "./dto/mc-case-note.response.dto";
+import {McCaseNoteDto} from "./dto/mc-case-note.dto";
+import {McCaseNoteUpdateDto} from "./dto/mc-case-note.update.dto";
+import {McapiUtil} from "../../../common/utils/mcapi.util";
+import {McLoanProfileService} from "../mc-loan-profile/mc-loan-profile.service";
 
 @Injectable()
 export class McCaseNoteService extends BaseService {
   constructor(
-    @Inject(REQUEST) protected request: Request,
-    protected readonly logger: Logger,
-    protected readonly redisClient: RedisClient,
-    private readonly requestUtil: RequestUtil
+      @Inject(REQUEST) protected request: Request,
+      protected readonly logger: Logger,
+      protected readonly redisClient: RedisClient,
+      private readonly requestUtil: RequestUtil,
+      @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
   }
@@ -79,34 +82,47 @@ export class McCaseNoteService extends BaseService {
 
   async createCaseNote(dto: McCaseNoteDto) {
     console.log(dto);
+    let loanProfileService = new McLoanProfileService(this.request, this.logger, this.redisClient, this.requestUtil, this.httpService);
+    let loanProfile = await loanProfileService.getLoanProfile(dto.profileid);
+    dto.appNumber = loanProfile.appNumber;
+    dto.app_uid = loanProfile.appid;
     let entity: McCaseNote = this.convertDto2Entity(dto, McCaseNote);
     entity.createdAt = new Date();
     console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
-      .getCustomRepository(McCaseNoteRepository)
-      .save(entity);
+        .getCustomRepository(McCaseNoteRepository)
+        .save(entity);
     this.logger.verbose(`insertResult = ${result}`);
 
     let response: McCaseNoteDto = this.convertEntity2Dto(
-      result,
-      McCaseNote,
-      McCaseNoteDto
+        result,
+        McCaseNote,
+        McCaseNoteDto
     );
+    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    if (dto.appNumber != null) {
+      mcapi.sendCaseNote(dto.appNumber, dto.note_content);
+    }
+
     return response;
   }
 
   async updateCaseNote(dto: McCaseNoteUpdateDto) {
+    let loanProfileService = new McLoanProfileService(this.request, this.logger, this.redisClient, this.requestUtil, this.httpService);
+    let loanProfile = await loanProfileService.getLoanProfile(dto.profileid);
+    dto.appNumber = loanProfile.appNumber;
+    dto.app_uid = loanProfile.appid;
     let entityUpdate: McCaseNote = this.convertDto2Entity(dto, McCaseNote);
     entityUpdate.updatedBy = dto.updatedBy;
     entityUpdate.updatedAt = new Date();
     let result = await this.connection
-      .getCustomRepository(McCaseNoteRepository)
-      .save(entityUpdate);
+        .getCustomRepository(McCaseNoteRepository)
+        .save(entityUpdate);
     let response: McCaseNoteUpdateDto = this.convertEntity2Dto(
-      result,
-      McCaseNote,
-      McCaseNoteUpdateDto
+        result,
+        McCaseNote,
+        McCaseNoteUpdateDto
     );
     return response;
   }
