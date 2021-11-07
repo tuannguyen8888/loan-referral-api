@@ -150,7 +150,7 @@ export class McLoanProfileService extends BaseService {
                     .createQueryBuilder()
                     .update()
                     .set({
-                        status: 'checkpass',
+                        status: "checkpass",
                         checkcontract: returnMes[0].outputType,
                         checkcontractdes: returnMes[0].outputValue
                     })
@@ -164,14 +164,13 @@ export class McLoanProfileService extends BaseService {
                     .createQueryBuilder()
                     .update()
                     .set({
-                        status: 'checkfaile',
-                        checkcontract: 'RED',
+                        status: "checkfaile",
+                        checkcontract: "RED",
                         checkcontractdes: response.returnMes
                     })
                     .where("id = :id", {id: loan_profile_id});
                 await queryupdate.execute();
                 break;
-
         }
         return response;
     }
@@ -230,6 +229,15 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
 
+    async listCaseNote(id) {
+        console.log("listCaseNote");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        let loanProfile = await this.getLoanProfile(id);
+        console.log(loanProfile.appNumber);
+        var response = await mcapi.listCaseNote(loanProfile.appNumber);
+        return response;
+    }
+
     async getCases(dto: GetMcCaseRequestDto) {
         console.log("getCases");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
@@ -253,7 +261,7 @@ export class McLoanProfileService extends BaseService {
                     appid: item.appId,
                     bpmStatus: item.bpmStatus,
                     reasons: JSON.stringify(item.reasons),
-                    pdfFiles: JSON.stringify(item.pdfFiles),
+                    pdfFiles: JSON.stringify(item.pdfFiles)
                 })
                 .where("id = :id", {id: data.id});
             await queryupdate.execute();

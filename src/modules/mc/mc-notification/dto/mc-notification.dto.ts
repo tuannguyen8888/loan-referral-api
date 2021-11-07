@@ -9,10 +9,9 @@ import {
 
 export class McNotificationDto {
   @IsOptional()
-
   id: number = null;
     appNumber: number = null;
-  appId: string = null;
+    appId: string = null;
   currentStatus: string = null;
 
   @IsOptional()

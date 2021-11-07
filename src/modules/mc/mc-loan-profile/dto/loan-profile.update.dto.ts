@@ -28,16 +28,16 @@ export class LoanProfileUpdateDto {
   officeNumber: string = null;
   companyTaxNumber: string = null;
   saleCode: string = null;
-  productId: number = null;
-  tempResidence: number = null;
-  loanAmount: number = null;
-  loanTenor: number = null;
-  hasInsurance: number = null;
-  issuePlace: string = null;
-  shopCode: string = null;
-  kiosid: number = null;
-  mobileProductType: string = null;
-  mobileIssueDateCitizen: string = null;
+    productId: number = null;
+    tempResidence: number = null;
+    loanAmount: number = null;
+    loanTenor: number = null;
+    hasInsurance: number = null;
+    issuePlace: string = null;
+    shopCode: string = null;
+    kiosid: number = null;
+    mobileProductType: string = null;
+    mobileIssueDateCitizen: string = null;
     appNumber: number = null;
     profileid: number = null;
     appid: string = null;
@@ -63,6 +63,6 @@ export class LoanProfileUpdateDto {
     deletedAt: string = null;
     deletedBy: string = null;
 
-  // process: ProcessDto[];
-  // defers: LoanProfileDeferDto[];
+    // process: ProcessDto[];
+    // defers: LoanProfileDeferDto[];
 }

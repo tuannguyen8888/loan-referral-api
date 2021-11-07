@@ -1,11 +1,17 @@
-import {BadRequestException, HttpService, Inject, Injectable, Scope} from "@nestjs/common";
+import {
+  BadRequestException,
+  HttpService,
+  Inject,
+  Injectable,
+  Scope
+} from "@nestjs/common";
 
-import { BaseService } from "../../../common/services";
-import { REQUEST } from "@nestjs/core";
-import { Request } from "express";
-import { Logger } from "../../../common/loggers";
-import { RedisClient } from "../../../common/shared";
-import { RequestUtil } from "../../../common/utils";
+import {BaseService} from "../../../common/services";
+import {REQUEST} from "@nestjs/core";
+import {Request} from "express";
+import {Logger} from "../../../common/loggers";
+import {RedisClient} from "../../../common/shared";
+import {RequestUtil} from "../../../common/utils";
 
 import * as moment from "moment";
 import * as config from "config";
@@ -82,7 +88,13 @@ export class McCaseNoteService extends BaseService {
 
   async createCaseNote(dto: McCaseNoteDto) {
     console.log(dto);
-    let loanProfileService = new McLoanProfileService(this.request, this.logger, this.redisClient, this.requestUtil, this.httpService);
+    let loanProfileService = new McLoanProfileService(
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil,
+        this.httpService
+    );
     let loanProfile = await loanProfileService.getLoanProfile(dto.profileid);
     dto.appNumber = loanProfile.appNumber;
     dto.app_uid = loanProfile.appid;
@@ -109,7 +121,13 @@ export class McCaseNoteService extends BaseService {
   }
 
   async updateCaseNote(dto: McCaseNoteUpdateDto) {
-    let loanProfileService = new McLoanProfileService(this.request, this.logger, this.redisClient, this.requestUtil, this.httpService);
+    let loanProfileService = new McLoanProfileService(
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil,
+        this.httpService
+    );
     let loanProfile = await loanProfileService.getLoanProfile(dto.profileid);
     dto.appNumber = loanProfile.appNumber;
     dto.app_uid = loanProfile.appid;

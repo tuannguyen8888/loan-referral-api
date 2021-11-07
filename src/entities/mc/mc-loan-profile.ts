@@ -305,7 +305,7 @@ export class McLoanProfile {
   @Column("timestamp", {name: "updated_at", nullable: true})
   updatedAt: Date | null;
 
-  @Column("varchar", {name: "updated_by", nullable: true, length: 255})
+    @Column("varchar", {name: "updated_by", nullable: true, length: 255})
   updatedBy: string | null;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })

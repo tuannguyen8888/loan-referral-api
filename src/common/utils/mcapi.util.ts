@@ -288,7 +288,7 @@ export class McapiUtil {
       response = result.data;
     } catch (e) {
       response = e.response.data;
-      console.log('Errors');
+      console.log("Errors");
       if (response.returnCode == "401") {
         await this.login();
         return await this.checkInitContract(dto);
@@ -464,8 +464,7 @@ export class McapiUtil {
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint +
-        "/mobile-4sales/list-case-note/" + appNumber;
+        mc_api_config.endpoint + "/mobile-4sales/list-case-note/" + appNumber;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -495,21 +494,23 @@ export class McapiUtil {
     }
     let response;
     let mc_api_config = config.get("mc_api");
-    let url =
-        mc_api_config.endpoint +
-        "/mobile-4sales/send-case-note";
+    let url = mc_api_config.endpoint + "/mobile-4sales/send-case-note";
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
       Authorization: "Bearer " + token
     };
     try {
-      let result = await axios.post(url, {
-        appNumber: appNumber,
-        noteContent: noteContent
-      }, {
-        headers: headers
-      });
+      let result = await axios.post(
+          url,
+          {
+            appNumber: appNumber,
+            noteContent: noteContent
+          },
+          {
+            headers: headers
+          }
+      );
       response = result.data;
     } catch (e) {
       response = e.response.data;
@@ -530,22 +531,24 @@ export class McapiUtil {
     }
     let response;
     let mc_api_config = config.get("mc_api");
-    let url =
-        mc_api_config.endpoint +
-        "/mobile-4sales/cancel-case";
+    let url = mc_api_config.endpoint + "/mobile-4sales/cancel-case";
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
       Authorization: "Bearer " + token
     };
     try {
-      let result = await axios.post(url, {
-        id: profileid,
-        reason: reason,
-        comment: comment,
-      }, {
-        headers: headers
-      });
+      let result = await axios.post(
+          url,
+          {
+            id: profileid,
+            reason: reason,
+            comment: comment
+          },
+          {
+            headers: headers
+          }
+      );
       response = result.data;
     } catch (e) {
       response = e.response.data;
@@ -568,7 +571,8 @@ export class McapiUtil {
     let mc_api_config = config.get("mc_api");
     let url =
         mc_api_config.endpoint +
-        "/mobile-4sales/third-party/checklist?appId=" + appId;
+        "/mobile-4sales/third-party/checklist?appId=" +
+        appId;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,

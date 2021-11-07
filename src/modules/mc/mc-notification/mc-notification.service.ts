@@ -1,33 +1,42 @@
-import {BadRequestException, HttpService, Inject, Injectable, Scope} from "@nestjs/common";
+import {
+    BadRequestException,
+    HttpService,
+    Inject,
+    Injectable,
+    Scope
+} from "@nestjs/common";
 
 import { BaseService } from "../../../common/services";
-import { REQUEST } from "@nestjs/core";
-import { Request } from "express";
-import { Logger } from "../../../common/loggers";
-import { RedisClient } from "../../../common/shared";
-import { RequestUtil } from "../../../common/utils";
+import {REQUEST} from "@nestjs/core";
+import {Request} from "express";
+import {Logger} from "../../../common/loggers";
+import {RedisClient} from "../../../common/shared";
+import {RequestUtil} from "../../../common/utils";
 import * as moment from "moment";
 import * as config from "config";
 
-import { McNotification } from "../../../entities";
+import {McNotification} from "../../../entities";
 
 import {GetMCnotificationRequestDto} from "./dto/get-notification.request.dto";
-import {McLoanProfileRepository, McNotificationRepository} from "../../../repositories";
+import {
+    McLoanProfileRepository,
+    McNotificationRepository
+} from "../../../repositories";
 import {McNotificationResponseDto} from "./dto/mc-notification.response.dto";
-import { McNotificationsResponseDto } from "./dto/mc-notifications.response.dto";
-import { McNotificationDto } from "./dto/mc-notification.dto";
+import {McNotificationsResponseDto} from "./dto/mc-notifications.response.dto";
+import {McNotificationDto} from "./dto/mc-notification.dto";
 import {McNotificationUpdateDto} from "./dto/mc-notification.update.dto";
 import {McLoanProfileService} from "../mc-loan-profile/mc-loan-profile.service";
 
 @Injectable()
 export class McNotificationService extends BaseService {
-  constructor(
-      @Inject(REQUEST) protected request: Request,
-      protected readonly logger: Logger,
-      protected readonly redisClient: RedisClient,
-      private readonly requestUtil: RequestUtil,
-      @Inject(HttpService) private readonly httpService: HttpService
-  ) {
+    constructor(
+        @Inject(REQUEST) protected request: Request,
+        protected readonly logger: Logger,
+        protected readonly redisClient: RedisClient,
+        private readonly requestUtil: RequestUtil,
+        @Inject(HttpService) private readonly httpService: HttpService
+    ) {
     super(request, logger, redisClient);
   }
   async getAllNotification(dto: GetMCnotificationRequestDto) {
@@ -74,7 +83,7 @@ export class McNotificationService extends BaseService {
   }
 
   async createNotification(dto: McNotificationDto) {
-    console.log(dto);
+      console.log(dto);
       let entity: McNotification = this.convertDto2Entity(dto, McNotification);
       entity.profileid = dto.id;
       entity.createdAt = new Date();
