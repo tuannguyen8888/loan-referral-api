@@ -119,6 +119,14 @@ export class McLoanProfileController {
     return this.service.listCaseNote(params.loan_profile_id);
   }
 
+  @Get("/getReturnChecklist/:loan_profile_id")
+  @ApiOperation({summary: "Kiểm tra khả năng cho vay"})
+  @HttpCode(200)
+  getReturnChecklist(@Headers() headers, @Param() params) {
+    console.log(params.loan_profile_id);
+    return this.service.getReturnChecklist(params.loan_profile_id);
+  }
+
   @Post("/")
   @ApiOperation({summary: "Tạo mới hồ sơ vay"})
   createLoanProfile(

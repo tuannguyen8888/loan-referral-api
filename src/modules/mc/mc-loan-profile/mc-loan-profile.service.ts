@@ -238,6 +238,15 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
 
+    async getReturnChecklist(id) {
+        console.log("getReturnChecklist");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        let loanProfile = await this.getLoanProfile(id);
+        console.log(loanProfile.appid);
+        var response = await mcapi.getReturnChecklist(loanProfile.appid);
+        return response;
+    }
+
     async getCases(dto: GetMcCaseRequestDto) {
         console.log("getCases");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
