@@ -63,9 +63,9 @@ export class McCaseNoteService extends BaseService {
       [data, count] = await query.getManyAndCount();
       result.count = count;
       result.rows = this.convertEntities2Dtos(
-        data,
-        McCaseNote,
-        McCaseNoteResponseDto
+          data,
+          McCaseNote,
+          McCaseNoteResponseDto
       );
       return result;
     } catch (e) {

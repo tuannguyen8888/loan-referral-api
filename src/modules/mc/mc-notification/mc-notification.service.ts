@@ -6,7 +6,7 @@ import {
     Scope
 } from "@nestjs/common";
 
-import { BaseService } from "../../../common/services";
+import {BaseService} from "../../../common/services";
 import {REQUEST} from "@nestjs/core";
 import {Request} from "express";
 import {Logger} from "../../../common/loggers";
@@ -37,34 +37,35 @@ export class McNotificationService extends BaseService {
         private readonly requestUtil: RequestUtil,
         @Inject(HttpService) private readonly httpService: HttpService
     ) {
-    super(request, logger, redisClient);
-  }
-  async getAllNotification(dto: GetMCnotificationRequestDto) {
-    try {
-      const repo = this.connection.getCustomRepository(
-        McNotificationRepository
-      );
-      let query = repo.createQueryBuilder().where("deleted_at is null");
-      if (dto.keyword)
-        query = query.andWhere(
-          "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
-          { keyword: "%" + dto.keyword + "%" }
-        );
-      query = query
-        .orderBy("id", "DESC")
-        .skip((dto.page - 1) * dto.pagesize)
-        .take(dto.pagesize);
-      const result = new McNotificationsResponseDto();
+        super(request, logger, redisClient);
+    }
 
-      let data, count;
-      [data, count] = await query.getManyAndCount();
-      result.count = count;
-      result.rows = this.convertEntities2Dtos(
-        data,
-        McNotification,
-        McNotificationResponseDto
-      );
-      return result;
+    async getAllNotification(dto: GetMCnotificationRequestDto) {
+        try {
+            const repo = this.connection.getCustomRepository(
+                McNotificationRepository
+            );
+            let query = repo.createQueryBuilder().where("deleted_at is null");
+            if (dto.keyword)
+                query = query.andWhere(
+                    "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
+                    {keyword: "%" + dto.keyword + "%"}
+                );
+            query = query
+                .orderBy("id", "DESC")
+                .skip((dto.page - 1) * dto.pagesize)
+                .take(dto.pagesize);
+            const result = new McNotificationsResponseDto();
+
+            let data, count;
+            [data, count] = await query.getManyAndCount();
+            result.count = count;
+            result.rows = this.convertEntities2Dtos(
+                data,
+                McNotification,
+                McNotificationResponseDto
+            );
+            return result;
     } catch (e) {
       console.error(e);
       throw e;
