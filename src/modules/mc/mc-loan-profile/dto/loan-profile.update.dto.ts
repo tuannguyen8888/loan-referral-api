@@ -1,27 +1,28 @@
 import {
-  IsString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsDateString,
-  IsDefined,
-  Matches
+    IsString,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsDateString,
+    IsDefined,
+    Matches
 } from "class-validator";
-import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
+import {ProcessDto} from "src/modules/mafc/loan-profile/dto";
 import {
-  AddressDto,
-  AttachFileDto,
-  EmploymentInformationDto,
-  RelatedPersonDto
+    AddressDto,
+    AttachFileDto,
+    EmploymentInformationDto,
+    RelatedPersonDto
 } from "./index";
 
 export class LoanProfileUpdateDto {
-  @IsDefined()
-  id: number = null;
-  citizenId: string = null;
+    @IsDefined()
+    id: number = null;
+    citizenId: string = null;
     customerName: string = null;
     gender: string = null;
     address: string = null;
+    phone: string = null;
     compName: string = null;
     catType: string = null;
     compAddrStreet: string = null;
