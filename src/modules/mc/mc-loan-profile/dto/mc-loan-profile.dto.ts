@@ -49,6 +49,8 @@ export class McLoanProfileDto {
     customerIncome: number = null;
     checkcontract: string = null;
     checkcontractdes: string = null;
+    verifyInfo: string = null;
+    verifyDes: string = null;
     reasons: string = null;
     pdfFiles: string = null;
 

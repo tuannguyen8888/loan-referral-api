@@ -30,6 +30,8 @@ import {CheckCitizenidRequestDto} from "./dto/check-citizenid.request.dto";
 import {CheckInitContractRequestDto} from "./dto/check-init-contract.request.dto";
 import {McCheckListrequestDto} from "./dto/mc-check-listrequest.dto";
 import {GetMcCaseRequestDto} from "./dto/get-mc-case.request.dto";
+import {requestSendOtp3PDto} from "./dto/requestSendOtp3P.dto";
+import {requestScoring3PDto} from "./dto/requestScoring3P.dto";
 
 @Controller("mc-loan-profile")
 @ApiSecurity("api-key")
@@ -125,6 +127,20 @@ export class McLoanProfileController {
   getReturnChecklist(@Headers() headers, @Param() params) {
     console.log(params.loan_profile_id);
     return this.service.getReturnChecklist(params.loan_profile_id);
+  }
+
+  @Post("/requestSendOtp3P")
+  @ApiOperation({summary: "Lấy otp để chấm điểm"})
+  @HttpCode(200)
+  requestSendOtp3P(@Headers() headers, @Body() dto: requestSendOtp3PDto) {
+    return this.service.requestSendOtp3P(dto);
+  }
+
+  @Post("/requestScoring3P")
+  @ApiOperation({summary: "Lấy otp để chấm điểm"})
+  @HttpCode(200)
+  requestScoring3P(@Headers() headers, @Body() dto: requestScoring3PDto) {
+    return this.service.requestScoring3P(dto);
   }
 
   @Post("/")

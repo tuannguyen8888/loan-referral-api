@@ -8,6 +8,7 @@ import {McLoanProfile} from "../../entities";
 import {McLoanProfileDto} from "../../modules/mc/mc-loan-profile/dto";
 import {McAttachfilesResponseDto} from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
 import {GetMcCaseRequestDto} from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
+import {requestScoring3PDto} from "../../modules/mc/mc-loan-profile/dto/requestScoring3P.dto";
 
 @Injectable()
 export class McapiUtil {
@@ -601,6 +602,75 @@ export class McapiUtil {
       if (response.returnCode == "401") {
         await this.login();
         await this.getReturnChecklist(appId);
+      }
+    }
+    return response;
+  }
+
+  async requestSendOtp3P(phone, typeScore): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "/mobile-4sales/requestOTP3P";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(url, {
+        requested_msisdn: phone,
+        typeScore: typeScore
+      }, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.requestSendOtp3P(phone, typeScore);
+      }
+    }
+    return response;
+  }
+
+  async requestScoring3P(dto: requestScoring3PDto): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "/mobile-4sales/scoring3P";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(url, {
+        verificationCode: dto.verificationCode,
+        primaryPhone: dto.primaryPhone,
+        nationalId: dto.nationalId,
+        typeScore: dto.typeScore,
+        userName: mc_api_config.username
+      }, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.requestScoring3P(dto);
       }
     }
     return response;

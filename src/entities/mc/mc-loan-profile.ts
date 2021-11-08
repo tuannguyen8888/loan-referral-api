@@ -265,23 +265,39 @@ export class McLoanProfile {
   })
   checkcontract: string;
 
-  @Column("varchar", {
-    name: "checkcontractdes",
-    nullable: true,
-    default: "",
-    comment: "Nội dung kiểm tra hồ sơ"
-  })
-  checkcontractdes: string;
+    @Column("varchar", {
+        name: "checkcontractdes",
+        nullable: true,
+        default: "",
+        comment: "Nội dung kiểm tra hồ sơ"
+    })
+    checkcontractdes: string;
 
-  @Column("text", {
-    name: "reasons",
-    nullable: true,
-    default: "[]",
-    comment: "List lý do"
-  })
-  reasons: string;
+    @Column("varchar", {
+        name: "verifyInfo",
+        nullable: true,
+        default: "",
+        comment: "Thông tin chấm điểm"
+    })
+    verifyInfo: string;
 
-  @Column("text", {
+    @Column("varchar", {
+        name: "verifyDes",
+        nullable: true,
+        default: "",
+        comment: "Thông tin chấm điểm nội dung phản hồi chấm điểm"
+    })
+    verifyDes: string;
+
+    @Column("text", {
+        name: "reasons",
+        nullable: true,
+        default: "[]",
+        comment: "List lý do"
+    })
+    reasons: string;
+
+    @Column("text", {
     name: "pdfFiles",
     nullable: true,
     default: "[]",

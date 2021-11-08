@@ -39,6 +39,8 @@ import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
 import {GetMCCaseRequestDto} from "../mc-case/dto/get-case.request.dto";
 import {GetMcCaseRequestDto} from "./dto/get-mc-case.request.dto";
 import {McCaseNoteRepository} from "../../../repositories/mc/mc-case-note.repository";
+import {requestSendOtp3PDto} from "./dto/requestSendOtp3P.dto";
+import {requestScoring3PDto} from "./dto/requestScoring3P.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -283,6 +285,20 @@ export class McLoanProfileService extends BaseService {
                 .where("id = :id", {id: data.id});
             await queryupdate.execute();
         }
+        return response;
+    }
+
+    async requestSendOtp3P(dto: requestSendOtp3PDto) {
+        console.log("requestSendOtp3P");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        var response = await mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
+        return response;
+    }
+
+    async requestScoring3P(dto: requestScoring3PDto) {
+        console.log("requestSendOtp3P");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        var response = await mcapi.requestScoring3P(dto);
         return response;
     }
 

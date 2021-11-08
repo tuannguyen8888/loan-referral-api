@@ -46,6 +46,8 @@ export class LoanProfileResponseDto {
     bpmStatus: string = null;
     dateOfBirth: string = null;
     customerIncome: number = null;
+    verifyInfo: string = null;
+    verifyDes: string = null;
     checkcontract: string = null;
     checkcontractdes: string = null;
     reasons: string = null;
