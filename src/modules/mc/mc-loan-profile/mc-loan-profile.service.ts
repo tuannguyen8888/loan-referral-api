@@ -164,7 +164,7 @@ export class McLoanProfileService extends BaseService {
                     .createQueryBuilder()
                     .update()
                     .set({
-                        status: "checkfaile",
+                        status: "checkfailed",
                         checkcontract: "RED",
                         checkcontractdes: response.returnMes
                     })
