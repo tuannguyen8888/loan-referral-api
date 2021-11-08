@@ -27,6 +27,9 @@ export class LoanProfileResponseDto {
     companyTaxNumber: string = null;
     saleCode: string = null;
     productId: number = null;
+    productCategoryId: string = null;
+    productCode: string = null;
+    productName: string = null;
     tempResidence: number = null;
     loanAmount: number = null;
     loanTenor: number = null;

@@ -100,6 +100,33 @@ export class McLoanProfile {
   })
   productId: number;
 
+  @Column("varchar", {
+    name: "productCategoryId",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Danh mục san phẩm"
+  })
+  productCategoryId: string;
+
+  @Column("varchar", {
+    name: "productCode",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Mã san phẩm"
+  })
+  productCode: string;
+
+  @Column("varchar", {
+    name: "productName",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Tên sản phẩm"
+  })
+  productName: string;
+
   @Column("int", {
     name: "tempResidence",
     default: 0,
