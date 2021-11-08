@@ -57,13 +57,21 @@ export class McLoanProfileService extends BaseService {
             const repo = this.connection.getCustomRepository(McLoanProfileRepository);
             let query = repo.createQueryBuilder().where("deleted_at is null");
             console.log(111);
-            if (dto.saleCode)
-                query = query.andWhere("saleCode = :saleCode", {
-                    saleCode: dto.saleCode
+            if (dto.shopCode)
+                query = query.andWhere("shopCode = :shopCode", {
+                    saleCode: dto.shopCode
                 });
             if (dto.mobileProductType)
                 query = query.andWhere("loan_status = :mobileProductType", {
                     loanStatus: dto.mobileProductType
+                });
+            if (dto.cicResult)
+                query = query.andWhere("cicResult = :cicResult", {
+                    cicResult: dto.cicResult
+                });
+            if (dto.status)
+                query = query.andWhere("status = :status", {
+                    status: dto.status
                 });
             if (dto.keyword)
                 query = query.andWhere(
