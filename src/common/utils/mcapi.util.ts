@@ -9,6 +9,7 @@ import {McLoanProfileDto} from "../../modules/mc/mc-loan-profile/dto";
 import {McAttachfilesResponseDto} from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
 import {GetMcCaseRequestDto} from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
 import {requestScoring3PDto} from "../../modules/mc/mc-loan-profile/dto/requestScoring3P.dto";
+import {urlencoded} from "express";
 
 @Injectable()
 export class McapiUtil {
@@ -56,7 +57,8 @@ export class McapiUtil {
         "mobile-4sales/check-cic/check?citizenID=" +
         citizenId +
         "&customerName=" +
-        customerName;
+        encodeURI(customerName);
+    console.log(url);
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -630,6 +632,7 @@ export class McapiUtil {
         headers: headers
       });
       response = result.data;
+      response.returnCode = 200;
     } catch (e) {
       response = e.response.data;
       if (response.returnCode == "401") {
@@ -666,6 +669,7 @@ export class McapiUtil {
         headers: headers
       });
       response = result.data;
+      response.returnCode = 200;
     } catch (e) {
       response = e.response.data;
       if (response.returnCode == "401") {
