@@ -8,9 +8,14 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   shopCode?: string;
   @IsOptional()
-  saleCode?: string;
-  @IsOptional()
   mobileProductType?: string;
+
+  @IsOptional()
+  cicResult?: number;
+  @IsOptional()
+  status?: string;
+  @IsOptional()
+  checkcontract?: string;
 
   @IsDefined()
   @IsString()

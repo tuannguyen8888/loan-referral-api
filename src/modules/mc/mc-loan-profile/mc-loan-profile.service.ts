@@ -38,6 +38,9 @@ import {GetMCAttachfileRequestDto} from "../mc-attachfile/dto/mc-get-attachfile.
 import {McAttachfileService} from "../mc-attachfile/mc-attachfile.service";
 import {GetMCCaseRequestDto} from "../mc-case/dto/get-case.request.dto";
 import {GetMcCaseRequestDto} from "./dto/get-mc-case.request.dto";
+import {McCaseNoteRepository} from "../../../repositories/mc/mc-case-note.repository";
+import {requestSendOtp3PDto} from "./dto/requestSendOtp3P.dto";
+import {requestScoring3PDto} from "./dto/requestScoring3P.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -56,13 +59,21 @@ export class McLoanProfileService extends BaseService {
             const repo = this.connection.getCustomRepository(McLoanProfileRepository);
             let query = repo.createQueryBuilder().where("deleted_at is null");
             console.log(111);
-            if (dto.saleCode)
-                query = query.andWhere("saleCode = :saleCode", {
-                    saleCode: dto.saleCode
+            if (dto.shopCode)
+                query = query.andWhere("shopCode = :shopCode", {
+                    saleCode: dto.shopCode
                 });
             if (dto.mobileProductType)
                 query = query.andWhere("loan_status = :mobileProductType", {
                     loanStatus: dto.mobileProductType
+                });
+            if (dto.cicResult)
+                query = query.andWhere("cicResult = :cicResult", {
+                    cicResult: dto.cicResult
+                });
+            if (dto.status)
+                query = query.andWhere("status = :status", {
+                    status: dto.status
                 });
             if (dto.keyword)
                 query = query.andWhere(
@@ -121,10 +132,56 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
 
-    async checkInitContract(dto: CheckInitContractRequestDto) {
+    async checkInitContract(loan_profile_id) {
         console.log("checkInitContract");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        let dto = new CheckInitContractRequestDto();
+        var loanProfile = await this.getLoanProfile(loan_profile_id);
+        dto.productId = loanProfile.productId;
+        dto.customerName = loanProfile.customerName;
+        dto.citizenId = loanProfile.citizenId;
+        dto.loanAmount = loanProfile.loanAmount;
+        dto.loanTenor = loanProfile.loanTenor;
+        dto.customerIncome = loanProfile.customerIncome;
+        dto.dateOfBirth = loanProfile.dateOfBirth;
+        dto.gender = loanProfile.gender;
+        dto.issuePlace = loanProfile.issuePlace;
+        dto.hasInsurance = loanProfile.hasInsurance;
         var response = await mcapi.checkInitContract(dto);
+        const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+
+        let queryupdate;
+        switch (response.returnCode) {
+            case "200":
+                let returnMes = JSON.parse(response.returnMes);
+                console.log(returnMes[0]);
+                //Cập nhât Profile
+                queryupdate = repo
+                    .createQueryBuilder()
+                    .update()
+                    .set({
+                        status: "checkpass",
+                        checkcontract: returnMes[0].outputType,
+                        checkcontractdes: returnMes[0].outputValue
+                    })
+                    .where("id = :id", {id: loan_profile_id});
+                await queryupdate.execute();
+                break;
+            case "400":
+                console.log(response.returnMes);
+                //Cập nhât Profile
+                queryupdate = repo
+                    .createQueryBuilder()
+                    .update()
+                    .set({
+                        status: "checkfailed",
+                        checkcontract: "RED",
+                        checkcontractdes: response.returnMes
+                    })
+                    .where("id = :id", {id: loan_profile_id});
+                await queryupdate.execute();
+                break;
+        }
         return response;
     }
 
@@ -182,10 +239,66 @@ export class McLoanProfileService extends BaseService {
         return response;
     }
 
-    async getCases(dto: GetMcCaseRequestDto) {
-        console.log("checkCategory");
+    async listCaseNote(id) {
+        console.log("listCaseNote");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        let loanProfile = await this.getLoanProfile(id);
+        console.log(loanProfile.appNumber);
+        var response = await mcapi.listCaseNote(loanProfile.appNumber);
+        return response;
+    }
+
+    async getReturnChecklist(id) {
+        console.log("getReturnChecklist");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        let loanProfile = await this.getLoanProfile(id);
+        console.log(loanProfile.appid);
+        var response = await mcapi.getReturnChecklist(loanProfile.appid);
+        return response;
+    }
+
+    async getCases(dto: GetMcCaseRequestDto) {
+        console.log("getCases");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        const repo = this.connection.getCustomRepository(McLoanProfileRepository);
         var response = await mcapi.getCases(dto);
+        for (const item of response) {
+            let query = repo.createQueryBuilder().where("deleted_at is null");
+            query = query.andWhere("profileid = :profileid", {
+                profileid: item.id
+            });
+            let data, count;
+            data = await query.getOne();
+            console.log(data);
+            //console.log(count);
+            //Cập nhât Profile
+            let queryupdate = repo
+                .createQueryBuilder()
+                .update()
+                .set({
+                    appNumber: item.appNumber,
+                    appid: item.appId,
+                    bpmStatus: item.bpmStatus,
+                    reasons: JSON.stringify(item.reasons),
+                    pdfFiles: JSON.stringify(item.pdfFiles)
+                })
+                .where("id = :id", {id: data.id});
+            await queryupdate.execute();
+        }
+        return response;
+    }
+
+    async requestSendOtp3P(dto: requestSendOtp3PDto) {
+        console.log("requestSendOtp3P");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        var response = await mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
+        return response;
+    }
+
+    async requestScoring3P(dto: requestScoring3PDto) {
+        console.log("requestScoring3P");
+        let mcapi = new McapiUtil(this.redisClient, this.httpService);
+        var response = await mcapi.requestScoring3P(dto);
         return response;
     }
 
