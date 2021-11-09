@@ -217,18 +217,30 @@ export class McLoanProfileService extends BaseService {
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
         var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles);
         //Update profileid
-        let profileid = response.id;
-        const repo = this.connection.getCustomRepository(McLoanProfileRepository);
-        let query = repo
-            .createQueryBuilder()
-            .update()
-            .set({
-                profileid: profileid,
-                status: "hadsend"
-            })
-            .where("id = :id", {id: id});
-        await query.execute();
-
+        if (response.returnCode == 200) {
+            let profileid = response.id;
+            const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+            let query = repo
+                .createQueryBuilder()
+                .update()
+                .set({
+                    profileid: profileid,
+                    status: "hadsend"
+                })
+                .where("id = :id", {id: id});
+            await query.execute();
+        } else {
+            let profileid = response.id;
+            const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+            let query = repo
+                .createQueryBuilder()
+                .update()
+                .set({
+                    status: "sendfaild"
+                })
+                .where("id = :id", {id: id});
+            await query.execute();
+        }
         return response;
     }
 
