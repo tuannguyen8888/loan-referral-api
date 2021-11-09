@@ -296,7 +296,7 @@ export class McLoanProfileService extends BaseService {
     }
 
     async requestScoring3P(dto: requestScoring3PDto) {
-        console.log("requestSendOtp3P");
+        console.log("requestScoring3P");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
         var response = await mcapi.requestScoring3P(dto);
         return response;
