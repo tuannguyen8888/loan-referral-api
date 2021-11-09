@@ -40,6 +40,14 @@ export class McLoanProfile {
   address: string;
 
   @Column("varchar", {
+    name: "phone",
+    length: 20,
+    nullable: true,
+    default: ""
+  })
+  phone: string;
+
+  @Column("varchar", {
     name: "compName",
     length: 255,
     nullable: true,
@@ -100,6 +108,33 @@ export class McLoanProfile {
   })
   productId: number;
 
+  @Column("varchar", {
+    name: "productCategoryId",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Danh mục san phẩm"
+  })
+  productCategoryId: string;
+
+  @Column("varchar", {
+    name: "productCode",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Mã san phẩm"
+  })
+  productCode: string;
+
+  @Column("varchar", {
+    name: "productName",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Tên sản phẩm"
+  })
+  productName: string;
+
   @Column("int", {
     name: "tempResidence",
     default: 0,
@@ -140,7 +175,14 @@ export class McLoanProfile {
     comment: "Địa điểm đăng ký VKTD"
   })
   issuePlace: string;
-
+  @Column("varchar", {
+    name: "bpmStatus",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Trạng thái hồ sơ"
+  })
+  bpmStatus: string;
   @Column("varchar", {
     name: "shopCode",
     length: 50,
@@ -175,6 +217,15 @@ export class McLoanProfile {
   })
   mobileIssueDateCitizen: string;
 
+  @Column("varchar", {
+    name: "dateOfBirth",
+    length: 20,
+    nullable: true,
+    default: "",
+    comment: "Ngày sinh Định dạng: dd/mm/yyyy"
+  })
+  dateOfBirth: string;
+
   @Column("int", {
     name: "profileid",
     nullable: true,
@@ -200,56 +251,112 @@ export class McLoanProfile {
   })
   appNumber: number;
 
-    @Column("int", {
-        name: "cicResult",
-        nullable: true,
-        default: 0,
-        comment: "mã cic"
-    })
-    cicResult: number;
+  @Column("int", {
+    name: "cicResult",
+    nullable: true,
+    default: 0,
+    comment: "mã cic"
+  })
+  cicResult: number;
+
+  @Column("varchar", {
+    name: "cicDescription",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Mô tả cic"
+  })
+  cicDescription: string;
+
+  @Column("int", {
+    name: "hasCourier",
+    nullable: true,
+    default: 0,
+    comment: "mã cic"
+  })
+  hasCourier: number;
+
+  @Column("int", {
+    name: "customerIncome",
+    nullable: true,
+    default: 0,
+    comment: "mã cic"
+  })
+  customerIncome: number;
+
+  @Column("varchar", {
+    name: "status",
+    nullable: true,
+    default: "",
+    comment: "Trạng thái hồ sơ"
+  })
+  status: string;
+
+  @Column("varchar", {
+    name: "checkcontract",
+    nullable: true,
+    default: "",
+    comment: "Check hồ sơ RED|YELLOW|BLUE"
+  })
+  checkcontract: string;
 
     @Column("varchar", {
-        name: "cicDescription",
-        length: 255,
+        name: "checkcontractdes",
         nullable: true,
         default: "",
-        comment: "Mô tả cic"
+        comment: "Nội dung kiểm tra hồ sơ"
     })
-    cicDescription: string;
-
-    @Column("int", {
-        name: "hasCourier",
-        nullable: true,
-        default: 0,
-        comment: "mã cic"
-    })
-    hasCourier: number;
+    checkcontractdes: string;
 
     @Column("varchar", {
-        name: "status",
+        name: "verifyInfo",
         nullable: true,
         default: "",
-        comment: "Trạng thái hồ sơ"
+        comment: "Thông tin chấm điểm"
     })
-    status: string;
-
-    @Column("timestamp", {
-        name: "created_at",
-        default: () => "CURRENT_TIMESTAMP"
-    })
-    createdAt: Date;
+    verifyInfo: string;
 
     @Column("varchar", {
-        name: "created_by",
-        length: 255,
+        name: "verifyDes",
+        nullable: true,
+        default: "",
+        comment: "Thông tin chấm điểm nội dung phản hồi chấm điểm"
+    })
+    verifyDes: string;
+
+    @Column("text", {
+        name: "reasons",
+        nullable: true,
+        default: "[]",
+        comment: "List lý do"
+    })
+    reasons: string;
+
+    @Column("text", {
+    name: "pdfFiles",
+    nullable: true,
+    default: "[]",
+    comment: "Danh sách file"
+  })
+  pdfFiles: string;
+
+  @Column("timestamp", {
+    name: "created_at",
+    default: () => "CURRENT_TIMESTAMP"
+  })
+  createdAt: Date;
+
+  @Column("varchar", {
+    name: "created_by",
+    length: 255,
     default: ""
   })
   createdBy: string | null;
 
-  @Column("timestamp", { name: "updated_at", nullable: true })
+  @Column("timestamp", {name: "updated_at", nullable: true})
   updatedAt: Date | null;
 
-  @Column("varchar", { name: "updated_by", nullable: true, length: 255 })
+    @Column("varchar", {name: "updated_by", nullable: true, length: 255})
   updatedBy: string | null;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })

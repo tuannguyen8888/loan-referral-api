@@ -8,6 +8,8 @@ import {McLoanProfile} from "../../entities";
 import {McLoanProfileDto} from "../../modules/mc/mc-loan-profile/dto";
 import {McAttachfilesResponseDto} from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
 import {GetMcCaseRequestDto} from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
+import {requestScoring3PDto} from "../../modules/mc/mc-loan-profile/dto/requestScoring3P.dto";
+import {urlencoded} from "express";
 
 @Injectable()
 export class McapiUtil {
@@ -55,7 +57,8 @@ export class McapiUtil {
         "mobile-4sales/check-cic/check?citizenID=" +
         citizenId +
         "&customerName=" +
-        customerName;
+        encodeURI(customerName);
+    console.log(url);
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -143,61 +146,74 @@ export class McapiUtil {
   }
 
   async getKios(): Promise<any> {
-    var axios = require("axios");
-    let token = await this.redisClient.get("token");
-    if (token == null) {
-      let login = await this.login();
-      token = login.token;
-    }
+    let mckios = await this.redisClient.get('mckios');
     let response;
-    let mc_api_config = config.get("mc_api");
-    let url = mc_api_config.endpoint + "mobile-4sales/kiosks";
-    let headers = {
-      "Content-Type": "application/json",
-      "x-security": mc_api_config.security,
-      Authorization: "Bearer " + token
-    };
-    try {
-      let result = await axios.get(url, {
-        headers: headers
-      });
-      response = result.data;
-    } catch (e) {
-      response = e.response.data;
-      if (response.returnCode == "401") {
-        await this.login();
-        return await this.getKios();
+    if (mckios == null) {
+      var axios = require("axios");
+      let token = await this.redisClient.get("token");
+      if (token == null) {
+        let login = await this.login();
+        token = login.token;
       }
+      let mc_api_config = config.get("mc_api");
+      let url = mc_api_config.endpoint + "mobile-4sales/kiosks";
+      let headers = {
+        "Content-Type": "application/json",
+        "x-security": mc_api_config.security,
+        Authorization: "Bearer " + token
+      };
+      try {
+        let result = await axios.get(url, {
+          headers: headers
+        });
+        response = result.data;
+      } catch (e) {
+        response = e.response.data;
+        if (response.returnCode == "401") {
+          await this.login();
+          return await this.getKios();
+        }
+      }
+    } else {
+      response = JSON.parse(mckios);
     }
+
     return response;
   }
 
   async getProducts(): Promise<any> {
-    var axios = require("axios");
-    let token = await this.redisClient.get("token");
-    if (token == null) {
-      let login = await this.login();
-      token = login.token;
-    }
+    let mcproducts = await this.redisClient.get('mcproducts');
     let response;
-    let mc_api_config = config.get("mc_api");
-    let url = mc_api_config.endpoint + "mobile-4sales/products";
-    let headers = {
-      "Content-Type": "application/json",
-      "x-security": mc_api_config.security,
-      Authorization: "Bearer " + token
-    };
-    try {
-      let result = await axios.get(url, {
-        headers: headers
-      });
-      response = result.data;
-    } catch (e) {
-      response = e.response.data;
-      if (response.returnCode == "401") {
-        await this.login();
-        return await this.getProducts();
+    if (mcproducts == null) {
+      var axios = require("axios");
+      let token = await this.redisClient.get("token");
+      if (token == null) {
+        let login = await this.login();
+        token = login.token;
       }
+
+      let mc_api_config = config.get("mc_api");
+      let url = mc_api_config.endpoint + "mobile-4sales/products";
+      let headers = {
+        "Content-Type": "application/json",
+        "x-security": mc_api_config.security,
+        Authorization: "Bearer " + token
+      };
+      try {
+        let result = await axios.get(url, {
+          headers: headers
+        });
+        response = result.data;
+        await this.redisClient.set("mcproducts", JSON.stringify(response));
+      } catch (e) {
+        response = e.response.data;
+        if (response.returnCode == "401") {
+          await this.login();
+          return await this.getProducts();
+        }
+      }
+    } else {
+      response = JSON.parse(mcproducts);
     }
     return response;
   }
@@ -288,6 +304,7 @@ export class McapiUtil {
       response = result.data;
     } catch (e) {
       response = e.response.data;
+      console.log("Errors");
       if (response.returnCode == "401") {
         await this.login();
         return await this.checkInitContract(dto);
@@ -298,7 +315,7 @@ export class McapiUtil {
 
   async createUploadFile(dtoAttachFiles: McAttachfilesResponseDto) {
     var fs = require("fs");
-    let dirname = Date.now()
+    let dirname = Date.now();
     let fileZipName = `${dirname}.zip`;
     let filePath = `${__dirname}/../../attach_files/`;
     var dir = filePath + dirname;
@@ -391,7 +408,7 @@ export class McapiUtil {
         "x-security": "FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d",
         Authorization: "Bearer " + token,
         ...data.getHeaders()
-      },
+      }
     };
 
     try {
@@ -420,12 +437,19 @@ export class McapiUtil {
     }
     let response;
     let mc_api_config = config.get("mc_api");
-    let url = mc_api_config.endpoint + "mobile-4sales/cases?" +
-        "pageNumber=" + dto.pageNumber +
-        "&pageSize=" + dto.pageSize +
-        "&keyword=" + dto.keyword +
-        "&status=" + dto.status +
-        "&saleCode=" + mc_api_config.saleCode;
+    let url =
+        mc_api_config.endpoint +
+        "mobile-4sales/cases?" +
+        "pageNumber=" +
+        dto.pageNumber +
+        "&pageSize=" +
+        dto.pageSize +
+        "&keyword=" +
+        dto.keyword +
+        "&status=" +
+        dto.status +
+        "&saleCode=" +
+        mc_api_config.saleCode;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -441,6 +465,216 @@ export class McapiUtil {
       if (response.returnCode == "401") {
         await this.login();
         return await this.getCases(dto);
+      }
+    }
+    return response;
+  }
+
+  async listCaseNote(appNumber): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url =
+        mc_api_config.endpoint + "/mobile-4sales/list-case-note/" + appNumber;
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.get(url, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.listCaseNote(appNumber);
+      }
+    }
+    return response;
+  }
+
+  async sendCaseNote(appNumber, noteContent): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "/mobile-4sales/send-case-note";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(
+          url,
+          {
+            appNumber: appNumber,
+            noteContent: noteContent
+          },
+          {
+            headers: headers
+          }
+      );
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.sendCaseNote(appNumber, noteContent);
+      }
+    }
+    return response;
+  }
+
+  async cancelCase(profileid, reason, comment): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "/mobile-4sales/cancel-case";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(
+          url,
+          {
+            id: profileid,
+            reason: reason,
+            comment: comment
+          },
+          {
+            headers: headers
+          }
+      );
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.cancelCase(profileid, reason, comment);
+      }
+    }
+    return response;
+  }
+
+  async getReturnChecklist(appId): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url =
+        mc_api_config.endpoint +
+        "/mobile-4sales/third-party/checklist?appId=" +
+        appId;
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.get(url, {
+        headers: headers
+      });
+      response = result.data;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.getReturnChecklist(appId);
+      }
+    }
+    return response;
+  }
+
+  async requestSendOtp3P(phone, typeScore): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "/mobile-4sales/requestOTP3P";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(url, {
+        requested_msisdn: phone,
+        typeScore: typeScore
+      }, {
+        headers: headers
+      });
+      response = result.data;
+      response.returnCode = 200;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.requestSendOtp3P(phone, typeScore);
+      }
+    }
+    return response;
+  }
+
+  async requestScoring3P(dto: requestScoring3PDto): Promise<any> {
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+    let response;
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "/mobile-4sales/scoring3P";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.post(url, {
+        verificationCode: dto.verificationCode,
+        primaryPhone: dto.primaryPhone,
+        nationalId: dto.nationalId,
+        typeScore: dto.typeScore,
+        userName: mc_api_config.username
+      }, {
+        headers: headers
+      });
+      response = result.data;
+      response.returnCode = 200;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        await this.requestScoring3P(dto);
       }
     }
     return response;

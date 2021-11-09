@@ -31,11 +31,11 @@ export class McNotification {
   appId: string;
 
   @Column("varchar", {
-    name: "currentStatus",
-    length: 20,
-    nullable: true,
-    default: "",
-    comment: "Nội dung note"
+      name: "currentStatus",
+      length: 255,
+      nullable: true,
+      default: "",
+      comment: "Nội dung note"
   })
   currentStatus: string;
 

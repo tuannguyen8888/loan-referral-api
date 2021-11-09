@@ -21,13 +21,13 @@ export class McCaseNoteResponseDto {
     createdAt: string = null;
     createdBy: string = null;
     @IsOptional()
-  @IsDateString()
-  updatedAt: string = null;
-  updatedBy: string = null;
-  @IsOptional()
-  @IsDateString()
-  deletedAt: string = null;
-  deletedBy: string = null;
+    @IsDateString()
+    updatedAt: string = null;
+    updatedBy: string = null;
+    @IsOptional()
+    @IsDateString()
+    deletedAt: string = null;
+    deletedBy: string = null;
 
-  process: ProcessDto[];
+    process: ProcessDto[];
 }
