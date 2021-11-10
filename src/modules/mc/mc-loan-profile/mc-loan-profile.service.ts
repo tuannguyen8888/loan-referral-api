@@ -319,7 +319,7 @@ export class McLoanProfileService extends BaseService {
         console.log(dto);
         let entity: McLoanProfile = this.convertDto2Entity(dto, McLoanProfile);
         entity.catType = "NEW";
-        entity.mobileProductType = "aaa";
+        entity.mobileProductType = dto.mobileProductType;
         entity.hasInsurance = 1;
         entity.tempResidence = 1;
         entity.createdBy = dto.createdBy;

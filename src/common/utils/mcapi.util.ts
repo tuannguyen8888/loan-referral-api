@@ -4,12 +4,14 @@ import {CheckInitContractRequestDto} from "../../modules/mc/mc-loan-profile/dto/
 import {RedisClient} from "../shared";
 import fs from "fs";
 import {RequestUtil} from "./request.util";
-import {McLoanProfile} from "../../entities";
+import {McLoanProfile, SendDataLog} from "../../entities";
 import {McLoanProfileDto} from "../../modules/mc/mc-loan-profile/dto";
 import {McAttachfilesResponseDto} from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
 import {GetMcCaseRequestDto} from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
 import {requestScoring3PDto} from "../../modules/mc/mc-loan-profile/dto/requestScoring3P.dto";
 import {urlencoded} from "express";
+import {SendDataLogRepository} from "../../repositories";
+import {Connection, getConnectionManager} from "typeorm";
 
 @Injectable()
 export class McapiUtil {
@@ -17,8 +19,10 @@ export class McapiUtil {
       protected readonly redisClient: RedisClient,
       @Inject(HttpService) private readonly httpService: HttpService
   ) {
+    this.connection = getConnectionManager().get("default");
   }
 
+  protected connection: Connection;
   async login(): Promise<any> {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
@@ -41,6 +45,21 @@ export class McapiUtil {
     //console.log(result.data);
     await this.redisClient.set("token", result.data.token);
     return result.data;
+  }
+
+  async writeLog(url, apiName, headers, method, input, result) {
+    let log = new SendDataLog();
+    log.apiUrl = apiName;
+    log.data = JSON.stringify({
+      apiname: apiName,
+      endpoint: url,
+      header: headers,
+      method: method,
+      input: input
+    });
+    log.result = JSON.stringify(result);
+    log.createdAt = new Date();
+    await this.connection.getCustomRepository(SendDataLogRepository).save(log);
   }
 
   async checkCIC(citizenId, customerName): Promise<any> {
@@ -75,6 +94,21 @@ export class McapiUtil {
         await this.login();
         return await this.checkCIC(citizenId, customerName);
       }
+    } finally {
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let input = {
+        citizenId: citizenId,
+        customerName: customerName
+      };
+      await this.writeLog(
+          url,
+          "checkCIC",
+          headers,
+          "get",
+          input,
+          JSON.stringify(response)
+      );
     }
     return response;
   }
@@ -108,6 +142,20 @@ export class McapiUtil {
         await this.login();
         return await this.checkCitizenId(citizenId);
       }
+    } finally {
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let input = {
+        citizenId: citizenId
+      };
+      await this.writeLog(
+          url,
+          "checkCitizenId",
+          headers,
+          "get",
+          input,
+          JSON.stringify(response)
+      );
     }
     return response;
   }
@@ -141,12 +189,26 @@ export class McapiUtil {
         await this.login();
         await this.checkCategory(companyTaxNumber);
       }
+    } finally {
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let input = {
+        companyTaxNumber: companyTaxNumber
+      };
+      await this.writeLog(
+          url,
+          "checkCategory",
+          headers,
+          "get",
+          input,
+          JSON.stringify(response)
+      );
     }
     return response;
   }
 
   async getKios(): Promise<any> {
-    let mckios = await this.redisClient.get('mckios');
+    let mckios = await this.redisClient.get("mckios");
     let response;
     if (mckios == null) {
       var axios = require("axios");
@@ -173,6 +235,18 @@ export class McapiUtil {
           await this.login();
           return await this.getKios();
         }
+      } finally {
+        let log = new SendDataLog();
+        log.apiUrl = url;
+        let input = {};
+        await this.writeLog(
+            url,
+            "getKios",
+            headers,
+            "get",
+            input,
+            JSON.stringify(response)
+        );
       }
     } else {
       response = JSON.parse(mckios);
@@ -182,7 +256,7 @@ export class McapiUtil {
   }
 
   async getProducts(): Promise<any> {
-    let mcproducts = await this.redisClient.get('mcproducts');
+    let mcproducts = await this.redisClient.get("mcproducts");
     let response;
     if (mcproducts == null) {
       var axios = require("axios");
@@ -211,6 +285,18 @@ export class McapiUtil {
           await this.login();
           return await this.getProducts();
         }
+      } finally {
+        let log = new SendDataLog();
+        log.apiUrl = url;
+        let input = {};
+        await this.writeLog(
+            url,
+            "getProducts",
+            headers,
+            "get",
+            input,
+            JSON.stringify(response)
+        );
       }
     } else {
       response = JSON.parse(mcproducts);
@@ -264,6 +350,27 @@ export class McapiUtil {
             shopCode
         );
       }
+    } finally {
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let data = JSON.stringify({
+        header: headers,
+        method: "get",
+        input: {
+          productCode: productCode,
+          mobileTemResidence: mobileTemResidence,
+          loanAmount: loanAmount,
+          shopCode: shopCode
+        }
+      });
+      await this.writeLog(
+          url,
+          "checkList",
+          headers,
+          "get",
+          data,
+          JSON.stringify(response)
+      );
     }
     return response;
   }
@@ -309,6 +416,24 @@ export class McapiUtil {
         await this.login();
         return await this.checkInitContract(dto);
       }
+    } finally {
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let data = JSON.stringify({
+        header: headers,
+        method: "post",
+        input: {
+          dto
+        }
+      });
+      await this.writeLog(
+          url,
+          "checkInitContract",
+          headers,
+          "post",
+          data,
+          JSON.stringify(response)
+      );
     }
     return response;
   }
@@ -625,12 +750,16 @@ export class McapiUtil {
       Authorization: "Bearer " + token
     };
     try {
-      let result = await axios.post(url, {
-        requested_msisdn: phone,
-        typeScore: typeScore
-      }, {
-        headers: headers
-      });
+      let result = await axios.post(
+          url,
+          {
+            requested_msisdn: phone,
+            typeScore: typeScore
+          },
+          {
+            headers: headers
+          }
+      );
       response = result.data;
       response.returnCode = 200;
     } catch (e) {
@@ -659,15 +788,19 @@ export class McapiUtil {
       Authorization: "Bearer " + token
     };
     try {
-      let result = await axios.post(url, {
-        verificationCode: dto.verificationCode,
-        primaryPhone: dto.primaryPhone,
-        nationalId: dto.nationalId,
-        typeScore: dto.typeScore,
-        userName: mc_api_config.username
-      }, {
-        headers: headers
-      });
+      let result = await axios.post(
+          url,
+          {
+            verificationCode: dto.verificationCode,
+            primaryPhone: dto.primaryPhone,
+            nationalId: dto.nationalId,
+            typeScore: dto.typeScore,
+            userName: mc_api_config.username
+          },
+          {
+            headers: headers
+          }
+      );
       response = result.data;
       response.returnCode = 200;
     } catch (e) {
