@@ -1,24 +1,24 @@
 import {
-    BadRequestException,
-    HttpService,
-    Inject,
-    Injectable,
-    Scope
+  BadRequestException,
+  HttpService,
+  Inject,
+  Injectable,
+  Scope
 } from "@nestjs/common";
-import {In, IsNull, Like} from "typeorm";
+import { In, IsNull, Like } from "typeorm";
 import * as moment from "moment";
 import {
-    Address,
-    LoanProfile,
-    McLoanProfile,
-    Process,
-    PtfAddress,
-    PtfAttachFile,
-    PtfEmploymentInformation,
-    PtfLoanProfile,
-    PtfLoanProfileDefer,
-    PtfRelatedPerson,
-    SendDataLog
+  Address,
+  LoanProfile,
+  McLoanProfile,
+  Process,
+  PtfAddress,
+  PtfAttachFile,
+  PtfEmploymentInformation,
+  PtfLoanProfile,
+  PtfLoanProfileDefer,
+  PtfRelatedPerson,
+  SendDataLog
 } from "../../../entities";
 import * as FormData from "form-data";
 import * as fs from "fs";
@@ -41,11 +41,11 @@ import { McapiUtil } from "../../../common/utils/mcapi.util";
 @Injectable()
 export class McProductService extends BaseService {
   constructor(
-      @Inject(REQUEST) protected request: Request,
-      protected readonly logger: Logger,
-      protected readonly redisClient: RedisClient,
-      private readonly requestUtil: RequestUtil,
-      @Inject(HttpService) private readonly httpService: HttpService
+    @Inject(REQUEST) protected request: Request,
+    protected readonly logger: Logger,
+    protected readonly redisClient: RedisClient,
+    private readonly requestUtil: RequestUtil,
+    @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
   }

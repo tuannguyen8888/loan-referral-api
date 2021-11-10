@@ -300,15 +300,15 @@ export class McLoanProfile {
   })
   checkcontract: string;
 
-    @Column("varchar", {
-        name: "checkcontractdes",
-        nullable: true,
-        default: "",
-        comment: "Nội dung kiểm tra hồ sơ"
-    })
-    checkcontractdes: string;
+  @Column("varchar", {
+    name: "checkcontractdes",
+    nullable: true,
+    default: "",
+    comment: "Nội dung kiểm tra hồ sơ"
+  })
+  checkcontractdes: string;
 
-    @Column("varchar", {
+  @Column("varchar", {
         name: "verifyInfo",
         nullable: true,
         default: "",
@@ -332,7 +332,7 @@ export class McLoanProfile {
     })
     reasons: string;
 
-    @Column("text", {
+  @Column("text", {
     name: "pdfFiles",
     nullable: true,
     default: "[]",
