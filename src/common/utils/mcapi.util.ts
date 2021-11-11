@@ -546,15 +546,12 @@ export class McapiUtil {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = configdata.url;
-      let input: {
-        data
-      };
       await this.writeLog(
           configdata.url,
           "uploadDocument",
           configdata.headers,
           "post",
-          data,
+          obj,
           JSON.stringify(response)
       );
     }
