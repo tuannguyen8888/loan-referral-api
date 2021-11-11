@@ -3,5 +3,4 @@ export class GetMcCaseRequestDto {
   pageSize: number;
   keyword: string;
   status: string;
-  saleCode: string;
 }
