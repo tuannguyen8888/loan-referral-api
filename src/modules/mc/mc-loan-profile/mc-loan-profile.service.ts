@@ -61,7 +61,7 @@ export class McLoanProfileService extends BaseService {
             console.log(111);
             if (dto.shopCode)
                 query = query.andWhere("shopCode = :shopCode", {
-                    saleCode: dto.shopCode
+                    shopCode: dto.shopCode
                 });
             if (dto.mobileProductType)
                 query = query.andWhere("loan_status = :mobileProductType", {
@@ -294,7 +294,6 @@ export class McLoanProfileService extends BaseService {
                 await queryupdate.execute();
             }
             //console.log(count);
-
         }
         return response;
     }

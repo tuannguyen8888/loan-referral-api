@@ -1,9 +1,9 @@
 import {
-  BadRequestException,
-  HttpService,
-  Inject,
-  Injectable,
-  Scope
+    BadRequestException,
+    HttpService,
+    Inject,
+    Injectable,
+    Scope
 } from "@nestjs/common";
 
 import {BaseService} from "../../../common/services";
@@ -28,13 +28,13 @@ import {McLoanProfileService} from "../mc-loan-profile/mc-loan-profile.service";
 
 @Injectable()
 export class McCaseNoteService extends BaseService {
-  constructor(
-      @Inject(REQUEST) protected request: Request,
-      protected readonly logger: Logger,
-      protected readonly redisClient: RedisClient,
-      private readonly requestUtil: RequestUtil,
-      @Inject(HttpService) private readonly httpService: HttpService
-  ) {
+    constructor(
+        @Inject(REQUEST) protected request: Request,
+        protected readonly logger: Logger,
+        protected readonly redisClient: RedisClient,
+        private readonly requestUtil: RequestUtil,
+        @Inject(HttpService) private readonly httpService: HttpService
+    ) {
     super(request, logger, redisClient);
   }
 
@@ -53,10 +53,10 @@ export class McCaseNoteService extends BaseService {
             "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
             {keyword: "%" + dto.keyword + "%"}
         );
-      query = query
-          .orderBy("id", "DESC")
-          .skip((dto.page - 1) * dto.pagesize)
-          .take(dto.pagesize);
+        query = query
+            .orderBy("id", "DESC")
+            .skip((dto.page - 1) * dto.pagesize)
+            .take(dto.pagesize);
       const result = new McCaseNotesResponseDto();
 
       let data, count;
@@ -102,9 +102,9 @@ export class McCaseNoteService extends BaseService {
     entity.createdAt = new Date();
     console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
-    let result = await this.connection
-        .getCustomRepository(McCaseNoteRepository)
-        .save(entity);
+      let result = await this.connection
+          .getCustomRepository(McCaseNoteRepository)
+          .save(entity);
     this.logger.verbose(`insertResult = ${result}`);
 
     let response: McCaseNoteDto = this.convertEntity2Dto(
@@ -134,14 +134,14 @@ export class McCaseNoteService extends BaseService {
     let entityUpdate: McCaseNote = this.convertDto2Entity(dto, McCaseNote);
     entityUpdate.updatedBy = dto.updatedBy;
     entityUpdate.updatedAt = new Date();
-    let result = await this.connection
-        .getCustomRepository(McCaseNoteRepository)
-        .save(entityUpdate);
-    let response: McCaseNoteUpdateDto = this.convertEntity2Dto(
-        result,
-        McCaseNote,
-        McCaseNoteUpdateDto
-    );
+      let result = await this.connection
+          .getCustomRepository(McCaseNoteRepository)
+          .save(entityUpdate);
+      let response: McCaseNoteUpdateDto = this.convertEntity2Dto(
+          result,
+          McCaseNote,
+          McCaseNoteUpdateDto
+      );
     return response;
   }
 

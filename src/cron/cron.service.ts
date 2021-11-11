@@ -11,13 +11,13 @@ import {GetMcCaseRequestDto} from "../modules/mc/mc-loan-profile/dto/get-mc-case
 
 @Injectable()
 export class CronService {
-  protected request: Request;
-  private logger = new Logger();
-  protected redisClient: RedisClient
-  private httpService = new HttpService();
-  private requestUtil = new RequestUtil(this.httpService);
+    protected request: Request;
+    private logger = new Logger();
+    protected redisClient: RedisClient;
+    private httpService = new HttpService();
+    private requestUtil = new RequestUtil(this.httpService);
 
-  // @Timeout(0)
+    // @Timeout(0)
   // async firstCron() {
   //   console.info(`RUN ONCE AT ======= ${new Date()}`);
   //   this.cronService();
@@ -43,14 +43,20 @@ export class CronService {
 
   @Cron("0 0 * * * *") // chạy mỗi tiếng
   async ptfCron() {
-    console.info(`START CRON PTF AT ======= ${new Date()}`);
-    await this.ptfGetLoanStatus();
-    let mcloanprofileser = new McLoanProfileService(this.request, this.logger, this.redisClient, this.requestUtil, this.httpService);
-    let dto = new GetMcCaseRequestDto();
-    dto.pageNumber = 1;
-    dto.pageSize = 1000;
-    dto.status = 'PROCESSING';
-    mcloanprofileser.getCases(dto);
+      console.info(`START CRON PTF AT ======= ${new Date()}`);
+      await this.ptfGetLoanStatus();
+      let mcloanprofileser = new McLoanProfileService(
+          this.request,
+          this.logger,
+          this.redisClient,
+          this.requestUtil,
+          this.httpService
+      );
+      let dto = new GetMcCaseRequestDto();
+      dto.pageNumber = 1;
+      dto.pageSize = 1000;
+      dto.status = "PROCESSING";
+      mcloanprofileser.getCases(dto);
   }
 
   async ptfGetLoanStatus() {
