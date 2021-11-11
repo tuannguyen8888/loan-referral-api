@@ -483,6 +483,7 @@ export class McapiUtil {
       let login = await this.login();
       token = login.token;
     }
+    let response;
     let mc_api_config = config.get("mc_api");
     var result = await this.createUploadFile(dtoAttachFiles);
     var axios = require("axios");
@@ -531,7 +532,8 @@ export class McapiUtil {
         headers: configdata.headers
       });
       //fs.unlinkSync(result.filePath);
-      return result.data;
+
+      response = result.data;
     } catch (e) {
       console.log("ERROR");
       //fs.unlinkSync(result.filePath);
@@ -539,8 +541,24 @@ export class McapiUtil {
         await this.login();
         return await this.uploadDocument(dtoMcLoanProfile, dtoAttachFiles);
       }
-      return e.response.data;
+      response = e.response.data;
+    } finally {
+      let log = new SendDataLog();
+      log.apiUrl = configdata.url;
+      let input: {
+        data
+      };
+      await this.writeLog(
+          configdata.url,
+          "uploadDocument",
+          configdata.headers,
+          "post",
+          data,
+          JSON.stringify(response)
+      );
     }
+
+    return response;
   }
 
   async getCases(dto: GetMcCaseRequestDto): Promise<any> {
