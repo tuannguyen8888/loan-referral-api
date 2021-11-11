@@ -308,7 +308,7 @@ export class McLoanProfile {
   })
   checkcontractdes: string;
 
-  @Column("varchar", {
+    @Column("varchar", {
         name: "verifyInfo",
         nullable: true,
         default: "",
@@ -332,15 +332,15 @@ export class McLoanProfile {
     })
     reasons: string;
 
-  @Column("text", {
-    name: "pdfFiles",
-    nullable: true,
-    default: "[]",
-    comment: "Danh sách file"
-  })
-  pdfFiles: string;
+    @Column("text", {
+        name: "pdfFiles",
+        nullable: true,
+        default: "[]",
+        comment: "Danh sách file"
+    })
+    pdfFiles: string;
 
-  @Column("timestamp", {
+    @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"
   })
@@ -353,7 +353,7 @@ export class McLoanProfile {
   })
   createdBy: string | null;
 
-  @Column("timestamp", {name: "updated_at", nullable: true})
+    @Column("timestamp", {name: "updated_at", nullable: true})
   updatedAt: Date | null;
 
     @Column("varchar", {name: "updated_by", nullable: true, length: 255})
