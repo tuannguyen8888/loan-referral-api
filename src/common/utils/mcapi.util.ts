@@ -534,7 +534,7 @@ export class McapiUtil {
       //fs.unlinkSync(result.filePath);
 
       response = result.data;
-      return response.returnCode = 200;
+      response.returnCode = 200;
     } catch (e) {
       console.log("ERROR");
       //fs.unlinkSync(result.filePath);
