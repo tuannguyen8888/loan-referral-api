@@ -12,6 +12,7 @@ import {requestScoring3PDto} from "../../modules/mc/mc-loan-profile/dto/requestS
 import {urlencoded} from "express";
 import {SendDataLogRepository} from "../../repositories";
 import {Connection, getConnectionManager} from "typeorm";
+import {McCheckListrequestDto} from "../../modules/mc/mc-loan-profile/dto/mc-check-listrequest.dto";
 
 @Injectable()
 export class McapiUtil {
@@ -304,12 +305,7 @@ export class McapiUtil {
     return response;
   }
 
-  async checkList(
-      productCode,
-      mobileTemResidence,
-      loanAmount,
-      shopCode
-  ): Promise<any> {
+  async checkList(dto: McCheckListrequestDto): Promise<any> {
     var axios = require("axios");
     let token = await this.redisClient.get("token");
     if (token == null) {
@@ -322,13 +318,15 @@ export class McapiUtil {
         mc_api_config.endpoint +
         "mobile-4sales/check-list?" +
         "mobileSchemaProductCode=" +
-        productCode +
+        dto.mobileSchemaProductCode +
         "&mobileTemResidence=" +
-        mobileTemResidence +
+        dto.mobileTemResidence +
         "&shopCode=" +
-        shopCode +
+        dto.shopCode +
         "&loanAmountAfterInsurrance=" +
-        loanAmount;
+        dto.loanAmountAfterInsurrance +
+        "&hasCourier=" +
+        dto.hasCourier;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -343,12 +341,7 @@ export class McapiUtil {
       response = e.response.data;
       if (response.returnCode == "401") {
         await this.login();
-        await this.checkList(
-            productCode,
-            mobileTemResidence,
-            loanAmount,
-            shopCode
-        );
+        await this.checkList(dto);
       }
     } finally {
       let log = new SendDataLog();
@@ -357,10 +350,7 @@ export class McapiUtil {
         header: headers,
         method: "get",
         input: {
-          productCode: productCode,
-          mobileTemResidence: mobileTemResidence,
-          loanAmount: loanAmount,
-          shopCode: shopCode
+          dto
         }
       });
       await this.writeLog(

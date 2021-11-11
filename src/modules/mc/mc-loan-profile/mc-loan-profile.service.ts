@@ -188,13 +188,7 @@ export class McLoanProfileService extends BaseService {
     async checkList(dto: McCheckListrequestDto) {
         console.log("checkList");
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
-        var response = await mcapi.checkList(
-            dto.mobileSchemaProductCode,
-            dto.mobileTemResidence,
-            dto.loanAmountAfterInsurrance,
-            dto.shopCode
-        );
-
+        var response = await mcapi.checkList(dto);
         return response;
     }
 
