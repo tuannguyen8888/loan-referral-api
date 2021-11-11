@@ -236,7 +236,7 @@ export class McLoanProfileService extends BaseService {
                 .createQueryBuilder()
                 .update()
                 .set({
-                    status: "sendfaild"
+                    status: "sendfailed"
                 })
                 .where("id = :id", {id: id});
             await query.execute();
