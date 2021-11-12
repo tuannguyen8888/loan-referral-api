@@ -35,6 +35,7 @@ import { McCaseNoteModule } from "./modules/mc/mc-case-note/mc-case-note.module"
 import { McNotificationModule } from "./modules/mc/mc-notification/mc-notification.module";
 import { McNotificationResponseDto } from "./modules/mc/mc-notification/dto/mc-notification.response.dto";
 import { McAttachfileModule } from "./modules/mc/mc-attachfile/mc-attachfile.module";
+import { TtfcLoanProfileModule } from './modules/ttfc/ttfc-loan-profile/ttfc-loan-profile.module';
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");

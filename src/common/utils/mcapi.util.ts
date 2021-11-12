@@ -237,17 +237,17 @@ export class McapiUtil {
           return await this.getKios();
         }
       } finally {
-        let log = new SendDataLog();
-        log.apiUrl = url;
-        let input = {};
-        await this.writeLog(
-            url,
-            "getKios",
-            headers,
-            "get",
-            input,
-            JSON.stringify(response)
-        );
+        // let log = new SendDataLog();
+        // log.apiUrl = url;
+        // let input = {};
+        // await this.writeLog(
+        //     url,
+        //     "getKios",
+        //     headers,
+        //     "get",
+        //     input,
+        //     JSON.stringify(response)
+        // );
       }
     } else {
       response = JSON.parse(mckios);
@@ -287,17 +287,17 @@ export class McapiUtil {
           return await this.getProducts();
         }
       } finally {
-        let log = new SendDataLog();
-        log.apiUrl = url;
-        let input = {};
-        await this.writeLog(
-            url,
-            "getProducts",
-            headers,
-            "get",
-            input,
-            JSON.stringify(response)
-        );
+        // let log = new SendDataLog();
+        // log.apiUrl = url;
+        // let input = {};
+        // await this.writeLog(
+        //     url,
+        //     "getProducts",
+        //     headers,
+        //     "get",
+        //     input,
+        //     JSON.stringify(response)
+        // );
       }
     } else {
       response = JSON.parse(mcproducts);
@@ -344,23 +344,23 @@ export class McapiUtil {
         await this.checkList(dto);
       }
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = url;
-      let data = JSON.stringify({
-        header: headers,
-        method: "get",
-        input: {
-          dto
-        }
-      });
-      await this.writeLog(
-          url,
-          "checkList",
-          headers,
-          "get",
-          data,
-          JSON.stringify(response)
-      );
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let data = JSON.stringify({
+      //   header: headers,
+      //   method: "get",
+      //   input: {
+      //     dto
+      //   }
+      // });
+      // await this.writeLog(
+      //     url,
+      //     "checkList",
+      //     headers,
+      //     "get",
+      //     data,
+      //     JSON.stringify(response)
+      // );
     }
     return response;
   }
