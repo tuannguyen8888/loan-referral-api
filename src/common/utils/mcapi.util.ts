@@ -40,7 +40,6 @@ export class McapiUtil {
       "x-security": mc_api_config.security
     };
 
-
     let result = await axios.post(url, data, {
       headers: headers
     });
@@ -63,7 +62,6 @@ export class McapiUtil {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security
     };
-
 
     let result = await axios.post(url, data, {
       headers: headers
@@ -464,14 +462,14 @@ export class McapiUtil {
     let i = 1;
     console.log(dtoAttachFiles.rows);
     for (const attachFile of dtoAttachFiles.rows) {
-      if(attachFile.url != ''){
+      if (attachFile.url != "") {
         let ext: any = attachFile.url.split(".");
         ext = ext[ext.length - 1].toLowerCase();
         let fileName = `${i}.${ext}`;
         let filePath = `${dir}/${fileName}`;
         var requestUtil = new RequestUtil(this.httpService);
         console.log(i);
-        console.log('download file '+ fileName);
+        console.log("download file " + fileName);
         await requestUtil.downloadPublicFile(attachFile.url, filePath);
         let item = {
           fileName: fileName,
@@ -511,10 +509,10 @@ export class McapiUtil {
     }
     let response;
     let mc_api_config = config.get("mc_api");
-    console.log('Begin createUploadFile');
+    console.log("Begin createUploadFile");
     var result = await this.createUploadFile(dtoAttachFiles);
     console.log(result);
-    console.log('END createUploadFile');
+    console.log("END createUploadFile");
 
     var axios = require("axios");
     var FormData = require("form-data");
@@ -609,33 +607,29 @@ export class McapiUtil {
       dto.status +
       "&saleCode=" +
       mc_api_config.saleCode;
+    console.log(url);
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
       Authorization: "Bearer " + token
     };
+
     try {
       let result = await axios.get(url, {
         headers: headers
       });
+      console.log(result);
       response = result.data;
+      console.log('true');
+      console.log(response);
     } catch (e) {
+      console.log('false');
       response = e.response.data;
-      if (response.returnCode == "401") {
-        await this.login();
-        return await this.getCases(dto);
-      }
-    }finally {
+    } finally {
       let input = {};
-      await this.writeLog(
-          url,
-          "getCases",
-          headers,
-          "get",
-          input,
-          ''
-      );
+      await this.writeLog(url, "getCases", headers, "get", input, "");
     }
+    console.log(response);
     return response;
   }
 
