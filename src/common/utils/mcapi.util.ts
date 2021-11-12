@@ -605,8 +605,6 @@ export class McapiUtil {
         return await this.getCases(dto);
       }
     }finally {
-      let log = new SendDataLog();
-
       let input = {};
       await this.writeLog(
           url,
@@ -614,7 +612,7 @@ export class McapiUtil {
           headers,
           "get",
           input,
-          JSON.stringify(response)
+          ''
       );
     }
     return response;
