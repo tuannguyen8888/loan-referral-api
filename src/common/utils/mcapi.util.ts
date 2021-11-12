@@ -40,6 +40,7 @@ export class McapiUtil {
       "x-security": mc_api_config.security
     };
 
+
     let result = await axios.post(url, data, {
       headers: headers
     });
@@ -47,7 +48,29 @@ export class McapiUtil {
     await this.redisClient.set("token", result.data.token);
     return result.data;
   }
+  async loginCron(): Promise<any> {
+    let mc_api_config = config.get("mc_api");
+    var axios = require("axios");
+    var data = JSON.stringify({
+      username: "finviet.3rd",
+      password: "123456a@",
+      notificationId: "notificationId.finviet.3rd",
+      imei: "imei.finviet.3rd",
+      osType: "IOS"
+    });
+    let url = mc_api_config.endpoint + "authorization/";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security
+    };
 
+
+    let result = await axios.post(url, data, {
+      headers: headers
+    });
+    //console.log(result.data);
+    return result.data;
+  }
   async writeLog(url, apiName, headers, method, input, result) {
     let log = new SendDataLog();
     log.apiUrl = apiName;
@@ -568,11 +591,9 @@ export class McapiUtil {
 
   async getCases(dto: GetMcCaseRequestDto): Promise<any> {
     var axios = require("axios");
-    let token = await this.redisClient.get("token");
-    if (token == null) {
-      let login = await this.login();
-      token = login.token;
-    }
+
+    let login = await this.loginCron();
+    let token = login.token;
     let response;
     let mc_api_config = config.get("mc_api");
     let url =

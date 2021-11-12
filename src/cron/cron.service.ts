@@ -41,22 +41,26 @@ export class CronService {
     return;
   }
 
-  @Cron("0 0 * * * *") // chạy mỗi tiếng
+  @Cron("0 28 * * * *") // chạy mỗi tiếng
   async ptfCron() {
     console.info(`START CRON PTF AT ======= ${new Date()}`);
-    await this.ptfGetLoanStatus();
+    //MC
     let mcloanprofileser = new McLoanProfileService(
-      this.request,
-      this.logger,
-      this.redisClient,
-      this.requestUtil,
-      this.httpService
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil,
+        this.httpService
     );
     let dto = new GetMcCaseRequestDto();
     dto.pageNumber = 1;
     dto.pageSize = 1000;
     dto.status = "PROCESSING";
     mcloanprofileser.getCases(dto);
+    //PTF
+    await this.ptfGetLoanStatus();
+
+
   }
 
   async ptfGetLoanStatus() {
