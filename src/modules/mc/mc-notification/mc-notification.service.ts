@@ -85,39 +85,55 @@ export class McNotificationService extends BaseService {
 
   async createNotification(dto: McNotificationDto) {
     console.log(dto);
-    let entity: McNotification = this.convertDto2Entity(dto, McNotification);
-    entity.profileid = dto.id;
-    entity.createdAt = new Date();
-    console.log(entity);
-    this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
-    let result = await this.connection
-      .getCustomRepository(McNotificationRepository)
-      .save(entity);
-    this.logger.verbose(`insertResult = ${result}`);
-
-    //let loanProfileService = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
     let query = repo.createQueryBuilder().where("deleted_at is null");
     query = query.andWhere("profileid = :profileid", {
-      profileid: entity.profileid
+      profileid: dto.id
     });
     let loanProfileResponse = await query.getOne();
-    //Cập nhật trạng thái
-    let queryupdate = repo
-      .createQueryBuilder()
-      .update()
-      .set({
-        bpmStatus: dto.currentStatus
-      })
-      .where("id = :id", { id: loanProfileResponse.id });
-    await queryupdate.execute();
+    console.log(loanProfileResponse);
+    if(loanProfileResponse != undefined){
+      let entity: McNotification = this.convertDto2Entity(dto, McNotification);
+      entity.id = null;
+      entity.profileid = dto.id;
+      entity.createdAt = new Date();
+      console.log(entity);
+      this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
+      let result = await this.connection
+          .getCustomRepository(McNotificationRepository)
+          .save(entity);
+      this.logger.verbose(`insertResult = ${result}`);
 
-    let response: McNotificationDto = this.convertEntity2Dto(
-      result,
-      McNotification,
-      McNotificationDto
-    );
-    return response;
+      //let loanProfileService = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+
+      //Cập nhật trạng thái
+      let queryupdate = repo
+          .createQueryBuilder()
+          .update()
+          .set({
+            bpmStatus: dto.currentStatus
+          })
+          .where("id = :id", { id: loanProfileResponse.id });
+      await queryupdate.execute();
+
+      let response: McNotificationDto = this.convertEntity2Dto(
+          result,
+          McNotification,
+          McNotificationDto
+      );
+      return {
+        statusCode:200,
+        message:"Gửi thông báo thành công",
+        data:response
+      };
+    }else {
+      return {
+        statusCode:500,
+        message:"Không tìm thấy hồ sơ!"
+      }
+    }
+
+
   }
 
   async updateNotification(dto: McNotificationUpdateDto) {
