@@ -604,6 +604,16 @@ export class McapiUtil {
         await this.login();
         return await this.getCases(dto);
       }
+    }finally {
+      let input = {};
+      await this.writeLog(
+          url,
+          "getCases",
+          headers,
+          "get",
+          input,
+          ''
+      );
     }
     return response;
   }
