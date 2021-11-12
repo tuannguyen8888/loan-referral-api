@@ -21,6 +21,7 @@ export class LoanProfileResponseDto {
   gender: string = null;
   address: string = null;
   phone: string = null;
+  typeScore: string = null;
   compName: string = null;
   catType: string = null;
   compAddrStreet: string = null;
