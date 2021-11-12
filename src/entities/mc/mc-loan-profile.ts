@@ -316,39 +316,39 @@ export class McLoanProfile {
   })
   checkcontractdes: string;
 
-    @Column("varchar", {
-        name: "verifyInfo",
-        nullable: true,
-        default: "",
-        comment: "Thông tin chấm điểm"
-    })
-    verifyInfo: string;
+  @Column("varchar", {
+    name: "verifyInfo",
+    nullable: true,
+    default: "",
+    comment: "Thông tin chấm điểm"
+  })
+  verifyInfo: string;
 
-    @Column("varchar", {
-        name: "verifyDes",
-        nullable: true,
-        default: "",
-        comment: "Thông tin chấm điểm nội dung phản hồi chấm điểm"
-    })
-    verifyDes: string;
+  @Column("varchar", {
+    name: "verifyDes",
+    nullable: true,
+    default: "",
+    comment: "Thông tin chấm điểm nội dung phản hồi chấm điểm"
+  })
+  verifyDes: string;
 
-    @Column("text", {
-        name: "reasons",
-        nullable: true,
-        default: "[]",
-        comment: "List lý do"
-    })
-    reasons: string;
+  @Column("text", {
+    name: "reasons",
+    nullable: true,
+    default: "[]",
+    comment: "List lý do"
+  })
+  reasons: string;
 
-    @Column("text", {
-        name: "pdfFiles",
-        nullable: true,
-        default: "[]",
-        comment: "Danh sách file"
-    })
-    pdfFiles: string;
+  @Column("text", {
+    name: "pdfFiles",
+    nullable: true,
+    default: "[]",
+    comment: "Danh sách file"
+  })
+  pdfFiles: string;
 
-    @Column("timestamp", {
+  @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"
   })
@@ -361,10 +361,10 @@ export class McLoanProfile {
   })
   createdBy: string | null;
 
-    @Column("timestamp", {name: "updated_at", nullable: true})
+  @Column("timestamp", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
-    @Column("varchar", {name: "updated_by", nullable: true, length: 255})
+  @Column("varchar", { name: "updated_by", nullable: true, length: 255 })
   updatedBy: string | null;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })

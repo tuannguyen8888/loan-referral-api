@@ -92,7 +92,7 @@ export class McNotificationService extends BaseService {
     });
     let loanProfileResponse = await query.getOne();
     console.log(loanProfileResponse);
-    if(loanProfileResponse != undefined){
+    if (loanProfileResponse != undefined) {
       let entity: McNotification = this.convertDto2Entity(dto, McNotification);
       entity.id = null;
       entity.profileid = dto.id;
@@ -100,40 +100,38 @@ export class McNotificationService extends BaseService {
       console.log(entity);
       this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
       let result = await this.connection
-          .getCustomRepository(McNotificationRepository)
-          .save(entity);
+        .getCustomRepository(McNotificationRepository)
+        .save(entity);
       this.logger.verbose(`insertResult = ${result}`);
 
       //let loanProfileService = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
 
       //Cập nhật trạng thái
       let queryupdate = repo
-          .createQueryBuilder()
-          .update()
-          .set({
-            bpmStatus: dto.currentStatus
-          })
-          .where("id = :id", { id: loanProfileResponse.id });
+        .createQueryBuilder()
+        .update()
+        .set({
+          bpmStatus: dto.currentStatus
+        })
+        .where("id = :id", { id: loanProfileResponse.id });
       await queryupdate.execute();
 
       let response: McNotificationDto = this.convertEntity2Dto(
-          result,
-          McNotification,
-          McNotificationDto
+        result,
+        McNotification,
+        McNotificationDto
       );
       return {
-        statusCode:200,
-        message:"Gửi thông báo thành công",
-        data:response
+        statusCode: 200,
+        message: "Gửi thông báo thành công",
+        data: response
       };
-    }else {
+    } else {
       return {
-        statusCode:500,
-        message:"Không tìm thấy hồ sơ!"
-      }
+        statusCode: 500,
+        message: "Không tìm thấy hồ sơ!"
+      };
     }
-
-
   }
 
   async updateNotification(dto: McNotificationUpdateDto) {

@@ -1,4 +1,4 @@
-import {IsOptional} from "class-validator";
+import { IsOptional } from "class-validator";
 
 export class requestScoring3PDto {
   verificationCode: string;
@@ -6,5 +6,5 @@ export class requestScoring3PDto {
   nationalId: string;
   typeScore: string;
   @IsOptional()
-  loanprofileid:number;
+  loanprofileid: number;
 }
