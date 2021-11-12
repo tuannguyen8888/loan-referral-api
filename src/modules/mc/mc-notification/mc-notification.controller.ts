@@ -49,7 +49,7 @@ export class McNotificationController {
   createNotification(
     @Headers() headers,
     @Body() dto: McNotificationDto
-  ): Promise<McNotificationDto> {
+  ): Promise<any> {
     return this.service.createNotification(dto);
   }
 
