@@ -48,6 +48,14 @@ export class McLoanProfile {
   phone: string;
 
   @Column("varchar", {
+    name: "typeScore",
+    length: 20,
+    nullable: true,
+    default: ""
+  })
+  typeScore: string;
+
+  @Column("varchar", {
     name: "compName",
     length: 255,
     nullable: true,

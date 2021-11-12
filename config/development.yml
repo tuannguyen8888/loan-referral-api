@@ -46,7 +46,7 @@ database:
   - name: "default"
     type: "mysql"
     logging: true
-    synchronize: false
+    synchronize: true
     entities:
       - "dist/entities/*.{js,ts}"
       - "dist/entities/mc/*.{js,ts}"
