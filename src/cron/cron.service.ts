@@ -45,6 +45,7 @@ export class CronService {
   async ptfCron() {
     console.info(`START CRON PTF AT ======= ${new Date()}`);
     await this.ptfGetLoanStatus();
+    //MC
     let mcloanprofileser = new McLoanProfileService(
       this.request,
       this.logger,
