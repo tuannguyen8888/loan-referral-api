@@ -99,9 +99,6 @@ export class McLoanProfileService extends BaseService {
             console.error(e);
             throw e;
         }
-        // return new Promise<LoanProfilesResponseDto>(()=>{
-        //     return new LoanProfilesResponseDto();
-        // });
     }
 
     async getLoanProfile(loanProfileId: number) {
