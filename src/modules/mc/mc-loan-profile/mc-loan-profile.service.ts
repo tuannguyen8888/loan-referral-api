@@ -76,8 +76,8 @@ export class McLoanProfileService extends BaseService {
           status: dto.status
         });
       if (dto.bpmStatus)
-        query = query.andWhere("status = :bpmStatus", {
-          status: dto.bpmStatus
+        query = query.andWhere("bpmStatus = :bpmStatus", {
+          bpmStatus: dto.bpmStatus
         });
       if (dto.keyword)
         query = query.andWhere(
