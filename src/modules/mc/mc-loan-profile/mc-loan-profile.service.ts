@@ -58,7 +58,7 @@ export class McLoanProfileService extends BaseService {
     try {
       const repo = this.connection.getCustomRepository(McLoanProfileRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
-      console.log(111);
+
       if (dto.shopCode)
         query = query.andWhere("shopCode = :shopCode", {
           shopCode: dto.shopCode
@@ -74,6 +74,10 @@ export class McLoanProfileService extends BaseService {
       if (dto.status)
         query = query.andWhere("status = :status", {
           status: dto.status
+        });
+      if (dto.bpmStatus)
+        query = query.andWhere("bpmStatus = :bpmStatus", {
+          bpmStatus: dto.bpmStatus
         });
       if (dto.keyword)
         query = query.andWhere(
@@ -100,7 +104,16 @@ export class McLoanProfileService extends BaseService {
       throw e;
     }
   }
-
+  async getbpmStatus() {
+    console.log('getbpmStatus');
+    try {
+      const rawData = await this.connection.query(`SELECT DISTINCT bpmStatus FROM mc_loan_profile`);
+      return rawData;
+    } catch (e) {
+      console.error(e);
+      return null
+    }
+  }
   async getLoanProfile(loanProfileId: number) {
     let result = await this.connection
       .getCustomRepository(McLoanProfileRepository)
