@@ -40,6 +40,14 @@ export class McLoanProfile {
   address: string;
 
   @Column("varchar", {
+    name: "permanentaddress",
+    length: 255,
+    nullable: true,
+    default: ""
+  })
+  permanentaddress: string;
+
+  @Column("varchar", {
     name: "phone",
     length: 20,
     nullable: true,

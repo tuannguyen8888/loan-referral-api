@@ -21,6 +21,7 @@ export class McLoanProfileDto {
   customerName: string = null;
   gender: string = null;
   address: string = null;
+  permanentaddress: string = null;
   phone: string = null;
   typeScore: string = null;
   compName: string = null;
