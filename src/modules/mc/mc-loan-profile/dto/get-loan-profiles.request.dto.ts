@@ -17,6 +17,10 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   bpmStatus?: string;
   @IsOptional()
+  completedatfrom?: string;
+  @IsOptional()
+  completedatto?: string;
+  @IsOptional()
   checkcontract?: string;
 
   @IsDefined()

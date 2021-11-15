@@ -79,6 +79,14 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("bpmStatus = :bpmStatus", {
           bpmStatus: dto.bpmStatus
         });
+      if (dto.completedatfrom)
+        query = query.andWhere("completedat >= :completedatfrom", {
+          completedatfrom: dto.completedatfrom
+        });
+      if (dto.completedatto)
+        query = query.andWhere("completedat <= :completedatto", {
+          completedatto: dto.completedatto
+        });
       if (dto.keyword)
         query = query.andWhere(
           "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",

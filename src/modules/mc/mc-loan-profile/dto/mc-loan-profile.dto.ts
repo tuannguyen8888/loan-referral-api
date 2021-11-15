@@ -51,6 +51,7 @@ export class McLoanProfileDto {
   hasCourier: number = null;
   status: string = null;
   bpmStatus: string = null;
+  completedat: string = null;
   dateOfBirth: string = null;
   customerIncome: number = null;
   checkcontract: string = null;

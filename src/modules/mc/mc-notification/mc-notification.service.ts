@@ -107,14 +107,27 @@ export class McNotificationService extends BaseService {
       //let loanProfileService = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
 
       //Cập nhật trạng thái
-      let queryupdate = repo
-        .createQueryBuilder()
-        .update()
-        .set({
-          bpmStatus: dto.currentStatus
-        })
-        .where("id = :id", { id: loanProfileResponse.id });
-      await queryupdate.execute();
+      if(dto.currentStatus == 'Hoàn thành'){
+        let queryupdate = repo
+            .createQueryBuilder()
+            .update()
+            .set({
+              bpmStatus: dto.currentStatus,
+              completedat: new Date()
+            })
+            .where("id = :id", { id: loanProfileResponse.id });
+        await queryupdate.execute();
+      }else {
+        let queryupdate = repo
+            .createQueryBuilder()
+            .update()
+            .set({
+              bpmStatus: dto.currentStatus
+            })
+            .where("id = :id", { id: loanProfileResponse.id });
+        await queryupdate.execute();
+      }
+
 
       let response: McNotificationDto = this.convertEntity2Dto(
         result,
