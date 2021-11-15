@@ -52,6 +52,7 @@ export class LoanProfileUpdateDto {
   hasCourier: number = null;
   status: string = null;
   bpmStatus: string = null;
+  completedat: string = null;
   dateOfBirth: string = null;
   customerIncome: number = null;
   verifyInfo: string = null;

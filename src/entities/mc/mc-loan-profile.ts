@@ -199,6 +199,10 @@ export class McLoanProfile {
     comment: "Trạng thái hồ sơ"
   })
   bpmStatus: string;
+
+  @Column("timestamp", { name: "completedat", nullable: true })
+  completedat: Date | null;
+
   @Column("varchar", {
     name: "shopCode",
     length: 50,
