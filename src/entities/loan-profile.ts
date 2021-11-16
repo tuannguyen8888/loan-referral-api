@@ -38,7 +38,7 @@ export class LoanProfile {
     name: "in_totalloanamountreq",
     nullable: true,
     comment: "Loan Amount Requested trên Finnone",
-    precision: 22
+    default: 0
   })
   inTotalloanamountreq: number | null;
 
