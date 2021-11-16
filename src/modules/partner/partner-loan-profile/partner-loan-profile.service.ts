@@ -15,6 +15,14 @@ import {McLoanProfileService} from "../../mc/mc-loan-profile/mc-loan-profile.ser
 import {McLoanProfileRepository} from "../../../repositories";
 import {McLoanProfile} from "../../../entities";
 import {PartnerResultResponseDto} from "./dto/partner-result.response.dto";
+import {McapiUtil} from "../../../common/utils/mcapi.util";
+import {McKiosService} from "../../mc/mc-kios/mc-kios.service";
+import {McProductService} from "../../mc/mc-product/mc-product.service";
+import {McCheckListrequestDto} from "../../mc/mc-loan-profile/dto/mc-check-listrequest.dto";
+import {McAttachfileDto} from "../../mc/mc-attachfile/dto/mc-attachfile.dto";
+import {McAttachfileService} from "../../mc/mc-attachfile/mc-attachfile.service";
+import {McAttachfileUpdateDto} from "../../mc/mc-attachfile/dto/mc-attachfile.update.dto";
+import {GetMCAttachfileRequestDto} from "../../mc/mc-attachfile/dto/mc-get-attachfile.request.dto";
 
 @Injectable()
 export class PartnerLoanProfileService extends BaseService{
@@ -32,13 +40,13 @@ export class PartnerLoanProfileService extends BaseService{
         let response = new PartnerResultResponseDto();
         if(dto.saleCode == undefined || dto.saleCode == ''){
             response.statusCode = 400;
-            response.text = 'Không tồn tại salecode!';
+            response.message = 'Không tồn tại salecode!';
             response.data = null;
         }else {
             let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
             let result = await serviceMCLoanProfile.getAllLoanProfiles(dto);
             response.statusCode = 200;
-            response.text = '';
+            response.message = '';
             response.data = result;
         }
         return response;
@@ -48,7 +56,7 @@ export class PartnerLoanProfileService extends BaseService{
         let response = new PartnerResultResponseDto();
         if(saleCode == undefined || saleCode == ''){
             response.statusCode = 400;
-            response.text = 'Không tồn tại salecode!';
+            response.message = 'Không tồn tại salecode!';
             response.data = null;
         }else {
             let result = await serviceMCLoanProfile.getLoanProfile(loanProfileId);
@@ -56,7 +64,7 @@ export class PartnerLoanProfileService extends BaseService{
                 response.data = result;
             }
             response.statusCode = 200;
-            response.text = '';
+            response.message = '';
 
         }
         return response
@@ -66,11 +74,11 @@ export class PartnerLoanProfileService extends BaseService{
         let response = new PartnerResultResponseDto();
         if(dto.saleCode == undefined || dto.saleCode == ''){
             response.statusCode = 400;
-            response.text = 'Không tồn tại salecode!';
+            response.message = 'Không tồn tại salecode!';
             response.data = null;
         }else {
             response.statusCode = 200;
-            response.text = '';
+            response.message = '';
             response.data = await serviceMCLoanProfile.createLoanProfile(dto);
         }
         return response
@@ -81,13 +89,199 @@ export class PartnerLoanProfileService extends BaseService{
         let response = new PartnerResultResponseDto();
         if(dto.saleCode == undefined || dto.saleCode == ''){
             response.statusCode = 400;
-            response.text = 'Không tồn tại salecode!';
+            response.message = 'Không tồn tại salecode!';
             response.data = null;
         }else {
             response.statusCode = 200;
-            response.text = '';
+            response.message = '';
             response.data = await serviceMCLoanProfile.updateLoanProfile(dto);
         }
         return response
+    }
+
+    //
+    async getbpmStatus(saleCode:string) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.getbpmStatus();
+        }
+        return response;
+    }
+    async checkCIC(saleCode,citizenId, customerName) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.checkCIC(citizenId,customerName);
+        }
+        return response;
+    }
+    async checkCitizenId(saleCode,citizenId) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.checkCitizenId(citizenId);
+        }
+        return response;
+    }
+    async checkInitContract(saleCode,loan_profile_id) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.checkInitContract(loan_profile_id);
+        }
+        return response;
+    }
+
+    async checkCategory(saleCode,companyTaxNumber) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.checkCategory(companyTaxNumber);
+        }
+        return response;
+    }
+
+    async getKios(saleCode) {
+        let serviceKios = new McKiosService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceKios.getKios();
+        }
+        return response;
+    }
+    async getProducts(saleCode) {
+        let serviceProduct = new McProductService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceProduct.getProducts();
+        }
+        return response;
+    }
+    async checkList(saleCode,dto: McCheckListrequestDto) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.checkList(dto);
+        }
+        return response;
+    }
+    async uploadDocument(saleCode,id) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.uploadDocument(id);
+        }
+        return response;
+    }
+    async getAllAttachfile(saleCode,dto: GetMCAttachfileRequestDto) {
+        let serviceMcAttachfile = new McAttachfileService(this.request,this.logger,this.redisClient,this.requestUtil);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMcAttachfile.getAllAttachfile(dto);
+        }
+        return response;
+    }
+    async getAttachfile(saleCode,id: number) {
+        let serviceMcAttachfile = new McAttachfileService(this.request,this.logger,this.redisClient,this.requestUtil);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMcAttachfile.getAttachfile(id);
+        }
+        return response;
+    }
+    async createAttachfile(saleCode,dto: McAttachfileDto) {
+        let serviceMcAttachfile = new McAttachfileService(this.request,this.logger,this.redisClient,this.requestUtil);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMcAttachfile.createAttachfile(dto);
+        }
+        return response;
+    }
+    async updateAttachfile(saleCode,dto: McAttachfileUpdateDto) {
+        let serviceMcAttachfile = new McAttachfileService(this.request,this.logger,this.redisClient,this.requestUtil);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMcAttachfile.updateAttachfile(dto);
+        }
+        return response;
     }
 }

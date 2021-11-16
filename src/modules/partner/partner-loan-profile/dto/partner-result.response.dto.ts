@@ -1,5 +1,5 @@
 export class PartnerResultResponseDto {
   statusCode:number = null;
-  text:string = null;
+  message:string = null;
   data:any = [];
 }
