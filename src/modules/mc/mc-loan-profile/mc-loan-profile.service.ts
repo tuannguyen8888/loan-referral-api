@@ -117,13 +117,15 @@ export class McLoanProfileService extends BaseService {
     }
   }
   async getbpmStatus() {
-    console.log('getbpmStatus');
+    console.log("getbpmStatus");
     try {
-      const rawData = await this.connection.query(`SELECT DISTINCT bpmStatus FROM mc_loan_profile`);
+      const rawData = await this.connection.query(
+        `SELECT DISTINCT bpmStatus FROM mc_loan_profile`
+      );
       return rawData;
     } catch (e) {
       console.error(e);
-      return null
+      return null;
     }
   }
   async getLoanProfile(loanProfileId: number) {

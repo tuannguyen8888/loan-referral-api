@@ -13,7 +13,7 @@ import { McCaseModule } from "./modules/mc/mc-case/mc-case.module";
 import { McCaseNoteModule } from "./modules/mc/mc-case-note/mc-case-note.module";
 import { McNotificationModule } from "./modules/mc/mc-notification/mc-notification.module";
 import { McAttachfileModule } from "./modules/mc/mc-attachfile/mc-attachfile.module";
-import {PartnerLoanProfileModule} from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
+import { PartnerLoanProfileModule } from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
 
 export const ROUTES: Routes = [
   {
@@ -48,8 +48,6 @@ export const ROUTES: Routes = [
   },
   {
     path: "api/partner",
-    children:[
-        PartnerLoanProfileModule
-    ]
+    children: [PartnerLoanProfileModule]
   }
 ];
