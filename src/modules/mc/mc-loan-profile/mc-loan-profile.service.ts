@@ -63,6 +63,10 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("shopCode = :shopCode", {
           shopCode: dto.shopCode
         });
+      if (dto.saleCode)
+        query = query.andWhere("saleCode = :saleCode", {
+          saleCode: dto.saleCode
+        });
       if (dto.mobileProductType)
         query = query.andWhere("loan_status = :mobileProductType", {
           loanStatus: dto.mobileProductType
