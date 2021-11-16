@@ -76,9 +76,17 @@ export class McLoanProfileController {
   @Post("/getbpmStatus")
   @ApiOperation({ summary: "Lấy thông tin hợp đồng trả về" })
   @HttpCode(200)
-  getbpmStatus(@Headers() headers, ) {
+  getbpmStatus(@Headers() headers) {
     return this.service.getbpmStatus();
   }
+
+  @Post("/getSaleCode")
+  @ApiOperation({ summary: "Lấy danh sách salecode" })
+  @HttpCode(200)
+  getSaleCode(@Headers() headers) {
+    return this.service.getSaleCode();
+  }
+
   @Post("/getCases")
   @ApiOperation({ summary: "Lấy thông tin hợp đồng trả về" })
   @HttpCode(200)

@@ -620,10 +620,10 @@ export class McapiUtil {
       });
       console.log(result);
       response = result.data;
-      console.log('true');
+      console.log("true");
       console.log(response);
     } catch (e) {
-      console.log('false');
+      console.log("false");
       response = e.response.data;
     } finally {
       let input = {};
