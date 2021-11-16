@@ -13,6 +13,10 @@ import {McCheckListrequestDto} from "../../mc/mc-loan-profile/dto/mc-check-listr
 import {McAttachfileDto} from "../../mc/mc-attachfile/dto/mc-attachfile.dto";
 import {McAttachfileUpdateDto} from "../../mc/mc-attachfile/dto/mc-attachfile.update.dto";
 import {GetMCAttachfileRequestDto} from "../../mc/mc-attachfile/dto/mc-get-attachfile.request.dto";
+import {McCaseNoteDto} from "../../mc/mc-case-note/dto/mc-case-note.dto";
+import {requestSendOtp3PDto} from "../../mc/mc-loan-profile/dto/requestSendOtp3P.dto";
+import {requestScoring3PDto} from "../../mc/mc-loan-profile/dto/requestScoring3P.dto";
+import {GetMcCaseRequestDto} from "../../mc/mc-loan-profile/dto/get-mc-case.request.dto";
 
 @Controller('partner-loan-profile')
 export class PartnerLoanProfileController {
@@ -153,5 +157,50 @@ export class PartnerLoanProfileController {
     @HttpCode(200)
     updateAttachfile(@Headers() headers, @Body() dto: McAttachfileUpdateDto) {
         return this.service.updateAttachfile(headers.salecode,dto);
+    }
+
+    @Get("/listCaseNote/:loan_profile_id")
+    @ApiOperation({ summary: "Kiểm tra khả năng cho vay" })
+    @HttpCode(200)
+    listCaseNote(@Headers() headers, @Param() params) {
+        console.log(params.loan_profile_id);
+        return this.service.listCaseNote(headers.salecode,params.loan_profile_id);
+    }
+    @Post("/createCaseNote")
+    @ApiOperation({ summary: "Thêm Case Note" })
+    createCaseNote(
+        @Headers() headers,
+        @Body() dto: McCaseNoteDto
+    ): Promise<PartnerResultResponseDto> {
+        return this.service.createCaseNote(headers.salecode,dto);
+    }
+
+    @Post("/requestSendOtp3P")
+    @ApiOperation({ summary: "Lấy otp để chấm điểm" })
+    @HttpCode(200)
+    requestSendOtp3P(@Headers() headers, @Body() dto: requestSendOtp3PDto) {
+        return this.service.requestSendOtp3P(headers.salecode,dto);
+    }
+
+    @Post("/requestScoring3P")
+    @ApiOperation({ summary: "Lấy otp để chấm điểm" })
+    @HttpCode(200)
+    requestScoring3P(@Headers() headers, @Body() dto: requestScoring3PDto) {
+        return this.service.requestScoring3P(headers.salecode,dto);
+    }
+
+    @Post("/getCases")
+    @ApiOperation({ summary: "Lấy thông tin hợp đồng trả về" })
+    @HttpCode(200)
+    getCases(@Headers() headers, @Body() dto: GetMcCaseRequestDto) {
+        return this.service.getCases(headers.salecode,dto);
+    }
+
+    @Get("/getReturnChecklist/:loan_profile_id")
+    @ApiOperation({ summary: "Kiểm tra khả năng cho vay" })
+    @HttpCode(200)
+    getReturnChecklist(@Headers() headers, @Param() params) {
+        console.log(params.loan_profile_id);
+        return this.service.getReturnChecklist(headers.salecode,params.loan_profile_id);
     }
 }

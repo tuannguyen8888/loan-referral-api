@@ -23,6 +23,11 @@ import {McAttachfileDto} from "../../mc/mc-attachfile/dto/mc-attachfile.dto";
 import {McAttachfileService} from "../../mc/mc-attachfile/mc-attachfile.service";
 import {McAttachfileUpdateDto} from "../../mc/mc-attachfile/dto/mc-attachfile.update.dto";
 import {GetMCAttachfileRequestDto} from "../../mc/mc-attachfile/dto/mc-get-attachfile.request.dto";
+import {McCaseNoteDto} from "../../mc/mc-case-note/dto/mc-case-note.dto";
+import {McCaseNoteService} from "../../mc/mc-case-note/mc-case-note.service";
+import {requestSendOtp3PDto} from "../../mc/mc-loan-profile/dto/requestSendOtp3P.dto";
+import {requestScoring3PDto} from "../../mc/mc-loan-profile/dto/requestScoring3P.dto";
+import {GetMcCaseRequestDto} from "../../mc/mc-loan-profile/dto/get-mc-case.request.dto";
 
 @Injectable()
 export class PartnerLoanProfileService extends BaseService{
@@ -281,6 +286,96 @@ export class PartnerLoanProfileService extends BaseService{
             response.statusCode = 200;
             response.message = '';
             response.data = await serviceMcAttachfile.updateAttachfile(dto);
+        }
+        return response;
+    }
+
+    async listCaseNote(saleCode,id) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.listCaseNote(id);
+        }
+        return response;
+    }
+
+    async createCaseNote(saleCode,dto: McCaseNoteDto) {
+        let serviceMcCaseNote = new McCaseNoteService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMcCaseNote.createCaseNote(dto);
+        }
+        return response;
+    }
+
+    async requestSendOtp3P(saleCode,dto: requestSendOtp3PDto) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.requestSendOtp3P(dto);
+        }
+        return response;
+    }
+
+    async requestScoring3P(saleCode,dto: requestScoring3PDto) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.requestScoring3P(dto);
+        }
+        return response;
+    }
+
+    async getCases(saleCode,dto: GetMcCaseRequestDto) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.getCases(dto);
+        }
+        return response;
+    }
+
+    async getReturnChecklist(saleCode,id) {
+        let serviceMCLoanProfile = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+        let response = new PartnerResultResponseDto();
+        if(saleCode == undefined || saleCode == ''){
+            response.statusCode = 400;
+            response.message = 'Không tồn tại salecode!';
+            response.data = null;
+        }else {
+            response.statusCode = 200;
+            response.message = '';
+            response.data = await serviceMCLoanProfile.getReturnChecklist(id);
         }
         return response;
     }
