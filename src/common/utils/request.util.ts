@@ -3,6 +3,7 @@ import * as FormData from "form-data";
 import { HttpService, Inject, Injectable } from "@nestjs/common";
 import { DownloadFileResParam } from "../interfaces/response";
 import * as fs from "fs";
+import * as path from "path";
 
 @Injectable()
 export class RequestUtil {
@@ -160,7 +161,7 @@ export class RequestUtil {
     writeStream.write(file.buffer);
     writeStream.end();
   }
-  async getFile(filename) {
+  getFile(filename) {
     var fs = require("fs");
     let dirname = "document";
     let filePath = `${__dirname}/../../attach_files/`;
@@ -170,18 +171,15 @@ export class RequestUtil {
     }
     filename = dir + "/" + filename;
     if (fs.existsSync(filename)) {
-      //let res;
-      fs.readFile(filename, function read(err, data) {
-        if (err) {
-          throw err;
-        }
-        var content = data;
-
-        console.log(content);
-        return content;
-      });
+      return {
+        statusCode:200,
+        filename:filename
+      };
     } else {
-      return "File không tồn tại";
+      return {
+        statusCode:500,
+        filename:'Không tồn tại file!'
+      };
     }
   }
 }
