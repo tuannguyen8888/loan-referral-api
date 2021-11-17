@@ -117,20 +117,20 @@ export class McapiUtil {
         return await this.checkCIC(citizenId, customerName);
       }
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = url;
-      let input = {
-        citizenId: citizenId,
-        customerName: customerName
-      };
-      await this.writeLog(
-        url,
-        "checkCIC",
-        headers,
-        "get",
-        input,
-        JSON.stringify(response)
-      );
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let input = {
+      //   citizenId: citizenId,
+      //   customerName: customerName
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "checkCIC",
+      //   headers,
+      //   "get",
+      //   input,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -165,19 +165,19 @@ export class McapiUtil {
         return await this.checkCitizenId(citizenId);
       }
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = url;
-      let input = {
-        citizenId: citizenId
-      };
-      await this.writeLog(
-        url,
-        "checkCitizenId",
-        headers,
-        "get",
-        input,
-        JSON.stringify(response)
-      );
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let input = {
+      //   citizenId: citizenId
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "checkCitizenId",
+      //   headers,
+      //   "get",
+      //   input,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -212,19 +212,19 @@ export class McapiUtil {
         await this.checkCategory(companyTaxNumber);
       }
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = url;
-      let input = {
-        companyTaxNumber: companyTaxNumber
-      };
-      await this.writeLog(
-        url,
-        "checkCategory",
-        headers,
-        "get",
-        input,
-        JSON.stringify(response)
-      );
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let input = {
+      //   companyTaxNumber: companyTaxNumber
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "checkCategory",
+      //   headers,
+      //   "get",
+      //   input,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -258,17 +258,17 @@ export class McapiUtil {
           return await this.getKios();
         }
       } finally {
-        let log = new SendDataLog();
-        log.apiUrl = url;
-        let input = {};
-        await this.writeLog(
-            url,
-            "getKios",
-            headers,
-            "get",
-            input,
-            JSON.stringify(response)
-        );
+        // let log = new SendDataLog();
+        // log.apiUrl = url;
+        // let input = {};
+        // await this.writeLog(
+        //     url,
+        //     "getKios",
+        //     headers,
+        //     "get",
+        //     input,
+        //     JSON.stringify(response)
+        // );
       }
     } else {
       response = JSON.parse(mckios);
@@ -308,17 +308,17 @@ export class McapiUtil {
           return await this.getProducts();
         }
       } finally {
-        let log = new SendDataLog();
-        log.apiUrl = url;
-        let input = {};
-        await this.writeLog(
-            url,
-            "getProducts",
-            headers,
-            "get",
-            input,
-            JSON.stringify(response)
-        );
+        // let log = new SendDataLog();
+        // log.apiUrl = url;
+        // let input = {};
+        // await this.writeLog(
+        //     url,
+        //     "getProducts",
+        //     headers,
+        //     "get",
+        //     input,
+        //     JSON.stringify(response)
+        // );
       }
     } else {
       response = JSON.parse(mcproducts);
@@ -365,23 +365,23 @@ export class McapiUtil {
         return await this.checkList(dto);
       }
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = url;
-      let data = JSON.stringify({
-        header: headers,
-        method: "get",
-        input: {
-          dto
-        }
-      });
-      await this.writeLog(
-          url,
-          "checkList",
-          headers,
-          "get",
-          data,
-          JSON.stringify(response)
-      );
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let data = JSON.stringify({
+      //   header: headers,
+      //   method: "get",
+      //   input: {
+      //     dto
+      //   }
+      // });
+      // await this.writeLog(
+      //     url,
+      //     "checkList",
+      //     headers,
+      //     "get",
+      //     data,
+      //     JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -428,23 +428,23 @@ export class McapiUtil {
         return await this.checkInitContract(dto);
       }
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = url;
-      let data = JSON.stringify({
-        header: headers,
-        method: "post",
-        input: {
-          dto
-        }
-      });
-      await this.writeLog(
-        url,
-        "checkInitContract",
-        headers,
-        "post",
-        data,
-        JSON.stringify(response)
-      );
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let data = JSON.stringify({
+      //   header: headers,
+      //   method: "post",
+      //   input: {
+      //     dto
+      //   }
+      // });
+      // await this.writeLog(
+      //   url,
+      //   "checkInitContract",
+      //   headers,
+      //   "post",
+      //   data,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -572,16 +572,16 @@ export class McapiUtil {
       }
       response = e.response.data;
     } finally {
-      let log = new SendDataLog();
-      log.apiUrl = configdata.url;
-      await this.writeLog(
-        configdata.url,
-        "uploadDocument",
-        configdata.headers,
-        "post",
-        obj,
-        JSON.stringify(response)
-      );
+      // let log = new SendDataLog();
+      // log.apiUrl = configdata.url;
+      // await this.writeLog(
+      //   configdata.url,
+      //   "uploadDocument",
+      //   configdata.headers,
+      //   "post",
+      //   obj,
+      //   JSON.stringify(response)
+      // );
     }
 
     return response;
