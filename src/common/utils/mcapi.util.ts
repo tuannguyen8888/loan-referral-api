@@ -28,11 +28,11 @@ export class McapiUtil {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
     var data = JSON.stringify({
-      username: "finviet.3rd",
-      password: "123456a@",
-      notificationId: "notificationId.finviet.3rd",
-      imei: "imei.finviet.3rd",
-      osType: "IOS"
+      username: mc_api_config.username,
+      password: mc_api_config.password,
+      notificationId: mc_api_config.notificationId,
+      imei: mc_api_config.imei,
+      osType: mc_api_config.osType
     });
     let url = mc_api_config.endpoint + "authorization/";
     let headers = {
@@ -51,11 +51,11 @@ export class McapiUtil {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
     var data = JSON.stringify({
-      username: "finviet.3rd",
-      password: "123456a@",
-      notificationId: "notificationId.finviet.3rd",
-      imei: "imei.finviet.3rd",
-      osType: "IOS"
+      username: mc_api_config.username,
+      password: mc_api_config.password,
+      notificationId: mc_api_config.notificationId,
+      imei: mc_api_config.imei,
+      osType: mc_api_config.osType
     });
     let url = mc_api_config.endpoint + "authorization/";
     let headers = {
