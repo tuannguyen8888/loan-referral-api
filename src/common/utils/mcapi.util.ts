@@ -28,11 +28,11 @@ export class McapiUtil {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
     var data = JSON.stringify({
-      username: "finviet.3rd",
-      password: "123456a@",
-      notificationId: "notificationId.finviet.3rd",
-      imei: "imei.finviet.3rd",
-      osType: "IOS"
+      username: mc_api_config.username,
+      password: mc_api_config.password,
+      notificationId: mc_api_config.notificationId,
+      imei: mc_api_config.imei,
+      osType: mc_api_config.osType
     });
     let url = mc_api_config.endpoint + "authorization/";
     let headers = {
@@ -51,11 +51,11 @@ export class McapiUtil {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
     var data = JSON.stringify({
-      username: "finviet.3rd",
-      password: "123456a@",
-      notificationId: "notificationId.finviet.3rd",
-      imei: "imei.finviet.3rd",
-      osType: "IOS"
+      username: mc_api_config.username,
+      password: mc_api_config.password,
+      notificationId: mc_api_config.notificationId,
+      imei: mc_api_config.imei,
+      osType: mc_api_config.osType
     });
     let url = mc_api_config.endpoint + "authorization/";
     let headers = {
@@ -258,17 +258,17 @@ export class McapiUtil {
           return await this.getKios();
         }
       } finally {
-        // let log = new SendDataLog();
-        // log.apiUrl = url;
-        // let input = {};
-        // await this.writeLog(
-        //     url,
-        //     "getKios",
-        //     headers,
-        //     "get",
-        //     input,
-        //     JSON.stringify(response)
-        // );
+        let log = new SendDataLog();
+        log.apiUrl = url;
+        let input = {};
+        await this.writeLog(
+            url,
+            "getKios",
+            headers,
+            "get",
+            input,
+            JSON.stringify(response)
+        );
       }
     } else {
       response = JSON.parse(mckios);
@@ -308,17 +308,17 @@ export class McapiUtil {
           return await this.getProducts();
         }
       } finally {
-        // let log = new SendDataLog();
-        // log.apiUrl = url;
-        // let input = {};
-        // await this.writeLog(
-        //     url,
-        //     "getProducts",
-        //     headers,
-        //     "get",
-        //     input,
-        //     JSON.stringify(response)
-        // );
+        let log = new SendDataLog();
+        log.apiUrl = url;
+        let input = {};
+        await this.writeLog(
+            url,
+            "getProducts",
+            headers,
+            "get",
+            input,
+            JSON.stringify(response)
+        );
       }
     } else {
       response = JSON.parse(mcproducts);
@@ -362,26 +362,26 @@ export class McapiUtil {
       response = e.response.data;
       if (response.returnCode == "401") {
         await this.login();
-        await this.checkList(dto);
+        return await this.checkList(dto);
       }
     } finally {
-      // let log = new SendDataLog();
-      // log.apiUrl = url;
-      // let data = JSON.stringify({
-      //   header: headers,
-      //   method: "get",
-      //   input: {
-      //     dto
-      //   }
-      // });
-      // await this.writeLog(
-      //     url,
-      //     "checkList",
-      //     headers,
-      //     "get",
-      //     data,
-      //     JSON.stringify(response)
-      // );
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let data = JSON.stringify({
+        header: headers,
+        method: "get",
+        input: {
+          dto
+        }
+      });
+      await this.writeLog(
+          url,
+          "checkList",
+          headers,
+          "get",
+          data,
+          JSON.stringify(response)
+      );
     }
     return response;
   }
@@ -620,10 +620,10 @@ export class McapiUtil {
       });
       console.log(result);
       response = result.data;
-      console.log('true');
+      console.log("true");
       console.log(response);
     } catch (e) {
-      console.log('false');
+      console.log("false");
       response = e.response.data;
     } finally {
       let input = {};

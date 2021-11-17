@@ -63,6 +63,10 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("shopCode = :shopCode", {
           shopCode: dto.shopCode
         });
+      if (dto.saleCode)
+        query = query.andWhere("saleCode = :saleCode", {
+          saleCode: dto.saleCode
+        });
       if (dto.mobileProductType)
         query = query.andWhere("loan_status = :mobileProductType", {
           loanStatus: dto.mobileProductType
@@ -113,13 +117,27 @@ export class McLoanProfileService extends BaseService {
     }
   }
   async getbpmStatus() {
-    console.log('getbpmStatus');
+    console.log("getbpmStatus");
     try {
-      const rawData = await this.connection.query(`SELECT DISTINCT bpmStatus FROM mc_loan_profile`);
+      const rawData = await this.connection.query(
+        `SELECT DISTINCT bpmStatus FROM mc_loan_profile`
+      );
       return rawData;
     } catch (e) {
       console.error(e);
-      return null
+      return null;
+    }
+  }
+  async getSaleCode() {
+    console.log("getSaleCode");
+    try {
+      const rawData = await this.connection.query(
+          `SELECT DISTINCT saleCode FROM mc_loan_profile`
+      );
+      return rawData;
+    } catch (e) {
+      console.error(e);
+      return null;
     }
   }
   async getLoanProfile(loanProfileId: number) {

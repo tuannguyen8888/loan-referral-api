@@ -36,6 +36,7 @@ import { McNotificationModule } from "./modules/mc/mc-notification/mc-notificati
 import { McNotificationResponseDto } from "./modules/mc/mc-notification/dto/mc-notification.response.dto";
 import { McAttachfileModule } from "./modules/mc/mc-attachfile/mc-attachfile.module";
 import { TtfcLoanProfileModule } from "./modules/ttfc/ttfc-loan-profile/ttfc-loan-profile.module";
+import { PartnerLoanProfileModule } from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -56,7 +57,8 @@ const imports = [
   McCaseModule,
   McCaseNoteModule,
   McNotificationModule,
-  McAttachfileModule
+  McAttachfileModule,
+  PartnerLoanProfileModule
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));

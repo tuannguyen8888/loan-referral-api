@@ -55,7 +55,7 @@ export class CronService {
     let dto = new GetMcCaseRequestDto();
     dto.pageNumber = 1;
     dto.pageSize = 1000;
-    dto.keyword = '';
+    dto.keyword = "";
     dto.status = "PROCESSING";
     await mcloanprofileser.getCases(dto);
     //PTF
