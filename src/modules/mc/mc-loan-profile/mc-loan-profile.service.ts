@@ -132,7 +132,7 @@ export class McLoanProfileService extends BaseService {
     console.log("getSaleCode");
     try {
       const rawData = await this.connection.query(
-          `SELECT DISTINCT saleCode FROM mc_loan_profile`
+        `SELECT DISTINCT saleCode FROM mc_loan_profile`
       );
       return rawData;
     } catch (e) {
