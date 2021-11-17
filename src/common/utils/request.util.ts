@@ -146,4 +146,42 @@ export class RequestUtil {
       throw error;
     }
   }
+  async saveFile(file: Express.Multer.File) {
+    var fs = require("fs");
+    let dirname = "document";
+    let filePath = `${__dirname}/../../attach_files/`;
+    var dir = filePath + dirname;
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+    let filename = dir + "/" + file.originalname;
+    console.log(filename);
+    const writeStream = fs.createWriteStream(filename);
+    writeStream.write(file.buffer);
+    writeStream.end();
+  }
+  async getFile(filename) {
+    var fs = require("fs");
+    let dirname = "document";
+    let filePath = `${__dirname}/../../attach_files/`;
+    var dir = filePath + dirname;
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+    filename = dir + "/" + filename;
+    if (fs.existsSync(filename)) {
+      //let res;
+      fs.readFile(filename, function read(err, data) {
+        if (err) {
+          throw err;
+        }
+        var content = data;
+
+        console.log(content);
+        return content;
+      });
+    } else {
+      return "File không tồn tại";
+    }
+  }
 }

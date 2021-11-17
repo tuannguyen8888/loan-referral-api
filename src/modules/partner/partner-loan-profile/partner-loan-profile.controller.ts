@@ -6,7 +6,9 @@ import {
   HttpCode,
   Param,
   Post,
-  Put
+  Put,
+  UploadedFile,
+  UseInterceptors
 } from "@nestjs/common";
 import { PartnerLoanProfileService } from "./partner-loan-profile.service";
 import { ApiOperation } from "@nestjs/swagger";
@@ -29,6 +31,7 @@ import { McCaseNoteDto } from "../../mc/mc-case-note/dto/mc-case-note.dto";
 import { requestSendOtp3PDto } from "../../mc/mc-loan-profile/dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "../../mc/mc-loan-profile/dto/requestScoring3P.dto";
 import { GetMcCaseRequestDto } from "../../mc/mc-loan-profile/dto/get-mc-case.request.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller("partner-loan-profile")
 export class PartnerLoanProfileController {
@@ -233,5 +236,18 @@ export class PartnerLoanProfileController {
       headers.salecode,
       params.loan_profile_id
     );
+  }
+  @Post("uploadFile")
+  @UseInterceptors(FileInterceptor("file"))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+    this.service.saveFile(file);
+  }
+  @Get("/getFile/:filename")
+  @ApiOperation({ summary: "Lấy thông tin chứng từ cần up lại" })
+  @HttpCode(200)
+  getFile(@Headers() headers, @Param() params) {
+    console.log(params.filename);
+    return this.service.getFile(params.filename);
   }
 }
