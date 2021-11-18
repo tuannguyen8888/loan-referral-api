@@ -43,6 +43,8 @@ import { McCaseNoteRepository } from "../../../repositories/mc/mc-case-note.repo
 import { requestSendOtp3PDto } from "./dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "./dto/requestScoring3P.dto";
 import { IsNull, Like } from "typeorm";
+import {McCaseNoteDto} from "../mc-case-note/dto/mc-case-note.dto";
+import {McCaseNoteService} from "../mc-case-note/mc-case-note.service";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -382,11 +384,25 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async cancelCase(profileid, reason, comment) {
+  async cancelCase(profileid:number, reason:number, comment:string) {
     console.log("cancelCase");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.cancelCase(profileid, reason, comment);
-    return response;
+    try {
+      let loanProfile = await this.getLoanProfile(profileid);
+      console.log(loanProfile);
+      let dtoCaseNode = new McCaseNoteDto();
+      dtoCaseNode.profileid = loanProfile.profileid;
+      dtoCaseNode.appNumber = loanProfile.appNumber;
+      dtoCaseNode.app_uid = loanProfile.appid;
+      dtoCaseNode.note_content = reason==0?'Không có nhu cầu vay':'Lý do khác'+' - '+comment;
+      let serviceCaseNote = new McCaseNoteService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+      serviceCaseNote.createCaseNote(dtoCaseNode);
+      let mcapi = new McapiUtil(this.redisClient, this.httpService);
+      var response = await mcapi.cancelCase(dtoCaseNode.profileid, reason, comment);
+      return response;
+    }catch (e) {
+      console.log(e);
+    }
+
   }
 
   async createLoanProfile(dto: McLoanProfileDto) {
