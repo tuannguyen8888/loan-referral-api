@@ -701,7 +701,7 @@ export class McapiUtil {
     return response;
   }
 
-  async cancelCase(profileid, reason, comment): Promise<any> {
+  async cancelCase(profileid:number, reason:number, comment:string): Promise<any> {
     var axios = require("axios");
     let token = await this.redisClient.get("token");
     if (token == null) {
