@@ -2,14 +2,20 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   Headers,
   HttpCode,
   Param,
   Post,
-  Put
+  Put,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+  HttpStatus
 } from "@nestjs/common";
 import { PartnerLoanProfileService } from "./partner-loan-profile.service";
 import { ApiOperation } from "@nestjs/swagger";
+import { createReadStream } from "fs";
 import {
   GetMCLoanProfilesRequestDto,
   LoanProfileResponseDto,
@@ -29,6 +35,9 @@ import { McCaseNoteDto } from "../../mc/mc-case-note/dto/mc-case-note.dto";
 import { requestSendOtp3PDto } from "../../mc/mc-loan-profile/dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "../../mc/mc-loan-profile/dto/requestScoring3P.dto";
 import { GetMcCaseRequestDto } from "../../mc/mc-loan-profile/dto/get-mc-case.request.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { Response } from "express";
+import path from "path";
 
 @Controller("partner-loan-profile")
 export class PartnerLoanProfileController {
@@ -233,5 +242,30 @@ export class PartnerLoanProfileController {
       headers.salecode,
       params.loan_profile_id
     );
+  }
+  @Post("uploadFile")
+  @UseInterceptors(FileInterceptor("file"))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+    return this.service.saveFile(file);
+  }
+
+  @Get("/getFile/:filename")
+  @HttpCode(HttpStatus.OK)
+  getFile(@Param() params, @Res() res: Response) {
+    let data = this.service.getFile(params.filename);
+    console.log(data);
+    if (data.statusCode == 200) {
+      let arr = params.filename.split(".");
+      let extensionName = arr[arr.length - 1];
+      console.log(extensionName);
+      const file = createReadStream(data.filename);
+      res.set({
+        "Content-Type": "image/" + extensionName
+      });
+      file.pipe(res);
+    } else {
+      res.send(data);
+    }
   }
 }
