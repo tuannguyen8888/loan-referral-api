@@ -83,9 +83,9 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("bpmStatus = :bpmStatus", {
           bpmStatus: dto.bpmStatus
         });
-      if (dto.createdBy)
-        query = query.andWhere("created_by = :createdBy", {
-          createdBy: dto.createdBy
+      if (dto.user_id)
+        query = query.andWhere("created_by = :user_id", {
+          user_id: dto.user_id
         });
       if (dto.completedatfrom)
         query = query.andWhere("completedat >= :completedatfrom", {

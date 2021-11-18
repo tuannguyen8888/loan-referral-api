@@ -158,17 +158,17 @@ export class RequestUtil {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
-    let filenewname = Date.now() +'_'+ file.originalname
-    let filename = dir + "/" +filenewname;
+    let filenewname = Date.now() + "_" + file.originalname;
+    let filename = dir + "/" + filenewname;
     console.log(filename);
     const writeStream = fs.createWriteStream(filename);
     writeStream.write(file.buffer);
     writeStream.end();
     let getfile = config.get("getfile");
     return {
-      statusCode:200,
-      filename:filenewname,
-      url: getfile.url+filenewname
+      statusCode: 200,
+      filename: filenewname,
+      url: getfile.url + filenewname
     };
   }
   getFile(filename) {
@@ -182,13 +182,13 @@ export class RequestUtil {
     filename = dir + "/" + filename;
     if (fs.existsSync(filename)) {
       return {
-        statusCode:200,
-        filename:filename
+        statusCode: 200,
+        filename: filename
       };
     } else {
       return {
-        statusCode:500,
-        filename:'Không tồn tại file!'
+        statusCode: 500,
+        filename: "Không tồn tại file!"
       };
     }
   }
