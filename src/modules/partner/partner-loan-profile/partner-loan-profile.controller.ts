@@ -244,7 +244,7 @@ export class PartnerLoanProfileController {
   @UseInterceptors(FileInterceptor("file"))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
-    this.service.saveFile(file);
+    return this.service.saveFile(file);
   }
 
   @Get('/getFile/:filename')
