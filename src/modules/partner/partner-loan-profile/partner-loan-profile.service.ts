@@ -518,4 +518,11 @@ export class PartnerLoanProfileService extends BaseService {
     }
     return response;
   }
+
+  async saveFile(file: Express.Multer.File) {
+    return await this.requestUtil.saveFile(file);
+  }
+  getFile(filename) {
+    return this.requestUtil.getFile(filename);
+  }
 }

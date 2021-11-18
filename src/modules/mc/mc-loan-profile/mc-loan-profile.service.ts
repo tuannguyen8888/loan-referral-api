@@ -83,6 +83,10 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("bpmStatus = :bpmStatus", {
           bpmStatus: dto.bpmStatus
         });
+      if (dto.user_id)
+        query = query.andWhere("created_by = :user_id", {
+          user_id: dto.user_id
+        });
       if (dto.completedatfrom)
         query = query.andWhere("completedat >= :completedatfrom", {
           completedatfrom: dto.completedatfrom
@@ -345,6 +349,13 @@ export class McLoanProfileService extends BaseService {
     console.log("requestScoring3P");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.requestScoring3P(dto);
+    return response;
+  }
+
+  async cancelCase(profileid, reason, comment) {
+    console.log("cancelCase");
+    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    var response = await mcapi.cancelCase(profileid, reason, comment);
     return response;
   }
 
