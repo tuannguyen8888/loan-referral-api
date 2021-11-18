@@ -32,7 +32,8 @@ import { McapiUtil } from "../../../common/utils/mcapi.util";
 import { McAttachfilesResponseDto } from "../mc-attachfile/dto/mc-attachfiles.response.dto";
 import {
   LoanProfileRepository,
-  McAttachfileRepository
+  McAttachfileRepository,
+  SaleGroupRepository
 } from "../../../repositories";
 import { GetMCAttachfileRequestDto } from "../mc-attachfile/dto/mc-get-attachfile.request.dto";
 import { McAttachfileService } from "../mc-attachfile/mc-attachfile.service";
@@ -41,6 +42,7 @@ import { GetMcCaseRequestDto } from "./dto/get-mc-case.request.dto";
 import { McCaseNoteRepository } from "../../../repositories/mc/mc-case-note.repository";
 import { requestSendOtp3PDto } from "./dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "./dto/requestScoring3P.dto";
+import { IsNull, Like } from "typeorm";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -83,10 +85,38 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("bpmStatus = :bpmStatus", {
           bpmStatus: dto.bpmStatus
         });
-      if (dto.user_id)
-        query = query.andWhere("created_by = :user_id", {
-          user_id: dto.user_id
-        });
+      if (dto.user_id) {
+        let userGroup = await this.connection
+          .getCustomRepository(SaleGroupRepository)
+          .findOne({
+            where: {
+              deletedAt: IsNull(),
+              email: dto.user_id
+            }
+          });
+        if (userGroup) {
+          let userGroups = await this.connection
+            .getCustomRepository(SaleGroupRepository)
+            .find({
+              where: {
+                deletedAt: IsNull(),
+                treePath: Like(`${userGroup.treePath}%`)
+              }
+            });
+          let userEmails = [];
+          if (userGroups && userGroups.length) {
+            userGroups.forEach(ug => userEmails.push(ug.email));
+          }
+          query = query.andWhere("created_by IN (:...userEmails)", {
+            userEmails: userEmails
+          });
+        } else {
+          query = query.andWhere("created_by = :userId", {
+            userId: dto.user_id
+          });
+        }
+      }
+
       if (dto.completedatfrom)
         query = query.andWhere("completedat >= :completedatfrom", {
           completedatfrom: dto.completedatfrom
