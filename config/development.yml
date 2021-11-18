@@ -119,5 +119,3 @@ download:
 
 getfile:
   url: http://localhost:8877/api/partner/partner-loan-profile/getFile/
-  backendUser: loan_referral-user
-  token: dvsdvsdkvmvkdfm
