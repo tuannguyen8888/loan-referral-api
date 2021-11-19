@@ -120,7 +120,7 @@ export class McAttachfileService extends BaseService {
     try{
       let attactFile = await this.getAttachfile(dto.id);
       const repo = this.connection.getCustomRepository(McAttachfileRepository);
-      if(attactFile.deletedBy==''){
+      if(attactFile.deletedBy== null){
         let queryupdate = repo
             .createQueryBuilder()
             .update()
