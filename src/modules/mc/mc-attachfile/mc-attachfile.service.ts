@@ -9,13 +9,14 @@ import { RequestUtil } from "../../../common/utils";
 import * as moment from "moment";
 import * as config from "config";
 
-import { McAttachfileRepository } from "../../../repositories";
+import {McAttachfileRepository, McLoanProfileRepository} from "../../../repositories";
 import { McAttachfilesResponseDto } from "./dto/mc-attachfiles.response.dto";
 import { McAttachfile } from "../../../entities";
 import { GetMCAttachfileRequestDto } from "./dto/mc-get-attachfile.request.dto";
 import { McAttachfileResponseDto } from "./dto/mc-attachfile.response.dto";
 import { McAttachfileDto } from "./dto/mc-attachfile.dto";
 import { McAttachfileUpdateDto } from "./dto/mc-attachfile.update.dto";
+import {McAttachfileDeleteDto} from "./dto/mc-attachfile.delete.dto";
 
 @Injectable()
 export class McAttachfileService extends BaseService {
@@ -115,7 +116,40 @@ export class McAttachfileService extends BaseService {
     );
     return response;
   }
+  async deleteAttachfile(dto:McAttachfileDeleteDto){
+    try{
+      let attactFile = await this.getAttachfile(dto.id);
+      const repo = this.connection.getCustomRepository(McAttachfileRepository);
+      if(attactFile.deletedBy==''){
+        let queryupdate = repo
+            .createQueryBuilder()
+            .update()
+            .set({
+              deletedAt:  new Date(),
+              deletedBy: dto.deletedBy
+            })
+            .where("id = :id", { id: dto.id});
+        await queryupdate.execute();
+        return {
+          statusCode:200,
+          message:"Xóa thành công"
+        }
+      }else {
+        return {
+          statusCode:403,
+          message:"Đã bị xóa!"
+        }
+      }
 
+    }catch (e) {
+      return {
+        statusCode:404,
+        message:"Không tồn tại!"
+      }
+    }
+
+
+  }
   private convertEntities2Dtos(entities, entityClass, dtoClass) {
     let dtos = [];
     if (entities && entities.length) {
