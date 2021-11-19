@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Get,
   Headers,
   HttpCode,
@@ -21,6 +21,7 @@ import { McAttachfilesResponseDto } from "./dto/mc-attachfiles.response.dto";
 import { McAttachfileResponseDto } from "./dto/mc-attachfile.response.dto";
 import { McAttachfileDto } from "./dto/mc-attachfile.dto";
 import { McAttachfileUpdateDto } from "./dto/mc-attachfile.update.dto";
+import {McAttachfileDeleteDto} from "./dto/mc-attachfile.delete.dto";
 
 @Controller("mc-attachfile")
 export class McAttachfileController {
@@ -61,5 +62,13 @@ export class McAttachfileController {
     @Body() dto: McAttachfileUpdateDto
   ): Promise<McAttachfileUpdateDto> {
     return this.service.updateAttachfile(dto);
+  }
+  @Delete("/")
+  @ApiOperation({ summary: "Xóa Attachfile" })
+  deleteAttachfile(
+      @Headers() headers,
+      @Body() dto: McAttachfileDeleteDto
+  ): Promise<any> {
+    return this.service.deleteAttachfile(dto);
   }
 }
