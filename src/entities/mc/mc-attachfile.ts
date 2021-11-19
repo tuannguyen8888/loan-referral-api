@@ -65,11 +65,10 @@ export class McAttachfile {
   })
   groupId: number;
 
-  @Column("varchar", {
+  @Column("string", {
     name: "url",
     length: 255,
     nullable: true,
-    default: "",
     comment: "Định dạng file upload(jpg,jpeg,png)"
   })
   url: string;

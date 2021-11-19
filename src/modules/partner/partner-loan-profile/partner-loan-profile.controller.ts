@@ -38,6 +38,7 @@ import { GetMcCaseRequestDto } from "../../mc/mc-loan-profile/dto/get-mc-case.re
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 import path from "path";
+import { cancelCaseDto } from "../../mc/mc-loan-profile/dto/cancelCase.dto";
 
 @Controller("partner-loan-profile")
 export class PartnerLoanProfileController {
@@ -231,6 +232,13 @@ export class PartnerLoanProfileController {
   @HttpCode(200)
   getCases(@Headers() headers, @Body() dto: GetMcCaseRequestDto) {
     return this.service.getCases(headers.salecode, dto);
+  }
+
+  @Post("/cancelCase")
+  @ApiOperation({ summary: "Hủy hồ sơ vay" })
+  @HttpCode(200)
+  cancelCase(@Headers() headers, @Body() dto: cancelCaseDto) {
+    return this.service.cancelCase(headers.salecode, dto);
   }
 
   @Get("/getReturnChecklist/:loan_profile_id")

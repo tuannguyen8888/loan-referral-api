@@ -32,7 +32,7 @@ import { McCheckListrequestDto } from "./dto/mc-check-listrequest.dto";
 import { GetMcCaseRequestDto } from "./dto/get-mc-case.request.dto";
 import { requestSendOtp3PDto } from "./dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "./dto/requestScoring3P.dto";
-import {cancelCaseDto} from "./dto/cancelCase.dto";
+import { cancelCaseDto } from "./dto/cancelCase.dto";
 
 @Controller("mc-loan-profile")
 @ApiSecurity("api-key")
@@ -99,7 +99,7 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "Hủy khoản vay" })
   @HttpCode(200)
   cancelCase(@Headers() headers, @Body() dto: cancelCaseDto) {
-    return this.service.cancelCase(dto.profileid,dto.reason,dto.comment);
+    return this.service.cancelCase(dto.profileid, dto.reason, dto.comment);
   }
 
   @Post("/checkList")
