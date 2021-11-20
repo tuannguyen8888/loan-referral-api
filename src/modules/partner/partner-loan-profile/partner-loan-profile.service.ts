@@ -476,7 +476,30 @@ export class PartnerLoanProfileService extends BaseService {
     }
     return response;
   }
-
+  async cancelCase(saleCode, dto) {
+    let serviceMCLoanProfile = new McLoanProfileService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
+    );
+    let response = new PartnerResultResponseDto();
+    if (saleCode == undefined || saleCode == "") {
+      response.statusCode = 400;
+      response.message = "Không tồn tại salecode!";
+      response.data = null;
+    } else {
+      response.statusCode = 200;
+      response.message = "";
+      response.data = await serviceMCLoanProfile.cancelCase(
+        dto.profileid,
+        dto.reason,
+        dto.comment
+      );
+    }
+    return response;
+  }
   async getCases(saleCode, dto: GetMcCaseRequestDto) {
     let serviceMCLoanProfile = new McLoanProfileService(
       this.request,

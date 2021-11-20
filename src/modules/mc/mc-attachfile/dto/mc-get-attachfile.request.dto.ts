@@ -8,6 +8,9 @@ export class GetMCAttachfileRequestDto {
   @IsOptional()
   profileid: number;
 
+  @IsOptional()
+  documentCode: string;
+
   @IsDefined()
   @IsString()
   keyword: string;
