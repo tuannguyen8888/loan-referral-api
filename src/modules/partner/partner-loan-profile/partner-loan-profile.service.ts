@@ -28,6 +28,7 @@ import { McCaseNoteService } from "../../mc/mc-case-note/mc-case-note.service";
 import { requestSendOtp3PDto } from "../../mc/mc-loan-profile/dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "../../mc/mc-loan-profile/dto/requestScoring3P.dto";
 import { GetMcCaseRequestDto } from "../../mc/mc-loan-profile/dto/get-mc-case.request.dto";
+import {McAttachfileDeleteDto} from "../../mc/mc-attachfile/dto/mc-attachfile.delete.dto";
 
 @Injectable()
 export class PartnerLoanProfileService extends BaseService {
@@ -389,6 +390,26 @@ export class PartnerLoanProfileService extends BaseService {
       response.statusCode = 200;
       response.message = "";
       response.data = await serviceMcAttachfile.updateAttachfile(dto);
+    }
+    return response;
+  }
+
+  async deleteAttachfile(saleCode, dto: McAttachfileDeleteDto) {
+    let serviceMcAttachfile = new McAttachfileService(
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil
+    );
+    let response = new PartnerResultResponseDto();
+    if (saleCode == undefined || saleCode == "") {
+      response.statusCode = 400;
+      response.message = "Không tồn tại salecode!";
+      response.data = null;
+    } else {
+      response.statusCode = 200;
+      response.message = "";
+      response.data = await serviceMcAttachfile.deleteAttachfile(dto);
     }
     return response;
   }
