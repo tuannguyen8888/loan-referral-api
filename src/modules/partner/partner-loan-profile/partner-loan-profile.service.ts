@@ -102,6 +102,7 @@ export class PartnerLoanProfileService extends BaseService {
     } else {
       response.statusCode = 200;
       response.message = "";
+      dto.status = 'new';
       response.data = await serviceMCLoanProfile.createLoanProfile(dto);
     }
     return response;
