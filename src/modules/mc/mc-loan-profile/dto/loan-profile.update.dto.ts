@@ -71,7 +71,4 @@ export class LoanProfileUpdateDto {
   @IsDateString()
   deletedAt: string = null;
   deletedBy: string = null;
-
-  // process: ProcessDto[];
-  // defers: LoanProfileDeferDto[];
 }
