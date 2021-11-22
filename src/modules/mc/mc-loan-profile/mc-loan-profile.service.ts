@@ -72,8 +72,8 @@ export class McLoanProfileService extends BaseService {
           saleCode: dto.saleCode
         });
       if (dto.mobileProductType)
-        query = query.andWhere("loan_status = :mobileProductType", {
-          loanStatus: dto.mobileProductType
+        query = query.andWhere("mobileProductType = :mobileProductType", {
+          mobileProductType: dto.mobileProductType
         });
       if (dto.cicResult)
         query = query.andWhere("cicResult = :cicResult", {
@@ -129,7 +129,16 @@ export class McLoanProfileService extends BaseService {
         });
       if (dto.keyword)
         query = query.andWhere(
-          "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
+          "(citizenId like :keyword " +
+            "OR customerName like :keyword " +
+            "OR address like :keyword " +
+            "OR permanentaddress like :keyword " +
+            "OR phone like :keyword " +
+            "OR catType like :keyword " +
+            "OR compAddrStreet like :keyword " +
+            "OR officeNumber like :keyword " +
+            "OR companyTaxNumber like :keyword " +
+            "OR compName like :keyword )",
           { keyword: "%" + dto.keyword + "%" }
         );
       query = query
