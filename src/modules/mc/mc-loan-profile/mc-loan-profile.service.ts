@@ -305,7 +305,6 @@ export class McLoanProfileService extends BaseService {
         .where("id = :id", { id: id });
       await query.execute();
     } else {
-      let profileid = response.id;
       const repo = this.connection.getCustomRepository(McLoanProfileRepository);
       let query = repo
         .createQueryBuilder()
