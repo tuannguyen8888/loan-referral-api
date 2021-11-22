@@ -23,7 +23,7 @@ export class GetMCAttachfileRequestDto {
   @IsNumber()
   pagesize: number;
 
-  @IsDefined()
+  @IsOptional()
   sort: any;
 
   user_id: string;

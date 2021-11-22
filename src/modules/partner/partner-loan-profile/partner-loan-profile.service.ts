@@ -102,6 +102,7 @@ export class PartnerLoanProfileService extends BaseService {
     } else {
       response.statusCode = 200;
       response.message = "";
+      dto.status = 'new';
       response.data = await serviceMCLoanProfile.createLoanProfile(dto);
     }
     return response;
@@ -277,7 +278,7 @@ export class PartnerLoanProfileService extends BaseService {
     }
     return response;
   }
-  async checkList(saleCode, dto: McCheckListrequestDto) {
+  async checkList(saleCode, profileid:number) {
     let serviceMCLoanProfile = new McLoanProfileService(
       this.request,
       this.logger,
@@ -285,6 +286,20 @@ export class PartnerLoanProfileService extends BaseService {
       this.requestUtil,
       this.httpService
     );
+    let profile = await serviceMCLoanProfile.getLoanProfile(profileid);
+    let dto = new McCheckListrequestDto();
+    dto.mobileSchemaProductCode =  profile.productCode;
+    dto.mobileTemResidence =  profile.tempResidence;
+    dto.loanAmountAfterInsurrance =  profile.loanAmount;
+    dto.shopCode =  profile.shopCode;
+    dto.customerName =  profile.customerName;
+    dto.citizenId =  profile.citizenId;
+    dto.loanTenor =  profile.loanTenor;
+    dto.hasInsurance =  profile.hasInsurance;
+    dto.companyTaxNumber =  profile.companyTaxNumber;
+    dto.mobileProductType =  profile.mobileProductType;
+    dto.mobileIssueDateCitizen =  profile.mobileIssueDateCitizen;
+    dto.hasCourier =  profile.hasCourier;
     let response = new PartnerResultResponseDto();
     if (saleCode == undefined || saleCode == "") {
       response.statusCode = 400;
@@ -370,6 +385,7 @@ export class PartnerLoanProfileService extends BaseService {
     } else {
       response.statusCode = 200;
       response.message = "";
+
       response.data = await serviceMcAttachfile.createAttachfile(dto);
     }
     return response;
@@ -449,9 +465,18 @@ export class PartnerLoanProfileService extends BaseService {
       response.message = "Không tồn tại salecode!";
       response.data = null;
     } else {
-      response.statusCode = 200;
-      response.message = "";
-      response.data = await serviceMcCaseNote.createCaseNote(dto);
+      let mcLoanProfileService = new McLoanProfileService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+      let profile = await mcLoanProfileService.getLoanProfile(dto.profileid);
+      if(profile.appNumber != null){
+        response.statusCode = 200;
+        response.message = "";
+        response.data = await serviceMcCaseNote.createCaseNote(dto);
+      }else {
+        response.statusCode = 500;
+        response.message = "Hồ sơ chưa được xét duyệt";
+        response.data = null;
+      }
+
     }
     return response;
   }

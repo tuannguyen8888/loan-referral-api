@@ -25,8 +25,7 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   checkcontract?: string;
 
-  @IsDefined()
-  @IsString()
+  @IsOptional()
   keyword: string;
 
   @IsDefined()
@@ -37,7 +36,7 @@ export class GetMCLoanProfilesRequestDto {
   @IsNumber()
   pagesize: number;
 
-  @IsDefined()
+  @IsOptional()
   sort: any;
 
   user_id: string;
