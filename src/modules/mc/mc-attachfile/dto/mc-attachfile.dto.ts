@@ -11,7 +11,9 @@ export class McAttachfileDto {
   @IsOptional()
   id?: number = null;
   profileid: number = null;
+  @IsOptional()
   appId: string = null;
+  @IsOptional()
   appNumber: number = null;
   fileName: string = null;
   documentCode: string = null;

@@ -42,7 +42,8 @@ export class McAttachfileService extends BaseService {
       }
       if (dto.keyword)
         query = query.andWhere(
-          "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
+          "( fileName like :keyword " +
+            "OR documentCode like :keyword OR mimeType like :keyword OR url like :keyword )",
           { keyword: "%" + dto.keyword + "%" }
         );
       if (dto.pagesize > 0) {

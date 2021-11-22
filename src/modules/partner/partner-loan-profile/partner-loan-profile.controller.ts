@@ -150,11 +150,11 @@ export class PartnerLoanProfileController {
     return this.service.getProducts(headers.salecode);
   }
 
-  @Post("/checkList")
+  @Get("/checkList/:loan_profile_id")
   @ApiOperation({ summary: "Láy danh sách chứng từ cần phải upload" })
   @HttpCode(200)
-  checkList(@Headers() headers, @Body() dto: McCheckListrequestDto) {
-    return this.service.checkList(headers.salecode, dto);
+  checkList(@Headers() headers, @Param() params) {
+    return this.service.checkList(headers.salecode, params.loan_profile_id);
   }
 
   @Post("/uploadDocument/:loan_profile_id")
