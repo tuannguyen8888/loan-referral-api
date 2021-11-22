@@ -545,8 +545,7 @@ export class McapiUtil {
     data.append("object", JSON.stringify(obj));
     var configdata = {
       method: "post",
-      url:
-        "https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/upload-document",
+      url: mc_api_config.endpoint + "mobile-4sales/upload-document",
       headers: {
         "Content-Type": "multipart/form-data",
         "x-security": "FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d",

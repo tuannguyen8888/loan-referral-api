@@ -11,7 +11,7 @@ import {
   Res,
   UploadedFile,
   UseInterceptors,
-  HttpStatus
+  HttpStatus, Delete
 } from "@nestjs/common";
 import { PartnerLoanProfileService } from "./partner-loan-profile.service";
 import { ApiOperation } from "@nestjs/swagger";
@@ -39,6 +39,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 import path from "path";
 import { cancelCaseDto } from "../../mc/mc-loan-profile/dto/cancelCase.dto";
+import {McAttachfileDeleteDto} from "../../mc/mc-attachfile/dto/mc-attachfile.delete.dto";
 
 @Controller("partner-loan-profile")
 export class PartnerLoanProfileController {
@@ -149,11 +150,11 @@ export class PartnerLoanProfileController {
     return this.service.getProducts(headers.salecode);
   }
 
-  @Post("/checkList")
+  @Get("/checkList/:loan_profile_id")
   @ApiOperation({ summary: "Láy danh sách chứng từ cần phải upload" })
   @HttpCode(200)
-  checkList(@Headers() headers, @Body() dto: McCheckListrequestDto) {
-    return this.service.checkList(headers.salecode, dto);
+  checkList(@Headers() headers, @Param() params) {
+    return this.service.checkList(headers.salecode, params.loan_profile_id);
   }
 
   @Post("/uploadDocument/:loan_profile_id")
@@ -195,6 +196,13 @@ export class PartnerLoanProfileController {
   @HttpCode(200)
   updateAttachfile(@Headers() headers, @Body() dto: McAttachfileUpdateDto) {
     return this.service.updateAttachfile(headers.salecode, dto);
+  }
+
+  @Delete("/deleteAttachfile")
+  @ApiOperation({ summary: "Xóa chứng từ" })
+  @HttpCode(200)
+  deleteAttachfile(@Headers() headers, @Body() dto: McAttachfileDeleteDto) {
+    return this.service.deleteAttachfile(headers.salecode, dto);
   }
 
   @Get("/listCaseNote/:loan_profile_id")

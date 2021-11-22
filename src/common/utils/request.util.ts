@@ -158,7 +158,7 @@ export class RequestUtil {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
-    let filenewname = Date.now() + "_" + file.originalname;
+    let filenewname = Date.now() + "_" + file.originalname.replace(/ /g,'_');
     let filename = dir + "/" + filenewname;
     console.log(filename);
     const writeStream = fs.createWriteStream(filename);
