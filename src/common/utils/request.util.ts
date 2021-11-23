@@ -149,15 +149,16 @@ export class RequestUtil {
   }
   async saveFile(file: Express.Multer.File) {
     var fs = require("fs");
-    let dirname = "document";
-    let filePath = `${__dirname}/../../upload/`;
+    //let dirname = "document";
+    let uploaddocument = config.get("uploaddocument");
+    let filePath = `${uploaddocument}`;
     if (!fs.existsSync(filePath)) {
       fs.mkdirSync(filePath);
     }
-    var dir = filePath + dirname;
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
+    var dir = uploaddocument;
+    // if (!fs.existsSync(dir)) {
+    //   fs.mkdirSync(dir);
+    // }
     let filenewname = Date.now() + "_" + file.originalname.replace(/ /g, "_");
     let filename = dir + "/" + filenewname;
     console.log(filename);
@@ -173,12 +174,16 @@ export class RequestUtil {
   }
   getFile(filename) {
     var fs = require("fs");
-    let dirname = "document";
-    let filePath = `${__dirname}/../../upload/`;
-    var dir = filePath + dirname;
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
+    //let dirname = "document";
+    let uploaddocument = config.get("uploaddocument");
+    let filePath = `${uploaddocument}`;
+    if (!fs.existsSync(filePath)) {
+      fs.mkdirSync(filePath);
     }
+    var dir = uploaddocument;
+    // if (!fs.existsSync(dir)) {
+    //   fs.mkdirSync(dir);
+    // }
     filename = dir + "/" + filename;
     if (fs.existsSync(filename)) {
       return {
