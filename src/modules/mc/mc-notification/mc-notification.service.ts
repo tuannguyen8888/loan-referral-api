@@ -122,7 +122,9 @@ export class McNotificationService extends BaseService {
           .createQueryBuilder()
           .update()
           .set({
-            bpmStatus: dto.currentStatus
+            bpmStatus: dto.currentStatus,
+            appNumber:dto.appNumber,
+            appid:dto.appId
           })
           .where("id = :id", { id: loanProfileResponse.id });
         await queryupdate.execute();

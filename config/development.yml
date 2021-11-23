@@ -119,3 +119,5 @@ download:
 
 getfile:
   url: http://localhost:8877/api/partner/partner-loan-profile/getFile/
+
+uploaddocument: C:\xampp\htdocs\loan-referral-api-new\dist\upload\document

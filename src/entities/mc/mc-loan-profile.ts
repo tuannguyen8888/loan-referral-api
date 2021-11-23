@@ -261,7 +261,7 @@ export class McLoanProfile {
     default: "",
     comment: "Mã hồ sơ vừa khởi tạo của Mobile For Sale"
   })
-  appid: number;
+  appid: string;
 
   @Column("int", {
     name: "appNumber",
