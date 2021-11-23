@@ -11,7 +11,8 @@ import {
   Res,
   UploadedFile,
   UseInterceptors,
-  HttpStatus, Delete
+  HttpStatus,
+  Delete
 } from "@nestjs/common";
 import { PartnerLoanProfileService } from "./partner-loan-profile.service";
 import { ApiOperation } from "@nestjs/swagger";
@@ -39,7 +40,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 import path from "path";
 import { cancelCaseDto } from "../../mc/mc-loan-profile/dto/cancelCase.dto";
-import {McAttachfileDeleteDto} from "../../mc/mc-attachfile/dto/mc-attachfile.delete.dto";
+import { McAttachfileDeleteDto } from "../../mc/mc-attachfile/dto/mc-attachfile.delete.dto";
 
 @Controller("partner-loan-profile")
 export class PartnerLoanProfileController {
