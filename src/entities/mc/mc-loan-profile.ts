@@ -40,12 +40,28 @@ export class McLoanProfile {
   address: string;
 
   @Column("varchar", {
+    name: "permanentaddress",
+    length: 255,
+    nullable: true,
+    default: ""
+  })
+  permanentaddress: string;
+
+  @Column("varchar", {
     name: "phone",
     length: 20,
     nullable: true,
     default: ""
   })
   phone: string;
+
+  @Column("varchar", {
+    name: "typeScore",
+    length: 20,
+    nullable: true,
+    default: ""
+  })
+  typeScore: string;
 
   @Column("varchar", {
     name: "compName",
@@ -183,6 +199,10 @@ export class McLoanProfile {
     comment: "Trạng thái hồ sơ"
   })
   bpmStatus: string;
+
+  @Column("timestamp", { name: "completedat", nullable: true })
+  completedat: Date | null;
+
   @Column("varchar", {
     name: "shopCode",
     length: 50,
@@ -300,39 +320,39 @@ export class McLoanProfile {
   })
   checkcontract: string;
 
-    @Column("varchar", {
-        name: "checkcontractdes",
-        nullable: true,
-        default: "",
-        comment: "Nội dung kiểm tra hồ sơ"
-    })
-    checkcontractdes: string;
+  @Column("varchar", {
+    name: "checkcontractdes",
+    nullable: true,
+    default: "",
+    comment: "Nội dung kiểm tra hồ sơ"
+  })
+  checkcontractdes: string;
 
-    @Column("varchar", {
-        name: "verifyInfo",
-        nullable: true,
-        default: "",
-        comment: "Thông tin chấm điểm"
-    })
-    verifyInfo: string;
+  @Column("varchar", {
+    name: "verifyInfo",
+    nullable: true,
+    default: "",
+    comment: "Thông tin chấm điểm"
+  })
+  verifyInfo: string;
 
-    @Column("varchar", {
-        name: "verifyDes",
-        nullable: true,
-        default: "",
-        comment: "Thông tin chấm điểm nội dung phản hồi chấm điểm"
-    })
-    verifyDes: string;
+  @Column("varchar", {
+    name: "verifyDes",
+    nullable: true,
+    default: "",
+    comment: "Thông tin chấm điểm nội dung phản hồi chấm điểm"
+  })
+  verifyDes: string;
 
-    @Column("text", {
-        name: "reasons",
-        nullable: true,
-        default: "[]",
-        comment: "List lý do"
-    })
-    reasons: string;
+  @Column("text", {
+    name: "reasons",
+    nullable: true,
+    default: "[]",
+    comment: "List lý do"
+  })
+  reasons: string;
 
-    @Column("text", {
+  @Column("text", {
     name: "pdfFiles",
     nullable: true,
     default: "[]",
@@ -353,10 +373,10 @@ export class McLoanProfile {
   })
   createdBy: string | null;
 
-  @Column("timestamp", {name: "updated_at", nullable: true})
+  @Column("timestamp", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
-    @Column("varchar", {name: "updated_by", nullable: true, length: 255})
+  @Column("varchar", { name: "updated_by", nullable: true, length: 255 })
   updatedBy: string | null;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })

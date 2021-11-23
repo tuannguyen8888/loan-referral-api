@@ -1,4 +1,4 @@
-import {IsString, IsNumber, IsOptional, IsDefined} from "class-validator";
+import { IsString, IsNumber, IsOptional, IsDefined } from "class-validator";
 
 export class GetMCCaseNoteRequestDto {
   // @IsNumber()

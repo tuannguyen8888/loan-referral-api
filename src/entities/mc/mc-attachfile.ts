@@ -65,14 +65,16 @@ export class McAttachfile {
   })
   groupId: number;
 
-  @Column("varchar", {
-    name: "url",
-    length: 255,
-    nullable: true,
-    default: "",
-    comment: "Định dạng file upload(jpg,jpeg,png)"
-  })
+  @Column("text", { name: "url" })
   url: string;
+  // @Column("varchar", {
+  //   name: "url",
+  //   length: 255,
+  //   nullable: true,
+  //   default: "",
+  //   comment: "Định dạng file upload(jpg,jpeg,png)"
+  // })
+  // url: string;
 
   @Column("timestamp", {
     name: "created_at",

@@ -3,6 +3,7 @@ import * as FormData from "form-data";
 import { HttpService, Inject, Injectable } from "@nestjs/common";
 import { DownloadFileResParam } from "../interfaces/response";
 import * as fs from "fs";
+import * as config from "config";
 
 @Injectable()
 export class RequestUtil {
@@ -144,6 +145,51 @@ export class RequestUtil {
       // return { downloadUrl: url, data: data };
     } catch (error) {
       throw error;
+    }
+  }
+  async saveFile(file: Express.Multer.File) {
+    var fs = require("fs");
+    let dirname = "document";
+    let filePath = `${__dirname}/../../upload/`;
+    if (!fs.existsSync(filePath)) {
+      fs.mkdirSync(filePath);
+    }
+    var dir = filePath + dirname;
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+    let filenewname = Date.now() + "_" + file.originalname.replace(/ /g, "_");
+    let filename = dir + "/" + filenewname;
+    console.log(filename);
+    const writeStream = fs.createWriteStream(filename);
+    writeStream.write(file.buffer);
+    writeStream.end();
+    let getfile = config.get("getfile");
+    return {
+      statusCode: 200,
+      filename: filenewname,
+      url: getfile.url + filenewname
+    };
+  }
+  getFile(filename) {
+    var fs = require("fs");
+    let dirname = "document";
+    let filePath = `${__dirname}/../../upload/`;
+    var dir = filePath + dirname;
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+    filename = dir + "/" + filename;
+    if (fs.existsSync(filename)) {
+      return {
+        statusCode: 200,
+        filename: filename
+      };
+    } else {
+      return {
+        statusCode: 500,
+        filename: "Không tồn tại file!"
+      };
     }
   }
 }

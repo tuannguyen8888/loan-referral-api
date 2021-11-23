@@ -8,6 +8,8 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   shopCode?: string;
   @IsOptional()
+  saleCode?: string;
+  @IsOptional()
   mobileProductType?: string;
 
   @IsOptional()
@@ -15,10 +17,15 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   status?: string;
   @IsOptional()
+  bpmStatus?: string;
+  @IsOptional()
+  completedatfrom?: string;
+  @IsOptional()
+  completedatto?: string;
+  @IsOptional()
   checkcontract?: string;
 
-  @IsDefined()
-  @IsString()
+  @IsOptional()
   keyword: string;
 
   @IsDefined()
@@ -29,7 +36,7 @@ export class GetMCLoanProfilesRequestDto {
   @IsNumber()
   pagesize: number;
 
-  @IsDefined()
+  @IsOptional()
   sort: any;
 
   user_id: string;

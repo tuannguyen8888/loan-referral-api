@@ -1,33 +1,38 @@
-import {HttpService, Inject, Injectable} from "@nestjs/common";
+import { HttpService, Inject, Injectable } from "@nestjs/common";
 import * as config from "config";
-import {CheckInitContractRequestDto} from "../../modules/mc/mc-loan-profile/dto/check-init-contract.request.dto";
-import {RedisClient} from "../shared";
+import { CheckInitContractRequestDto } from "../../modules/mc/mc-loan-profile/dto/check-init-contract.request.dto";
+import { RedisClient } from "../shared";
 import fs from "fs";
-import {RequestUtil} from "./request.util";
-import {McLoanProfile} from "../../entities";
-import {McLoanProfileDto} from "../../modules/mc/mc-loan-profile/dto";
-import {McAttachfilesResponseDto} from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
-import {GetMcCaseRequestDto} from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
-import {requestScoring3PDto} from "../../modules/mc/mc-loan-profile/dto/requestScoring3P.dto";
-import {urlencoded} from "express";
+import { RequestUtil } from "./request.util";
+import { McLoanProfile, SendDataLog } from "../../entities";
+import { McLoanProfileDto } from "../../modules/mc/mc-loan-profile/dto";
+import { McAttachfilesResponseDto } from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
+import { GetMcCaseRequestDto } from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
+import { requestScoring3PDto } from "../../modules/mc/mc-loan-profile/dto/requestScoring3P.dto";
+import { urlencoded } from "express";
+import { SendDataLogRepository } from "../../repositories";
+import { Connection, getConnectionManager } from "typeorm";
+import { McCheckListrequestDto } from "../../modules/mc/mc-loan-profile/dto/mc-check-listrequest.dto";
 
 @Injectable()
 export class McapiUtil {
   constructor(
-      protected readonly redisClient: RedisClient,
-      @Inject(HttpService) private readonly httpService: HttpService
+    protected readonly redisClient: RedisClient,
+    @Inject(HttpService) private readonly httpService: HttpService
   ) {
+    this.connection = getConnectionManager().get("default");
   }
 
+  protected connection: Connection;
   async login(): Promise<any> {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
     var data = JSON.stringify({
-      username: "finviet.3rd",
-      password: "123456a@",
-      notificationId: "notificationId.finviet.3rd",
-      imei: "imei.finviet.3rd",
-      osType: "IOS"
+      username: mc_api_config.username,
+      password: mc_api_config.password,
+      notificationId: mc_api_config.notificationId,
+      imei: mc_api_config.imei,
+      osType: mc_api_config.osType
     });
     let url = mc_api_config.endpoint + "authorization/";
     let headers = {
@@ -42,6 +47,42 @@ export class McapiUtil {
     await this.redisClient.set("token", result.data.token);
     return result.data;
   }
+  async loginCron(): Promise<any> {
+    let mc_api_config = config.get("mc_api");
+    var axios = require("axios");
+    var data = JSON.stringify({
+      username: mc_api_config.username,
+      password: mc_api_config.password,
+      notificationId: mc_api_config.notificationId,
+      imei: mc_api_config.imei,
+      osType: mc_api_config.osType
+    });
+    let url = mc_api_config.endpoint + "authorization/";
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security
+    };
+
+    let result = await axios.post(url, data, {
+      headers: headers
+    });
+    //console.log(result.data);
+    return result.data;
+  }
+  async writeLog(url, apiName, headers, method, input, result) {
+    let log = new SendDataLog();
+    log.apiUrl = apiName;
+    log.data = JSON.stringify({
+      apiname: apiName,
+      endpoint: url,
+      header: headers,
+      method: method,
+      input: input
+    });
+    log.result = JSON.stringify(result);
+    log.createdAt = new Date();
+    await this.connection.getCustomRepository(SendDataLogRepository).save(log);
+  }
 
   async checkCIC(citizenId, customerName): Promise<any> {
     var axios = require("axios");
@@ -53,11 +94,11 @@ export class McapiUtil {
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint +
-        "mobile-4sales/check-cic/check?citizenID=" +
-        citizenId +
-        "&customerName=" +
-        encodeURI(customerName);
+      mc_api_config.endpoint +
+      "mobile-4sales/check-cic/check?citizenID=" +
+      citizenId +
+      "&customerName=" +
+      encodeURI(customerName);
     console.log(url);
     let headers = {
       "Content-Type": "application/json",
@@ -75,6 +116,21 @@ export class McapiUtil {
         await this.login();
         return await this.checkCIC(citizenId, customerName);
       }
+    } finally {
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let input = {
+      //   citizenId: citizenId,
+      //   customerName: customerName
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "checkCIC",
+      //   headers,
+      //   "get",
+      //   input,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -89,9 +145,9 @@ export class McapiUtil {
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint +
-        "mobile-4sales/check-identifier?citizenId=" +
-        citizenId;
+      mc_api_config.endpoint +
+      "mobile-4sales/check-identifier?citizenId=" +
+      citizenId;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -108,6 +164,20 @@ export class McapiUtil {
         await this.login();
         return await this.checkCitizenId(citizenId);
       }
+    } finally {
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let input = {
+      //   citizenId: citizenId
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "checkCitizenId",
+      //   headers,
+      //   "get",
+      //   input,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -122,9 +192,9 @@ export class McapiUtil {
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint +
-        "/mobile-4sales/check-cat?companyTaxNumber=" +
-        companyTaxNumber;
+      mc_api_config.endpoint +
+      "/mobile-4sales/check-cat?companyTaxNumber=" +
+      companyTaxNumber;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -141,12 +211,26 @@ export class McapiUtil {
         await this.login();
         await this.checkCategory(companyTaxNumber);
       }
+    } finally {
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let input = {
+      //   companyTaxNumber: companyTaxNumber
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "checkCategory",
+      //   headers,
+      //   "get",
+      //   input,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
 
   async getKios(): Promise<any> {
-    let mckios = await this.redisClient.get('mckios');
+    let mckios = await this.redisClient.get("mckios");
     let response;
     if (mckios == null) {
       var axios = require("axios");
@@ -173,6 +257,18 @@ export class McapiUtil {
           await this.login();
           return await this.getKios();
         }
+      } finally {
+        // let log = new SendDataLog();
+        // log.apiUrl = url;
+        // let input = {};
+        // await this.writeLog(
+        //     url,
+        //     "getKios",
+        //     headers,
+        //     "get",
+        //     input,
+        //     JSON.stringify(response)
+        // );
       }
     } else {
       response = JSON.parse(mckios);
@@ -182,7 +278,7 @@ export class McapiUtil {
   }
 
   async getProducts(): Promise<any> {
-    let mcproducts = await this.redisClient.get('mcproducts');
+    let mcproducts = await this.redisClient.get("mcproducts");
     let response;
     if (mcproducts == null) {
       var axios = require("axios");
@@ -211,6 +307,18 @@ export class McapiUtil {
           await this.login();
           return await this.getProducts();
         }
+      } finally {
+        // let log = new SendDataLog();
+        // log.apiUrl = url;
+        // let input = {};
+        // await this.writeLog(
+        //     url,
+        //     "getProducts",
+        //     headers,
+        //     "get",
+        //     input,
+        //     JSON.stringify(response)
+        // );
       }
     } else {
       response = JSON.parse(mcproducts);
@@ -218,12 +326,7 @@ export class McapiUtil {
     return response;
   }
 
-  async checkList(
-      productCode,
-      mobileTemResidence,
-      loanAmount,
-      shopCode
-  ): Promise<any> {
+  async checkList(dto: McCheckListrequestDto): Promise<any> {
     var axios = require("axios");
     let token = await this.redisClient.get("token");
     if (token == null) {
@@ -233,16 +336,18 @@ export class McapiUtil {
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint +
-        "mobile-4sales/check-list?" +
-        "mobileSchemaProductCode=" +
-        productCode +
-        "&mobileTemResidence=" +
-        mobileTemResidence +
-        "&shopCode=" +
-        shopCode +
-        "&loanAmountAfterInsurrance=" +
-        loanAmount;
+      mc_api_config.endpoint +
+      "mobile-4sales/check-list?" +
+      "mobileSchemaProductCode=" +
+      dto.mobileSchemaProductCode +
+      "&mobileTemResidence=" +
+      dto.mobileTemResidence +
+      "&shopCode=" +
+      dto.shopCode +
+      "&loanAmountAfterInsurrance=" +
+      dto.loanAmountAfterInsurrance +
+      "&hasCourier=" +
+      dto.hasCourier;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -257,13 +362,26 @@ export class McapiUtil {
       response = e.response.data;
       if (response.returnCode == "401") {
         await this.login();
-        await this.checkList(
-            productCode,
-            mobileTemResidence,
-            loanAmount,
-            shopCode
-        );
+        return await this.checkList(dto);
       }
+    } finally {
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let data = JSON.stringify({
+      //   header: headers,
+      //   method: "get",
+      //   input: {
+      //     dto
+      //   }
+      // });
+      // await this.writeLog(
+      //     url,
+      //     "checkList",
+      //     headers,
+      //     "get",
+      //     data,
+      //     JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -309,6 +427,24 @@ export class McapiUtil {
         await this.login();
         return await this.checkInitContract(dto);
       }
+    } finally {
+      // let log = new SendDataLog();
+      // log.apiUrl = url;
+      // let data = JSON.stringify({
+      //   header: headers,
+      //   method: "post",
+      //   input: {
+      //     dto
+      //   }
+      // });
+      // await this.writeLog(
+      //   url,
+      //   "checkInitContract",
+      //   headers,
+      //   "post",
+      //   data,
+      //   JSON.stringify(response)
+      // );
     }
     return response;
   }
@@ -324,29 +460,32 @@ export class McapiUtil {
     }
     var info = [];
     let i = 1;
+    console.log(dtoAttachFiles.rows);
     for (const attachFile of dtoAttachFiles.rows) {
-      console.log(attachFile);
-      console.log(attachFile.url);
-      let ext: any = attachFile.url.split(".");
-      ext = ext[ext.length - 1].toLowerCase();
-      let fileName = `${i}.${ext}`;
-      let filePath = `${dir}/${fileName}`;
-      var requestUtil = new RequestUtil(this.httpService);
-      await requestUtil.downloadPublicFile(attachFile.url, filePath);
-      let item = {
-        fileName: fileName,
-        documentCode: attachFile.documentCode,
-        mimeType: ext,
-        groupId: attachFile.groupId
-      };
-      info.push(item);
+      if (attachFile.url != "") {
+        let ext: any = attachFile.url.split(".");
+        ext = ext[ext.length - 1].toLowerCase();
+        let fileName = `${i}.${ext}`;
+        let filePath = `${dir}/${fileName}`;
+        var requestUtil = new RequestUtil(this.httpService);
+        console.log(i);
+        console.log("download file " + fileName);
+        await requestUtil.downloadPublicFile(attachFile.url, filePath);
+        let item = {
+          fileName: fileName,
+          documentCode: attachFile.documentCode,
+          mimeType: ext,
+          groupId: attachFile.groupId
+        };
+        info.push(item);
+      }
       i++;
     }
     var zipper = require("zip-local");
     zipper.sync
-        .zip(dir)
-        .compress()
-        .save(`${filePath}/${fileZipName}`);
+      .zip(dir)
+      .compress()
+      .save(`${filePath}/${fileZipName}`);
     const md5File = require("md5-file");
     const md5checksum = md5File.sync(`${filePath}/${fileZipName}`);
     console.log(`The MD5 sum of LICENSE.md is: ${md5checksum}`);
@@ -359,8 +498,8 @@ export class McapiUtil {
   }
 
   async uploadDocument(
-      dtoMcLoanProfile: McLoanProfileDto,
-      dtoAttachFiles: McAttachfilesResponseDto
+    dtoMcLoanProfile: McLoanProfileDto,
+    dtoAttachFiles: McAttachfilesResponseDto
   ): Promise<any> {
     console.log("Call API");
     let token = await this.redisClient.get("token");
@@ -368,8 +507,13 @@ export class McapiUtil {
       let login = await this.login();
       token = login.token;
     }
+    let response;
     let mc_api_config = config.get("mc_api");
+    console.log("Begin createUploadFile");
     var result = await this.createUploadFile(dtoAttachFiles);
+    console.log(result);
+    console.log("END createUploadFile");
+
     var axios = require("axios");
     var FormData = require("form-data");
     var fs = require("fs");
@@ -401,8 +545,7 @@ export class McapiUtil {
     data.append("object", JSON.stringify(obj));
     var configdata = {
       method: "post",
-      url:
-          "https://uat-mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/mobile-4sales/upload-document",
+      url: mc_api_config.endpoint + "mobile-4sales/upload-document",
       headers: {
         "Content-Type": "multipart/form-data",
         "x-security": "FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d",
@@ -416,7 +559,9 @@ export class McapiUtil {
         headers: configdata.headers
       });
       //fs.unlinkSync(result.filePath);
-      return result.data;
+
+      response = result.data;
+      response.returnCode = "200";
     } catch (e) {
       console.log("ERROR");
       //fs.unlinkSync(result.filePath);
@@ -424,49 +569,66 @@ export class McapiUtil {
         await this.login();
         return await this.uploadDocument(dtoMcLoanProfile, dtoAttachFiles);
       }
-      return e.response.data;
+      response = e.response.data;
+    } finally {
+      // let log = new SendDataLog();
+      // log.apiUrl = configdata.url;
+      // await this.writeLog(
+      //   configdata.url,
+      //   "uploadDocument",
+      //   configdata.headers,
+      //   "post",
+      //   obj,
+      //   JSON.stringify(response)
+      // );
     }
+
+    return response;
   }
 
   async getCases(dto: GetMcCaseRequestDto): Promise<any> {
     var axios = require("axios");
-    let token = await this.redisClient.get("token");
-    if (token == null) {
-      let login = await this.login();
-      token = login.token;
-    }
+
+    let login = await this.loginCron();
+    let token = login.token;
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint +
-        "mobile-4sales/cases?" +
-        "pageNumber=" +
-        dto.pageNumber +
-        "&pageSize=" +
-        dto.pageSize +
-        "&keyword=" +
-        dto.keyword +
-        "&status=" +
-        dto.status +
-        "&saleCode=" +
-        mc_api_config.saleCode;
+      mc_api_config.endpoint +
+      "mobile-4sales/cases?" +
+      "pageNumber=" +
+      dto.pageNumber +
+      "&pageSize=" +
+      dto.pageSize +
+      "&keyword=" +
+      dto.keyword +
+      "&status=" +
+      dto.status +
+      "&saleCode=" +
+      mc_api_config.saleCode;
+    console.log(url);
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
       Authorization: "Bearer " + token
     };
+
     try {
       let result = await axios.get(url, {
         headers: headers
       });
+      console.log(result);
       response = result.data;
+      console.log("true");
+      console.log(response);
     } catch (e) {
+      console.log("false");
       response = e.response.data;
-      if (response.returnCode == "401") {
-        await this.login();
-        return await this.getCases(dto);
-      }
+    } finally {
+      let input = {};
+      await this.writeLog(url, "getCases", headers, "get", input, "");
     }
+    console.log(response);
     return response;
   }
 
@@ -480,7 +642,7 @@ export class McapiUtil {
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint + "/mobile-4sales/list-case-note/" + appNumber;
+      mc_api_config.endpoint + "/mobile-4sales/list-case-note/" + appNumber;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -518,14 +680,14 @@ export class McapiUtil {
     };
     try {
       let result = await axios.post(
-          url,
-          {
-            appNumber: appNumber,
-            noteContent: noteContent
-          },
-          {
-            headers: headers
-          }
+        url,
+        {
+          appNumber: appNumber,
+          noteContent: noteContent
+        },
+        {
+          headers: headers
+        }
       );
       response = result.data;
     } catch (e) {
@@ -538,7 +700,11 @@ export class McapiUtil {
     return response;
   }
 
-  async cancelCase(profileid, reason, comment): Promise<any> {
+  async cancelCase(
+    profileid: number,
+    reason: number,
+    comment: string
+  ): Promise<any> {
     var axios = require("axios");
     let token = await this.redisClient.get("token");
     if (token == null) {
@@ -555,15 +721,15 @@ export class McapiUtil {
     };
     try {
       let result = await axios.post(
-          url,
-          {
-            id: profileid,
-            reason: reason,
-            comment: comment
-          },
-          {
-            headers: headers
-          }
+        url,
+        {
+          id: profileid,
+          reason: reason,
+          comment: comment
+        },
+        {
+          headers: headers
+        }
       );
       response = result.data;
     } catch (e) {
@@ -586,9 +752,9 @@ export class McapiUtil {
     let response;
     let mc_api_config = config.get("mc_api");
     let url =
-        mc_api_config.endpoint +
-        "/mobile-4sales/third-party/checklist?appId=" +
-        appId;
+      mc_api_config.endpoint +
+      "/mobile-4sales/third-party/checklist?appId=" +
+      appId;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -625,12 +791,16 @@ export class McapiUtil {
       Authorization: "Bearer " + token
     };
     try {
-      let result = await axios.post(url, {
-        requested_msisdn: phone,
-        typeScore: typeScore
-      }, {
-        headers: headers
-      });
+      let result = await axios.post(
+        url,
+        {
+          requested_msisdn: phone,
+          typeScore: typeScore
+        },
+        {
+          headers: headers
+        }
+      );
       response = result.data;
       response.returnCode = 200;
     } catch (e) {
@@ -659,15 +829,19 @@ export class McapiUtil {
       Authorization: "Bearer " + token
     };
     try {
-      let result = await axios.post(url, {
-        verificationCode: dto.verificationCode,
-        primaryPhone: dto.primaryPhone,
-        nationalId: dto.nationalId,
-        typeScore: dto.typeScore,
-        userName: mc_api_config.username
-      }, {
-        headers: headers
-      });
+      let result = await axios.post(
+        url,
+        {
+          verificationCode: dto.verificationCode,
+          primaryPhone: dto.primaryPhone,
+          nationalId: dto.nationalId,
+          typeScore: dto.typeScore,
+          userName: mc_api_config.username
+        },
+        {
+          headers: headers
+        }
+      );
       response = result.data;
       response.returnCode = 200;
     } catch (e) {
