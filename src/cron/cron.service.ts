@@ -56,6 +56,8 @@ export class CronService {
     dto.pageNumber = 1;
     dto.pageSize = 1000;
     dto.keyword = "";
+    dto.status = "ABORT";
+    await mcloanprofileser.getCases(dto);
     dto.status = "PROCESSING";
     await mcloanprofileser.getCases(dto);
     //PTF

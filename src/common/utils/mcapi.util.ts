@@ -626,9 +626,15 @@ export class McapiUtil {
       response = e.response.data;
     } finally {
       let input = {};
-      await this.writeLog(url, "getCases", headers, "get", input, "");
+      await this.writeLog(
+        url,
+        "getCases -" + dto.status,
+        headers,
+        "get",
+        input,
+        ""
+      );
     }
-    console.log(response);
     return response;
   }
 
