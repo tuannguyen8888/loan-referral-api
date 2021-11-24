@@ -15,10 +15,11 @@ export class McCicresultUpdateDto {
   identifier: string = null;
   customerName: string = null;
   cicResult: number = null;
-  cicDescription: string = null;
+  description: string = null;
   cicImageLink: string = null;
   lastUpdateTime: Date = null;
   status: string = null;
+  numberOfRelationOrganize: string = null;
 
   @IsOptional()
   @IsDateString()

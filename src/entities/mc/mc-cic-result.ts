@@ -82,6 +82,15 @@ export class McCicResult {
   })
   status: string;
 
+  @Column("varchar", {
+    name: "numberOfRelationOrganize",
+    length: 20,
+    nullable: true,
+    default: "",
+    comment: "Trạng thái: SUCCESS"
+  })
+  numberOfRelationOrganize: string;
+
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"
