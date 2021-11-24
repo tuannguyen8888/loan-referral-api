@@ -344,11 +344,11 @@ export class McLoanProfileService extends BaseService {
   }
 
   async getCases(dto: GetMcCaseRequestDto) {
-    console.log("getCases");
+    console.log("getCases " + dto.status);
+    debugger;
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
     var response = await mcapi.getCases(dto);
-    console.log(response);
     for (const item of response) {
       console.log(item);
       let query = repo.createQueryBuilder().where("deleted_at is null");
