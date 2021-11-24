@@ -23,6 +23,10 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   completedatto?: string;
   @IsOptional()
+  createatfrom?: string;
+  @IsOptional()
+  createatto?: string;
+  @IsOptional()
   checkcontract?: string;
 
   @IsOptional()
