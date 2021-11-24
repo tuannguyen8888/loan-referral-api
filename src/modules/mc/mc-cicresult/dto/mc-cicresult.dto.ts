@@ -14,7 +14,7 @@ export class McCicresultDto {
   identifier: string = null;
   customerName: string = null;
   cicResult: number = null;
-  cicDescription: string = null;
+  description: string = null;
   cicImageLink: string = null;
   lastUpdateTime: Date = null;
   status: string = null;

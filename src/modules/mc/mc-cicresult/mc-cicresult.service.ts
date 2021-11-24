@@ -76,6 +76,10 @@ export class McCicresultService extends BaseService {
   async createCicResult(dto: McCicresultDto) {
     console.log(dto);
     let entity: McCicResult = this.convertDto2Entity(dto, McCicResult);
+    entity.cicDescription = dto.description;
+    if(entity.createdBy == null){
+      entity.createdBy = 'MCPartner';
+    }
     entity.createdAt = new Date();
     console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
@@ -96,7 +100,7 @@ export class McCicresultService extends BaseService {
           .update()
           .set({
             cicResult: dto.cicResult,
-            cicDescription:dto.cicDescription
+            cicDescription:dto.description
           })
           .where("id = :id", { id: loanProfileResponse.id });
       await queryupdate.execute();
@@ -111,6 +115,7 @@ export class McCicresultService extends BaseService {
 
   async updateCicResult(dto: McCicresultUpdateDto) {
     let entityUpdate: McCicResult = this.convertDto2Entity(dto, McCicResult);
+    entityUpdate.cicDescription = dto.description;
     entityUpdate.updatedBy = dto.updatedBy;
     entityUpdate.updatedAt = new Date();
     let result = await this.connection
