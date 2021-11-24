@@ -3,10 +3,10 @@ import {
   Controller,
   Get,
   Headers,
-  HttpCode,
+  HttpCode, HttpStatus,
   Param,
   Post,
-  Put
+  Put, Res
 } from "@nestjs/common";
 import {
   ApiBody,
@@ -33,6 +33,8 @@ import { GetMcCaseRequestDto } from "./dto/get-mc-case.request.dto";
 import { requestSendOtp3PDto } from "./dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "./dto/requestScoring3P.dto";
 import { cancelCaseDto } from "./dto/cancelCase.dto";
+import {Response} from "express";
+import {createReadStream} from "fs";
 
 @Controller("mc-loan-profile")
 @ApiSecurity("api-key")
@@ -148,6 +150,18 @@ export class McLoanProfileController {
   getReturnChecklist(@Headers() headers, @Param() params) {
     console.log(params.loan_profile_id);
     return this.service.getReturnChecklist(params.loan_profile_id);
+  }
+
+  @Get("/downloadPDF/:fileid")
+  @HttpCode(HttpStatus.OK)
+  getFile(@Param() params, @Res() res: Response) {
+    // res.set({
+    //   "Content-Type": "application/pdf"
+    // });
+    let response = this.service.downloadPDF(params.fileid);
+    res.send(response);
+    // const file = createReadStream(response);
+    // file.pipe(res);
   }
 
   @Post("/requestSendOtp3P")

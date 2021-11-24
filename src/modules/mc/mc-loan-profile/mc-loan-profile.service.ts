@@ -343,6 +343,13 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
+  async downloadPDF(fileid) {
+    console.log("downloadPDF");
+    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    var response = await mcapi.downloadPDF(fileid);
+    return response;
+  }
+
   async getCases(dto: GetMcCaseRequestDto) {
     console.log("getCases " + dto.status);
     debugger;
