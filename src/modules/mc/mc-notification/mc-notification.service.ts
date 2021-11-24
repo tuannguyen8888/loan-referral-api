@@ -97,6 +97,9 @@ export class McNotificationService extends BaseService {
       entity.id = null;
       entity.profileid = dto.id;
       entity.createdAt = new Date();
+      if(entity.createdBy == null){
+        entity.createdBy = 'MCPartner';
+      }
       console.log(entity);
       this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
       let result = await this.connection
