@@ -97,8 +97,8 @@ export class McNotificationService extends BaseService {
       entity.id = null;
       entity.profileid = dto.id;
       entity.createdAt = new Date();
-      if(entity.createdBy == null){
-        entity.createdBy = 'MCPartner';
+      if (entity.createdBy == null) {
+        entity.createdBy = "MCPartner";
       }
       console.log(entity);
       this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
@@ -126,8 +126,8 @@ export class McNotificationService extends BaseService {
           .update()
           .set({
             bpmStatus: dto.currentStatus,
-            appNumber:dto.appNumber,
-            appid:dto.appId
+            appNumber: dto.appNumber,
+            appid: dto.appId
           })
           .where("id = :id", { id: loanProfileResponse.id });
         await queryupdate.execute();

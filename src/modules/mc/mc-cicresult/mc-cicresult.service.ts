@@ -6,7 +6,10 @@ import { Request } from "express";
 import { Logger } from "../../../common/loggers";
 import { RedisClient } from "../../../common/shared";
 import { RequestUtil } from "../../../common/utils";
-import {McCicresultRepository, McLoanProfileRepository} from "../../../repositories";
+import {
+  McCicresultRepository,
+  McLoanProfileRepository
+} from "../../../repositories";
 import { In, IsNull, Like } from "typeorm";
 import * as moment from "moment";
 import * as config from "config";
@@ -77,8 +80,8 @@ export class McCicresultService extends BaseService {
     console.log(dto);
     let entity: McCicResult = this.convertDto2Entity(dto, McCicResult);
     entity.cicDescription = dto.description;
-    if(entity.createdBy == null){
-      entity.createdBy = 'MCPartner';
+    if (entity.createdBy == null) {
+      entity.createdBy = "MCPartner";
     }
     entity.createdAt = new Date();
     console.log(entity);
@@ -96,13 +99,13 @@ export class McCicresultService extends BaseService {
     console.log(loanProfileResponse);
     if (loanProfileResponse != undefined) {
       let queryupdate = repo
-          .createQueryBuilder()
-          .update()
-          .set({
-            cicResult: dto.cicResult,
-            cicDescription:dto.description
-          })
-          .where("id = :id", { id: loanProfileResponse.id });
+        .createQueryBuilder()
+        .update()
+        .set({
+          cicResult: dto.cicResult,
+          cicDescription: dto.description
+        })
+        .where("id = :id", { id: loanProfileResponse.id });
       await queryupdate.execute();
     }
     let response: McCicresultDto = this.convertEntity2Dto(
