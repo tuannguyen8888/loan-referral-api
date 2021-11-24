@@ -18,6 +18,7 @@ export class McCicresultDto {
   cicImageLink: string = null;
   lastUpdateTime: Date = null;
   status: string = null;
+  numberOfRelationOrganize: string = null;
 
   @IsOptional()
   @IsDateString()
