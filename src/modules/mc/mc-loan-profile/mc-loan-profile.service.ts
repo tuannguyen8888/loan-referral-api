@@ -128,11 +128,11 @@ export class McLoanProfileService extends BaseService {
           completedatto: dto.completedatto
         });
       if (dto.createatfrom)
-        query = query.andWhere("completedat >= :createatfrom", {
+        query = query.andWhere("created_at >= :createatfrom", {
           createatfrom: dto.createatfrom
         });
       if (dto.createatto)
-        query = query.andWhere("completedat <= :createatto", {
+        query = query.andWhere("created_at <= :createatto", {
           createatto: dto.createatto
         });
       if (dto.keyword)
