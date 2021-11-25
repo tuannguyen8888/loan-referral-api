@@ -52,6 +52,11 @@ export class McAttachfileService extends BaseService {
           groupId: dto.groupId
         });
       }
+      if (dto.arrgroupId) {
+        query = query.andWhere("groupId in (:arrgroupId)", {
+          arrgroupId: dto.arrgroupId
+        });
+      }
       if (dto.keyword)
         query = query.andWhere(
           "( fileName like :keyword " +

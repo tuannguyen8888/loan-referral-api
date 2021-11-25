@@ -284,7 +284,7 @@ export class McLoanProfileService extends BaseService {
   async uploadDocument(id,appStatus) {
     console.log("uploadDocument new");
     let loanProfileDTO = await this.getLoanProfile(id);
-    console.log(loanProfileDTO);
+    //console.log(loanProfileDTO);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let attachRequest = new GetMCAttachfileRequestDto();
     let attachFiles = new McAttachfilesResponseDto();
@@ -301,10 +301,16 @@ export class McLoanProfileService extends BaseService {
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     }else {
       //Get return checklist
-      let returnchecklist = mcapi.getReturnChecklist(loanProfileDTO.appid);
-      console.log(returnchecklist['checkList']);
+      let returnchecklist = await mcapi.getReturnChecklist(loanProfileDTO.appid);
+      let arr_groupid = new Array();
+      for (const group of returnchecklist['checkList']) {
+        console.log(group);
+        arr_groupid.push(group['groupId']);
+      }
+      console.log(arr_groupid);
+      console.log('------------');
       attachRequest.profileid = id;
-      attachRequest.groupId = 37;
+      attachRequest.arrgroupId = arr_groupid.join(',');
       attachRequest.page = 1;
       attachRequest.pagesize = 0;
       let attachserviec = new McAttachfileService(
@@ -315,33 +321,33 @@ export class McLoanProfileService extends BaseService {
       );
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     }
-
-    var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles,appStatus);
-    //Update profileid
-    if (response.returnCode == 200) {
-      let profileid = response.id;
-      const repo = this.connection.getCustomRepository(McLoanProfileRepository);
-      let query = repo
-        .createQueryBuilder()
-        .update()
-        .set({
-          profileid: profileid,
-          status: "hadsend"
-        })
-        .where("id = :id", { id: id });
-      await query.execute();
-    } else {
-      const repo = this.connection.getCustomRepository(McLoanProfileRepository);
-      let query = repo
-        .createQueryBuilder()
-        .update()
-        .set({
-          status: "sendfailed"
-        })
-        .where("id = :id", { id: id });
-      await query.execute();
-    }
-    return response;
+    return attachFiles;
+    // var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles,appStatus);
+    // //Update profileid
+    // if (response.returnCode == 200) {
+    //   let profileid = response.id;
+    //   const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+    //   let query = repo
+    //     .createQueryBuilder()
+    //     .update()
+    //     .set({
+    //       profileid: profileid,
+    //       status: "hadsend"
+    //     })
+    //     .where("id = :id", { id: id });
+    //   await query.execute();
+    // } else {
+    //   const repo = this.connection.getCustomRepository(McLoanProfileRepository);
+    //   let query = repo
+    //     .createQueryBuilder()
+    //     .update()
+    //     .set({
+    //       status: "sendfailed"
+    //     })
+    //     .where("id = :id", { id: id });
+    //   await query.execute();
+    // }
+    // return response;
   }
 
   async checkCategory(companyTaxNumber) {
