@@ -41,7 +41,16 @@ export class McAttachfileService extends BaseService {
         query = query.andWhere("profileid = :profileid", {
           profileid: dto.profileid
         });
-        // where["partnerId"] = dto.partner_id;
+      }
+      if (dto.documentCode) {
+        query = query.andWhere("documentCode = :documentCode", {
+          documentCode: dto.documentCode
+        });
+      }
+      if (dto.groupId) {
+        query = query.andWhere("groupId = :groupId", {
+          groupId: dto.groupId
+        });
       }
       if (dto.keyword)
         query = query.andWhere(

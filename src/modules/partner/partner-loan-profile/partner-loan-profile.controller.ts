@@ -165,7 +165,8 @@ export class PartnerLoanProfileController {
     console.log("uploadDocument");
     return this.service.uploadDocument(
       headers.salecode,
-      params.loan_profile_id
+      params.loan_profile_id,
+        1
     );
   }
 

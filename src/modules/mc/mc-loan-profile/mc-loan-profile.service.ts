@@ -281,24 +281,42 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async uploadDocument(id) {
-    console.log("uploadDocument service");
+  async uploadDocument(id,appStatus) {
+    console.log("uploadDocument new");
     let loanProfileDTO = await this.getLoanProfile(id);
     console.log(loanProfileDTO);
-    let attachRequest = new GetMCAttachfileRequestDto();
-    attachRequest.profileid = id;
-    attachRequest.page = 1;
-    attachRequest.pagesize = 0;
-    let attachserviec = new McAttachfileService(
-      this.request,
-      this.logger,
-      this.redisClient,
-      this.requestUtil
-    );
-    let attachFiles = new McAttachfilesResponseDto();
-    attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles);
+    let attachRequest = new GetMCAttachfileRequestDto();
+    let attachFiles = new McAttachfilesResponseDto();
+    if(appStatus == 1){
+      attachRequest.profileid = id;
+      attachRequest.page = 1;
+      attachRequest.pagesize = 0;
+      let attachserviec = new McAttachfileService(
+          this.request,
+          this.logger,
+          this.redisClient,
+          this.requestUtil
+      );
+      attachFiles = await attachserviec.getAllAttachfile(attachRequest);
+    }else {
+      //Get return checklist
+      let returnchecklist = mcapi.getReturnChecklist(loanProfileDTO.appid);
+      console.log(returnchecklist['checkList']);
+      attachRequest.profileid = id;
+      attachRequest.groupId = 37;
+      attachRequest.page = 1;
+      attachRequest.pagesize = 0;
+      let attachserviec = new McAttachfileService(
+          this.request,
+          this.logger,
+          this.redisClient,
+          this.requestUtil
+      );
+      attachFiles = await attachserviec.getAllAttachfile(attachRequest);
+    }
+
+    var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles,appStatus);
     //Update profileid
     if (response.returnCode == 200) {
       let profileid = response.id;

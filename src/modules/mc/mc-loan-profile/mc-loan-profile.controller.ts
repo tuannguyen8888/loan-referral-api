@@ -116,7 +116,15 @@ export class McLoanProfileController {
   @HttpCode(200)
   uploadDocument(@Headers() headers, @Param() params) {
     console.log("uploadDocument");
-    return this.service.uploadDocument(params.loan_profile_id);
+    return this.service.uploadDocument(params.loan_profile_id,1);
+  }
+
+  @Post("/reUploadDocument/:loan_profile_id")
+  @ApiOperation({ summary: "ReuploadDocument" })
+  @HttpCode(200)
+  reUploadDocument(@Headers() headers, @Param() params) {
+    console.log("reUploadDocument");
+    return this.service.uploadDocument(params.loan_profile_id,2);
   }
 
   @Get("/checkCategory/:companyTaxNumber")

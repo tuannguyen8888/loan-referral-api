@@ -535,7 +535,7 @@ export class McapiUtil {
 
     async uploadDocument(
         dtoMcLoanProfile: McLoanProfileDto,
-        dtoAttachFiles: McAttachfilesResponseDto
+        dtoAttachFiles: McAttachfilesResponseDto,appStatus:number
     ): Promise<any> {
         console.log("Call API");
         let token = await this.redisClient.get("token");
@@ -556,7 +556,7 @@ export class McapiUtil {
         var data = new FormData();
         var obj = {
             request: {
-                id: "",
+                id: dtoMcLoanProfile.profileid==null?'':dtoMcLoanProfile.profileid,
                 saleCode: mc_api_config.saleCode,
                 customerName: dtoMcLoanProfile.customerName,
                 productId: dtoMcLoanProfile.productId,
@@ -572,7 +572,7 @@ export class McapiUtil {
             },
             mobileProductType: dtoMcLoanProfile.mobileProductType,
             mobileIssueDateCitizen: dtoMcLoanProfile.mobileIssueDateCitizen,
-            appStatus: 1,
+            appStatus: appStatus,
             md5: result.md5checksum,
             info: result.info
         };
@@ -603,7 +603,7 @@ export class McapiUtil {
             //fs.unlinkSync(result.filePath);
             if (e.response.data.returnCode == "401") {
                 await this.login();
-                return await this.uploadDocument(dtoMcLoanProfile, dtoAttachFiles);
+                return await this.uploadDocument(dtoMcLoanProfile, dtoAttachFiles,appStatus);
             }
             response = e.response.data;
         } finally {

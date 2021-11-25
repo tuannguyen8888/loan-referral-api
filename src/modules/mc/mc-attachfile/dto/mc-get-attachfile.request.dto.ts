@@ -11,6 +11,9 @@ export class GetMCAttachfileRequestDto {
   @IsOptional()
   documentCode: string;
 
+  @IsOptional()
+  groupId: number;
+
   @IsDefined()
   @IsString()
   keyword: string;
