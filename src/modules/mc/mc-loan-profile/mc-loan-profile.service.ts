@@ -281,48 +281,54 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async uploadDocument(id,appStatus) {
+  async uploadDocument(id, appStatus) {
     console.log("uploadDocument new");
     let loanProfileDTO = await this.getLoanProfile(id);
     //console.log(loanProfileDTO);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let attachRequest = new GetMCAttachfileRequestDto();
     let attachFiles = new McAttachfilesResponseDto();
-    if(appStatus == 1){
+    if (appStatus == 1) {
       attachRequest.profileid = id;
       attachRequest.page = 1;
       attachRequest.pagesize = 0;
       let attachserviec = new McAttachfileService(
-          this.request,
-          this.logger,
-          this.redisClient,
-          this.requestUtil
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil
       );
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
-    }else {
+    } else {
       //Get return checklist
-      let returnchecklist = await mcapi.getReturnChecklist(loanProfileDTO.appid);
+      let returnchecklist = await mcapi.getReturnChecklist(
+        loanProfileDTO.appid
+      );
       let arr_groupid = new Array();
-      for (const group of returnchecklist['checkList']) {
+      for (const group of returnchecklist["checkList"]) {
         console.log(group);
-        arr_groupid.push(group['groupId']);
+        arr_groupid.push(group["groupId"]);
       }
       console.log(arr_groupid);
-      console.log('------------');
+      console.log("------------");
       attachRequest.profileid = id;
-      attachRequest.arrgroupId = arr_groupid.join(',');
+      attachRequest.arrgroupId = arr_groupid.join(",");
       attachRequest.page = 1;
       attachRequest.pagesize = 0;
       let attachserviec = new McAttachfileService(
-          this.request,
-          this.logger,
-          this.redisClient,
-          this.requestUtil
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil
       );
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     }
 
-    var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles,appStatus);
+    var response = await mcapi.uploadDocument(
+      loanProfileDTO,
+      attachFiles,
+      appStatus
+    );
     //Update profileid
     if (response.returnCode == 200) {
       let profileid = response.id;
