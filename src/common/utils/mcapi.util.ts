@@ -463,23 +463,23 @@ export class McapiUtil {
         return await this.checkInitContract(dto);
       }
     } finally {
-      // let log = new SendDataLog();
-      // log.apiUrl = url;
-      // let data = JSON.stringify({
-      //   header: headers,
-      //   method: "post",
-      //   input: {
-      //     dto
-      //   }
-      // });
-      // await this.writeLog(
-      //   url,
-      //   "checkInitContract",
-      //   headers,
-      //   "post",
-      //   data,
-      //   JSON.stringify(response)
-      // );
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let data = JSON.stringify({
+        header: headers,
+        method: "post",
+        input: {
+          dto
+        }
+      });
+      await this.writeLog(
+        url,
+        "checkInitContract",
+        headers,
+        "post",
+        data,
+        JSON.stringify(response)
+      );
     }
     return response;
   }
