@@ -3,10 +3,12 @@ import {
   Controller,
   Get,
   Headers,
-  HttpCode, HttpStatus,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
-  Put, Res
+  Put,
+  Res
 } from "@nestjs/common";
 import {
   ApiBody,
@@ -33,8 +35,8 @@ import { GetMcCaseRequestDto } from "./dto/get-mc-case.request.dto";
 import { requestSendOtp3PDto } from "./dto/requestSendOtp3P.dto";
 import { requestScoring3PDto } from "./dto/requestScoring3P.dto";
 import { cancelCaseDto } from "./dto/cancelCase.dto";
-import {Response} from "express";
-import {createReadStream} from "fs";
+import { Response } from "express";
+import { createReadStream } from "fs";
 
 @Controller("mc-loan-profile")
 @ApiSecurity("api-key")
@@ -116,7 +118,7 @@ export class McLoanProfileController {
   @HttpCode(200)
   uploadDocument(@Headers() headers, @Param() params) {
     console.log("uploadDocument");
-    return this.service.uploadDocument(params.loan_profile_id,1);
+    return this.service.uploadDocument(params.loan_profile_id, 1);
   }
 
   @Post("/reUploadDocument/:loan_profile_id")
@@ -124,7 +126,7 @@ export class McLoanProfileController {
   @HttpCode(200)
   reUploadDocument(@Headers() headers, @Param() params) {
     console.log("reUploadDocument");
-    return this.service.uploadDocument(params.loan_profile_id,2);
+    return this.service.uploadDocument(params.loan_profile_id, 2);
   }
 
   @Get("/checkCategory/:companyTaxNumber")
