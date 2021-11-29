@@ -165,7 +165,19 @@ export class PartnerLoanProfileController {
     console.log("uploadDocument");
     return this.service.uploadDocument(
       headers.salecode,
-      params.loan_profile_id
+      params.loan_profile_id,
+      1
+    );
+  }
+  @Post("/reUploadDocument/:loan_profile_id")
+  @ApiOperation({ summary: "Up load hồ sơ để kiểm duyệt" })
+  @HttpCode(200)
+  reUploadDocument(@Headers() headers, @Param() params) {
+    console.log("reUploadDocument");
+    return this.service.uploadDocument(
+      headers.salecode,
+      params.loan_profile_id,
+      2
     );
   }
 

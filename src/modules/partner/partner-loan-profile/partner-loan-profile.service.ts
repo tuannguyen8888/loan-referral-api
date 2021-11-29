@@ -312,7 +312,7 @@ export class PartnerLoanProfileService extends BaseService {
     }
     return response;
   }
-  async uploadDocument(saleCode, id) {
+  async uploadDocument(saleCode, id, appStatus) {
     let serviceMCLoanProfile = new McLoanProfileService(
       this.request,
       this.logger,
@@ -328,7 +328,7 @@ export class PartnerLoanProfileService extends BaseService {
     } else {
       response.statusCode = 200;
       response.message = "";
-      response.data = await serviceMCLoanProfile.uploadDocument(id);
+      response.data = await serviceMCLoanProfile.uploadDocument(id, appStatus);
     }
     return response;
   }

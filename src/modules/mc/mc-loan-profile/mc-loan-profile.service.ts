@@ -127,6 +127,14 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("completedat <= :completedatto", {
           completedatto: dto.completedatto
         });
+      if (dto.createatfrom)
+        query = query.andWhere("created_at >= :createatfrom", {
+          createatfrom: dto.createatfrom
+        });
+      if (dto.createatto)
+        query = query.andWhere("created_at <= :createatto", {
+          createatto: dto.createatto
+        });
       if (dto.keyword)
         query = query.andWhere(
           "(citizenId like :keyword " +
@@ -273,24 +281,54 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async uploadDocument(id) {
-    console.log("uploadDocument service");
+  async uploadDocument(id, appStatus) {
+    console.log("uploadDocument new");
     let loanProfileDTO = await this.getLoanProfile(id);
-    console.log(loanProfileDTO);
-    let attachRequest = new GetMCAttachfileRequestDto();
-    attachRequest.profileid = id;
-    attachRequest.page = 1;
-    attachRequest.pagesize = 0;
-    let attachserviec = new McAttachfileService(
-      this.request,
-      this.logger,
-      this.redisClient,
-      this.requestUtil
-    );
-    let attachFiles = new McAttachfilesResponseDto();
-    attachFiles = await attachserviec.getAllAttachfile(attachRequest);
+    //console.log(loanProfileDTO);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.uploadDocument(loanProfileDTO, attachFiles);
+    let attachRequest = new GetMCAttachfileRequestDto();
+    let attachFiles = new McAttachfilesResponseDto();
+    if (appStatus == 1) {
+      attachRequest.profileid = id;
+      attachRequest.page = 1;
+      attachRequest.pagesize = 0;
+      let attachserviec = new McAttachfileService(
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil
+      );
+      attachFiles = await attachserviec.getAllAttachfile(attachRequest);
+    } else {
+      //Get return checklist
+      let returnchecklist = await mcapi.getReturnChecklist(
+        loanProfileDTO.appid
+      );
+      let arr_groupid = new Array();
+      for (const group of returnchecklist["checkList"]) {
+        console.log(group);
+        arr_groupid.push(group["groupId"]);
+      }
+      console.log(arr_groupid);
+      console.log("------------");
+      attachRequest.profileid = id;
+      attachRequest.arrgroupId = arr_groupid.join(",");
+      attachRequest.page = 1;
+      attachRequest.pagesize = 0;
+      let attachserviec = new McAttachfileService(
+        this.request,
+        this.logger,
+        this.redisClient,
+        this.requestUtil
+      );
+      attachFiles = await attachserviec.getAllAttachfile(attachRequest);
+    }
+
+    var response = await mcapi.uploadDocument(
+      loanProfileDTO,
+      attachFiles,
+      appStatus
+    );
     //Update profileid
     if (response.returnCode == 200) {
       let profileid = response.id;
@@ -340,6 +378,13 @@ export class McLoanProfileService extends BaseService {
     let loanProfile = await this.getLoanProfile(id);
     console.log(loanProfile.appid);
     var response = await mcapi.getReturnChecklist(loanProfile.appid);
+    return response;
+  }
+
+  async downloadPDF(fileid) {
+    console.log("downloadPDF");
+    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    var response = await mcapi.downloadPDF(fileid);
     return response;
   }
 

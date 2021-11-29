@@ -24,6 +24,7 @@ export class McapiUtil {
   }
 
   protected connection: Connection;
+
   async login(): Promise<any> {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
@@ -47,6 +48,7 @@ export class McapiUtil {
     await this.redisClient.set("token", result.data.token);
     return result.data;
   }
+
   async loginCron(): Promise<any> {
     let mc_api_config = config.get("mc_api");
     var axios = require("axios");
@@ -69,6 +71,7 @@ export class McapiUtil {
     //console.log(result.data);
     return result.data;
   }
+
   async writeLog(url, apiName, headers, method, input, result) {
     let log = new SendDataLog();
     log.apiUrl = apiName;
@@ -326,6 +329,38 @@ export class McapiUtil {
     return response;
   }
 
+  async downloadPDF(fileid): Promise<any> {
+    let response;
+    var axios = require("axios");
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
+
+    let mc_api_config = config.get("mc_api");
+    let url = mc_api_config.endpoint + "mobile-4sales/downloadPdf/" + fileid;
+    let headers = {
+      "Content-Type": "application/json",
+      "x-security": mc_api_config.security,
+      Authorization: "Bearer " + token
+    };
+    try {
+      let result = await axios.get(url, {
+        headers: headers,
+        responseType: "stream"
+      });
+      response = result;
+    } catch (e) {
+      response = e.response.data;
+      if (response.returnCode == "401") {
+        await this.login();
+        return await this.downloadPDF(fileid);
+      }
+    }
+    return response;
+  }
+
   async checkList(dto: McCheckListrequestDto): Promise<any> {
     var axios = require("axios");
     let token = await this.redisClient.get("token");
@@ -428,23 +463,23 @@ export class McapiUtil {
         return await this.checkInitContract(dto);
       }
     } finally {
-      // let log = new SendDataLog();
-      // log.apiUrl = url;
-      // let data = JSON.stringify({
-      //   header: headers,
-      //   method: "post",
-      //   input: {
-      //     dto
-      //   }
-      // });
-      // await this.writeLog(
-      //   url,
-      //   "checkInitContract",
-      //   headers,
-      //   "post",
-      //   data,
-      //   JSON.stringify(response)
-      // );
+      let log = new SendDataLog();
+      log.apiUrl = url;
+      let data = JSON.stringify({
+        header: headers,
+        method: "post",
+        input: {
+          dto
+        }
+      });
+      await this.writeLog(
+        url,
+        "checkInitContract",
+        headers,
+        "post",
+        data,
+        JSON.stringify(response)
+      );
     }
     return response;
   }
@@ -499,7 +534,8 @@ export class McapiUtil {
 
   async uploadDocument(
     dtoMcLoanProfile: McLoanProfileDto,
-    dtoAttachFiles: McAttachfilesResponseDto
+    dtoAttachFiles: McAttachfilesResponseDto,
+    appStatus: number
   ): Promise<any> {
     console.log("Call API");
     let token = await this.redisClient.get("token");
@@ -520,7 +556,8 @@ export class McapiUtil {
     var data = new FormData();
     var obj = {
       request: {
-        id: "",
+        id:
+          dtoMcLoanProfile.profileid == null ? "" : dtoMcLoanProfile.profileid,
         saleCode: mc_api_config.saleCode,
         customerName: dtoMcLoanProfile.customerName,
         productId: dtoMcLoanProfile.productId,
@@ -536,7 +573,7 @@ export class McapiUtil {
       },
       mobileProductType: dtoMcLoanProfile.mobileProductType,
       mobileIssueDateCitizen: dtoMcLoanProfile.mobileIssueDateCitizen,
-      appStatus: 1,
+      appStatus: appStatus,
       md5: result.md5checksum,
       info: result.info
     };
@@ -567,7 +604,11 @@ export class McapiUtil {
       //fs.unlinkSync(result.filePath);
       if (e.response.data.returnCode == "401") {
         await this.login();
-        return await this.uploadDocument(dtoMcLoanProfile, dtoAttachFiles);
+        return await this.uploadDocument(
+          dtoMcLoanProfile,
+          dtoAttachFiles,
+          appStatus
+        );
       }
       response = e.response.data;
     } finally {
