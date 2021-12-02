@@ -35,6 +35,7 @@ export class LoanProfileResponseDto {
   productName: string = null;
   tempResidence: number = null;
   loanAmount: number = null;
+  loanAmountApproval: number = null;
   loanTenor: number = null;
   hasInsurance: number = null;
   issuePlace: string = null;
