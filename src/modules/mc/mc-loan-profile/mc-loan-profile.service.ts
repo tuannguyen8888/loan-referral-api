@@ -231,7 +231,7 @@ export class McLoanProfileService extends BaseService {
     }else {
       return {
         "returnCode": "400",
-        "returnMes": "Tham số citizenID đã tồn tại trông hệ thống"
+        "returnMes": "Tham số CMND/CCCD đã tồn tại trong hệ thống"
       }
     }
 
