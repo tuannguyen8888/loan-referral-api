@@ -127,13 +127,13 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("completedat <= :completedatto", {
           completedatto: dto.completedatto
         });
-      if (dto.createatfrom)
-        query = query.andWhere("created_at >= :createatfrom", {
-          createatfrom: dto.createatfrom
+      if (dto.createfrom)
+        query = query.andWhere("created_at >= :createfrom", {
+          createfrom: dto.createfrom
         });
-      if (dto.createatto)
-        query = query.andWhere("created_at <= :createatto", {
-          createatto: dto.createatto
+      if (dto.createto)
+        query = query.andWhere("created_at <= :createto", {
+          createto: dto.createto + " 23:59:59"
         });
       if (dto.keyword)
         query = query.andWhere(
@@ -149,14 +149,13 @@ export class McLoanProfileService extends BaseService {
             "OR compName like :keyword )",
           { keyword: "%" + dto.keyword + "%" }
         );
-      if(dto.pagesize !=0){
+      if (dto.pagesize != 0) {
         query = query
-            .orderBy("id", "DESC")
-            .skip((dto.page - 1) * dto.pagesize)
-            .take(dto.pagesize);
-      }else {
-        query = query
-            .orderBy("id", "DESC");
+          .orderBy("id", "DESC")
+          .skip((dto.page - 1) * dto.pagesize)
+          .take(dto.pagesize);
+      } else {
+        query = query.orderBy("id", "DESC");
       }
 
       const result = new LoanProfilesResponseDto();

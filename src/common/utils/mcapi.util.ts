@@ -605,21 +605,19 @@ export class McapiUtil {
       console.log("ERROR");
       console.log(e);
       //fs.unlinkSync(result.filePath);
-      if(e.response.data != undefined){
+      if (e.response.data != undefined) {
         if (e.response.data.returnCode == "401") {
           await this.login();
           return await this.uploadDocument(
-              dtoMcLoanProfile,
-              dtoAttachFiles,
-              appStatus
+            dtoMcLoanProfile,
+            dtoAttachFiles,
+            appStatus
           );
         }
         response = e.response.data;
-      }else {
+      } else {
         response = e.response;
       }
-
-
     } finally {
       // let log = new SendDataLog();
       // log.apiUrl = configdata.url;
