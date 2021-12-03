@@ -167,6 +167,14 @@ export class McLoanProfile {
   })
   loanAmount: number;
 
+  @Column("double", {
+    name: "loanAmountApproval",
+    default: 0,
+    nullable: true,
+    comment: "Số tiền phê duyệt"
+  })
+  loanAmountApproval: number;
+
   @Column("int", {
     name: "loanTenor",
     default: 0,

@@ -149,10 +149,16 @@ export class McLoanProfileService extends BaseService {
             "OR compName like :keyword )",
           { keyword: "%" + dto.keyword + "%" }
         );
-      query = query
-        .orderBy("id", "DESC")
-        .skip((dto.page - 1) * dto.pagesize)
-        .take(dto.pagesize);
+      if(dto.pagesize !=0){
+        query = query
+            .orderBy("id", "DESC")
+            .skip((dto.page - 1) * dto.pagesize)
+            .take(dto.pagesize);
+      }else {
+        query = query
+            .orderBy("id", "DESC");
+      }
+
       const result = new LoanProfilesResponseDto();
 
       let data, count;
