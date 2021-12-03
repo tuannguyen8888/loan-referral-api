@@ -83,6 +83,10 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("status = :status", {
           status: dto.status
         });
+      if (dto.citizenId)
+        query = query.andWhere("citizenId = :citizenId", {
+          citizenId: dto.citizenId
+        });
       if (dto.bpmStatus)
         query = query.andWhere("bpmStatus = :bpmStatus", {
           bpmStatus: dto.bpmStatus
@@ -214,9 +218,23 @@ export class McLoanProfileService extends BaseService {
     console.log(
       "Check cic citizenId: " + citizenId + " customerName: " + customerName
     );
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCIC(citizenId, customerName);
-    return response;
+    let dtoreq = new GetMCLoanProfilesRequestDto();
+    dtoreq.citizenId = citizenId;
+    dtoreq.page=1;
+    dtoreq.pagesize = 0;
+    let loanProfiles = await this.getAllLoanProfiles(dtoreq);
+    console.log(loanProfiles.count);
+    if(loanProfiles.count == 0){
+      let mcapi = new McapiUtil(this.redisClient, this.httpService);
+      var response = await mcapi.checkCIC(citizenId, customerName);
+      return response;
+    }else {
+      return {
+        "returnCode": "400",
+        "returnMes": "Tham số citizenID đã tồn tại trông hệ thống"
+      }
+    }
+
   }
 
   async checkCitizenId(citizenId) {
