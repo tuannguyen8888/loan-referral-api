@@ -11,7 +11,8 @@ export class GetMCLoanProfilesRequestDto {
   saleCode?: string;
   @IsOptional()
   mobileProductType?: string;
-
+  @IsOptional()
+  citizenId:string;
   @IsOptional()
   cicResult?: number;
   @IsOptional()
