@@ -593,7 +593,9 @@ export class McapiUtil {
 
     try {
       let result = await axios.post(configdata.url, data, {
-        headers: configdata.headers
+        headers: configdata.headers,
+        maxContentLength: 100000000,
+        maxBodyLength: 1000000000
       });
       //fs.unlinkSync(result.filePath);
 
@@ -601,16 +603,23 @@ export class McapiUtil {
       response.returnCode = "200";
     } catch (e) {
       console.log("ERROR");
+      console.log(e);
       //fs.unlinkSync(result.filePath);
-      if (e.response.data.returnCode == "401") {
-        await this.login();
-        return await this.uploadDocument(
-          dtoMcLoanProfile,
-          dtoAttachFiles,
-          appStatus
-        );
+      if(e.response.data != undefined){
+        if (e.response.data.returnCode == "401") {
+          await this.login();
+          return await this.uploadDocument(
+              dtoMcLoanProfile,
+              dtoAttachFiles,
+              appStatus
+          );
+        }
+        response = e.response.data;
+      }else {
+        response = e.response;
       }
-      response = e.response.data;
+
+
     } finally {
       // let log = new SendDataLog();
       // log.apiUrl = configdata.url;
@@ -623,7 +632,6 @@ export class McapiUtil {
       //   JSON.stringify(response)
       // );
     }
-
     return response;
   }
 
