@@ -23,9 +23,9 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   completedatto?: string;
   @IsOptional()
-  createatfrom?: string;
+  createfrom?: string;
   @IsOptional()
-  createatto?: string;
+  createto?: string;
   @IsOptional()
   checkcontract?: string;
 
