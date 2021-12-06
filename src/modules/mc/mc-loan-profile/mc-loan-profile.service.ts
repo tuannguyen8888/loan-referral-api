@@ -144,6 +144,7 @@ export class McLoanProfileService extends BaseService {
           "(citizenId like :keyword " +
             "OR customerName like :keyword " +
             "OR address like :keyword " +
+            "OR appNumber like :keyword " +
             "OR permanentaddress like :keyword " +
             "OR phone like :keyword " +
             "OR catType like :keyword " +
