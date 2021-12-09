@@ -12,7 +12,7 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   mobileProductType?: string;
   @IsOptional()
-  citizenId:string;
+  citizenId: string;
   @IsOptional()
   cicResult?: number;
   @IsOptional()
