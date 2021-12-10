@@ -519,7 +519,7 @@ export class LoanProfileService extends BaseService {
       });
     if (entityOld) {
       throw new BadRequestException(
-        `Số CMND ${dto.in_nationalid} đã tồn tại hồ sơ đang xử lý trong hệ thống. Vuiu lòng kiểm tra lại.`
+        `Số CMND ${dto.in_nationalid} đã tồn tại hồ sơ đang xử lý trong hệ thống. Vui lòng kiểm tra lại.`
       );
     }
     let error = null;
