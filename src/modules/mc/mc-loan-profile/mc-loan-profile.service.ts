@@ -219,23 +219,25 @@ export class McLoanProfileService extends BaseService {
     console.log(
       "Check cic citizenId: " + citizenId + " customerName: " + customerName
     );
-    let dtoreq = new GetMCLoanProfilesRequestDto();
-    dtoreq.citizenId = citizenId;
-    dtoreq.page=1;
-    dtoreq.pagesize = 0;
-    let loanProfiles = await this.getAllLoanProfiles(dtoreq);
-    console.log(loanProfiles.count);
-    if(loanProfiles.count == 0){
-      let mcapi = new McapiUtil(this.redisClient, this.httpService);
-      var response = await mcapi.checkCIC(citizenId, customerName);
-      return response;
-    }else {
-      return {
-        "returnCode": "400",
-        "returnMes": "Tham số CMND/CCCD đã tồn tại trong hệ thống"
-      }
-    }
-
+    // let dtoreq = new GetMCLoanProfilesRequestDto();
+    // dtoreq.citizenId = citizenId;
+    // dtoreq.page=1;
+    // dtoreq.pagesize = 0;
+    // let loanProfiles = await this.getAllLoanProfiles(dtoreq);
+    // console.log(loanProfiles.count);
+    // if(loanProfiles.count == 0){
+    //   let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    //   var response = await mcapi.checkCIC(citizenId, customerName);
+    //   return response;
+    // }else {
+    //   return {
+    //     "returnCode": "400",
+    //     "returnMes": "Tham số CMND/CCCD đã tồn tại trong hệ thống"
+    //   }
+    // }
+    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    var response = await mcapi.checkCIC(citizenId, customerName);
+    return response;
   }
 
   async checkCitizenId(citizenId) {
@@ -505,7 +507,6 @@ export class McLoanProfileService extends BaseService {
   }
 
   async createLoanProfile(dto: McLoanProfileDto) {
-    let ptfApiConfig = config.get("ptf_api");
     console.log(dto);
     let entity: McLoanProfile = this.convertDto2Entity(dto, McLoanProfile);
     entity.catType = "NEW";
