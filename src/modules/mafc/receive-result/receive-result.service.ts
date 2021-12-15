@@ -42,6 +42,7 @@ export class ReceiveResultService extends BaseService {
     if (loanProfile) {
       if (dto.defer_code != "S1") {
         loanProfile.fvStatus = "NEED_UPDATE";
+        loanProfile.updatedAt = new Date();
         loanProfile = await repoLP.save(loanProfile);
       }
 
