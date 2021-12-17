@@ -393,6 +393,11 @@ export class McapiUtil {
         headers: headers
       });
       response = result.data;
+      for (const i in response.checkList) {
+        if(response.checkList[i].groupId == 34){
+          response.checkList[i].mandatory = 1
+        }
+      }
     } catch (e) {
       response = e.response.data;
       if (response.returnCode == "401") {
