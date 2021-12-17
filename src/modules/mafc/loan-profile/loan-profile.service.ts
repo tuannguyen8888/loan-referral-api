@@ -182,15 +182,35 @@ export class LoanProfileService extends BaseService {
       [data, count] = await query.getManyAndCount();
       result.count = count;
 
+      const quickDeferCodes = ['D2.4.5', 'D2.9.1', 'D2.9.2', 'D4.1', 'D4.10', 'D4.9'];
       if (data && data.length) {
-        data.forEach(item => {
+        for (const item of data){
           let lp = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
           // lp = Object.assign(lp, item);
           if (lp.loan_status == "FINISH") {
             lp.disbursement_date = lp.updated_at;
           }
+          if(lp.fvStatus == "NEED_UPDATE"){
+              let defers = await this.connection
+                  .getCustomRepository(LoanProfileDeferRepository)
+                  .find({
+                      where: {
+                          deletedAt: IsNull(),
+                          loanProfileId: lp.id,
+                          status: "NEW"
+                      }
+                  });
+              let isQuickDefer = true;
+              for( const defer of defers){
+                if(!quickDeferCodes.includes(defer.deferCode)){
+                    isQuickDefer = false;
+                    break;
+                }
+              }
+              lp.is_quick_defer = isQuickDefer;
+          }
           result.rows.push(lp);
-        });
+        };
       }
       // console.log("result = ", result);
       return result;
