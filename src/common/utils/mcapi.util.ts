@@ -394,8 +394,8 @@ export class McapiUtil {
       });
       response = result.data;
       for (const i in response.checkList) {
-        if(response.checkList[i].groupId == 34){
-          response.checkList[i].mandatory = 1
+        if (response.checkList[i].groupId == 34) {
+          response.checkList[i].mandatory = 1;
         }
       }
     } catch (e) {
@@ -769,6 +769,7 @@ export class McapiUtil {
       let login = await this.login();
       token = login.token;
     }
+    console.log(profileid);
     let response;
     let mc_api_config = config.get("mc_api");
     let url = mc_api_config.endpoint + "/mobile-4sales/cancel-case";
@@ -791,10 +792,11 @@ export class McapiUtil {
       );
       response = result.data;
     } catch (e) {
+      console.log("ERORR");
       response = e.response.data;
       if (response.returnCode == "401") {
         await this.login();
-        await this.cancelCase(profileid, reason, comment);
+        return await this.cancelCase(profileid, reason, comment);
       }
     }
     return response;

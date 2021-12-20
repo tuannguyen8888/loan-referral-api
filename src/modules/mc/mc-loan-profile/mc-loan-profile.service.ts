@@ -489,6 +489,19 @@ export class McLoanProfileService extends BaseService {
           reason,
           comment
         );
+        if (response.returnCode == 200) {
+          const repo = this.connection.getCustomRepository(
+            McLoanProfileRepository
+          );
+          let queryupdate = repo
+            .createQueryBuilder()
+            .update()
+            .set({
+              status: "cancelcase"
+            })
+            .where("id = :id", { id: profileid });
+          await queryupdate.execute();
+        }
         return response;
       } else {
         return {
