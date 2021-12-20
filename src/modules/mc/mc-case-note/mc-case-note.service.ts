@@ -98,7 +98,9 @@ export class McCaseNoteService extends BaseService {
     let loanProfile = await loanProfileService.getLoanProfile(dto.profileid);
     dto.appNumber = loanProfile.appNumber;
     dto.app_uid = loanProfile.appid;
+    dto.createdBy = loanProfile.createdBy;
     let entity: McCaseNote = this.convertDto2Entity(dto, McCaseNote);
+    entity.createdBy = dto.createdBy;
     entity.createdAt = new Date();
     console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
@@ -106,7 +108,7 @@ export class McCaseNoteService extends BaseService {
       .getCustomRepository(McCaseNoteRepository)
       .save(entity);
     this.logger.verbose(`insertResult = ${result}`);
-
+    console.log(result);
     let response: McCaseNoteDto = this.convertEntity2Dto(
       result,
       McCaseNote,
