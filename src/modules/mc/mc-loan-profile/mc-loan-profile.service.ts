@@ -467,10 +467,9 @@ export class McLoanProfileService extends BaseService {
     console.log("cancelCase");
     try {
       let loanProfile = await this.getLoanProfile(profileid);
-      console.log(loanProfile);
       if (loanProfile.appNumber != null) {
         let dtoCaseNode = new McCaseNoteDto();
-        dtoCaseNode.profileid = loanProfile.profileid;
+        dtoCaseNode.profileid = loanProfile.id;
         dtoCaseNode.appNumber = loanProfile.appNumber;
         dtoCaseNode.app_uid = loanProfile.appid;
         dtoCaseNode.note_content =
@@ -482,10 +481,11 @@ export class McLoanProfileService extends BaseService {
           this.requestUtil,
           this.httpService
         );
+
         serviceCaseNote.createCaseNote(dtoCaseNode);
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
         var response = await mcapi.cancelCase(
-          dtoCaseNode.profileid,
+            loanProfile.profileid,
           reason,
           comment
         );

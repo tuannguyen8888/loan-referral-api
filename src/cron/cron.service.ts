@@ -54,11 +54,11 @@ export class CronService {
     console.log(`START CRON McCron AT ======= ${new Date()}`);
     //MC
     let mcloanprofileser = new McLoanProfileService(
-        this.request,
-        this.logger,
-        this.redisClient,
-        this.requestUtil,
-        this.httpService
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
     );
     let dto = new GetMcCaseRequestDto();
     dto.pageNumber = 1;
@@ -68,7 +68,6 @@ export class CronService {
     await mcloanprofileser.getCases(dto);
     dto.status = "PROCESSING";
     await mcloanprofileser.getCases(dto);
-
   }
 
   async ptfGetLoanStatus() {
