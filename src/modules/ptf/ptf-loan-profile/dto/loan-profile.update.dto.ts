@@ -1,10 +1,11 @@
 import {
-    IsString,
-    IsNotEmpty,
-    IsNumber,
-    IsOptional,
-    IsDateString,
-    IsDefined, Matches
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsDateString,
+  IsDefined,
+  Matches
 } from "class-validator";
 import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 import {
@@ -65,7 +66,7 @@ export class LoanProfileUpdateDto {
   serviceName: number = null;
   iCareLead: number = null;
   creationDate: Date = null;
-  @Matches(/http[\s\S]*.[jpg,jpeg,png,pdf]/,{message: 'url invalid'})
+  @Matches(/http[\s\S]*.[jpg,jpeg,png,pdf]/, { message: "url invalid" })
   clientPhotoUrl: string = null;
   // documentPhoto: AttachFileDto[] = null;
   currentAddress: AddressDto = null;
