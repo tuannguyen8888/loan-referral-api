@@ -39,7 +39,8 @@ const imports = [
   ScheduleModule.forRoot(),
   PtfLoanProfileModule,
   PtfMasterDataModule,
-  PtfReceiveResultModule
+  PtfReceiveResultModule,
+    SendDataLogModule
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));
