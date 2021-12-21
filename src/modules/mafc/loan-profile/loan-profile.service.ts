@@ -113,43 +113,43 @@ export class LoanProfileService extends BaseService {
           }
         );
       }
-        if (dto.user_id) {
-            let userGroup = await this.connection
-                .getCustomRepository(SaleGroupRepository)
-                .findOne({
-                    where: {
-                        deletedAt: IsNull(),
-                        email: dto.user_id
-                    }
-                });
-            if (userGroup) {
-                let userGroups = await this.connection
-                    .getCustomRepository(SaleGroupRepository)
-                    .find({
-                        where: {
-                            deletedAt: IsNull(),
-                            treePath: Like(`${userGroup.treePath}%`)
-                        }
-                    });
-                let userEmails = [];
-                if (userGroups && userGroups.length) {
-                    userGroups.forEach(ug => userEmails.push(ug.email));
-                }
-                // where["createdBy"] = In(userEmails);
-                query = query.andWhere("created_by IN (:...userEmails)", {
-                    userEmails: userEmails
-                });
-            } else {
-                // where["createdBy"] = dto.user_id;
-                query = query.andWhere("created_by = :userId", {
-                    userId: dto.user_id
-                });
+      if (dto.user_id) {
+        let userGroup = await this.connection
+          .getCustomRepository(SaleGroupRepository)
+          .findOne({
+            where: {
+              deletedAt: IsNull(),
+              email: dto.user_id
             }
+          });
+        if (userGroup) {
+          let userGroups = await this.connection
+            .getCustomRepository(SaleGroupRepository)
+            .find({
+              where: {
+                deletedAt: IsNull(),
+                treePath: Like(`${userGroup.treePath}%`)
+              }
+            });
+          let userEmails = [];
+          if (userGroups && userGroups.length) {
+            userGroups.forEach(ug => userEmails.push(ug.email));
+          }
+          // where["createdBy"] = In(userEmails);
+          query = query.andWhere("created_by IN (:...userEmails)", {
+            userEmails: userEmails
+          });
+        } else {
+          // where["createdBy"] = dto.user_id;
+          query = query.andWhere("created_by = :userId", {
+            userId: dto.user_id
+          });
         }
+      }
       if (dto.keyword) {
         query = query.andWhere(
           // "concat(in_fname,' ', in_mname, ' ', in_lname) like :keyword OR in_nationalid like :keyword OR loan_no like :keyword ",
-            "( in_nationalid like :keyword OR loan_no like :keyword )",
+          "( in_nationalid like :keyword OR loan_no like :keyword )",
           { keyword: "%" + dto.keyword + "%" }
         );
         // where["$or"] = [
@@ -1109,10 +1109,11 @@ export class LoanProfileService extends BaseService {
   }
 
   async replyDeffers(dtos: LoanProfileDeferReplyRequestDto[]) {
-    let defer, allReplySuccess = true;
+    let defer,
+      allReplySuccess = true;
     if (dtos && dtos.length) {
       for (let i = 0; i < dtos.length; i++) {
-        if(!dtos[i].defer_id) continue;
+        if (!dtos[i].defer_id) continue;
         defer = await this.connection
           .getCustomRepository(LoanProfileDeferRepository)
           .findOne({
@@ -1146,9 +1147,9 @@ export class LoanProfileService extends BaseService {
                 newReply.docCode = dtos[i].details[j].doc_code;
                 newReply.url = dtos[i].details[j].url;
                 newReplys.push(newReply);
-              }else{
-                  replySuccess = false;
-                  allReplySuccess = false;
+              } else {
+                replySuccess = false;
+                allReplySuccess = false;
               }
             }
           } else {
@@ -1161,33 +1162,33 @@ export class LoanProfileService extends BaseService {
               defer.deferCode,
               i == dtos.length - 1 ? "N" : "Y"
             );
-              if (Boolean(result.success) == true) {
-                  // let newReply = new LoanProfileDeferReply();
-                  // newReply.deferId = defer.defer_id;
-                  // newReply.docCode = defer.doc_code;
-                  // newReply.url = defer.url;
-                  // newReplys.push(newReply);
-              }else{
-                  replySuccess = false;
-                  allReplySuccess = false;
-              }
+            if (Boolean(result.success) == true) {
+              // let newReply = new LoanProfileDeferReply();
+              // newReply.deferId = defer.defer_id;
+              // newReply.docCode = defer.doc_code;
+              // newReply.url = defer.url;
+              // newReplys.push(newReply);
+            } else {
+              replySuccess = false;
+              allReplySuccess = false;
+            }
           }
-          if(replySuccess) {
-              defer.replyComment = dtos[i].reply_comment;
-              defer.status = "SENT";
-              defer.updatedAt = new Date();
-              defer = await this.connection
-                  .getCustomRepository(LoanProfileDeferRepository)
-                  .save(defer);
-              if (newReplys && newReplys.length) {
-                  await this.connection
-                      .getCustomRepository(LoanProfileDeferReplyRepository)
-                      .save(newReplys);
-              }
-          }else {
-              throw new BadRequestException(
-                  "Reply defer fail, please try again."
-              );
+          if (replySuccess) {
+            defer.replyComment = dtos[i].reply_comment;
+            defer.status = "SENT";
+            defer.updatedAt = new Date();
+            defer = await this.connection
+              .getCustomRepository(LoanProfileDeferRepository)
+              .save(defer);
+            if (newReplys && newReplys.length) {
+              await this.connection
+                .getCustomRepository(LoanProfileDeferReplyRepository)
+                .save(newReplys);
+            }
+          } else {
+            throw new BadRequestException(
+              "Reply defer fail, please try again."
+            );
           }
         } else {
           throw new BadRequestException(
