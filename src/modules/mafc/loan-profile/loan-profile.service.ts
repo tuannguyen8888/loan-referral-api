@@ -185,12 +185,12 @@ export class LoanProfileService extends BaseService {
       const quickDeferCodes = ['D2.4.5', 'D2.9.1', 'D2.9.2', 'D4.1', 'D4.10', 'D4.9'];
       if (data && data.length) {
         for (const item of data){
-          let lp = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
+          let lp: LoanProfileDto = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
           // lp = Object.assign(lp, item);
           if (lp.loan_status == "FINISH") {
             lp.disbursement_date = lp.updated_at;
           }
-          if(lp.fvStatus == "NEED_UPDATE"){
+          if(lp.fv_status == "NEED_UPDATE"){
               let defers: LoanProfileDefer[] = await this.connection
                   .getCustomRepository(LoanProfileDeferRepository)
                   .find({
