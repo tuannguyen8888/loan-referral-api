@@ -51,6 +51,7 @@ const imports = [
   PtfLoanProfileModule,
   PtfMasterDataModule,
   PtfReceiveResultModule,
+  SendDataLogModule,
   McLoanProfileModule,
   McKiosModule,
   McProductModule,
