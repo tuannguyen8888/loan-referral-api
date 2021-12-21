@@ -8,6 +8,9 @@ export class SendDataLog {
   @Column("varchar", { name: "api_url", length: 255 })
   apiUrl: string;
 
+  @Column("text", { name: "keyword" })
+  keyword: string;
+
   @Column("text", { name: "data" })
   data: string;
 
