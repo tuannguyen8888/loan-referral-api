@@ -182,7 +182,7 @@ export class LoanProfileService extends BaseService {
       [data, count] = await query.getManyAndCount();
       result.count = count;
 
-      const quickDeferCodes = ['D2.4.5', 'D2.9.1', 'D2.9.2', 'D4.1', 'D4.10', 'D4.9'];
+      const quickDeferCodes = ['D2.4.5', 'D2.9.1', 'D2.9.2', 'D4.1', 'D4.10', 'D4.9', 'D2.5', 'D2.1'];
       if (data && data.length) {
         for (const item of data){
           let lp: LoanProfileDto = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
@@ -203,8 +203,8 @@ export class LoanProfileService extends BaseService {
               let isQuickDefer = true;
               for( const defer of defers){
                 if(!quickDeferCodes.includes(defer.deferCode)){
-                    console.log('defer.deferCode = ]'+defer.deferCode+'[');
-                    console.log('quickDeferCodes = '+quickDeferCodes);
+                    // console.log('defer.deferCode = ]'+defer.deferCode+'[');
+                    // console.log('quickDeferCodes = '+quickDeferCodes);
                     isQuickDefer = false;
                     break;
                 }
