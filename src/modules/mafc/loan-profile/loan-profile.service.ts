@@ -191,7 +191,7 @@ export class LoanProfileService extends BaseService {
             lp.disbursement_date = lp.updated_at;
           }
           if(lp.fvStatus == "NEED_UPDATE"){
-              let defers = await this.connection
+              let defers: LoanProfileDefer[] = await this.connection
                   .getCustomRepository(LoanProfileDeferRepository)
                   .find({
                       where: {
@@ -203,6 +203,8 @@ export class LoanProfileService extends BaseService {
               let isQuickDefer = true;
               for( const defer of defers){
                 if(!quickDeferCodes.includes(defer.deferCode)){
+                    console.log('defer.deferCode = ]'+defer.deferCode+'[');
+                    console.log('quickDeferCodes = '+quickDeferCodes);
                     isQuickDefer = false;
                     break;
                 }
