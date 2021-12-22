@@ -554,7 +554,10 @@ export class McapiUtil {
     var result = await this.createUploadFile(dtoAttachFiles);
     console.log(result);
     console.log("END createUploadFile");
-
+    let saleCode = mc_api_config.saleCode;
+    if (dtoMcLoanProfile.hasCourier) {
+      saleCode = mc_api_config.saleCodeDSA;
+    }
     var axios = require("axios");
     var FormData = require("form-data");
     var fs = require("fs");
@@ -563,7 +566,7 @@ export class McapiUtil {
       request: {
         id:
           dtoMcLoanProfile.profileid == null ? "" : dtoMcLoanProfile.profileid,
-        saleCode: mc_api_config.saleCode,
+        saleCode: saleCode,
         customerName: dtoMcLoanProfile.customerName,
         productId: dtoMcLoanProfile.productId,
         citizenId: dtoMcLoanProfile.citizenId,
@@ -645,6 +648,9 @@ export class McapiUtil {
     let token = login.token;
     let response;
     let mc_api_config = config.get("mc_api");
+    let saleCode = dto.hasCourier
+      ? mc_api_config.saleCodeDSA
+      : mc_api_config.saleCode;
     let url =
       mc_api_config.endpoint +
       "mobile-4sales/cases?" +
@@ -657,7 +663,7 @@ export class McapiUtil {
       "&status=" +
       dto.status +
       "&saleCode=" +
-      mc_api_config.saleCode;
+      saleCode;
     console.log(url);
     let headers = {
       "Content-Type": "application/json",
