@@ -26,6 +26,7 @@ import { CronService } from "./cron/cron.service";
 import { PtfLoanProfileModule } from "./modules/ptf/ptf-loan-profile/ptf-loan-profile.module";
 import { PtfMasterDataModule } from "./modules/ptf/ptf-master-data/ptf-master-data.module";
 import { PtfReceiveResultModule } from "./modules/ptf/ptf-receive-result/ptf-receive-result.module";
+import { SendDataLogModule } from './modules/send-data-log/send-data-log.module';
 import { McLoanProfileModule } from "./modules/mc/mc-loan-profile/mc-loan-profile.module";
 import { McKiosModule } from "./modules/mc/mc-kios/mc-kios.module";
 import { McProductModule } from "./modules/mc/mc-product/mc-product.module";
@@ -50,6 +51,7 @@ const imports = [
   PtfLoanProfileModule,
   PtfMasterDataModule,
   PtfReceiveResultModule,
+  SendDataLogModule,
   McLoanProfileModule,
   McKiosModule,
   McProductModule,

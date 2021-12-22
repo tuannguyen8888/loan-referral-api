@@ -61,12 +61,21 @@ export class CronService {
       this.httpService
     );
     let dto = new GetMcCaseRequestDto();
+
     dto.pageNumber = 1;
     dto.pageSize = 1000;
     dto.keyword = "";
     dto.status = "ABORT";
+
+    dto.hasCourier = 0;
     await mcloanprofileser.getCases(dto);
+    dto.hasCourier = 1;
+    await mcloanprofileser.getCases(dto);
+
     dto.status = "PROCESSING";
+    dto.hasCourier = 0;
+    await mcloanprofileser.getCases(dto);
+    dto.hasCourier = 1;
     await mcloanprofileser.getCases(dto);
   }
 
