@@ -651,6 +651,7 @@ export class McapiUtil {
     let saleCode = dto.hasCourier
       ? mc_api_config.saleCodeDSA
       : mc_api_config.saleCode;
+    console.log(saleCode);
     let url =
       mc_api_config.endpoint +
       "mobile-4sales/cases?" +
@@ -675,10 +676,8 @@ export class McapiUtil {
       let result = await axios.get(url, {
         headers: headers
       });
-      console.log(result);
       response = result.data;
       console.log("true");
-      console.log(response);
     } catch (e) {
       console.log("false");
       response = e.response.data;
