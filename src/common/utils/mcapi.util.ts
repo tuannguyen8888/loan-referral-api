@@ -555,6 +555,7 @@ export class McapiUtil {
     console.log(result);
     console.log("END createUploadFile");
     let saleCode = mc_api_config.saleCode;
+    let security = mc_api_config.security;
     if (dtoMcLoanProfile.hasCourier) {
       saleCode = mc_api_config.saleCodeDSA;
     }
@@ -593,7 +594,7 @@ export class McapiUtil {
       url: mc_api_config.endpoint + "mobile-4sales/upload-document",
       headers: {
         "Content-Type": "multipart/form-data",
-        "x-security": "FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d",
+        "x-security": security,
         Authorization: "Bearer " + token,
         ...data.getHeaders()
       }
