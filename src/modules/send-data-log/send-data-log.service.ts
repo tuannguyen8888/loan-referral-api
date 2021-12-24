@@ -30,7 +30,7 @@ export class SendDataLogService extends BaseService {
     try {
       console.log("getAllSendDataLog");
       const repo = this.connection.getCustomRepository(SendDataLogRepository);
-      let query = repo.createQueryBuilder().where("deleted_at is null");
+      let query = repo.createQueryBuilder();
       if (searchDto.keyword)
         query = query.andWhere("keyword like :keyword", {
           keyword: "%" + searchDto.keyword + "%"
@@ -111,12 +111,7 @@ export class SendDataLogService extends BaseService {
     dto.created_at = entity.createdAt
       ? moment(entity.createdAt).format("YYYY-MM-DD HH:mm:ss")
       : null;
-    dto.updated_at = entity.updatedAt
-      ? moment(entity.updatedAt).format("YYYY-MM-DD HH:mm:ss")
-      : null;
-    dto.deleted_at = entity.deletedAt
-      ? moment(entity.deletedAt).format("YYYY-MM-DD HH:mm:ss")
-      : null;
+
     return dto;
   }
 
@@ -165,8 +160,7 @@ export class SendDataLogService extends BaseService {
       }
     }
     entity.createdAt = dto.created_at ? new Date(dto.created_at) : null;
-    entity.updatedAt = dto.updated_at ? new Date(dto.updated_at) : null;
-    entity.deletedAt = dto.deleted_at ? new Date(dto.deleted_at) : null;
+
     return entity;
   }
 
