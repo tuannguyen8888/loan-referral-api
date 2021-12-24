@@ -485,7 +485,7 @@ export class McLoanProfileService extends BaseService {
         serviceCaseNote.createCaseNote(dtoCaseNode);
         let mcapi = new McapiUtil(this.redisClient, this.httpService);
         var response = await mcapi.cancelCase(
-            loanProfile.profileid,
+          loanProfile.profileid,
           reason,
           comment
         );
