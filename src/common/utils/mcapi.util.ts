@@ -555,6 +555,7 @@ export class McapiUtil {
     console.log(result);
     console.log("END createUploadFile");
     let saleCode = mc_api_config.saleCode;
+    let security = mc_api_config.security;
     if (dtoMcLoanProfile.hasCourier) {
       saleCode = mc_api_config.saleCodeDSA;
     }
@@ -593,7 +594,7 @@ export class McapiUtil {
       url: mc_api_config.endpoint + "mobile-4sales/upload-document",
       headers: {
         "Content-Type": "multipart/form-data",
-        "x-security": "FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d",
+        "x-security": security,
         Authorization: "Bearer " + token,
         ...data.getHeaders()
       }
@@ -627,16 +628,16 @@ export class McapiUtil {
         response = e.response;
       }
     } finally {
-      // let log = new SendDataLog();
-      // log.apiUrl = configdata.url;
-      // await this.writeLog(
-      //   configdata.url,
-      //   "uploadDocument",
-      //   configdata.headers,
-      //   "post",
-      //   obj,
-      //   JSON.stringify(response)
-      // );
+      let log = new SendDataLog();
+      log.apiUrl = configdata.url;
+      await this.writeLog(
+        configdata.url,
+        "uploadDocument",
+        configdata.headers,
+        "post",
+        obj,
+        JSON.stringify(response)
+      );
     }
     return response;
   }
@@ -651,6 +652,7 @@ export class McapiUtil {
     let saleCode = dto.hasCourier
       ? mc_api_config.saleCodeDSA
       : mc_api_config.saleCode;
+    console.log(saleCode);
     let url =
       mc_api_config.endpoint +
       "mobile-4sales/cases?" +
@@ -675,10 +677,8 @@ export class McapiUtil {
       let result = await axios.get(url, {
         headers: headers
       });
-      console.log(result);
       response = result.data;
       console.log("true");
-      console.log(response);
     } catch (e) {
       console.log("false");
       response = e.response.data;
