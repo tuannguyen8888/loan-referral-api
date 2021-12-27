@@ -483,7 +483,7 @@ export class McapiUtil {
         headers,
         "post",
         data,
-        JSON.stringify(response)
+        response
       );
     }
     return response;
@@ -636,7 +636,7 @@ export class McapiUtil {
         configdata.headers,
         "post",
         obj,
-        JSON.stringify(response)
+        response
       );
     }
     return response;
