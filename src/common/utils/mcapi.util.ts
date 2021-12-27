@@ -628,16 +628,16 @@ export class McapiUtil {
         response = e.response;
       }
     } finally {
-      // let log = new SendDataLog();
-      // log.apiUrl = configdata.url;
-      // await this.writeLog(
-      //   configdata.url,
-      //   "uploadDocument",
-      //   configdata.headers,
-      //   "post",
-      //   obj,
-      //   JSON.stringify(response)
-      // );
+      let log = new SendDataLog();
+      log.apiUrl = configdata.url;
+      await this.writeLog(
+        configdata.url,
+        "uploadDocument",
+        configdata.headers,
+        "post",
+        obj,
+        JSON.stringify(response)
+      );
     }
     return response;
   }
