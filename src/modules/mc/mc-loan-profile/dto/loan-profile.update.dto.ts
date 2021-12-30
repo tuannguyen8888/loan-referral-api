@@ -58,8 +58,8 @@ export class LoanProfileUpdateDto {
   customerIncome: number = null;
   verifyInfo: string = null;
   verifyDes: string = null;
-  checkcontract: string = null;
-  checkcontractdes: string = null;
+  //checkcontract: string = null;
+  //checkcontractdes: string = null;
   reasons: string = null;
   pdfFiles: string = null;
 
