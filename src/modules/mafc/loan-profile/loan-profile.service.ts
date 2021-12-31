@@ -182,15 +182,50 @@ export class LoanProfileService extends BaseService {
       [data, count] = await query.getManyAndCount();
       result.count = count;
 
+      const quickDeferCodes = [
+        "D2.4.5",
+        "D2.9.1",
+        "D2.9.2",
+        "D4.1",
+        "D4.10",
+        "D4.9",
+        "D2.5",
+        "D2.1"
+      ];
       if (data && data.length) {
-        data.forEach(item => {
-          let lp = this.convertEntity2Dto(item, LoanProfile, LoanProfileDto);
+        for (const item of data) {
+          let lp: LoanProfileDto = this.convertEntity2Dto(
+            item,
+            LoanProfile,
+            LoanProfileDto
+          );
           // lp = Object.assign(lp, item);
           if (lp.loan_status == "FINISH") {
             lp.disbursement_date = lp.updated_at;
           }
+          if (lp.fv_status == "NEED_UPDATE") {
+            let defers: LoanProfileDefer[] = await this.connection
+              .getCustomRepository(LoanProfileDeferRepository)
+              .find({
+                where: {
+                  deletedAt: IsNull(),
+                  loanProfileId: lp.id,
+                  status: "NEW"
+                }
+              });
+            let isQuickDefer = true;
+            for (const defer of defers) {
+              if (!quickDeferCodes.includes(defer.deferCode)) {
+                // console.log('defer.deferCode = ]'+defer.deferCode+'[');
+                // console.log('quickDeferCodes = '+quickDeferCodes);
+                isQuickDefer = false;
+                break;
+              }
+            }
+            lp.is_quick_defer = isQuickDefer;
+          }
           result.rows.push(lp);
-        });
+        }
       }
       // console.log("result = ", result);
       return result;
@@ -519,7 +554,7 @@ export class LoanProfileService extends BaseService {
       });
     if (entityOld) {
       throw new BadRequestException(
-        `Số CMND ${dto.in_nationalid} đã tồn tại hồ sơ đang xử lý trong hệ thống. Vuiu lòng kiểm tra lại.`
+        `Số CMND ${dto.in_nationalid} đã tồn tại hồ sơ đang xử lý trong hệ thống. Vui lòng kiểm tra lại.`
       );
     }
     let error = null;
@@ -715,6 +750,11 @@ export class LoanProfileService extends BaseService {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = "inputQDE";
+      log.keyword =
+        (qdeResult.data ? qdeResult.data + "-" : "") +
+        inputQdeDto.in_nationalid +
+        "-" +
+        inputQdeDto.in_phone;
       log.data = JSON.stringify([
         mafc_api_config.input_data_entry.url,
         inputQdeDto,
@@ -774,6 +814,7 @@ export class LoanProfileService extends BaseService {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = "procQDEChangeState";
+      log.keyword = loanNo;
       log.data = JSON.stringify([
         mafc_api_config.input_data_entry.url,
         {
@@ -851,6 +892,7 @@ export class LoanProfileService extends BaseService {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = "inputDDE";
+      log.keyword = inputDdeDto.in_appid.toString();
       log.data = JSON.stringify([
         mafc_api_config.input_data_entry.url,
         inputDdeDto,
@@ -910,6 +952,7 @@ export class LoanProfileService extends BaseService {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = "procDDEChangeState";
+      log.keyword = loanNo;
       log.data = JSON.stringify([
         mafc_api_config.input_data_entry.url,
         {
@@ -1024,6 +1067,7 @@ export class LoanProfileService extends BaseService {
       }
       let log = new SendDataLog();
       log.apiUrl = "push-to-und";
+      log.keyword = formData_log["appid"];
       log.data = JSON.stringify([
         mafc_api_config.upload.push_to_und_url,
         formData_log,
@@ -1278,6 +1322,7 @@ export class LoanProfileService extends BaseService {
       }
       let log = new SendDataLog();
       log.apiUrl = "reply-defer-und";
+      log.keyword = formData_log["appid"];
       log.data = JSON.stringify([
         mafc_api_config.upload.reply_defer_url,
         formData_log,
@@ -1549,6 +1594,11 @@ export class LoanProfileService extends BaseService {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = "update_data_entry";
+      log.keyword =
+        inputDatatUpdateDto.in_appid +
+        (inputDatatUpdateDto.in_nationalid
+          ? inputDatatUpdateDto.in_nationalid + "-"
+          : "");
       log.data = JSON.stringify([
         mafc_api_config.update_data_entry.url,
         inputDatatUpdateDto,
@@ -1809,6 +1859,7 @@ export class LoanProfileService extends BaseService {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = "check_customer_info";
+      log.keyword = customerNationalId + "-" + phone;
       log.data = JSON.stringify([
         mafc_api_config.check_customer_info.url,
         {
@@ -1885,6 +1936,7 @@ export class LoanProfileService extends BaseService {
     } finally {
       let log = new SendDataLog();
       log.apiUrl = "polling-s37";
+      log.keyword = customerNationalId;
       log.data = JSON.stringify([
         mafc_api_config.cic.url + "/polling-s37",
         {

@@ -98,4 +98,7 @@ export class LoanProfileDto {
 
   @IsOptional()
   disbursement_date: string = null;
+
+  @IsOptional()
+  is_quick_defer: boolean = null;
 }
