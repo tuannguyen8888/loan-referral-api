@@ -644,9 +644,11 @@ export class McapiUtil {
 
   async getCases(dto: GetMcCaseRequestDto): Promise<any> {
     var axios = require("axios");
-
-    let login = await this.loginCron();
-    let token = login.token;
+    let token = await this.redisClient.get("token");
+    if (token == null) {
+      let login = await this.login();
+      token = login.token;
+    }
     let response;
     let mc_api_config = config.get("mc_api");
     let saleCode = dto.hasCourier
