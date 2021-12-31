@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from "typeorm";
-import { McProductResponseDto } from "../../modules/mc/mc-product/dto";
+import { McProduct } from "../../entities";
 
-@EntityRepository(McProductResponseDto)
-export class McProductRepository extends Repository<McProductResponseDto> {}
+@EntityRepository(McProduct)
+export class McProductRepository extends Repository<McProduct> {}
