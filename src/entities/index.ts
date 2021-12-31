@@ -31,3 +31,4 @@ export * from "./mc/mc-case";
 export * from "./mc/mc-case-note";
 export * from "./mc/mc-notification";
 export * from "./mc/mc-attachfile";
+export * from "./mc/mc-product";
