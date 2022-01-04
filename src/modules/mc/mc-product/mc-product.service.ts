@@ -80,8 +80,7 @@ export class McProductService extends BaseService {
         query = query.andWhere("productname like :keyword", {
           keyword: "%" + dto.keyword + "%"
         });
-      query = query
-        .orderBy("id", "DESC")
+      query = query.orderBy("id", "DESC");
 
       const result = new McProductsResponseDto();
 

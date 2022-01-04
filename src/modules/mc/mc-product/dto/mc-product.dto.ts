@@ -10,6 +10,7 @@ import {
 export class McProductDto {
   @IsOptional()
   id?: number = null;
+  productid: number = null;
   productname: string = null;
   dsarate: number = null;
   tsarate: number = null;

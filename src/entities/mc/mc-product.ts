@@ -4,6 +4,15 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class McProduct {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
+
+  @Column("int", {
+    name: "productid",
+    default: 0,
+    nullable: true,
+    comment: "ID sản phẩm"
+  })
+  productid: number;
+
   @Column("varchar", {
     name: "productname",
     length: 255,

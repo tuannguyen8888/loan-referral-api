@@ -877,6 +877,19 @@ export class McapiUtil {
         await this.login();
         await this.requestSendOtp3P(phone, typeScore);
       }
+    } finally {
+      let input = {
+        requested_msisdn: phone,
+        typeScore: typeScore
+      };
+      await this.writeLog(
+        url,
+        "requestSendOtp3P",
+        headers,
+        "post",
+        input,
+        response
+      );
     }
     return response;
   }
@@ -918,6 +931,22 @@ export class McapiUtil {
         await this.login();
         await this.requestScoring3P(dto);
       }
+    } finally {
+      let input = {
+        verificationCode: dto.verificationCode,
+        primaryPhone: dto.primaryPhone,
+        nationalId: dto.nationalId,
+        typeScore: dto.typeScore,
+        userName: mc_api_config.username
+      };
+      await this.writeLog(
+        url,
+        "requestScoring3P",
+        headers,
+        "post",
+        input,
+        response
+      );
     }
     return response;
   }
