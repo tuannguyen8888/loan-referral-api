@@ -5,20 +5,7 @@ export class GetMCProductRequestDto {
   // @IsOptional()
   // partner_id?: number;
 
-  @IsDefined()
-  @IsString()
+  @IsOptional()
   keyword: string;
-
-  @IsDefined()
-  @IsNumber()
-  page: number;
-
-  @IsDefined()
-  @IsNumber()
-  pagesize: number;
-
-  @IsDefined()
-  sort: any;
-
   user_id: string;
 }

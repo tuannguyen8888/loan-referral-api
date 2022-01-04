@@ -82,8 +82,7 @@ export class McProductService extends BaseService {
         });
       query = query
         .orderBy("id", "DESC")
-        .skip((dto.page - 1) * dto.pagesize)
-        .take(dto.pagesize);
+
       const result = new McProductsResponseDto();
 
       let data, count;
