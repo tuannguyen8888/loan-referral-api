@@ -3,11 +3,13 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsDateString
+  IsDateString,
+  IsDefined,
+  Matches
 } from "class-validator";
-import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 
-export class McProductResponseDto {
+export class McProductUpdateDto {
+  @IsDefined()
   id: number = null;
   productname: string = null;
   dsarate: number = null;
@@ -15,16 +17,11 @@ export class McProductResponseDto {
 
   @IsOptional()
   @IsDateString()
-  createdAt: string = null;
-  createdBy: string = null;
-  @IsOptional()
-  @IsDateString()
   updatedAt: string = null;
   updatedBy: string = null;
+
   @IsOptional()
   @IsDateString()
   deletedAt: string = null;
   deletedBy: string = null;
-
-  process: ProcessDto[];
 }
