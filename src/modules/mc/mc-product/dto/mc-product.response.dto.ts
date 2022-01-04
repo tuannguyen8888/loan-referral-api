@@ -9,6 +9,7 @@ import { ProcessDto } from "src/modules/mafc/loan-profile/dto";
 
 export class McProductResponseDto {
   id: number = null;
+  productid: number = null;
   productname: string = null;
   dsarate: number = null;
   tsarate: number = null;
