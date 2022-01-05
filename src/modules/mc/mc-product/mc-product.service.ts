@@ -11,7 +11,7 @@ import {
   Address,
   LoanProfile,
   McCaseNote,
-  McLoanProfile,
+  McLoanProfile, McProduct,
   Process,
   PtfAddress,
   PtfAttachFile,
@@ -38,15 +38,9 @@ import {
 } from "../../../repositories";
 import { BaseService } from "../../../common/services";
 import { McapiUtil } from "../../../common/utils/mcapi.util";
-import { GetMCCaseNoteRequestDto } from "../mc-case-note/dto/get-case-note.request.dto";
-import { McCaseNoteRepository } from "../../../repositories/mc/mc-case-note.repository";
-import { McCaseNotesResponseDto } from "../mc-case-note/dto/mc-case-notes.response.dto";
-import { McCaseNoteResponseDto } from "../mc-case-note/dto/mc-case-note.response.dto";
-import { McCaseNoteDto } from "../mc-case-note/dto/mc-case-note.dto";
-import { McLoanProfileService } from "../mc-loan-profile/mc-loan-profile.service";
-import { McCaseNoteUpdateDto } from "../mc-case-note/dto/mc-case-note.update.dto";
+
 import { GetMCProductRequestDto } from "./dto/get-product.request.dto";
-import { McProduct } from "../../../entities/mc/mc-product";
+
 import { McProductDto } from "./dto/mc-product.dto";
 import { McProductsResponseDto } from "./dto/mc-products.response.dto";
 import { McProductResponseDto } from "./dto/mc-product.response.dto";
