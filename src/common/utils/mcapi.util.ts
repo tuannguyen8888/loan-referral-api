@@ -650,6 +650,7 @@ export class McapiUtil {
       let login = await this.login();
       token = login.token;
     }
+    console.log("Token: "+token);
     let response;
     let mc_api_config = config.get("mc_api");
     let saleCode = dto.hasCourier

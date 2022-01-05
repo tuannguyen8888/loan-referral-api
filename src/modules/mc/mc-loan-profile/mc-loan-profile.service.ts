@@ -420,8 +420,7 @@ export class McLoanProfileService extends BaseService {
   }
 
   async getCases(dto: GetMcCaseRequestDto) {
-    console.log("getCases " + dto.status);
-    debugger;
+    console.log("getCases " + dto.status + " hasCourier = "+dto.hasCourier);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
     var response = await mcapi.getCases(dto);
