@@ -38,6 +38,7 @@ import { McNotificationResponseDto } from "./modules/mc/mc-notification/dto/mc-n
 import { McAttachfileModule } from "./modules/mc/mc-attachfile/mc-attachfile.module";
 import { TtfcLoanProfileModule } from "./modules/ttfc/ttfc-loan-profile/ttfc-loan-profile.module";
 import { PartnerLoanProfileModule } from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
+import { McScoringTrackingModule } from './modules/mc/mc-scoring-tracking/mc-scoring-tracking.module';
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -60,6 +61,7 @@ const imports = [
   McCaseNoteModule,
   McNotificationModule,
   McAttachfileModule,
+  McScoringTrackingModule,
   PartnerLoanProfileModule
 ];
 databaseConfig.forEach(db => {
