@@ -45,6 +45,11 @@ import { requestScoring3PDto } from "./dto/requestScoring3P.dto";
 import { IsNull, Like } from "typeorm";
 import { McCaseNoteDto } from "../mc-case-note/dto/mc-case-note.dto";
 import { McCaseNoteService } from "../mc-case-note/mc-case-note.service";
+import {McScoringTrackingService} from "../mc-scoring-tracking/mc-scoring-tracking.service";
+import {McScoringTrackingDto} from "../mc-scoring-tracking/dto/mc-scoring-tracking.dto";
+import {GetMCScoringTrackingRequestDto} from "../mc-scoring-tracking/dto/get-scoring-tracking.request.dto";
+import {McScoringTrackingResponseDto} from "../mc-scoring-tracking/dto/mc-scoring-tracking.response.dto";
+import {McScoringTrackingUpdateDto} from "../mc-scoring-tracking/dto/mc-scoring-tracking.update.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -415,8 +420,7 @@ export class McLoanProfileService extends BaseService {
   }
 
   async getCases(dto: GetMcCaseRequestDto) {
-    console.log("getCases " + dto.status);
-    debugger;
+    console.log("getCases " + dto.status + " hasCourier = "+dto.hasCourier);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
     var response = await mcapi.getCases(dto);
@@ -453,6 +457,13 @@ export class McLoanProfileService extends BaseService {
     console.log("requestSendOtp3P");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
+    let scoringTrackingService = new McScoringTrackingService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+    let dtoScoringTracking = new McScoringTrackingDto();
+    dtoScoringTracking.typeScore = dto.typeScore;
+    dtoScoringTracking.primaryPhone = dto.phone;
+    dtoScoringTracking.requestSendOtp3P = JSON.stringify(response);
+    dtoScoringTracking.createdBy = dto.user_id;
+    await scoringTrackingService.createScoringTracking(dtoScoringTracking);
     return response;
   }
 
@@ -460,6 +471,23 @@ export class McLoanProfileService extends BaseService {
     console.log("requestScoring3P");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.requestScoring3P(dto);
+    let requestScoringTracking = new GetMCScoringTrackingRequestDto();
+    requestScoringTracking.primaryPhone = dto.primaryPhone;
+    let scoringTrackingService = new McScoringTrackingService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+
+    let result = await scoringTrackingService.getAllScoringTrackings(requestScoringTracking);
+    console.log(result);
+    let responseScoringTracking = result['rows'][0];
+    let dtoUpdate = new McScoringTrackingUpdateDto();
+    dtoUpdate.id = responseScoringTracking.id;
+    dtoUpdate.typeScore = responseScoringTracking.typeScore;
+    dtoUpdate.primaryPhone = responseScoringTracking.primaryPhone;
+    dtoUpdate.nationalId = dto.nationalId;
+    dtoUpdate.verificationCode = dto.verificationCode;
+    dtoUpdate.requestSendOtp3P = responseScoringTracking.requestSendOtp3P;
+    dtoUpdate.requestScoring3P = JSON.stringify(response);
+    dtoUpdate.updatedBy = dto.user_id;
+    await scoringTrackingService.updateScoringTracking(dtoUpdate);
     return response;
   }
 

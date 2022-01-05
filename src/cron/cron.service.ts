@@ -13,7 +13,7 @@ import { GetMcCaseRequestDto } from "../modules/mc/mc-loan-profile/dto/get-mc-ca
 export class CronService {
   protected request: Request;
   private logger = new Logger();
-  protected redisClient: RedisClient;
+  protected redisClient= new RedisClient(this.logger);
   private httpService = new HttpService();
   private requestUtil = new RequestUtil(this.httpService);
 
@@ -49,10 +49,12 @@ export class CronService {
   }
 
   @Cron("0 */5 * * * *") // chạy mỗi 5 phút
+  //@Cron("*/10 * * * * *") // chạy mỗi 30s
   async McCron() {
     console.info(`START CRON McCron AT ======= ${new Date()}`);
     console.log(`START CRON McCron AT ======= ${new Date()}`);
     //MC
+    this.redisClient.onModuleInit();
     let mcloanprofileser = new McLoanProfileService(
       this.request,
       this.logger,
