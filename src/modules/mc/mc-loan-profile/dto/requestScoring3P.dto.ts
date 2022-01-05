@@ -7,4 +7,5 @@ export class requestScoring3PDto {
   typeScore: string;
   @IsOptional()
   loanprofileid: number;
+  user_id:string;
 }

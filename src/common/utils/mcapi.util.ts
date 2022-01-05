@@ -75,6 +75,7 @@ export class McapiUtil {
   async writeLog(url, apiName, headers, method, input, result) {
     let log = new SendDataLog();
     log.apiUrl = apiName;
+    log.keyword = "MC - apiName"
     log.data = JSON.stringify({
       apiname: apiName,
       endpoint: url,
@@ -878,18 +879,18 @@ export class McapiUtil {
         await this.requestSendOtp3P(phone, typeScore);
       }
     } finally {
-      let input = {
-        requested_msisdn: phone,
-        typeScore: typeScore
-      };
-      await this.writeLog(
-        url,
-        "requestSendOtp3P",
-        headers,
-        "post",
-        input,
-        response
-      );
+      // let input = {
+      //   requested_msisdn: phone,
+      //   typeScore: typeScore
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "requestSendOtp3P",
+      //   headers,
+      //   "post",
+      //   input,
+      //   response
+      // );
     }
     return response;
   }
@@ -932,21 +933,21 @@ export class McapiUtil {
         await this.requestScoring3P(dto);
       }
     } finally {
-      let input = {
-        verificationCode: dto.verificationCode,
-        primaryPhone: dto.primaryPhone,
-        nationalId: dto.nationalId,
-        typeScore: dto.typeScore,
-        userName: mc_api_config.username
-      };
-      await this.writeLog(
-        url,
-        "requestScoring3P",
-        headers,
-        "post",
-        input,
-        response
-      );
+      // let input = {
+      //   verificationCode: dto.verificationCode,
+      //   primaryPhone: dto.primaryPhone,
+      //   nationalId: dto.nationalId,
+      //   typeScore: dto.typeScore,
+      //   userName: mc_api_config.username
+      // };
+      // await this.writeLog(
+      //   url,
+      //   "requestScoring3P",
+      //   headers,
+      //   "post",
+      //   input,
+      //   response
+      // );
     }
     return response;
   }

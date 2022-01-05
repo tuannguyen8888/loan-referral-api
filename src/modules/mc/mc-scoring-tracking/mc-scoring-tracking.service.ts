@@ -44,7 +44,7 @@ export class McScoringTrackingService extends BaseService{
                 query = query.andWhere("primaryPhone = :primaryPhone", {
                     primaryPhone: dto.primaryPhone
                 });
-                query = query.andWhere("verificationCode is null");
+                //query = query.andWhere("verificationCode is null");
             }
             if(dto.user_id){
                 query = query.andWhere("created_by = :created_by", {

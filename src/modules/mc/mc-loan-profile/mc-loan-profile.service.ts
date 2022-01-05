@@ -462,8 +462,9 @@ export class McLoanProfileService extends BaseService {
     let dtoScoringTracking = new McScoringTrackingDto();
     dtoScoringTracking.typeScore = dto.typeScore;
     dtoScoringTracking.primaryPhone = dto.phone;
-    dtoScoringTracking.requestSendOtp3P = response;
-    scoringTrackingService.createScoringTracking(dtoScoringTracking);
+    dtoScoringTracking.requestSendOtp3P = JSON.stringify(response);
+    dtoScoringTracking.createdBy = dto.user_id;
+    await scoringTrackingService.createScoringTracking(dtoScoringTracking);
     return response;
   }
 
@@ -475,8 +476,9 @@ export class McLoanProfileService extends BaseService {
     requestScoringTracking.primaryPhone = dto.primaryPhone;
     let scoringTrackingService = new McScoringTrackingService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
 
-    let result = scoringTrackingService.getAllScoringTrackings(requestScoringTracking);
-    let responseScoringTracking = result[0];
+    let result = await scoringTrackingService.getAllScoringTrackings(requestScoringTracking);
+    console.log(result);
+    let responseScoringTracking = result['rows'][0];
     let dtoUpdate = new McScoringTrackingUpdateDto();
     dtoUpdate.id = responseScoringTracking.id;
     dtoUpdate.typeScore = responseScoringTracking.typeScore;
@@ -484,7 +486,9 @@ export class McLoanProfileService extends BaseService {
     dtoUpdate.nationalId = dto.nationalId;
     dtoUpdate.verificationCode = dto.verificationCode;
     dtoUpdate.requestSendOtp3P = responseScoringTracking.requestSendOtp3P;
-    dtoUpdate.requestScoring3P = response;
+    dtoUpdate.requestScoring3P = JSON.stringify(response);
+    dtoUpdate.updatedBy = dto.user_id;
+    await scoringTrackingService.updateScoringTracking(dtoUpdate);
     return response;
   }
 
