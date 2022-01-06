@@ -13,7 +13,7 @@ import { GetMcCaseRequestDto } from "../modules/mc/mc-loan-profile/dto/get-mc-ca
 export class CronService {
   protected request: Request;
   private logger = new Logger();
-  protected redisClient= new RedisClient(this.logger);
+  protected redisClient = new RedisClient(this.logger);
   private httpService = new HttpService();
   private requestUtil = new RequestUtil(this.httpService);
 
