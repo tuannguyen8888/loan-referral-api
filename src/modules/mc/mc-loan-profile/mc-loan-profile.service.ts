@@ -315,7 +315,7 @@ export class McLoanProfileService extends BaseService {
   async uploadDocument(id, appStatus) {
     console.log("uploadDocument new");
     let loanProfileResponseDTO = await this.getLoanProfile(id);
-    //console.log(loanProfileDTO);
+    console.log(loanProfileResponseDTO);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let attachRequest = new GetMCAttachfileRequestDto();
     let attachFiles = new McAttachfilesResponseDto();

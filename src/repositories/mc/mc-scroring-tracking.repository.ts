@@ -1,5 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
-import {McProduct, McScoringTracking} from "../../entities";
+import { McProduct, McScoringTracking } from "../../entities";
 
 @EntityRepository(McScoringTracking)
-export class McScoringTrackingRepository extends Repository<McScoringTracking> {}
+export class McScoringTrackingRepository extends Repository<
+  McScoringTracking
+> {}
