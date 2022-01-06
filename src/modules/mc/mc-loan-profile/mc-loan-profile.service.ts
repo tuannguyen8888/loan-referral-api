@@ -45,11 +45,11 @@ import { requestScoring3PDto } from "./dto/requestScoring3P.dto";
 import { IsNull, Like } from "typeorm";
 import { McCaseNoteDto } from "../mc-case-note/dto/mc-case-note.dto";
 import { McCaseNoteService } from "../mc-case-note/mc-case-note.service";
-import {McScoringTrackingService} from "../mc-scoring-tracking/mc-scoring-tracking.service";
-import {McScoringTrackingDto} from "../mc-scoring-tracking/dto/mc-scoring-tracking.dto";
-import {GetMCScoringTrackingRequestDto} from "../mc-scoring-tracking/dto/get-scoring-tracking.request.dto";
-import {McScoringTrackingResponseDto} from "../mc-scoring-tracking/dto/mc-scoring-tracking.response.dto";
-import {McScoringTrackingUpdateDto} from "../mc-scoring-tracking/dto/mc-scoring-tracking.update.dto";
+import { McScoringTrackingService } from "../mc-scoring-tracking/mc-scoring-tracking.service";
+import { McScoringTrackingDto } from "../mc-scoring-tracking/dto/mc-scoring-tracking.dto";
+import { GetMCScoringTrackingRequestDto } from "../mc-scoring-tracking/dto/get-scoring-tracking.request.dto";
+import { McScoringTrackingResponseDto } from "../mc-scoring-tracking/dto/mc-scoring-tracking.response.dto";
+import { McScoringTrackingUpdateDto } from "../mc-scoring-tracking/dto/mc-scoring-tracking.update.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -314,8 +314,8 @@ export class McLoanProfileService extends BaseService {
 
   async uploadDocument(id, appStatus) {
     console.log("uploadDocument new");
-    let loanProfileDTO = await this.getLoanProfile(id);
-    //console.log(loanProfileDTO);
+    let loanProfileResponseDTO = await this.getLoanProfile(id);
+    console.log(loanProfileResponseDTO);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let attachRequest = new GetMCAttachfileRequestDto();
     let attachFiles = new McAttachfilesResponseDto();
@@ -333,8 +333,12 @@ export class McLoanProfileService extends BaseService {
     } else {
       //Get return checklist
       let returnchecklist = await mcapi.getReturnChecklist(
-        loanProfileDTO.appid
+        loanProfileResponseDTO.appid
       );
+      console.log(returnchecklist);
+      if(returnchecklist['returnCode'] == '400'){
+        return returnchecklist;
+      }
       let arr_groupid = new Array();
       for (const group of returnchecklist["checkList"]) {
         console.log(group);
@@ -356,7 +360,7 @@ export class McLoanProfileService extends BaseService {
     }
 
     var response = await mcapi.uploadDocument(
-      loanProfileDTO,
+      loanProfileResponseDTO,
       attachFiles,
       appStatus
     );
@@ -420,7 +424,7 @@ export class McLoanProfileService extends BaseService {
   }
 
   async getCases(dto: GetMcCaseRequestDto) {
-    console.log("getCases " + dto.status + " hasCourier = "+dto.hasCourier);
+    console.log("getCases " + dto.status + " hasCourier = " + dto.hasCourier);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
     var response = await mcapi.getCases(dto);
@@ -457,7 +461,13 @@ export class McLoanProfileService extends BaseService {
     console.log("requestSendOtp3P");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
-    let scoringTrackingService = new McScoringTrackingService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+    let scoringTrackingService = new McScoringTrackingService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
+    );
     let dtoScoringTracking = new McScoringTrackingDto();
     dtoScoringTracking.typeScore = dto.typeScore;
     dtoScoringTracking.primaryPhone = dto.phone;
@@ -473,11 +483,19 @@ export class McLoanProfileService extends BaseService {
     var response = await mcapi.requestScoring3P(dto);
     let requestScoringTracking = new GetMCScoringTrackingRequestDto();
     requestScoringTracking.primaryPhone = dto.primaryPhone;
-    let scoringTrackingService = new McScoringTrackingService(this.request,this.logger,this.redisClient,this.requestUtil,this.httpService);
+    let scoringTrackingService = new McScoringTrackingService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
+    );
 
-    let result = await scoringTrackingService.getAllScoringTrackings(requestScoringTracking);
+    let result = await scoringTrackingService.getAllScoringTrackings(
+      requestScoringTracking
+    );
     console.log(result);
-    let responseScoringTracking = result['rows'][0];
+    let responseScoringTracking = result["rows"][0];
     let dtoUpdate = new McScoringTrackingUpdateDto();
     dtoUpdate.id = responseScoringTracking.id;
     dtoUpdate.typeScore = responseScoringTracking.typeScore;
