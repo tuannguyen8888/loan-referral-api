@@ -335,6 +335,10 @@ export class McLoanProfileService extends BaseService {
       let returnchecklist = await mcapi.getReturnChecklist(
         loanProfileResponseDTO.appid
       );
+      console.log(returnchecklist);
+      if(returnchecklist['returnCode'] == '400'){
+        return returnchecklist;
+      }
       let arr_groupid = new Array();
       for (const group of returnchecklist["checkList"]) {
         console.log(group);
