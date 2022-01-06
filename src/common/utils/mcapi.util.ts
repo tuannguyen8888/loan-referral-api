@@ -5,12 +5,18 @@ import { RedisClient } from "../shared";
 import fs from "fs";
 import { RequestUtil } from "./request.util";
 import { McLoanProfile, SendDataLog } from "../../entities";
-import { McLoanProfileDto } from "../../modules/mc/mc-loan-profile/dto";
+import {
+  LoanProfileResponseDto,
+  McLoanProfileDto
+} from "../../modules/mc/mc-loan-profile/dto";
 import { McAttachfilesResponseDto } from "../../modules/mc/mc-attachfile/dto/mc-attachfiles.response.dto";
 import { GetMcCaseRequestDto } from "../../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
 import { requestScoring3PDto } from "../../modules/mc/mc-loan-profile/dto/requestScoring3P.dto";
 import { urlencoded } from "express";
-import { SendDataLogRepository } from "../../repositories";
+import {
+  McLoanProfileRepository,
+  SendDataLogRepository
+} from "../../repositories";
 import { Connection, getConnectionManager } from "typeorm";
 import { McCheckListrequestDto } from "../../modules/mc/mc-loan-profile/dto/mc-check-listrequest.dto";
 
@@ -75,7 +81,7 @@ export class McapiUtil {
   async writeLog(url, apiName, headers, method, input, result) {
     let log = new SendDataLog();
     log.apiUrl = apiName;
-    log.keyword = "MC - apiName"
+    log.keyword = "MC - apiName";
     log.data = JSON.stringify({
       apiname: apiName,
       endpoint: url,
@@ -539,7 +545,7 @@ export class McapiUtil {
   }
 
   async uploadDocument(
-    dtoMcLoanProfile: McLoanProfileDto,
+    dtoMcLoanProfileRepository: LoanProfileResponseDto,
     dtoAttachFiles: McAttachfilesResponseDto,
     appStatus: number
   ): Promise<any> {
@@ -557,7 +563,7 @@ export class McapiUtil {
     console.log("END createUploadFile");
     let saleCode = mc_api_config.saleCode;
     let security = mc_api_config.security;
-    if (dtoMcLoanProfile.hasCourier) {
+    if (dtoMcLoanProfileRepository.hasCourier) {
       saleCode = mc_api_config.saleCodeDSA;
     }
     var axios = require("axios");
@@ -566,23 +572,22 @@ export class McapiUtil {
     var data = new FormData();
     var obj = {
       request: {
-        id:
-          dtoMcLoanProfile.profileid == null ? "" : dtoMcLoanProfile.profileid,
+        id: dtoMcLoanProfileRepository.profileid,
         saleCode: saleCode,
-        customerName: dtoMcLoanProfile.customerName,
-        productId: dtoMcLoanProfile.productId,
-        citizenId: dtoMcLoanProfile.citizenId,
-        tempResidence: dtoMcLoanProfile.tempResidence,
-        loanAmount: dtoMcLoanProfile.loanAmount,
-        loanTenor: dtoMcLoanProfile.loanTenor,
-        hasInsurance: dtoMcLoanProfile.hasInsurance,
-        issuePlace: dtoMcLoanProfile.issuePlace,
-        shopCode: dtoMcLoanProfile.shopCode,
-        companyTaxNumber: dtoMcLoanProfile.companyTaxNumber,
-        hasCourier: dtoMcLoanProfile.hasCourier
+        customerName: dtoMcLoanProfileRepository.customerName,
+        productId: dtoMcLoanProfileRepository.productId,
+        citizenId: dtoMcLoanProfileRepository.citizenId,
+        tempResidence: dtoMcLoanProfileRepository.tempResidence,
+        loanAmount: dtoMcLoanProfileRepository.loanAmount,
+        loanTenor: dtoMcLoanProfileRepository.loanTenor,
+        hasInsurance: dtoMcLoanProfileRepository.hasInsurance,
+        issuePlace: dtoMcLoanProfileRepository.issuePlace,
+        shopCode: dtoMcLoanProfileRepository.shopCode,
+        companyTaxNumber: dtoMcLoanProfileRepository.companyTaxNumber,
+        hasCourier: dtoMcLoanProfileRepository.hasCourier
       },
-      mobileProductType: dtoMcLoanProfile.mobileProductType,
-      mobileIssueDateCitizen: dtoMcLoanProfile.mobileIssueDateCitizen,
+      mobileProductType: dtoMcLoanProfileRepository.mobileProductType,
+      mobileIssueDateCitizen: dtoMcLoanProfileRepository.mobileIssueDateCitizen,
       appStatus: appStatus,
       md5: result.md5checksum,
       info: result.info
@@ -619,7 +624,7 @@ export class McapiUtil {
         if (e.response.data.returnCode == "401") {
           await this.login();
           return await this.uploadDocument(
-            dtoMcLoanProfile,
+            dtoMcLoanProfileRepository,
             dtoAttachFiles,
             appStatus
           );
@@ -650,7 +655,7 @@ export class McapiUtil {
       let login = await this.login();
       token = login.token;
     }
-    console.log("Token: "+token);
+    console.log("Token: " + token);
     let response;
     let mc_api_config = config.get("mc_api");
     let saleCode = dto.hasCourier
