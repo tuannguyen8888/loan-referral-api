@@ -70,7 +70,11 @@ export class McProductService extends BaseService {
     try {
       const repo = this.connection.getCustomRepository(McProductRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
-
+      if(dto.productid){
+        query = query.andWhere("productid = :productid", {
+          productid: dto.productid
+        });
+      }
       if (dto.keyword)
         query = query.andWhere("productname like :keyword", {
           keyword: "%" + dto.keyword + "%"
@@ -107,23 +111,35 @@ export class McProductService extends BaseService {
   }
 
   async createProduct(dto: McProductDto) {
-    console.log(dto);
-    let entity: McProduct = this.convertDto2Entity(dto, McProduct);
-    entity.createdBy = dto.createdBy;
-    entity.createdAt = new Date();
-    console.log(entity);
-    this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
-    let result = await this.connection
-      .getCustomRepository(McProductRepository)
-      .save(entity);
-    this.logger.verbose(`insertResult = ${result}`);
-    console.log(result);
-    let response: McProductDto = this.convertEntity2Dto(
-      result,
-      McProduct,
-      McProductDto
-    );
-    return response;
+    //Kiểm tra có tồn tại id
+    let reqDto = new GetMCProductRequestDto();
+    reqDto.productid = dto.productid;
+    let dtoProductResponses = await this.getAllProducts(reqDto);
+    console.log(dtoProductResponses);
+    if(dtoProductResponses.count == 0){
+      let entity: McProduct = this.convertDto2Entity(dto, McProduct);
+      entity.createdBy = dto.createdBy;
+      entity.createdAt = new Date();
+      console.log(entity);
+      this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
+      let result = await this.connection
+          .getCustomRepository(McProductRepository)
+          .save(entity);
+      this.logger.verbose(`insertResult = ${result}`);
+      console.log(result);
+      let response: McProductDto = this.convertEntity2Dto(
+          result,
+          McProduct,
+          McProductDto
+      );
+      return response;
+    }else {
+       return {
+         "statusCode": 300,
+         "message": "Sản phẩm bị trùng"
+       };
+    }
+
   }
 
   async updateProduct(dto: McProductUpdateDto) {
