@@ -638,7 +638,7 @@ export class McapiUtil {
       log.apiUrl = configdata.url;
       await this.writeLog(
         configdata.url,
-        "uploadDocument",
+        "uploadDocument - " + appStatus,
         configdata.headers,
         "post",
         obj,

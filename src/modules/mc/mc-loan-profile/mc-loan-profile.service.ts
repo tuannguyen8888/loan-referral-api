@@ -336,7 +336,7 @@ export class McLoanProfileService extends BaseService {
         loanProfileResponseDTO.appid
       );
       console.log(returnchecklist);
-      if(returnchecklist['returnCode'] == '400'){
+      if (returnchecklist["returnCode"] == "400") {
         return returnchecklist;
       }
       let arr_groupid = new Array();
