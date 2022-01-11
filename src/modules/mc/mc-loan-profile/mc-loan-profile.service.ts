@@ -361,10 +361,6 @@ export class McLoanProfileService extends BaseService {
 
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     }
-    for (const attachFile of attachFiles.rows) {
-      console.log(attachFile.id);
-      await attachserviec.updateColAttachfile(attachFile.id, "hassend", 1);
-    }
     var response = await mcapi.uploadDocument(
       loanProfileResponseDTO,
       attachFiles,
@@ -384,6 +380,10 @@ export class McLoanProfileService extends BaseService {
         .where("id = :id", { id: id });
       await query.execute();
       //Cập nhật mc_attachfile.hassend = 1
+      for (const attachFile of attachFiles.rows) {
+        console.log(attachFile.id);
+        await attachserviec.updateColAttachfile(attachFile.id, "hassend", 1);
+      }
     } else {
       const repo = this.connection.getCustomRepository(McLoanProfileRepository);
       let query = repo

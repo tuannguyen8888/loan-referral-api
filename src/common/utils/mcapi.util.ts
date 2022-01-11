@@ -507,7 +507,6 @@ export class McapiUtil {
     }
     var info = [];
     let i = 1;
-    console.log(dtoAttachFiles.rows);
     for (const attachFile of dtoAttachFiles.rows) {
       if (attachFile.url != "") {
         let ext: any = attachFile.url.split(".");
@@ -515,7 +514,7 @@ export class McapiUtil {
         let fileName = `${i}.${ext}`;
         let filePath = `${dir}/${fileName}`;
         var requestUtil = new RequestUtil(this.httpService);
-        console.log(i);
+        console.log(attachFile);
         console.log("download file " + fileName);
         await requestUtil.downloadPublicFile(attachFile.url, filePath);
         let item = {
@@ -608,45 +607,45 @@ export class McapiUtil {
       }
     };
 
-    // try {
-    //   let result = await axios.post(configdata.url, data, {
-    //     headers: configdata.headers,
-    //     maxContentLength: 100000000,
-    //     maxBodyLength: 1000000000
-    //   });
-    //   //fs.unlinkSync(result.filePath);
-    //
-    //   response = result.data;
-    //   response.returnCode = "200";
-    // } catch (e) {
-    //   console.log("ERROR");
-    //   console.log(e);
-    //   //fs.unlinkSync(result.filePath);
-    //   if (e.response.data != undefined) {
-    //     if (e.response.data.returnCode == "401") {
-    //       await this.login();
-    //       return await this.uploadDocument(
-    //         dtoMcLoanProfileRepository,
-    //         dtoAttachFiles,
-    //         appStatus
-    //       );
-    //     }
-    //     response = e.response.data;
-    //   } else {
-    //     response = e.response;
-    //   }
-    // } finally {
-    //   let log = new SendDataLog();
-    //   log.apiUrl = configdata.url;
-    //   await this.writeLog(
-    //     configdata.url,
-    //     "uploadDocument - " + appStatus,
-    //     configdata.headers,
-    //     "post",
-    //     obj,
-    //     response
-    //   );
-    // }
+    try {
+      let result = await axios.post(configdata.url, data, {
+        headers: configdata.headers,
+        maxContentLength: 100000000,
+        maxBodyLength: 1000000000
+      });
+      //fs.unlinkSync(result.filePath);
+
+      response = result.data;
+      response.returnCode = "200";
+    } catch (e) {
+      console.log("ERROR");
+      console.log(e);
+      //fs.unlinkSync(result.filePath);
+      if (e.response.data != undefined) {
+        if (e.response.data.returnCode == "401") {
+          await this.login();
+          return await this.uploadDocument(
+            dtoMcLoanProfileRepository,
+            dtoAttachFiles,
+            appStatus
+          );
+        }
+        response = e.response.data;
+      } else {
+        response = e.response;
+      }
+    } finally {
+      let log = new SendDataLog();
+      log.apiUrl = configdata.url;
+      await this.writeLog(
+        configdata.url,
+        "uploadDocument - " + appStatus,
+        configdata.headers,
+        "post",
+        obj,
+        response
+      );
+    }
     return response;
   }
 
