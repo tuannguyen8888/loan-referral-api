@@ -57,6 +57,14 @@ export class McAttachfileService extends BaseService {
           arrgroupId: dto.arrgroupId
         });
       }
+      if (dto.hassend == 0) {
+        query = query.andWhere("hassend is null");
+      }
+      if (dto.hassend) {
+        query = query.andWhere("hassend != :hassend", {
+          hassend: dto.hassend
+        });
+      }
       if (dto.keyword)
         query = query.andWhere(
           "( fileName like :keyword " +
@@ -151,6 +159,35 @@ export class McAttachfileService extends BaseService {
         return {
           statusCode: 200,
           message: "Xóa thành công"
+        };
+      } else {
+        return {
+          statusCode: 403,
+          message: "Đã bị xóa!"
+        };
+      }
+    } catch (e) {
+      return {
+        statusCode: 404,
+        message: "Không tồn tại!"
+      };
+    }
+  }
+  async updateColAttachfile(id: number, col: string, value: any) {
+    try {
+      let attactFile = await this.getAttachfile(id);
+      const repo = this.connection.getCustomRepository(McAttachfileRepository);
+      let jsonstr = `{"${col}":"${value}"}`;
+      if (attactFile.deletedBy == null) {
+        let queryupdate = repo
+          .createQueryBuilder()
+          .update()
+          .set(JSON.parse(jsonstr))
+          .where("id = :id", { id: id });
+        await queryupdate.execute();
+        return {
+          statusCode: 200,
+          message: "Update thành công"
         };
       } else {
         return {

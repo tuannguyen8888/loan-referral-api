@@ -60,10 +60,7 @@ export class McProductController {
 
   @Post("/")
   @ApiOperation({ summary: "Thêm sản phẩm" })
-  createProduct(
-    @Headers() headers,
-    @Body() dto: McProductDto
-  ): Promise<any> {
+  createProduct(@Headers() headers, @Body() dto: McProductDto): Promise<any> {
     return this.service.createProduct(dto);
   }
 

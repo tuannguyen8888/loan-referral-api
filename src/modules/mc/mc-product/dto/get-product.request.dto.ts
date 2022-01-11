@@ -5,7 +5,7 @@ export class GetMCProductRequestDto {
   // @IsOptional()
   // partner_id?: number;
   @IsOptional()
-  productid:number;
+  productid: number;
   @IsOptional()
   keyword: string;
   @IsOptional()

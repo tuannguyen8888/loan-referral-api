@@ -17,6 +17,7 @@ export class McAttachfileResponseDto {
   mimeType: string = null;
   groupId: number = null;
   url: string = null;
+  hassend: number = null;
 
   @IsOptional()
   @IsDateString()
