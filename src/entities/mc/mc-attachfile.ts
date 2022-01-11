@@ -65,6 +65,14 @@ export class McAttachfile {
   })
   groupId: number;
 
+  @Column("int", {
+    name: "hassend",
+    nullable: true,
+    default: 0,
+    comment: "File đã gửi"
+  })
+  hassend: number;
+
   @Column("text", { name: "url" })
   url: string;
   // @Column("varchar", {

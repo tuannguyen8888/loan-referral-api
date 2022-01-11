@@ -13,6 +13,8 @@ export class GetMCAttachfileRequestDto {
 
   @IsOptional()
   groupId: number;
+  @IsOptional()
+  hassend: number;
 
   @IsOptional()
   arrgroupId: string;
