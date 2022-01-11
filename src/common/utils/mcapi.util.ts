@@ -595,6 +595,8 @@ export class McapiUtil {
     console.log(obj);
     data.append("file", fs.createReadStream(result.filePath));
     data.append("object", JSON.stringify(obj));
+    console.log(data);
+    response = obj;
     var configdata = {
       method: "post",
       url: mc_api_config.endpoint + "mobile-4sales/upload-document",
@@ -606,45 +608,45 @@ export class McapiUtil {
       }
     };
 
-    try {
-      let result = await axios.post(configdata.url, data, {
-        headers: configdata.headers,
-        maxContentLength: 100000000,
-        maxBodyLength: 1000000000
-      });
-      //fs.unlinkSync(result.filePath);
-
-      response = result.data;
-      response.returnCode = "200";
-    } catch (e) {
-      console.log("ERROR");
-      console.log(e);
-      //fs.unlinkSync(result.filePath);
-      if (e.response.data != undefined) {
-        if (e.response.data.returnCode == "401") {
-          await this.login();
-          return await this.uploadDocument(
-            dtoMcLoanProfileRepository,
-            dtoAttachFiles,
-            appStatus
-          );
-        }
-        response = e.response.data;
-      } else {
-        response = e.response;
-      }
-    } finally {
-      let log = new SendDataLog();
-      log.apiUrl = configdata.url;
-      await this.writeLog(
-        configdata.url,
-        "uploadDocument - " + appStatus,
-        configdata.headers,
-        "post",
-        obj,
-        response
-      );
-    }
+    // try {
+    //   let result = await axios.post(configdata.url, data, {
+    //     headers: configdata.headers,
+    //     maxContentLength: 100000000,
+    //     maxBodyLength: 1000000000
+    //   });
+    //   //fs.unlinkSync(result.filePath);
+    //
+    //   response = result.data;
+    //   response.returnCode = "200";
+    // } catch (e) {
+    //   console.log("ERROR");
+    //   console.log(e);
+    //   //fs.unlinkSync(result.filePath);
+    //   if (e.response.data != undefined) {
+    //     if (e.response.data.returnCode == "401") {
+    //       await this.login();
+    //       return await this.uploadDocument(
+    //         dtoMcLoanProfileRepository,
+    //         dtoAttachFiles,
+    //         appStatus
+    //       );
+    //     }
+    //     response = e.response.data;
+    //   } else {
+    //     response = e.response;
+    //   }
+    // } finally {
+    //   let log = new SendDataLog();
+    //   log.apiUrl = configdata.url;
+    //   await this.writeLog(
+    //     configdata.url,
+    //     "uploadDocument - " + appStatus,
+    //     configdata.headers,
+    //     "post",
+    //     obj,
+    //     response
+    //   );
+    // }
     return response;
   }
 

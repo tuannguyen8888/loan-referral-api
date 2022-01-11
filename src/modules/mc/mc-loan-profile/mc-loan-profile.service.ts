@@ -314,11 +314,18 @@ export class McLoanProfileService extends BaseService {
 
   async uploadDocument(id, appStatus) {
     console.log("uploadDocument new");
+    console.log(appStatus);
     let loanProfileResponseDTO = await this.getLoanProfile(id);
-    console.log(loanProfileResponseDTO);
+    //console.log(loanProfileResponseDTO);
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let attachRequest = new GetMCAttachfileRequestDto();
     let attachFiles = new McAttachfilesResponseDto();
+    let attachserviec = new McAttachfileService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil
+    );
     if (appStatus == 1) {
       attachRequest.profileid = id;
       attachRequest.page = 1;
@@ -335,7 +342,7 @@ export class McLoanProfileService extends BaseService {
       let returnchecklist = await mcapi.getReturnChecklist(
         loanProfileResponseDTO.appid
       );
-      console.log(returnchecklist);
+      //console.log(returnchecklist);
       if (returnchecklist["returnCode"] == "400") {
         return returnchecklist;
       }
@@ -348,17 +355,16 @@ export class McLoanProfileService extends BaseService {
       console.log("------------");
       attachRequest.profileid = id;
       attachRequest.arrgroupId = arr_groupid.join(",");
+      attachRequest.hassend = 0;
       attachRequest.page = 1;
       attachRequest.pagesize = 0;
-      let attachserviec = new McAttachfileService(
-        this.request,
-        this.logger,
-        this.redisClient,
-        this.requestUtil
-      );
+
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     }
-
+    for (const attachFile of attachFiles.rows) {
+      console.log(attachFile.id);
+      await attachserviec.updateColAttachfile(attachFile.id, "hassend", 1);
+    }
     var response = await mcapi.uploadDocument(
       loanProfileResponseDTO,
       attachFiles,
@@ -377,6 +383,7 @@ export class McLoanProfileService extends BaseService {
         })
         .where("id = :id", { id: id });
       await query.execute();
+      //Cập nhật mc_attachfile.hassend = 1
     } else {
       const repo = this.connection.getCustomRepository(McLoanProfileRepository);
       let query = repo
