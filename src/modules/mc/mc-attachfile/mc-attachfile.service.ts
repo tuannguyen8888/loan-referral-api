@@ -61,7 +61,7 @@ export class McAttachfileService extends BaseService {
         query = query.andWhere("hassend is null");
       }
       if (dto.hassend) {
-        query = query.andWhere("hassend != :hassend", {
+        query = query.andWhere("hassend = :hassend", {
           hassend: dto.hassend
         });
       }
