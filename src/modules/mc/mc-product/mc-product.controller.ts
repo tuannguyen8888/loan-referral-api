@@ -63,7 +63,7 @@ export class McProductController {
   createProduct(
     @Headers() headers,
     @Body() dto: McProductDto
-  ): Promise<McProductDto> {
+  ): Promise<any> {
     return this.service.createProduct(dto);
   }
 
