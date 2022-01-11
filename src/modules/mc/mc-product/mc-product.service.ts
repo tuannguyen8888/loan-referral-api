@@ -70,7 +70,7 @@ export class McProductService extends BaseService {
     try {
       const repo = this.connection.getCustomRepository(McProductRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
-      if(dto.productid){
+      if (dto.productid) {
         query = query.andWhere("productid = :productid", {
           productid: dto.productid
         });
@@ -116,30 +116,29 @@ export class McProductService extends BaseService {
     reqDto.productid = dto.productid;
     let dtoProductResponses = await this.getAllProducts(reqDto);
     console.log(dtoProductResponses);
-    if(dtoProductResponses.count == 0){
+    if (dtoProductResponses.count == 0) {
       let entity: McProduct = this.convertDto2Entity(dto, McProduct);
       entity.createdBy = dto.createdBy;
       entity.createdAt = new Date();
       console.log(entity);
       this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
       let result = await this.connection
-          .getCustomRepository(McProductRepository)
-          .save(entity);
+        .getCustomRepository(McProductRepository)
+        .save(entity);
       this.logger.verbose(`insertResult = ${result}`);
       console.log(result);
       let response: McProductDto = this.convertEntity2Dto(
-          result,
-          McProduct,
-          McProductDto
+        result,
+        McProduct,
+        McProductDto
       );
       return response;
-    }else {
-       return {
-         "statusCode": 300,
-         "message": "Sản phẩm bị trùng"
-       };
+    } else {
+      return {
+        statusCode: 300,
+        message: "Sản phẩm bị trùng"
+      };
     }
-
   }
 
   async updateProduct(dto: McProductUpdateDto) {

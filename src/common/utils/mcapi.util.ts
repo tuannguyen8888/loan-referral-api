@@ -507,7 +507,6 @@ export class McapiUtil {
     }
     var info = [];
     let i = 1;
-    console.log(dtoAttachFiles.rows);
     for (const attachFile of dtoAttachFiles.rows) {
       if (attachFile.url != "") {
         let ext: any = attachFile.url.split(".");
@@ -515,7 +514,7 @@ export class McapiUtil {
         let fileName = `${i}.${ext}`;
         let filePath = `${dir}/${fileName}`;
         var requestUtil = new RequestUtil(this.httpService);
-        console.log(i);
+        console.log(attachFile);
         console.log("download file " + fileName);
         await requestUtil.downloadPublicFile(attachFile.url, filePath);
         let item = {
@@ -595,6 +594,8 @@ export class McapiUtil {
     console.log(obj);
     data.append("file", fs.createReadStream(result.filePath));
     data.append("object", JSON.stringify(obj));
+    console.log(data);
+    response = obj;
     var configdata = {
       method: "post",
       url: mc_api_config.endpoint + "mobile-4sales/upload-document",
@@ -638,7 +639,7 @@ export class McapiUtil {
       log.apiUrl = configdata.url;
       await this.writeLog(
         configdata.url,
-        "uploadDocument",
+        "uploadDocument - " + appStatus,
         configdata.headers,
         "post",
         obj,
