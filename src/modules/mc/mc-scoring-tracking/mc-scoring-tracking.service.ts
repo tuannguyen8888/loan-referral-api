@@ -8,12 +8,16 @@ import { BaseService } from "../../../common/services";
 
 import * as moment from "moment";
 import { GetMCScoringTrackingRequestDto } from "./dto/get-scoring-tracking.request.dto";
-import { McScoringTrackingRepository } from "../../../repositories";
+import {
+  McScoringTrackingRepository,
+  SaleGroupRepository
+} from "../../../repositories";
 import { McScoringTrackingsResponseDto } from "./dto/mc-scoring-trackings.response.dto";
 import { McScoringTracking } from "../../../entities";
 import { McScoringTrackingResponseDto } from "./dto/mc-scoring-tracking.response.dto";
 import { McScoringTrackingDto } from "./dto/mc-scoring-tracking.dto";
 import { McScoringTrackingUpdateDto } from "./dto/mc-scoring-tracking.update.dto";
+import { IsNull, Like } from "typeorm";
 
 @Injectable()
 export class McScoringTrackingService extends BaseService {
@@ -49,10 +53,37 @@ export class McScoringTrackingService extends BaseService {
         //query = query.andWhere("verificationCode is null");
       }
       if (dto.user_id) {
-        query = query.andWhere("created_by = :created_by", {
-          created_by: dto.user_id
-        });
+        let userGroup = await this.connection
+          .getCustomRepository(SaleGroupRepository)
+          .findOne({
+            where: {
+              deletedAt: IsNull(),
+              email: dto.user_id
+            }
+          });
+        if (userGroup) {
+          let userGroups = await this.connection
+            .getCustomRepository(SaleGroupRepository)
+            .find({
+              where: {
+                deletedAt: IsNull(),
+                treePath: Like(`${userGroup.treePath}%`)
+              }
+            });
+          let userEmails = [];
+          if (userGroups && userGroups.length) {
+            userGroups.forEach(ug => userEmails.push(ug.email));
+          }
+          query = query.andWhere("created_by IN (:...userEmails)", {
+            userEmails: userEmails
+          });
+        } else {
+          query = query.andWhere("created_by = :userId", {
+            userId: dto.user_id
+          });
+        }
       }
+
       if (dto.keyword)
         query = query.andWhere("productname like :keyword", {
           keyword: "%" + dto.keyword + "%"
