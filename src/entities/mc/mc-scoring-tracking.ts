@@ -24,6 +24,15 @@ export class McScoringTracking {
   primaryPhone: string;
 
   @Column("varchar", {
+    name: "fullname",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Tên khách hàng"
+  })
+  fullname: string;
+
+  @Column("varchar", {
     name: "nationalId",
     length: 20,
     nullable: true,
