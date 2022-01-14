@@ -190,7 +190,7 @@ export class LoanProfileService extends BaseService {
         "D4.10",
         "D4.9",
         "D2.5",
-        "D2.1"
+        // "D2.1" // bỏ theo yêu cầu của Công
       ];
       if (data && data.length) {
         for (const item of data) {
