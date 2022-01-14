@@ -85,7 +85,10 @@ export class McScoringTrackingService extends BaseService {
       }
 
       if (dto.keyword)
-        query = query.andWhere("productname like :keyword", {
+        query = query.andWhere("(productname like :keyword " +
+            "OR fullname like :keyword OR " +
+            "OR nationalId like :keyword OR " +
+            "primaryPhone like :keyword)", {
           keyword: "%" + dto.keyword + "%"
         });
       if (dto.sortcol) {

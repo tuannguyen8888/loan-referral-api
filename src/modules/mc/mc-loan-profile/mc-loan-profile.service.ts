@@ -478,6 +478,7 @@ export class McLoanProfileService extends BaseService {
     let dtoScoringTracking = new McScoringTrackingDto();
     dtoScoringTracking.typeScore = dto.typeScore;
     dtoScoringTracking.primaryPhone = dto.phone;
+    dtoScoringTracking.fullname = dto.customerName;
     dtoScoringTracking.requestSendOtp3P = JSON.stringify(response);
     dtoScoringTracking.createdBy = dto.user_id;
     await scoringTrackingService.createScoringTracking(dtoScoringTracking);
