@@ -13,7 +13,7 @@ export class McScoringTrackingUpdateDto {
   id: number = null;
   typeScore: string = null;
   primaryPhone: string = null;
-  fullname: string = null;
+  //fullname: string = null;
   nationalId: string = null;
   verificationCode: string = null;
   requestSendOtp3P: string = null;
