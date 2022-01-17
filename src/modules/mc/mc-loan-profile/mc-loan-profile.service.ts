@@ -92,6 +92,10 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("citizenId = :citizenId", {
           citizenId: dto.citizenId
         });
+      if (dto.refid)
+        query = query.andWhere("refid = :refid", {
+          refid: dto.refid
+        });
       if (dto.bpmStatus)
         query = query.andWhere("bpmStatus = :bpmStatus", {
           bpmStatus: dto.bpmStatus
