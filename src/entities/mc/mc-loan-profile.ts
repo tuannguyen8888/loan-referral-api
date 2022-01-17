@@ -13,7 +13,14 @@ export class McLoanProfile {
     comment: "Chứng minh thư"
   })
   citizenId: string;
-
+  @Column("varchar", {
+    name: "refid",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Mã tham chiếu"
+  })
+  refid: string;
   @Column("varchar", {
     name: "customerName",
     length: 255,
