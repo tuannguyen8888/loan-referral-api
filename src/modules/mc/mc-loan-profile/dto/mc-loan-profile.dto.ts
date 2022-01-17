@@ -18,6 +18,7 @@ export class McLoanProfileDto {
   @IsOptional()
   id?: number = null;
   citizenId: string = null;
+  refid: string = null;
   customerName: string = null;
   gender: string = null;
   address: string = null;

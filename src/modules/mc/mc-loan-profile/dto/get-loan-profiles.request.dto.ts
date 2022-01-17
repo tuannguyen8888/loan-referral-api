@@ -14,6 +14,8 @@ export class GetMCLoanProfilesRequestDto {
   @IsOptional()
   citizenId: string;
   @IsOptional()
+  refid: string;
+  @IsOptional()
   cicResult?: number;
   @IsOptional()
   status?: string;
