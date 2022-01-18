@@ -571,6 +571,7 @@ export class LoanProfileService extends BaseService {
       entity.fvStatus = "SENT_QDE";
       entity.loanStatus = "QDE";
       entity.createdAt = new Date();
+      entity.refid = dto.refid;
       let qdeChangeResult = await this.sendData_procQDEChangeState(
         entity.loanNo
       );

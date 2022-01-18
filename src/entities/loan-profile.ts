@@ -506,4 +506,7 @@ export class LoanProfile {
 
   @Column("varchar", { name: "deleted_by", nullable: true, length: 255 })
   deletedBy: string;
+
+  @Column("varchar", { name: "refid", nullable: true, length: 255 })
+  refid: string;
 }
