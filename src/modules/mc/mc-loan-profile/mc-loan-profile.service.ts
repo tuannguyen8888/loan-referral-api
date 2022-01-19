@@ -221,6 +221,7 @@ export class McLoanProfileService extends BaseService {
       McLoanProfile,
       LoanProfileResponseDto
     );
+    response.productName = response.productName.trim();
     return response;
   }
 
