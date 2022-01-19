@@ -63,6 +63,9 @@ export class McProductService extends BaseService {
     console.log("Get Products");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.getProducts();
+    for (const i in response) {
+      response[i].productName = response[i].productName.trim();
+    }
     return response;
   }
 
