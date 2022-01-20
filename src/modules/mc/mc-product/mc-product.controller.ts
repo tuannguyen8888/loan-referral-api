@@ -39,6 +39,12 @@ export class McProductController {
     console.log("Lấy danh sách product");
     return this.service.getProducts();
   }
+  @Get("/update")
+  @ApiOperation({ summary: "Lấy danh sách sản phẩm và câp nhật" })
+  getProductsUpdate(@Headers() headers): Promise<McProductRepository> {
+    console.log("Lấy danh sách product");
+    return this.service.getProductsUpdate();
+  }
   @Get("/all")
   @ApiOperation({ summary: "Lấy danh sách sản phẩm" })
   getAllProducts(
