@@ -14,6 +14,15 @@ export class McProduct {
   productid: number;
 
   @Column("varchar", {
+    name: "productcode",
+    length: 255,
+    nullable: true,
+    default: "",
+    comment: "Mã sản phẩm"
+  })
+  productcode: string;
+
+  @Column("varchar", {
     name: "productname",
     length: 255,
     nullable: true,
