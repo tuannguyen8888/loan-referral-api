@@ -34,6 +34,7 @@ import { RedisClient } from "../../../common/shared";
 import { RequestUtil } from "../../../common/utils";
 
 import {
+  McLoanProfileRepository,
   McProductRepository,
   SendDataLogRepository
 } from "../../../repositories";
@@ -58,7 +59,26 @@ export class McProductService extends BaseService {
   ) {
     super(request, logger, redisClient);
   }
-
+  async getProductsUpdate() {
+    console.log("Get Products");
+    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    var response = await mcapi.getProducts();
+    for (const i in response) {
+      console.log(response[i]);
+      response[i].productName = response[i].productName.trim();
+      //Cập nhat product code
+      const repo = this.connection.getCustomRepository(McProductRepository);
+      let queryupdate = repo
+          .createQueryBuilder()
+          .update()
+          .set({
+            productcode: response[i].productCode
+          })
+          .where("productname = :productname", { productname: response[i].productName});
+      await queryupdate.execute();
+    }
+    return response;
+  }
   async getProducts() {
     console.log("Get Products");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
