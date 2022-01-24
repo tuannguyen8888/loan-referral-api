@@ -1,55 +1,35 @@
-import {
-  BadRequestException,
-  HttpService,
-  Inject,
-  Injectable,
-  Scope
-} from "@nestjs/common";
-import { In, IsNull, Like } from "typeorm";
-import * as moment from "moment";
-import {
-  Address,
-  LoanProfile,
-  McCaseNote,
-  McLoanProfile,
-  McProduct,
-  Process,
-  PtfAddress,
-  PtfAttachFile,
-  PtfEmploymentInformation,
-  PtfLoanProfile,
-  PtfLoanProfileDefer,
-  PtfRelatedPerson,
-  SendDataLog
-} from "../../../entities";
-import * as FormData from "form-data";
-import * as fs from "fs";
-import * as config from "config";
-import { ProcessDto } from "../../mafc/loan-profile/dto";
-
+import { HttpService, Inject, Injectable } from "@nestjs/common";
+import { BaseService } from "../../../common/services";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 import { Logger } from "../../../common/loggers";
 import { RedisClient } from "../../../common/shared";
 import { RequestUtil } from "../../../common/utils";
-
+import { GetMCProductRequestDto } from "../../mc/mc-product/dto/get-product.request.dto";
 import {
   McLoanProfileRepository,
   McProductRepository,
-  SendDataLogRepository
+  VibIntroduceRepository
 } from "../../../repositories";
-import { BaseService } from "../../../common/services";
-import { McapiUtil } from "../../../common/utils/mcapi.util";
-
-import { GetMCProductRequestDto } from "./dto/get-product.request.dto";
-
-import { McProductDto } from "./dto/mc-product.dto";
-import { McProductsResponseDto } from "./dto/mc-products.response.dto";
-import { McProductResponseDto } from "./dto/mc-product.response.dto";
-import { McProductUpdateDto } from "./dto/mc-product.update.dto";
+import { McProductsResponseDto } from "../../mc/mc-product/dto/mc-products.response.dto";
+import { McCaseNote, McLoanProfile, McProduct } from "../../../entities";
+import { McProductResponseDto } from "../../mc/mc-product/dto/mc-product.response.dto";
+import { GetVibIntroduceRequestDto } from "./dto/get-introduce.request.dto";
+import * as moment from "moment";
+import {
+  LoanProfileUpdateDto,
+  McLoanProfileDto
+} from "../../mc/mc-loan-profile/dto";
+import { VibIntroduceDto } from "./dto/vib-introduce.dto";
+import { VibIntroduceUpdateDto } from "./dto/vib-introduce.update.dto";
+import { VibIntroduceResponseDto } from "./dto/vib-introduce.response.dto";
+import { VIBIntroduce } from "../../../entities/vib/vib-introduce-entiy";
+import { VibIntroducesResponseDto } from "./dto/vib-introduces.response.dto";
+import { McCaseNoteRepository } from "../../../repositories/mc/mc-case-note.repository";
+import { McCaseNoteResponseDto } from "../../mc/mc-case-note/dto/mc-case-note.response.dto";
 
 @Injectable()
-export class McProductService extends BaseService {
+export class VibIntroduceService extends BaseService {
   constructor(
     @Inject(REQUEST) protected request: Request,
     protected readonly logger: Logger,
@@ -59,62 +39,64 @@ export class McProductService extends BaseService {
   ) {
     super(request, logger, redisClient);
   }
-  async getProductsUpdate() {
-    console.log("Get Products");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.getProducts();
-    for (const i in response) {
-      console.log(response[i]);
-      response[i].productName = response[i].productName.trim();
-      //Cập nhat product code
-      const repo = this.connection.getCustomRepository(McProductRepository);
-      let queryupdate = repo
-        .createQueryBuilder()
-        .update()
-        .set({
-          productcode: response[i].productCode
-        })
-        .where("productname = :productname", {
-          productname: response[i].productName
-        });
-      await queryupdate.execute();
-    }
-    return response;
-  }
-  async getProducts() {
-    console.log("Get Products");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.getProducts();
-    for (const i in response) {
-      response[i].productName = response[i].productName.trim();
-    }
-    return response;
-  }
-
-  async getAllProducts(dto: GetMCProductRequestDto) {
+  async getAllIntroduces(dto: GetVibIntroduceRequestDto) {
     try {
       const repo = this.connection.getCustomRepository(McProductRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
-      if (dto.productid) {
-        query = query.andWhere("productid = :productid", {
-          productid: dto.productid
+      if (dto.regisdatefrom) {
+        query = query.andWhere("regisdate >= :regisdatefrom", {
+          regisdatefrom: dto.regisdatefrom
+        });
+      }
+      if (dto.regisdateto) {
+        query = query.andWhere("regisdate <= :regisdateto", {
+          regisdateto: dto.regisdateto
+        });
+      }
+      if (dto.cardtype) {
+        query = query.andWhere("cardtype = :cardtype", {
+          cardtype: dto.cardtype
+        });
+      }
+      if (dto.statuslead) {
+        query = query.andWhere("statuslead = :statuslead", {
+          statuslead: dto.statuslead
+        });
+      }
+      if (dto.statusapproval) {
+        query = query.andWhere("statusapproval = :statusapproval", {
+          statusapproval: dto.statusapproval
+        });
+      }
+      if (dto.paid) {
+        query = query.andWhere("paid = :paid", {
+          paid: dto.paid
         });
       }
       if (dto.keyword)
-        query = query.andWhere("productname like :keyword", {
-          keyword: "%" + dto.keyword + "%"
-        });
+        query = query.andWhere(
+          "(source like :keyword " +
+            "OR source like :keyword" +
+            "OR introduceby like :keyword" +
+            "OR customername like :keyword" +
+            "OR customerphone like :keyword" +
+            "OR province like :keyword" +
+            ")",
+          {
+            keyword: "%" + dto.keyword + "%"
+          }
+        );
       query = query.orderBy("id", "DESC");
 
-      const result = new McProductsResponseDto();
+      const result = new VibIntroducesResponseDto();
 
       let data, count;
       [data, count] = await query.getManyAndCount();
       result.count = count;
       result.rows = this.convertEntities2Dtos(
         data,
-        McProduct,
-        McProductResponseDto
+        VIBIntroduce,
+        VibIntroduceResponseDto
       );
       return result;
     } catch (e) {
@@ -122,65 +104,50 @@ export class McProductService extends BaseService {
       throw e;
     }
   }
+  async createIntroduce(dto: VibIntroduceDto) {
+    console.log(dto);
+    let entity: VIBIntroduce = this.convertDto2Entity(dto, VIBIntroduce);
+    entity.createdBy = dto.createdBy;
+    entity.createdAt = new Date();
 
-  async getProduct(id: number) {
+    this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
-      .getCustomRepository(McProductRepository)
-      .findOne(id);
-    let response: McProductResponseDto = this.convertEntity2Dto(
+      .getCustomRepository(VibIntroduceRepository)
+      .save(entity);
+    this.logger.verbose(`insertResult = ${result}`);
+
+    let response: VibIntroduceDto = this.convertEntity2Dto(
       result,
-      McProduct,
-      McProductResponseDto
+      VIBIntroduce,
+      VibIntroduceDto
     );
     return response;
   }
-
-  async createProduct(dto: McProductDto) {
-    //Kiểm tra có tồn tại id
-    let reqDto = new GetMCProductRequestDto();
-    reqDto.productid = dto.productid;
-    let dtoProductResponses = await this.getAllProducts(reqDto);
-    console.log(dtoProductResponses);
-    if (dtoProductResponses.count == 0) {
-      let entity: McProduct = this.convertDto2Entity(dto, McProduct);
-      entity.createdBy = dto.createdBy;
-      entity.createdAt = new Date();
-      console.log(entity);
-      this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
-      let result = await this.connection
-        .getCustomRepository(McProductRepository)
-        .save(entity);
-      this.logger.verbose(`insertResult = ${result}`);
-      console.log(result);
-      let response: McProductDto = this.convertEntity2Dto(
-        result,
-        McProduct,
-        McProductDto
-      );
-      return response;
-    } else {
-      return {
-        statusCode: 300,
-        message: "Sản phẩm bị trùng"
-      };
-    }
+  async getVibIntroduce(id: number) {
+    let result = await this.connection
+      .getCustomRepository(VibIntroduceRepository)
+      .findOne(id);
+    let response: VibIntroduceResponseDto = this.convertEntity2Dto(
+      result,
+      McCaseNote,
+      VibIntroduceResponseDto
+    );
+    return response;
   }
-
-  async updateProduct(dto: McProductUpdateDto) {
-    let entityUpdate: McProduct = this.convertDto2Entity(dto, McProduct);
+  async updateVibIntroduce(dto: VibIntroduceUpdateDto) {
+    let entityUpdate: VIBIntroduce = this.convertDto2Entity(dto, VIBIntroduce);
     entityUpdate.updatedBy = dto.updatedBy;
     entityUpdate.updatedAt = new Date();
     let result = await this.connection
-      .getCustomRepository(McProductRepository)
+      .getCustomRepository(VibIntroduceRepository)
       .save(entityUpdate);
-    let response: McProductUpdateDto = this.convertEntity2Dto(
+    let response: VibIntroduceUpdateDto = this.convertEntity2Dto(
       result,
-      McProduct,
-      McProductUpdateDto
+      VIBIntroduce,
+      VibIntroduceUpdateDto
     );
     return response;
   }
-
   private convertEntity2Dto(entity, entityClass, dtoClass) {
     let dto = new dtoClass();
     let dtoKeys = Object.getOwnPropertyNames(dto);

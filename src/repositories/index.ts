@@ -35,3 +35,4 @@ export * from "./mc/mc-case.repository";
 export * from "./mc/mc-notification.repository";
 export * from "./mc/mc-attachfile.repository";
 export * from "./mc/mc-scroring-tracking.repository";
+export * from "./vib/vib-introduce.repository";

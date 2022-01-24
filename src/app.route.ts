@@ -15,6 +15,7 @@ import { McNotificationModule } from "./modules/mc/mc-notification/mc-notificati
 import { McAttachfileModule } from "./modules/mc/mc-attachfile/mc-attachfile.module";
 import { PartnerLoanProfileModule } from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
 import { McScoringTrackingModule } from "./modules/mc/mc-scoring-tracking/mc-scoring-tracking.module";
+import { VibIntroduceModule } from "./modules/vib/vib-introduce/vib-introduce.module";
 
 export const ROUTES: Routes = [
   {
@@ -51,5 +52,9 @@ export const ROUTES: Routes = [
   {
     path: "api/partner",
     children: [PartnerLoanProfileModule]
+  },
+  {
+    path: "api/partner",
+    children: [VibIntroduceModule]
   }
 ];

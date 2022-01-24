@@ -33,3 +33,4 @@ export * from "./mc/mc-notification";
 export * from "./mc/mc-attachfile";
 export * from "./mc/mc-product";
 export * from "./mc/mc-scoring-tracking";
+export * from "./vib/vib-introduce";
