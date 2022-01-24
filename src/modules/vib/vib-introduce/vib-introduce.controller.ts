@@ -9,8 +9,6 @@ import {
 } from "@nestjs/common";
 import { VibIntroduceService } from "./vib-introduce.service";
 import { ApiOperation } from "@nestjs/swagger";
-import { McCaseNoteDto } from "../../mc/mc-case-note/dto/mc-case-note.dto";
-import { McCaseNoteUpdateDto } from "../../mc/mc-case-note/dto/mc-case-note.update.dto";
 import { GetVibIntroduceRequestDto } from "./dto/get-introduce.request.dto";
 import { VibIntroducesResponseDto } from "./dto/vib-introduces.response.dto";
 import { VibIntroduceResponseDto } from "./dto/vib-introduce.response.dto";
