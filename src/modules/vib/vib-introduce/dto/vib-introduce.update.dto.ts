@@ -23,8 +23,6 @@ export class VibIntroduceUpdateDto {
   intidate: number = null;
   carddeliverydate: number = null;
   cardactivedate: number = null;
-  commission: number = null;
-  paid: number = null;
 
   @IsOptional()
   @IsDateString()

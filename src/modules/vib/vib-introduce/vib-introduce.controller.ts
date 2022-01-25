@@ -14,6 +14,7 @@ import { VibIntroducesResponseDto } from "./dto/vib-introduces.response.dto";
 import { VibIntroduceResponseDto } from "./dto/vib-introduce.response.dto";
 import { VibIntroduceDto } from "./dto/vib-introduce.dto";
 import { VibIntroduceUpdateDto } from "./dto/vib-introduce.update.dto";
+import {VibIntroduceUpdateCommissionDto} from "./dto/vib-introduce.update.commission.dto";
 
 @Controller("vib-introduce")
 export class VibIntroduceController {
@@ -21,7 +22,7 @@ export class VibIntroduceController {
 
   @Get("/")
   @ApiOperation({ summary: "Lấy danh sách Giới thiệu" })
-  getAllCaseNotes(
+  getAllIntroduce(
     @Headers() headers,
     @Body() dto: GetVibIntroduceRequestDto
   ): Promise<VibIntroducesResponseDto> {
@@ -31,7 +32,7 @@ export class VibIntroduceController {
 
   @Get("/:id")
   @ApiOperation({ summary: "Lấy chi tiết Case Note" })
-  getCaseNote(
+  getIntroduce(
     @Headers() headers,
     @Param() params
   ): Promise<VibIntroduceResponseDto> {
@@ -40,7 +41,7 @@ export class VibIntroduceController {
 
   @Post("/")
   @ApiOperation({ summary: "Thêm giới thiệu" })
-  createCaseNote(
+  createIntroduce(
     @Headers() headers,
     @Body() dto: VibIntroduceDto
   ): Promise<VibIntroduceDto> {
@@ -49,10 +50,18 @@ export class VibIntroduceController {
 
   @Put("/")
   @ApiOperation({ summary: "Sửa giới thiệu" })
-  updateCaseNote(
+  updateIntroduce(
     @Headers() headers,
     @Body() dto: VibIntroduceUpdateDto
   ): Promise<VibIntroduceUpdateDto> {
     return this.service.updateVibIntroduce(dto);
+  }
+  @Put("/updateCommission")
+  @ApiOperation({ summary: "Cập nhật hoa hồng" })
+  updateIntroduceCommission(
+      @Headers() headers,
+      @Body() dto: VibIntroduceUpdateCommissionDto
+  ): Promise<VibIntroduceUpdateDto> {
+    return this.service.updateVibIntroduceCommission(dto);
   }
 }

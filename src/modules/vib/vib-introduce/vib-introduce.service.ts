@@ -21,6 +21,7 @@ import { VibIntroduceUpdateDto } from "./dto/vib-introduce.update.dto";
 import { VibIntroduceResponseDto } from "./dto/vib-introduce.response.dto";
 import { VIBIntroduce } from "../../../entities/vib/vib-introduce-entiy";
 import { VibIntroducesResponseDto } from "./dto/vib-introduces.response.dto";
+import {VibIntroduceUpdateCommissionDto} from "./dto/vib-introduce.update.commission.dto";
 
 
 @Injectable()
@@ -141,6 +142,20 @@ export class VibIntroduceService extends BaseService {
       result,
       VIBIntroduce,
       VibIntroduceUpdateDto
+    );
+    return response;
+  }
+  async updateVibIntroduceCommission(dto: VibIntroduceUpdateCommissionDto) {
+    let entityUpdate: VIBIntroduce = this.convertDto2Entity(dto, VIBIntroduce);
+    entityUpdate.updatedBy = dto.updatedBy;
+    entityUpdate.updatedAt = new Date();
+    let result = await this.connection
+        .getCustomRepository(VibIntroduceRepository)
+        .save(entityUpdate);
+    let response: VibIntroduceUpdateDto = this.convertEntity2Dto(
+        result,
+        VIBIntroduce,
+        VibIntroduceUpdateCommissionDto
     );
     return response;
   }
