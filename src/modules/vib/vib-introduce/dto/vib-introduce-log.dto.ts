@@ -7,16 +7,10 @@ import {
   Matches
 } from "class-validator";
 
-export class VibIntroduceDto {
+export class VibIntroduceLogDto {
   @IsOptional()
   id?: number = null;
-  regisdate: number = null;
-  source: string = null;
-  introduceby: string = null;
-  cardtype: string = null;
-  customername: string = null;
-  customerphone: string = null;
-  province: string = null;
+  introduceid: number = null;
   statuslead: string = null;
   statusapproval: string = null;
   intidate: number = null;

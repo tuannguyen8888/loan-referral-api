@@ -34,3 +34,4 @@ export * from "./mc/mc-attachfile";
 export * from "./mc/mc-product";
 export * from "./mc/mc-scoring-tracking";
 export * from "./vib/vib-introduce-entiy";
+export * from "./vib/vib-introduce-log-entiy";

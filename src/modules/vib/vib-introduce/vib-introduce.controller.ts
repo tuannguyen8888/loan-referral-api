@@ -14,7 +14,7 @@ import { VibIntroducesResponseDto } from "./dto/vib-introduces.response.dto";
 import { VibIntroduceResponseDto } from "./dto/vib-introduce.response.dto";
 import { VibIntroduceDto } from "./dto/vib-introduce.dto";
 import { VibIntroduceUpdateDto } from "./dto/vib-introduce.update.dto";
-import {VibIntroduceUpdateCommissionDto} from "./dto/vib-introduce.update.commission.dto";
+import { VibIntroduceUpdateCommissionDto } from "./dto/vib-introduce.update.commission.dto";
 
 @Controller("vib-introduce")
 export class VibIntroduceController {
@@ -44,7 +44,7 @@ export class VibIntroduceController {
   createIntroduce(
     @Headers() headers,
     @Body() dto: VibIntroduceDto
-  ): Promise<VibIntroduceDto> {
+  ): Promise<VibIntroduceResponseDto> {
     return this.service.createIntroduce(dto);
   }
 
@@ -59,8 +59,8 @@ export class VibIntroduceController {
   @Put("/updateCommission")
   @ApiOperation({ summary: "Cập nhật hoa hồng" })
   updateIntroduceCommission(
-      @Headers() headers,
-      @Body() dto: VibIntroduceUpdateCommissionDto
+    @Headers() headers,
+    @Body() dto: VibIntroduceUpdateCommissionDto
   ): Promise<VibIntroduceUpdateDto> {
     return this.service.updateVibIntroduceCommission(dto);
   }

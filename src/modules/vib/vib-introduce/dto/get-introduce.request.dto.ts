@@ -5,6 +5,8 @@ export class GetVibIntroduceRequestDto {
   // @IsOptional()
   // partner_id?: number;
   @IsOptional()
+  source: string = null;
+  @IsOptional()
   regisdatefrom: number;
   @IsOptional()
   regisdateto: number;

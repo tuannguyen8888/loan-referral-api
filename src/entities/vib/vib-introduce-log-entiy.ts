@@ -1,71 +1,17 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("vib_introduce", { schema: "loan_referral" })
-export class VIBIntroduce {
+@Entity("vib_introduce_log", { schema: "loan_referral" })
+export class VIBIntroduceLog {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
   @Column("int", {
-    name: "regisdate",
+    name: "introduceid",
     default: 0,
     nullable: true,
-    comment: "Ngày đăng ký"
+    comment: ""
   })
-  regisdate: number;
-
-  @Column("varchar", {
-    name: "source",
-    length: 255,
-    nullable: true,
-    default: "",
-    comment: "Nguồn"
-  })
-  source: string;
-
-  @Column("varchar", {
-    name: "introduceby",
-    length: 255,
-    nullable: true,
-    default: "",
-    comment: "Người giới thiệu"
-  })
-  introduceby: string;
-
-  @Column("varchar", {
-    name: "cardtype",
-    length: 255,
-    nullable: true,
-    default: "",
-    comment: "Loại thẻ"
-  })
-  cardtype: string;
-
-  @Column("varchar", {
-    name: "customername",
-    length: 255,
-    nullable: true,
-    default: "",
-    comment: "Tên khách hàng"
-  })
-  customername: string;
-
-  @Column("varchar", {
-    name: "customerphone",
-    length: 20,
-    nullable: true,
-    default: "",
-    comment: "Số điện thoại khách hàng"
-  })
-  customerphone: string;
-
-  @Column("varchar", {
-    name: "province",
-    length: 20,
-    nullable: true,
-    default: "",
-    comment: "Tỉnh / Thành"
-  })
-  province: string;
+  introduceid: number;
 
   @Column("varchar", {
     name: "statuslead",

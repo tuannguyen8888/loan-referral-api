@@ -11,7 +11,12 @@ import {
   VibIntroduceRepository
 } from "../../../repositories";
 
-import { McCaseNote, McLoanProfile, McProduct } from "../../../entities";
+import {
+  McCaseNote,
+  McLoanProfile,
+  McProduct,
+  VIBIntroduceLog
+} from "../../../entities";
 
 import { GetVibIntroduceRequestDto } from "./dto/get-introduce.request.dto";
 import * as moment from "moment";
@@ -21,8 +26,9 @@ import { VibIntroduceUpdateDto } from "./dto/vib-introduce.update.dto";
 import { VibIntroduceResponseDto } from "./dto/vib-introduce.response.dto";
 import { VIBIntroduce } from "../../../entities/vib/vib-introduce-entiy";
 import { VibIntroducesResponseDto } from "./dto/vib-introduces.response.dto";
-import {VibIntroduceUpdateCommissionDto} from "./dto/vib-introduce.update.commission.dto";
-
+import { VibIntroduceUpdateCommissionDto } from "./dto/vib-introduce.update.commission.dto";
+import { VibIntroduceLogDto } from "./dto/vib-introduce-log.dto";
+import { VibIntroduceLogRepository } from "../../../repositories/vib/vib-introduce-log.repository";
 
 @Injectable()
 export class VibIntroduceService extends BaseService {
@@ -47,6 +53,11 @@ export class VibIntroduceService extends BaseService {
       if (dto.regisdateto) {
         query = query.andWhere("regisdate <= :regisdateto", {
           regisdateto: dto.regisdateto
+        });
+      }
+      if (dto.source) {
+        query = query.andWhere("source = :source", {
+          source: dto.source
         });
       }
       if (dto.cardtype) {
@@ -102,21 +113,60 @@ export class VibIntroduceService extends BaseService {
   }
 
   async createIntroduce(dto: VibIntroduceDto) {
+    let dtoReq = new GetVibIntroduceRequestDto();
+    dtoReq.source = dto.source;
+    let introduces = await this.getAllIntroduces(dtoReq);
+    let response: VibIntroduceResponseDto;
+    if (introduces.count > 0) {
+      response = introduces.rows[0];
+    } else {
+      let arr = dto.source.split("-");
+      dto.introduceby = arr[arr.length - 1];
+      let entity: VIBIntroduce = this.convertDto2Entity(dto, VIBIntroduce);
+      entity.createdBy = dto.createdBy;
+      entity.createdAt = new Date();
+
+      this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
+      let result = await this.connection
+        .getCustomRepository(VibIntroduceRepository)
+        .save(entity);
+      this.logger.verbose(`insertResult = ${result}`);
+
+      response = this.convertEntity2Dto(result, VIBIntroduce, VibIntroduceDto);
+    }
+    console.log("Ghi log");
+    console.log(response);
+
+    let logDto = new VibIntroduceLogDto();
+    logDto.introduceid = response.id;
+    logDto.statuslead = dto.statuslead;
+    logDto.statusapproval = dto.statusapproval;
+    logDto.intidate = dto.intidate;
+    logDto.carddeliverydate = dto.carddeliverydate;
+    logDto.commission = dto.commission;
+    logDto.paid = dto.paid;
+    logDto.status = dto.status;
+    logDto.createdBy = dto.createdBy;
+    let log = await this.writeLog(logDto);
+    console.log(log);
+    return response;
+  }
+  async writeLog(dto: VibIntroduceLogDto) {
     console.log(dto);
-    let entity: VIBIntroduce = this.convertDto2Entity(dto, VIBIntroduce);
+    let entity: VIBIntroduceLog = this.convertDto2Entity(dto, VIBIntroduceLog);
     entity.createdBy = dto.createdBy;
     entity.createdAt = new Date();
 
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
-      .getCustomRepository(VibIntroduceRepository)
+      .getCustomRepository(VibIntroduceLogRepository)
       .save(entity);
     this.logger.verbose(`insertResult = ${result}`);
 
     let response: VibIntroduceDto = this.convertEntity2Dto(
       result,
-      VIBIntroduce,
-      VibIntroduceDto
+      VIBIntroduceLog,
+      VibIntroduceLogDto
     );
     return response;
   }
@@ -132,7 +182,10 @@ export class VibIntroduceService extends BaseService {
     return response;
   }
   async updateVibIntroduce(dto: VibIntroduceUpdateDto) {
+    let arr = dto.source.split("-");
+    dto.introduceby = arr[arr.length - 1];
     let entityUpdate: VIBIntroduce = this.convertDto2Entity(dto, VIBIntroduce);
+
     entityUpdate.updatedBy = dto.updatedBy;
     entityUpdate.updatedAt = new Date();
     let result = await this.connection
@@ -150,12 +203,12 @@ export class VibIntroduceService extends BaseService {
     entityUpdate.updatedBy = dto.updatedBy;
     entityUpdate.updatedAt = new Date();
     let result = await this.connection
-        .getCustomRepository(VibIntroduceRepository)
-        .save(entityUpdate);
+      .getCustomRepository(VibIntroduceRepository)
+      .save(entityUpdate);
     let response: VibIntroduceUpdateDto = this.convertEntity2Dto(
-        result,
-        VIBIntroduce,
-        VibIntroduceUpdateCommissionDto
+      result,
+      VIBIntroduce,
+      VibIntroduceUpdateCommissionDto
     );
     return response;
   }

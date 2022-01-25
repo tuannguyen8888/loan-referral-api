@@ -23,6 +23,7 @@ export class VibIntroduceResponseDto {
   cardactivedate: number = null;
   commission: number = null;
   paid: number = null;
+  status: string = null;
 
   @IsOptional()
   @IsDateString()
