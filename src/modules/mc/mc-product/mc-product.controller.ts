@@ -7,7 +7,7 @@ import {
   Post,
   Put
 } from "@nestjs/common";
-import { McLoanProfileService } from "../mc-loan-profile/mc-loan-profile.service";
+
 import {
   ApiBody,
   ApiOperation,
@@ -18,11 +18,7 @@ import {
 
 import { McProductService } from "./mc-product.service";
 import { McProductRepository } from "../../../repositories";
-import { GetMCCaseNoteRequestDto } from "../mc-case-note/dto/get-case-note.request.dto";
-import { McCaseNotesResponseDto } from "../mc-case-note/dto/mc-case-notes.response.dto";
-import { McCaseNoteResponseDto } from "../mc-case-note/dto/mc-case-note.response.dto";
-import { McCaseNoteDto } from "../mc-case-note/dto/mc-case-note.dto";
-import { McCaseNoteUpdateDto } from "../mc-case-note/dto/mc-case-note.update.dto";
+
 import { GetMCProductRequestDto } from "./dto/get-product.request.dto";
 import { McProductsResponseDto } from "./dto/mc-products.response.dto";
 import { McProductResponseDto } from "./dto/mc-product.response.dto";

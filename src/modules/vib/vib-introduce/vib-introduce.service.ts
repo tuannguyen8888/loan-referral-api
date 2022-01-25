@@ -5,28 +5,23 @@ import { Request } from "express";
 import { Logger } from "../../../common/loggers";
 import { RedisClient } from "../../../common/shared";
 import { RequestUtil } from "../../../common/utils";
-import { GetMCProductRequestDto } from "../../mc/mc-product/dto/get-product.request.dto";
+
 import {
-  McLoanProfileRepository,
   McProductRepository,
   VibIntroduceRepository
 } from "../../../repositories";
-import { McProductsResponseDto } from "../../mc/mc-product/dto/mc-products.response.dto";
+
 import { McCaseNote, McLoanProfile, McProduct } from "../../../entities";
-import { McProductResponseDto } from "../../mc/mc-product/dto/mc-product.response.dto";
+
 import { GetVibIntroduceRequestDto } from "./dto/get-introduce.request.dto";
 import * as moment from "moment";
-import {
-  LoanProfileUpdateDto,
-  McLoanProfileDto
-} from "../../mc/mc-loan-profile/dto";
+
 import { VibIntroduceDto } from "./dto/vib-introduce.dto";
 import { VibIntroduceUpdateDto } from "./dto/vib-introduce.update.dto";
 import { VibIntroduceResponseDto } from "./dto/vib-introduce.response.dto";
 import { VIBIntroduce } from "../../../entities/vib/vib-introduce-entiy";
 import { VibIntroducesResponseDto } from "./dto/vib-introduces.response.dto";
-import { McCaseNoteRepository } from "../../../repositories/mc/mc-case-note.repository";
-import { McCaseNoteResponseDto } from "../../mc/mc-case-note/dto/mc-case-note.response.dto";
+
 
 @Injectable()
 export class VibIntroduceService extends BaseService {
@@ -41,7 +36,7 @@ export class VibIntroduceService extends BaseService {
   }
   async getAllIntroduces(dto: GetVibIntroduceRequestDto) {
     try {
-      const repo = this.connection.getCustomRepository(McProductRepository);
+      const repo = this.connection.getCustomRepository(VibIntroduceRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
       if (dto.regisdatefrom) {
         query = query.andWhere("regisdate >= :regisdatefrom", {
@@ -104,6 +99,7 @@ export class VibIntroduceService extends BaseService {
       throw e;
     }
   }
+
   async createIntroduce(dto: VibIntroduceDto) {
     console.log(dto);
     let entity: VIBIntroduce = this.convertDto2Entity(dto, VIBIntroduce);
@@ -129,7 +125,7 @@ export class VibIntroduceService extends BaseService {
       .findOne(id);
     let response: VibIntroduceResponseDto = this.convertEntity2Dto(
       result,
-      McCaseNote,
+      VIBIntroduce,
       VibIntroduceResponseDto
     );
     return response;

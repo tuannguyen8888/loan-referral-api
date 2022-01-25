@@ -35,7 +35,8 @@ export class VIBIntroduce {
     name: "cardtype",
     length: 255,
     nullable: true,
-    default: "Loại thẻ"
+    default: "",
+    comment: "Loại thẻ"
   })
   cardtype: string;
 
@@ -43,7 +44,8 @@ export class VIBIntroduce {
     name: "customername",
     length: 255,
     nullable: true,
-    default: "Tên khách hàng"
+    default: "",
+    comment: "Tên khách hàng"
   })
   customername: string;
 
@@ -51,7 +53,8 @@ export class VIBIntroduce {
     name: "customerphone",
     length: 20,
     nullable: true,
-    default: "Số điện thoại khách hàng"
+    default: "",
+    comment: "Số điện thoại khách hàng"
   })
   customerphone: string;
 
@@ -59,7 +62,8 @@ export class VIBIntroduce {
     name: "province",
     length: 20,
     nullable: true,
-    default: "Tỉnh / Thành"
+    default: "",
+    comment: "Tỉnh / Thành"
   })
   province: string;
 

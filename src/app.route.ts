@@ -54,7 +54,7 @@ export const ROUTES: Routes = [
     children: [PartnerLoanProfileModule]
   },
   {
-    path: "api/partner",
+    path: "api/vib",
     children: [VibIntroduceModule]
   }
 ];
