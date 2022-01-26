@@ -26,4 +26,7 @@ export class GetLoanProfilesRequestDto extends BaseRequestDto {
 
   @IsOptional()
   disbursement_date_to?: string;
+
+  @IsOptional()
+  refid?: string;
 }
