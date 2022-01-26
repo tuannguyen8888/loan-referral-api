@@ -11,7 +11,6 @@ import {
 export class VibIntroduceUpdateDto {
   @IsDefined()
   id: number = null;
-  regisdate: number = null;
   source: string = null;
   introduceby: string = null;
   cardtype: string = null;

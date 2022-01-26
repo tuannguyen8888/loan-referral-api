@@ -10,7 +10,7 @@ import {
 export class VibIntroduceDto {
   @IsOptional()
   id?: number = null;
-  regisdate: number = null;
+  regisdate: number;
   source: string = null;
   introduceby: string = null;
   cardtype: string = null;

@@ -31,7 +31,7 @@ export class VIBIntroduceLog {
   })
   statusapproval: string;
 
-  @Column("int", {
+  @Column("double", {
     name: "intidate",
     default: 0,
     nullable: true,
@@ -39,7 +39,7 @@ export class VIBIntroduceLog {
   })
   intidate: number;
 
-  @Column("int", {
+  @Column("double", {
     name: "carddeliverydate",
     default: 0,
     nullable: true,
@@ -47,7 +47,7 @@ export class VIBIntroduceLog {
   })
   carddeliverydate: number;
 
-  @Column("int", {
+  @Column("double", {
     name: "cardactivedate",
     default: 0,
     nullable: true,

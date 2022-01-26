@@ -119,6 +119,19 @@ export class VibIntroduceService extends BaseService {
     let response: VibIntroduceResponseDto;
     if (introduces.count > 0) {
       response = introduces.rows[0];
+      let updateDto = new VibIntroduceUpdateDto();
+      updateDto.id = response.id;
+      updateDto.source = dto.source;
+      updateDto.introduceby = dto.introduceby;
+      updateDto.cardtype = dto.cardtype;
+      updateDto.customername = dto.customername;
+      updateDto.customerphone = dto.customerphone;
+      updateDto.province = dto.statuslead;
+      updateDto.statusapproval = dto.statusapproval;
+      updateDto.intidate = dto.intidate;
+      updateDto.carddeliverydate = dto.carddeliverydate;
+      updateDto.cardactivedate = dto.cardactivedate;
+      await this.updateVibIntroduce(updateDto);
     } else {
       let arr = dto.source.split("-");
       dto.introduceby = arr[arr.length - 1];
