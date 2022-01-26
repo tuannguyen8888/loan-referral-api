@@ -7,6 +7,12 @@ export class GetVibIntroduceRequestDto {
   @IsOptional()
   source: string = null;
   @IsOptional()
+  introduceby: string = null;
+  @IsOptional()
+  customername: string = null;
+  @IsOptional()
+  customerphone: string = null;
+  @IsOptional()
   regisdatefrom: number;
   @IsOptional()
   regisdateto: number;

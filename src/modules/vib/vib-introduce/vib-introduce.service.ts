@@ -60,6 +60,21 @@ export class VibIntroduceService extends BaseService {
           source: dto.source
         });
       }
+      if (dto.introduceby) {
+        query = query.andWhere("introduceby = :introduceby", {
+          introduceby: dto.introduceby
+        });
+      }
+      if (dto.customername) {
+        query = query.andWhere("customername = :customername", {
+          customername: dto.customername
+        });
+      }
+      if (dto.customerphone) {
+        query = query.andWhere("customerphone = :customerphone", {
+          customerphone: dto.customerphone
+        });
+      }
       if (dto.cardtype) {
         query = query.andWhere("cardtype = :cardtype", {
           cardtype: dto.cardtype
@@ -85,8 +100,6 @@ export class VibIntroduceService extends BaseService {
           "(source like :keyword " +
             "OR source like :keyword" +
             "OR introduceby like :keyword" +
-            "OR customername like :keyword" +
-            "OR customerphone like :keyword" +
             "OR province like :keyword" +
             ")",
           {
@@ -115,7 +128,10 @@ export class VibIntroduceService extends BaseService {
   async createIntroduce(dto: VibIntroduceDto) {
     let dtoReq = new GetVibIntroduceRequestDto();
     dtoReq.source = dto.source;
+    dtoReq.customername = dto.customername;
+    dtoReq.customerphone = dto.customerphone;
     let introduces = await this.getAllIntroduces(dtoReq);
+    console.log(introduces);
     let response: VibIntroduceResponseDto;
     if (introduces.count > 0) {
       response = introduces.rows[0];
@@ -127,6 +143,7 @@ export class VibIntroduceService extends BaseService {
       updateDto.customername = dto.customername;
       updateDto.customerphone = dto.customerphone;
       updateDto.province = dto.statuslead;
+      updateDto.statuslead = dto.statuslead;
       updateDto.statusapproval = dto.statusapproval;
       updateDto.intidate = dto.intidate;
       updateDto.carddeliverydate = dto.carddeliverydate;
