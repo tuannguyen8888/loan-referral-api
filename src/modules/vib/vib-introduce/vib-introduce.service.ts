@@ -173,6 +173,7 @@ export class VibIntroduceService extends BaseService {
     logDto.statusapproval = dto.statusapproval;
     logDto.intidate = dto.intidate;
     logDto.carddeliverydate = dto.carddeliverydate;
+    logDto.cardactivedate = dto.cardactivedate;
     logDto.createdBy = dto.createdBy;
     let log = await this.writeLog(logDto);
     console.log(log);
