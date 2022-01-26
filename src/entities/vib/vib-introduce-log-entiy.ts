@@ -55,31 +55,6 @@ export class VIBIntroduceLog {
   })
   cardactivedate: number;
 
-  @Column("double", {
-    name: "commission",
-    default: 0,
-    nullable: true,
-    comment: "Số tiền hoa hồng"
-  })
-  commission: number;
-
-  @Column("int", {
-    name: "paid",
-    default: 0,
-    nullable: true,
-    comment: "Đã trả hoa hồng"
-  })
-  paid: number;
-
-  @Column("varchar", {
-    name: "status",
-    length: 20,
-    default: "",
-    nullable: true,
-    comment: "Tình trang giới thiệu new,expired"
-  })
-  status: number;
-
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"

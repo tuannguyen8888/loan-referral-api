@@ -16,9 +16,6 @@ export class VibIntroduceLogDto {
   intidate: number = null;
   carddeliverydate: number = null;
   cardactivedate: number = null;
-  commission: number = null;
-  paid: number = null;
-  status: string = null;
 
   @IsOptional()
   @IsDateString()

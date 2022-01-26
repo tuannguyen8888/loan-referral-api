@@ -5,11 +5,11 @@ export class VIBIntroduce {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Column("int", {
+  @Column("double", {
     name: "regisdate",
     default: 0,
     nullable: true,
-    comment: "Ngày đăng ký"
+    comment: "Ngày đang ký"
   })
   regisdate: number;
 
