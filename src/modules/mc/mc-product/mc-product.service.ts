@@ -69,12 +69,14 @@ export class McProductService extends BaseService {
       //Cập nhat product code
       const repo = this.connection.getCustomRepository(McProductRepository);
       let queryupdate = repo
-          .createQueryBuilder()
-          .update()
-          .set({
-            productcode: response[i].productCode
-          })
-          .where("productname = :productname", { productname: response[i].productName});
+        .createQueryBuilder()
+        .update()
+        .set({
+          productcode: response[i].productCode
+        })
+        .where("productname = :productname", {
+          productname: response[i].productName
+        });
       await queryupdate.execute();
     }
     return response;

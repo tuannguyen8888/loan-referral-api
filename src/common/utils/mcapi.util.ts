@@ -687,11 +687,18 @@ export class McapiUtil {
       let result = await axios.get(url, {
         headers: headers
       });
-      response = result.data;
       console.log("true");
+      console.log(result);
+      response = result.data;
+
     } catch (e) {
       console.log("false");
       response = e.response.data;
+      console.log(response);
+      if (response.returnCode == "401") {
+        await this.login();
+        return await this.getCases(dto);
+      }
     } finally {
       let input = {};
       await this.writeLog(

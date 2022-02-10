@@ -39,6 +39,7 @@ import { McAttachfileModule } from "./modules/mc/mc-attachfile/mc-attachfile.mod
 import { TtfcLoanProfileModule } from "./modules/ttfc/ttfc-loan-profile/ttfc-loan-profile.module";
 import { PartnerLoanProfileModule } from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
 import { McScoringTrackingModule } from "./modules/mc/mc-scoring-tracking/mc-scoring-tracking.module";
+import { VibIntroduceModule } from "./modules/vib/vib-introduce/vib-introduce.module";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
@@ -62,7 +63,8 @@ const imports = [
   McNotificationModule,
   McAttachfileModule,
   McScoringTrackingModule,
-  PartnerLoanProfileModule
+  PartnerLoanProfileModule,
+  VibIntroduceModule
 ];
 databaseConfig.forEach(db => {
   imports.push(TypeOrmModule.forRoot(db));

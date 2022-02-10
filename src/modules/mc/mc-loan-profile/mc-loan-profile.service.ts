@@ -440,32 +440,37 @@ export class McLoanProfileService extends BaseService {
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
     var response = await mcapi.getCases(dto);
-    for (const item of response) {
-      console.log(item);
-      let query = repo.createQueryBuilder().where("deleted_at is null");
-      query = query.andWhere("profileid = :profileid", {
-        profileid: item.id
-      });
-      let data;
-      data = await query.getOne();
-      console.log(data);
-      if (data != undefined) {
-        //Cập nhât Profile
-        let queryupdate = repo
-          .createQueryBuilder()
-          .update()
-          .set({
-            appNumber: item.appNumber,
-            appid: item.appId,
-            bpmStatus: item.bpmStatus,
-            reasons: JSON.stringify(item.reasons),
-            pdfFiles: JSON.stringify(item.pdfFiles)
-          })
-          .where("id = :id", { id: data.id });
-        await queryupdate.execute();
+    try{
+      for (const item of response) {
+        console.log(item);
+        let query = repo.createQueryBuilder().where("deleted_at is null");
+        query = query.andWhere("profileid = :profileid", {
+          profileid: item.id
+        });
+        let data;
+        data = await query.getOne();
+        console.log(data);
+        if (data != undefined) {
+          //Cập nhât Profile
+          let queryupdate = repo
+              .createQueryBuilder()
+              .update()
+              .set({
+                appNumber: item.appNumber,
+                appid: item.appId,
+                bpmStatus: item.bpmStatus,
+                reasons: JSON.stringify(item.reasons),
+                pdfFiles: JSON.stringify(item.pdfFiles)
+              })
+              .where("id = :id", { id: data.id });
+          await queryupdate.execute();
+        }
+        //console.log(count);
       }
-      //console.log(count);
+    }catch (e) {
+
     }
+
     return response;
   }
 

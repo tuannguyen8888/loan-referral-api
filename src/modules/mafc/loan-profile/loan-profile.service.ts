@@ -79,6 +79,14 @@ export class LoanProfileService extends BaseService {
       // const where = {
       //   deletedAt: IsNull()
       // };
+
+      if (dto.refid) {
+        query = query.andWhere("refid = :refid", {
+          refid: dto.refid
+        });
+        // where["partnerId"] = dto.partner_id;
+      }
+
       if (dto.partner_id) {
         query = query.andWhere("partner_id = :partnerId", {
           partnerId: dto.partner_id
