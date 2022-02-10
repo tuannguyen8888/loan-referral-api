@@ -690,7 +690,6 @@ export class McapiUtil {
       console.log("true");
       console.log(result);
       response = result.data;
-
     } catch (e) {
       console.log("false");
       response = e.response.data;
