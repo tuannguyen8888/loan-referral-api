@@ -1,0 +1,124 @@
+server:
+  port: 8877
+
+logs:
+  directory: logs
+
+security:
+  ssl:
+    active: false
+    key: privatekey.pem
+    ca: COMODORSADomainValidationSecureServerCA.crt
+    cert: finviet.com.vn.crt
+
+  rateLlmit:
+    maxRequest: 0
+    resetAfter: 3600000
+
+  requestTracker:
+    maxCache: 10
+
+jwt:
+  secret: loyalty_secret_dev
+
+activemq:
+  client:
+  server:
+    host: 10.11.30.30
+    port: 61613
+    login: admin
+    passcode: admin
+  queues:
+    ewalletNotification: /topic/EWALLET_NOTIFY
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ''
+  expireIn: 300
+
+addon:
+  fvBackend:
+    api: http://sandbox.finviet.com.vn:3980
+    version: 2.0
+
+database:
+  - name: "default"
+    type: "mysql"
+    logging: true
+    synchronize: false
+    entities:
+      - "dist/entities/*.{js,ts}"
+      - "dist/entities/mc/*.{js,ts}"
+      - "dist/entities/mafc-masterdata/*.{js,ts}"
+      - "dist//entities/ptf/*.{js,ts}"
+    host: "10.50.50.5"
+    port: 3308
+    username: "finviet"
+    password: "yVREMIiso8BYPBAptGS8"
+    database: "loan_referral_uat"
+
+mafc_api:
+  partner_code: 'FIV'
+  input_data_entry:
+    url: 'https://apigw-staging.mafc.vn/dataentry-mci'
+    username: 'dataentrymci'
+    password: 'mirae52345!@#%$'
+  update_data_entry:
+    url: 'https://apigw-staging.mafc.vn/3p/v2/data-entry-update'
+    username: 'mirae-3p'
+    password: '123456'
+  master_data:
+    url: 'https://apigw-staging.mafc.vn/masterdatamci'
+    username: 'masterdatamci'
+    password: 'mafc32412^&%^$'
+  check_customer_info:
+    url: 'https://apigw-staging.mafc.vn/3p/v2/check-customer'
+    username: 'mirae-3p'
+    password: '123456'
+  cic:
+    url: 'https://apigw-staging.mafc.vn/cic'
+    username: 'mirae-3p'
+    password: '123456'
+  upload:
+    push_to_und_url: 'https://apigw-staging.mafc.vn/thirdparty/pushundersystem'
+    reply_defer_url: 'https://apigw-staging.mafc.vn/thirdparty/pushpenhistory'
+    username: 'mirae-3p'
+    password: '123456'
+
+ptf_api:
+  partner_code: 'FinViet'
+  upload:
+    url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-file-rest-demo/process'
+  loan_request:
+    url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-rest-demo/process'
+  loan_status:
+    url: 'https://apiext.ptf.com.vn/ptf/ext/api-ptf-loan-rest-demo/process'
+  X_IBM_Client_Secret: 'aT7hL7gP1wH0uP0nJ7iH7bC6yA4rQ7pI7fI0eP4wR5uY4lU6bL'
+  X_IBM_Client_Id: '215b0e37-f71e-419b-9565-f9b28c3d53bd'
+
+mc_api:
+  partner_code: 'FIV'
+  endpoint: 'https://mfs-v2.mcredit.com.vn:8043/mcMobileService/service/v1.0/'
+  username: 'finviet.3rd'
+  password: '123456a@'
+  notificationId: 'notificationId.finviet.3rd'
+  imei: 'imei.finviet.3rd'
+  osType: 'IOS'
+  security: 'FINVIET-7114da26-2e6a-497c-904f-4372308ecb2d'
+  saleCode: 'RD014100001'
+  saleCodeDSA: 'RD014000071'
+
+upload:
+  backendUrl: http://sandbox.finviet.com.vn:3000/upload
+  backendUser: loan_referral-user
+
+download:
+  backendUrl: http://sandbox.finviet.com.vn:3000/download
+  backendUser: loan_referral-user
+  token: dvsdvsdkvmvkdfm
+
+getfile:
+  url: http://localhost:8877/api/partner/partner-loan-profile/getFile/
+
+uploaddocument: C:\xampp\htdocs\loan-referral-api-new\dist\upload\document
