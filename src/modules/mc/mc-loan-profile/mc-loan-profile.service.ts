@@ -162,7 +162,7 @@ export class McLoanProfileService extends BaseService {
             "OR companyTaxNumber like :keyword " +
             "OR created_by like :keyword " +
             "OR compName like :keyword )",
-          { keyword: "%" + dto.keyword + "%" }
+          { keyword: "%" + dto.keyword.trim() + "%" }
         );
       if (dto.pagesize != 0) {
         query = query
