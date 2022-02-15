@@ -160,6 +160,7 @@ export class McLoanProfileService extends BaseService {
             "OR compAddrStreet like :keyword " +
             "OR officeNumber like :keyword " +
             "OR companyTaxNumber like :keyword " +
+            "OR created_by like :keyword " +
             "OR compName like :keyword )",
           { keyword: "%" + dto.keyword + "%" }
         );
