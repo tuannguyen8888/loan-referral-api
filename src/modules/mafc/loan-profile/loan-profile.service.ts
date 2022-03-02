@@ -121,6 +121,22 @@ export class LoanProfileService extends BaseService {
           }
         );
       }
+      if (dto.created_at_from) {
+        query = query.andWhere(
+          "created_at >= :createdAtFrom",
+          {
+            createdAtFrom: dto.created_at_from
+          }
+        );
+      }
+      if (dto.created_at_to) {
+        query = query.andWhere(
+          "created_at < :createdAtTo",
+          {
+            createdAtTo: dto.created_at_to + " 23:59:59"
+          }
+        );
+      }
       if (dto.user_id) {
         let userGroup = await this.connection
           .getCustomRepository(SaleGroupRepository)
