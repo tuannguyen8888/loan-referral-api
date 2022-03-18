@@ -22,4 +22,7 @@ export class SendDataLog {
     default: () => "CURRENT_TIMESTAMP"
   })
   createdAt: Date;
+
+  @Column("varchar", { name: "created_by" , length: 45})
+  createdBy: string;
 }

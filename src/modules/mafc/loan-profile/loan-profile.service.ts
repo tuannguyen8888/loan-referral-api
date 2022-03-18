@@ -1854,7 +1854,7 @@ export class LoanProfileService extends BaseService {
     }
   }
 
-  async checkCustomerInfo(customerNationalId, phone, taxCode = null) {
+  async checkCustomerInfo(customerNationalId, phone, taxCode = null, createBy) {
     let mafc_api_config = config.get("mafc_api");
     let response: any;
     try {
@@ -1902,6 +1902,7 @@ export class LoanProfileService extends BaseService {
       ]);
       log.result = JSON.stringify(response);
       log.createdAt = new Date();
+      log.createdBy = createBy;
       await this.connection
         .getCustomRepository(SendDataLogRepository)
         .save(log);
@@ -1932,7 +1933,7 @@ export class LoanProfileService extends BaseService {
     return response;
   }
 
-  async pollingS37(customerNationalId) {
+  async pollingS37(customerNationalId, createBy) {
     let mafc_api_config = config.get("mafc_api");
     let response: any;
     try {
@@ -1978,6 +1979,7 @@ export class LoanProfileService extends BaseService {
       ]);
       log.result = JSON.stringify(response);
       log.createdAt = new Date();
+        log.createdBy = createBy;
       await this.connection
         .getCustomRepository(SendDataLogRepository)
         .save(log);
