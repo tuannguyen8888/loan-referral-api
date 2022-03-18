@@ -62,7 +62,8 @@ export class LoanProfileController {
     return this.service.checkCustomerInfo(
       dto.customer_national_id,
       dto.phone,
-      dto.tax_code
+      dto.tax_code,
+      dto.user_id
     );
   }
 
@@ -72,11 +73,11 @@ export class LoanProfileController {
   //   return this.service.checkingS37(params.customer_national_id);
   // }
 
-  @Get("/polling-s37/:customer_national_id")
+  @Get("/polling-s37/:customer_national_id/:user_id")
   @ApiOperation({ summary: "Lấy kết quả kiểm tra lịch sử tín dụng" })
   @HttpCode(200)
   pollingS37(@Headers() headers, @Param() params): Promise<any> {
-    return this.service.pollingS37(params.customer_national_id);
+    return this.service.pollingS37(params.customer_national_id, params.user_id);
   }
 
   @Post("/")
