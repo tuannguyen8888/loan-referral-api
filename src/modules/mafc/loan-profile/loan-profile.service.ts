@@ -1969,8 +1969,8 @@ export class LoanProfileService extends BaseService {
           .update()
           .set({
               inNationalid: customerNationalId+'_DEL',
-              deletedAt: new Date(),
-              deletedBy: removeBy
+              updatedAt: new Date(),
+              updatedBy: removeBy
           })
           .where("in_nationalid = :inNationalid", { inNationalid: customerNationalId });
       await queryupdate.execute();
