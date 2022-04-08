@@ -1986,4 +1986,18 @@ export class LoanProfileService extends BaseService {
     }
     return response;
   }
+
+  async removeNationalId(customerNationalId, removeBy) {
+      let repo = this.connection.getCustomRepository(LoanProfileRepository);
+      let queryupdate = repo.createQueryBuilder()
+          .update()
+          .set({
+              inNationalid: customerNationalId+'_DEL',
+              deletedAt: new Date(),
+              deletedBy: removeBy
+          })
+          .where("in_nationalid = :inNationalid", { inNationalid: customerNationalId });
+      await queryupdate.execute();
+      return true;
+  }
 }

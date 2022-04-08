@@ -89,14 +89,24 @@ export class LoanProfileController {
     return this.service.createLoanProfile(dto);
   }
 
+  @Put("/remove-national-id/:customer_national_id/:user_id")
+  @ApiOperation({ summary: "Gở bỏ số SMND/CCCD để có thể nhập lại hồ sơ" })
+  removeNationalId(
+    @Headers() headers,
+    @Param() params
+  ): Promise<boolean> {
+    return this.service.removeNationalId(params.customer_national_id,params.user_id);
+  }
+
   @Put("/")
   @ApiOperation({ summary: "Sửa thông tin hồ sơ vay" })
   updateLoanProfile(
-    @Headers() headers,
-    @Body() dto: LoanProfileDto
+      @Headers() headers,
+      @Body() dto: LoanProfileDto
   ): Promise<LoanProfileDto> {
-    return this.service.updateLoanProfile(dto);
+      return this.service.updateLoanProfile(dto);
   }
+
   @Put("/update-attach-files")
   @ApiOperation({ summary: "Update file đính kèm cho hồ sơ vay" })
   @ApiBody({ type: [AttachFileDto] })
