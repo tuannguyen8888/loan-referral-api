@@ -360,7 +360,7 @@ export class McLoanProfileService extends BaseService {
       console.log(arr_groupid);
       console.log("------------");
       attachRequest.profileid = id;
-      attachRequest.arrgroupId = arr_groupid.join(",");
+      //attachRequest.arrgroupId = arr_groupid.join(",");
       attachRequest.hassend = 0;
       attachRequest.page = 1;
       attachRequest.pagesize = 0;
