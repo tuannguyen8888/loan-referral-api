@@ -23,6 +23,6 @@ export class SendDataLog {
   })
   createdAt: Date;
 
-  @Column("varchar", { name: "created_by" , length: 45})
+  @Column("varchar", { name: "created_by", length: 45 })
   createdBy: string;
 }
