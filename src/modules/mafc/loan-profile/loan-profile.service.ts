@@ -189,7 +189,7 @@ export class LoanProfileService extends BaseService {
         "D4.1",
         "D4.10",
         "D4.9",
-        "D2.5",
+        "D2.5"
         // "D2.1" // bỏ theo yêu cầu của Công
       ];
       if (data && data.length) {
@@ -1955,7 +1955,7 @@ export class LoanProfileService extends BaseService {
       ]);
       log.result = JSON.stringify(response);
       log.createdAt = new Date();
-        log.createdBy = createBy;
+      log.createdBy = createBy;
       await this.connection
         .getCustomRepository(SendDataLogRepository)
         .save(log);
@@ -1964,16 +1964,19 @@ export class LoanProfileService extends BaseService {
   }
 
   async removeNationalId(customerNationalId, removeBy) {
-      let repo = this.connection.getCustomRepository(LoanProfileRepository);
-      let queryupdate = repo.createQueryBuilder()
-          .update()
-          .set({
-              inNationalid: customerNationalId+'_DEL',
-              updatedAt: new Date(),
-              updatedBy: removeBy
-          })
-          .where("in_nationalid = :inNationalid", { inNationalid: customerNationalId });
-      await queryupdate.execute();
-      return true;
+    let repo = this.connection.getCustomRepository(LoanProfileRepository);
+    let queryupdate = repo
+      .createQueryBuilder()
+      .update()
+      .set({
+        inNationalid: customerNationalId + "_DEL",
+        updatedAt: new Date(),
+        updatedBy: removeBy
+      })
+      .where("in_nationalid = :inNationalid", {
+        inNationalid: customerNationalId
+      });
+    await queryupdate.execute();
+    return true;
   }
 }

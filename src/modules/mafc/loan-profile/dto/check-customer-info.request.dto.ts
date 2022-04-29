@@ -20,6 +20,5 @@ export class CheckCustomerInfoRequestDto {
   @IsOptional()
   tax_code?: string;
 
-
   user_id: string;
 }
