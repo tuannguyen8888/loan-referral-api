@@ -232,7 +232,9 @@ export class MasterDataService extends BaseService {
       "430",
       "431",
       "432",
-      "433"
+      "433",
+      "1381",
+      "1382"
     ];
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
