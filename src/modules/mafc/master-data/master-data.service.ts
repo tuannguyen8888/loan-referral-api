@@ -232,7 +232,9 @@ export class MasterDataService extends BaseService {
       "430",
       "431",
       "432",
-      "433"
+      "433",
+      "1381",
+      "1382"
     ];
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
@@ -244,6 +246,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    console.log(' getSchemes response = ', response);
     const schemes: SchemeMasterData[] = response.data.filter(
       (m: SchemeMasterData) => {
         const filt = listFilter.some(x => m.schemename.includes(x));
@@ -280,6 +283,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+      console.log('getSchemes schemes = ', schemes);
     const res = await this.schemeMD.save(schemes, { chunk: 500 });
     console.log("SAVED SCHEME");
     return res;
