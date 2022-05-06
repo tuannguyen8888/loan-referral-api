@@ -1,14 +1,14 @@
 stages:
   - deploy
-deploy-loan-uat-api:
+deploy-loan-dev-api:
   tags:
-    - loan-uat-api
+    - loan-dev-api
   before_script:
     - cd /app/
   script:
     - sudo sh loanapi.sh
-    - echo "LOAN has been deployed to dev env!!"
+    - echo "LoAN has been deployed to dev env!!"
   stage: deploy
   only:
-    - test
+    - dev
 
