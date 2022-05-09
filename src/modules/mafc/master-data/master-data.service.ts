@@ -283,7 +283,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-      console.log('getSchemes schemes = ', schemes);
+      console.log('gggggetSchemes schemes = ', JSON.stringify(schemes));
     const res = await this.schemeMD.save(schemes, { chunk: 500 });
     console.log("SAVED SCHEME");
     return res;
