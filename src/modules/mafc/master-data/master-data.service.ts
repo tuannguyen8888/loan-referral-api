@@ -246,10 +246,10 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-    console.log(' getSchemes response = ', response);
+    console.log(' ddddgetSchemes response = ', response);
     const schemes: SchemeMasterData[] = response.data.filter(
       (m: SchemeMasterData) => {
-        const filt = listFilter.some(x => m.schemename.includes(x));
+        const filt = listFilter.some(x =>(m.schemeid == x && m.schemename.includes(x)));
         if (filt) {
           if (
             m.schemename.startsWith("EVN") ||
@@ -283,7 +283,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-      console.log('gggggetSchemes schemes = ', JSON.stringify(schemes));
+      console.log('getSchemes schemes = ', JSON.stringify(schemes));
     const res = await this.schemeMD.save(schemes, { chunk: 500 });
     console.log("SAVED SCHEME");
     return res;
