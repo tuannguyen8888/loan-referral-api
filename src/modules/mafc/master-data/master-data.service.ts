@@ -249,7 +249,7 @@ export class MasterDataService extends BaseService {
     console.log(' ddddgetSchemes response = ', response);
     const schemes: SchemeMasterData[] = response.data.filter(
       (m: SchemeMasterData) => {
-        const filt = listFilter.some(x =>(m.schemeid == x && m.schemename.includes(x)));
+        const filt = listFilter.some(x =>(m.schemeid == x || m.schemename.includes(x)));
         if (filt) {
           if (
             m.schemename.startsWith("EVN") ||
