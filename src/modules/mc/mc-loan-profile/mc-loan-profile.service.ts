@@ -50,6 +50,8 @@ import { McScoringTrackingDto } from "../mc-scoring-tracking/dto/mc-scoring-trac
 import { GetMCScoringTrackingRequestDto } from "../mc-scoring-tracking/dto/get-scoring-tracking.request.dto";
 import { McScoringTrackingResponseDto } from "../mc-scoring-tracking/dto/mc-scoring-tracking.response.dto";
 import { McScoringTrackingUpdateDto } from "../mc-scoring-tracking/dto/mc-scoring-tracking.update.dto";
+import { McApiTrackingService } from "../mc-api-tracking/mc-api-tracking.service";
+import { McApiTrackingDto } from "../mc-api-tracking/dto/mc-api-tracking.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -189,11 +191,13 @@ export class McLoanProfileService extends BaseService {
       throw e;
     }
   }
+
   async getbpmStatus() {
     console.log("getbpmStatus");
     try {
       const rawData = await this.connection.query(
-        `SELECT DISTINCT bpmStatus FROM mc_loan_profile`
+        `SELECT DISTINCT bpmStatus
+                 FROM mc_loan_profile`
       );
       return rawData;
     } catch (e) {
@@ -201,11 +205,13 @@ export class McLoanProfileService extends BaseService {
       return null;
     }
   }
+
   async getSaleCode() {
     console.log("getSaleCode");
     try {
       const rawData = await this.connection.query(
-        `SELECT DISTINCT saleCode FROM mc_loan_profile`
+        `SELECT DISTINCT saleCode
+                 FROM mc_loan_profile`
       );
       return rawData;
     } catch (e) {
@@ -213,6 +219,7 @@ export class McLoanProfileService extends BaseService {
       return null;
     }
   }
+
   async getLoanProfile(loanProfileId: number) {
     let result = await this.connection
       .getCustomRepository(McLoanProfileRepository)
@@ -248,6 +255,25 @@ export class McLoanProfileService extends BaseService {
     // }
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.checkCIC(citizenId, customerName);
+    let url = "mobile-4sales/check-cic/check";
+    var mcApiTrackingService = new McApiTrackingService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
+    );
+    let dtoApiTracking = new McApiTrackingDto();
+    dtoApiTracking.apiname = "checkCIC";
+    dtoApiTracking.url = url;
+    dtoApiTracking.method = "get";
+    dtoApiTracking.payload = JSON.stringify({
+      citizenId: citizenId,
+      customerName: customerName
+    });
+    dtoApiTracking.response = JSON.stringify(response);
+    dtoApiTracking.createdBy = "admin@abc.com";
+    await mcApiTrackingService.createApiTracking(dtoApiTracking);
     return response;
   }
 
@@ -255,6 +281,22 @@ export class McLoanProfileService extends BaseService {
     console.log("Check cic citizenId: " + citizenId + " customerName: ");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.checkCitizenId(citizenId);
+    let url = "mobile-4sales/check-identifier";
+    var mcApiTrackingService = new McApiTrackingService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
+    );
+    let dtoApiTracking = new McApiTrackingDto();
+    dtoApiTracking.apiname = "checkCitizenId";
+    dtoApiTracking.url = url;
+    dtoApiTracking.method = "get";
+    dtoApiTracking.payload = JSON.stringify({ citizenId: citizenId });
+    dtoApiTracking.response = JSON.stringify(response);
+    dtoApiTracking.createdBy = "admin@abc.com";
+    await mcApiTrackingService.createApiTracking(dtoApiTracking);
     return response;
   }
 
