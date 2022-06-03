@@ -7,7 +7,7 @@ export class McApiTracking {
 
   @Column("varchar", {
     name: "apiname",
-    length: 10,
+    length: 255,
     nullable: true,
     default: "",
     comment: "Tên api"

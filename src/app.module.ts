@@ -40,7 +40,7 @@ import { TtfcLoanProfileModule } from "./modules/ttfc/ttfc-loan-profile/ttfc-loa
 import { PartnerLoanProfileModule } from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
 import { McScoringTrackingModule } from "./modules/mc/mc-scoring-tracking/mc-scoring-tracking.module";
 import { VibIntroduceModule } from "./modules/vib/vib-introduce/vib-introduce.module";
-import { McApiTrackingModule } from './modules/mc/mc-api-tracking/mc-api-tracking.module';
+import { McApiTrackingModule } from "./modules/mc/mc-api-tracking/mc-api-tracking.module";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
