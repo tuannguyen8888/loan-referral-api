@@ -10,13 +10,11 @@ import {
 export class McApiTrackingDto {
   @IsOptional()
   id?: number = null;
-  typeScore: string = null;
-  primaryPhone: string = null;
-  fullname: string = null;
-  nationalId: string = null;
-  verificationCode: string = null;
-  requestSendOtp3P: string = null;
-  requestScoring3P: string = null;
+  apiname: string = null;
+  url: string = null;
+  method: string = null;
+  payload: string = null;
+  response: string = null;
 
   @IsOptional()
   @IsDateString()
