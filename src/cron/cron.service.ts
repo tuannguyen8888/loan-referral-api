@@ -65,20 +65,55 @@ export class CronService {
     let dto = new GetMcCaseRequestDto();
 
     dto.pageNumber = 1;
-    dto.pageSize = 1000;
+    dto.pageSize = 10;
     dto.keyword = "";
     dto.status = "ABORT";
 
-    dto.hasCourier = 0;
-    await mcloanprofileser.getCases(dto);
-    dto.hasCourier = 1;
-    await mcloanprofileser.getCases(dto);
+    var response;
 
+    dto.hasCourier = 0;
+    do{
+        console.log("Page: "+dto.pageNumber);
+      response =  await mcloanprofileser.getCases(dto);
+      console.log('---------------------');
+      console.log(response.length);
+      console.log('---------------------');
+      dto.pageNumber++;
+    }while (response.length > 0);
+
+    dto.pageNumber = 1;
+    dto.hasCourier = 1;
+    do{
+      console.log("Page: "+dto.pageNumber);
+      response =  await mcloanprofileser.getCases(dto);
+      console.log('---------------------');
+      console.log(response.length);
+      console.log('---------------------');
+      dto.pageNumber++;
+    }while (response.length > 0);
+
+    dto.pageNumber = 1;
     dto.status = "PROCESSING";
     dto.hasCourier = 0;
-    await mcloanprofileser.getCases(dto);
+    do{
+      console.log("Page: "+dto.pageNumber);
+      response =  await mcloanprofileser.getCases(dto);
+      console.log('---------------------');
+      console.log(response.length);
+      console.log('---------------------');
+      dto.pageNumber++;
+    }while (response.length > 0);
+
+    dto.pageNumber = 1;
     dto.hasCourier = 1;
-    await mcloanprofileser.getCases(dto);
+    do{
+      console.log("Page: "+dto.pageNumber);
+      var response =  await mcloanprofileser.getCases(dto);
+      console.log('---------------------');
+      console.log(response.length);
+      console.log('---------------------');
+      dto.pageNumber++;
+    }while (response.length > 0);
   }
 
   async ptfGetLoanStatus() {
