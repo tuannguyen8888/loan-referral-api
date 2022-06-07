@@ -12,4 +12,6 @@ import {
 export class CheckCitizenidRequestDto {
   @IsNumberString()
   citizenId: string;
+
+  user_id: string;
 }

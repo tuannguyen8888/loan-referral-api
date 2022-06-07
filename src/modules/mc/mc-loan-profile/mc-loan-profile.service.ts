@@ -233,7 +233,7 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async checkCIC(citizenId, customerName) {
+  async checkCIC(citizenId, customerName, user_id) {
     console.log(
       "Check cic citizenId: " + citizenId + " customerName: " + customerName
     );
@@ -272,12 +272,12 @@ export class McLoanProfileService extends BaseService {
       customerName: customerName
     });
     dtoApiTracking.response = JSON.stringify(response);
-    dtoApiTracking.createdBy = "admin@abc.com";
+    dtoApiTracking.createdBy = user_id;
     await mcApiTrackingService.createApiTracking(dtoApiTracking);
     return response;
   }
 
-  async checkCitizenId(citizenId) {
+  async checkCitizenId(citizenId,user_id) {
     console.log("Check cic citizenId: " + citizenId + " customerName: ");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.checkCitizenId(citizenId);
@@ -295,7 +295,7 @@ export class McLoanProfileService extends BaseService {
     dtoApiTracking.method = "get";
     dtoApiTracking.payload = JSON.stringify({ citizenId: citizenId });
     dtoApiTracking.response = JSON.stringify(response);
-    dtoApiTracking.createdBy = "admin@abc.com";
+    dtoApiTracking.createdBy = user_id;
     await mcApiTrackingService.createApiTracking(dtoApiTracking);
     return response;
   }

@@ -167,7 +167,8 @@ export class PartnerLoanProfileService extends BaseService {
       response.message = "";
       response.data = await serviceMCLoanProfile.checkCIC(
         citizenId,
-        customerName
+        customerName,
+          saleCode
       );
     }
     return response;
@@ -188,7 +189,7 @@ export class PartnerLoanProfileService extends BaseService {
     } else {
       response.statusCode = 200;
       response.message = "";
-      response.data = await serviceMCLoanProfile.checkCitizenId(citizenId);
+      response.data = await serviceMCLoanProfile.checkCitizenId(citizenId,saleCode);
     }
     return response;
   }
