@@ -44,11 +44,22 @@ export class McApiTrackingService extends BaseService {
         query = query.andWhere("created_at <= :createto", {
           createto: dto.createto + " 23:59:59"
         });
-      if (dto.primaryPhone) {
-        query = query.andWhere("primaryPhone = :primaryPhone", {
-          primaryPhone: dto.primaryPhone
+      if (dto.apiname) {
+        query = query.andWhere("apiname = :apiname", {
+          apiname: dto.apiname
         });
-        //query = query.andWhere("verificationCode is null");
+      }
+      if (dto.method) {
+        query = query.andWhere("method = :method", {
+          method: dto.method
+        });
+      }
+      if (dto.keyword){
+        query = query.andWhere(
+            "(payload like :keyword " +
+            "OR response like :keyword )",
+            { keyword: "%" + dto.keyword.trim() + "%" }
+        );
       }
       if (dto.user_id) {
         let userGroup = await this.connection
@@ -81,17 +92,6 @@ export class McApiTrackingService extends BaseService {
           });
         }
       }
-
-      if (dto.keyword)
-        query = query.andWhere(
-          "(productname like :keyword " +
-            "OR fullname like :keyword OR " +
-            "OR nationalId like :keyword OR " +
-            "primaryPhone like :keyword)",
-          {
-            keyword: "%" + dto.keyword + "%"
-          }
-        );
       if (dto.sortcol) {
         let sorttype = dto.sorttype ? dto.sorttype : "ASC";
         if (dto.sorttype) {

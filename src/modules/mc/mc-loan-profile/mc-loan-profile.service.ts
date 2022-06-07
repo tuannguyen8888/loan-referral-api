@@ -150,9 +150,9 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("created_at <= :createto", {
           createto: dto.createto + " 23:59:59"
         });
-      if (dto.keyword)
+      if (dto.keyword){
         query = query.andWhere(
-          "(citizenId like :keyword " +
+            "(citizenId like :keyword " +
             "OR customerName like :keyword " +
             "OR address like :keyword " +
             "OR appNumber like :keyword " +
@@ -164,8 +164,10 @@ export class McLoanProfileService extends BaseService {
             "OR companyTaxNumber like :keyword " +
             "OR created_by like :keyword " +
             "OR compName like :keyword )",
-          { keyword: "%" + dto.keyword.trim() + "%" }
+            { keyword: "%" + dto.keyword.trim() + "%" }
         );
+      }
+
       if (dto.pagesize != 0) {
         query = query
           .orderBy("id", "DESC")

@@ -12,7 +12,9 @@ export class GetMCApiTrackingRequestDto {
   @IsOptional()
   createto?: string;
   @IsOptional()
-  primaryPhone?: string;
+  apiname?: string;
+  @IsOptional()
+  method?: string;
   @IsOptional()
   user_id: string;
   @IsOptional()
