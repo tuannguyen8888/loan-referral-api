@@ -72,48 +72,48 @@ export class CronService {
     var response;
 
     dto.hasCourier = 0;
-    do{
-        console.log("Page: "+dto.pageNumber);
-      response =  await mcloanprofileser.getCases(dto);
-      console.log('---------------------');
+    do {
+      console.log("Page: " + dto.pageNumber);
+      response = await mcloanprofileser.getCases(dto);
+      console.log("---------------------");
       console.log(response.length);
-      console.log('---------------------');
+      console.log("---------------------");
       dto.pageNumber++;
-    }while (response.length > 0);
+    } while (response.length > 0);
 
     dto.pageNumber = 1;
     dto.hasCourier = 1;
-    do{
-      console.log("Page: "+dto.pageNumber);
-      response =  await mcloanprofileser.getCases(dto);
-      console.log('---------------------');
+    do {
+      console.log("Page: " + dto.pageNumber);
+      response = await mcloanprofileser.getCases(dto);
+      console.log("---------------------");
       console.log(response.length);
-      console.log('---------------------');
+      console.log("---------------------");
       dto.pageNumber++;
-    }while (response.length > 0);
+    } while (response.length > 0);
 
     dto.pageNumber = 1;
     dto.status = "PROCESSING";
     dto.hasCourier = 0;
-    do{
-      console.log("Page: "+dto.pageNumber);
-      response =  await mcloanprofileser.getCases(dto);
-      console.log('---------------------');
+    do {
+      console.log("Page: " + dto.pageNumber);
+      response = await mcloanprofileser.getCases(dto);
+      console.log("---------------------");
       console.log(response.length);
-      console.log('---------------------');
+      console.log("---------------------");
       dto.pageNumber++;
-    }while (response.length > 0);
+    } while (response.length > 0);
 
     dto.pageNumber = 1;
     dto.hasCourier = 1;
-    do{
-      console.log("Page: "+dto.pageNumber);
-      var response =  await mcloanprofileser.getCases(dto);
-      console.log('---------------------');
+    do {
+      console.log("Page: " + dto.pageNumber);
+      var response = await mcloanprofileser.getCases(dto);
+      console.log("---------------------");
       console.log(response.length);
-      console.log('---------------------');
+      console.log("---------------------");
       dto.pageNumber++;
-    }while (response.length > 0);
+    } while (response.length > 0);
   }
 
   async ptfGetLoanStatus() {

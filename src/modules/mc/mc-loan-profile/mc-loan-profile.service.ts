@@ -150,9 +150,9 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("created_at <= :createto", {
           createto: dto.createto + " 23:59:59"
         });
-      if (dto.keyword){
+      if (dto.keyword) {
         query = query.andWhere(
-            "(citizenId like :keyword " +
+          "(citizenId like :keyword " +
             "OR customerName like :keyword " +
             "OR address like :keyword " +
             "OR appNumber like :keyword " +
@@ -164,7 +164,7 @@ export class McLoanProfileService extends BaseService {
             "OR companyTaxNumber like :keyword " +
             "OR created_by like :keyword " +
             "OR compName like :keyword )",
-            { keyword: "%" + dto.keyword.trim() + "%" }
+          { keyword: "%" + dto.keyword.trim() + "%" }
         );
       }
 
@@ -279,10 +279,10 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async checkCitizenId(citizenId,user_id) {
+  async checkCitizenId(citizenId, productCode, user_id) {
     console.log("Check cic citizenId: " + citizenId + " customerName: ");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCitizenId(citizenId);
+    var response = await mcapi.checkCitizenId(citizenId, productCode);
     let url = "mobile-4sales/check-identifier";
     var mcApiTrackingService = new McApiTrackingService(
       this.request,
@@ -295,7 +295,10 @@ export class McLoanProfileService extends BaseService {
     dtoApiTracking.apiname = "checkCitizenId";
     dtoApiTracking.url = url;
     dtoApiTracking.method = "get";
-    dtoApiTracking.payload = JSON.stringify({ citizenId: citizenId });
+    dtoApiTracking.payload = JSON.stringify({
+      citizenId: citizenId,
+      productCode: productCode
+    });
     dtoApiTracking.response = JSON.stringify(response);
     dtoApiTracking.createdBy = user_id;
     await mcApiTrackingService.createApiTracking(dtoApiTracking);

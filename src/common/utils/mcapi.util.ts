@@ -145,7 +145,7 @@ export class McapiUtil {
     return response;
   }
 
-  async checkCitizenId(citizenId): Promise<any> {
+  async checkCitizenId(citizenId, productCode): Promise<any> {
     var axios = require("axios");
     let token = await this.redisClient.get("token");
     if (token == null) {
@@ -157,7 +157,9 @@ export class McapiUtil {
     let url =
       mc_api_config.endpoint +
       "mobile-4sales/check-identifier?citizenId=" +
-      citizenId;
+      citizenId +
+      "&productCode=" +
+      productCode;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -172,7 +174,7 @@ export class McapiUtil {
       response = e.response.data;
       if (response.returnCode == "401") {
         await this.login();
-        return await this.checkCitizenId(citizenId);
+        return await this.checkCitizenId(citizenId, productCode);
       }
     } finally {
       // let log = new SendDataLog();

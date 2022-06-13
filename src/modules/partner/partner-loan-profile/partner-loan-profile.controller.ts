@@ -111,7 +111,11 @@ export class PartnerLoanProfileController {
   @ApiOperation({ summary: "Kiểm tra thông tin khách hàng" })
   @HttpCode(200)
   checkCitizenId(@Headers() headers, @Body() dto: CheckCitizenidRequestDto) {
-    return this.service.checkCitizenId(headers.salecode, dto.citizenId);
+    return this.service.checkCitizenId(
+      headers.salecode,
+      dto.citizenId,
+      dto.productCode
+    );
   }
 
   @Get("/checkInitContract/:loan_profile_id")
