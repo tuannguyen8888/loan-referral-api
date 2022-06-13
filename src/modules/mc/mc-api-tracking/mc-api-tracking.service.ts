@@ -54,11 +54,10 @@ export class McApiTrackingService extends BaseService {
           method: dto.method
         });
       }
-      if (dto.keyword){
+      if (dto.keyword) {
         query = query.andWhere(
-            "(payload like :keyword " +
-            "OR response like :keyword )",
-            { keyword: "%" + dto.keyword.trim() + "%" }
+          "(payload like :keyword " + "OR response like :keyword )",
+          { keyword: "%" + dto.keyword.trim() + "%" }
         );
       }
       if (dto.user_id) {

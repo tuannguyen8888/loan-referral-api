@@ -168,12 +168,12 @@ export class PartnerLoanProfileService extends BaseService {
       response.data = await serviceMCLoanProfile.checkCIC(
         citizenId,
         customerName,
-          saleCode
+        saleCode
       );
     }
     return response;
   }
-  async checkCitizenId(saleCode, citizenId) {
+  async checkCitizenId(saleCode, citizenId, productCode) {
     let serviceMCLoanProfile = new McLoanProfileService(
       this.request,
       this.logger,
@@ -189,7 +189,11 @@ export class PartnerLoanProfileService extends BaseService {
     } else {
       response.statusCode = 200;
       response.message = "";
-      response.data = await serviceMCLoanProfile.checkCitizenId(citizenId,saleCode);
+      response.data = await serviceMCLoanProfile.checkCitizenId(
+        citizenId,
+        productCode,
+        saleCode
+      );
     }
     return response;
   }
