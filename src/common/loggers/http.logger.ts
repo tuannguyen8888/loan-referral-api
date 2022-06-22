@@ -58,24 +58,27 @@ export class Logger implements OnModuleInit {
   private logger: winston.Logger;
 
   info(message: unknown): void {
-    this.logger.info(message);
+      if(logsConfig.writelog)
+          this.logger.info(message);
   }
 
   verbose(message: unknown): void {
-    this.logger.verbose(message);
+      if(logsConfig.writelog)
+          this.logger.verbose(message);
   }
 
   error(message: unknown): void {
-    this.logger.error(message);
+      this.logger.error(message);
   }
 
   logTrace(requestId: string, data: unknown): void {
-    this.logger.info(
-      JSON.stringify({
-        requestId,
-        data
-      })
-    );
+      if(logsConfig.writelog)
+          this.logger.info(
+            JSON.stringify({
+              requestId,
+              data
+            })
+          );
   }
 
   logException(exception: BaseException, data: unknown): void {

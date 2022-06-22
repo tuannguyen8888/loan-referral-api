@@ -294,9 +294,9 @@ export class LoanProfileService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    //console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    //console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (
@@ -559,7 +559,7 @@ export class LoanProfileService extends BaseService {
     }
     let error = null;
     let qdeResult = await this.sendData_inputQDE(dto);
-    console.log("qdeResult = ", qdeResult);
+    //console.log("qdeResult = ", qdeResult);
     let entity: LoanProfile = this.convertDto2Entity(dto, LoanProfile);
     if (!qdeResult.success) {
       error = new BadRequestException(qdeResult, "error from MAFC SENT_QDE");
@@ -724,7 +724,7 @@ export class LoanProfileService extends BaseService {
           inputQdeDto.reference.push(refer);
         });
       }
-      console.log("call api MAFC: ", [
+      /*console.log("call api MAFC: ", [
         mafc_api_config.input_data_entry.url,
         inputQdeDto,
         {
@@ -733,7 +733,7 @@ export class LoanProfileService extends BaseService {
             password: mafc_api_config.input_data_entry.password
           }
         }
-      ]);
+      ]);*/
       qdeResult = await this.requestUtil.post(
         mafc_api_config.input_data_entry.url,
         inputQdeDto,
@@ -744,9 +744,9 @@ export class LoanProfileService extends BaseService {
           }
         }
       );
-      console.log("qdeResult = ", qdeResult);
+      //console.log("qdeResult = ", qdeResult);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       qdeResult = e;
     } finally {
       let log = new SendDataLog();
@@ -779,7 +779,7 @@ export class LoanProfileService extends BaseService {
     let mafc_api_config = config.get("mafc_api");
     let result;
     try {
-      console.log("call api MAFC: ", [
+      /*console.log("call api MAFC: ", [
         mafc_api_config.input_data_entry.url,
         {
           p_appid: Number(loanNo),
@@ -793,7 +793,7 @@ export class LoanProfileService extends BaseService {
             password: mafc_api_config.input_data_entry.password
           }
         }
-      ]);
+      ]);*/
       result = await this.requestUtil.post(
         mafc_api_config.input_data_entry.url,
         {
@@ -810,7 +810,7 @@ export class LoanProfileService extends BaseService {
         }
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
       result = e;
     } finally {
       let log = new SendDataLog();
@@ -867,7 +867,7 @@ export class LoanProfileService extends BaseService {
       inputDdeDto.in_notecode = dto.in_notecode;
       inputDdeDto.in_notedetails = dto.in_notedetails;
       inputDdeDto.msgName = "inputDDE";
-      console.log("call api MAFC: ", [
+      /*console.log("call api MAFC: ", [
         mafc_api_config.input_data_entry.url,
         inputDdeDto,
         {
@@ -876,7 +876,7 @@ export class LoanProfileService extends BaseService {
             password: mafc_api_config.input_data_entry.password
           }
         }
-      ]);
+      ]);*/
       ddeResult = await this.requestUtil.post(
         mafc_api_config.input_data_entry.url,
         inputDdeDto,
@@ -888,7 +888,7 @@ export class LoanProfileService extends BaseService {
         }
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
       ddeResult = e;
     } finally {
       let log = new SendDataLog();
@@ -917,7 +917,7 @@ export class LoanProfileService extends BaseService {
     let mafc_api_config = config.get("mafc_api");
     let result;
     try {
-      console.log("call api MAFC: ", [
+      /*console.log("call api MAFC: ", [
         mafc_api_config.input_data_entry.url,
         {
           p_appid: Number(loanNo),
@@ -931,7 +931,7 @@ export class LoanProfileService extends BaseService {
             password: mafc_api_config.input_data_entry.password
           }
         }
-      ]);
+      ]);*/
       result = await this.requestUtil.post(
         mafc_api_config.input_data_entry.url,
         {
@@ -948,7 +948,7 @@ export class LoanProfileService extends BaseService {
         }
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
       result = e;
     } finally {
       let log = new SendDataLog();
@@ -1016,7 +1016,7 @@ export class LoanProfileService extends BaseService {
             attachFiles[i].url,
             filePath
           );
-          console.log("fileStream = ", fileStream.path);
+          //console.log("fileStream = ", fileStream.path);
           files.push(fileStream.path);
           formData.append(
             attachFiles[i].docCode,
@@ -1025,7 +1025,7 @@ export class LoanProfileService extends BaseService {
           formData_log[attachFiles[i].docCode] = fileName;
         }
       }
-      console.log("call api uploadFile");
+      //console.log("call api uploadFile");
       result = await this.requestUtil.uploadFile(
         mafc_api_config.upload.push_to_und_url,
         formData,
@@ -1049,7 +1049,7 @@ export class LoanProfileService extends BaseService {
         isError = true;
       }
 
-      console.log("call api uploadFile result = ", result);
+      //console.log("call api uploadFile result = ", result);
     } catch (e) {
       console.error("call api uploadFile error : " + e);
       result = e;
@@ -1061,7 +1061,7 @@ export class LoanProfileService extends BaseService {
             if (err) {
               console.error("finally unlink " + filePath + " error = ", err);
             } else {
-              console.error("finally unlink success ", filePath);
+              console.info("finally unlink success ", filePath);
             }
           })
         );
@@ -1245,19 +1245,19 @@ export class LoanProfileService extends BaseService {
     deferCode: string,
     deferStatus: string = "Y"
   ) {
-    console.log(
-      `sendData_replyDeferUND loanNo=${loanNo},  customerName=${customerName},  docCode=${docCode},  url=${url}, comment=${comment}, deferCode=${deferCode}, deferStatus=${deferStatus}`
-    );
+    //console.log(
+    //  `sendData_replyDeferUND loanNo=${loanNo},  customerName=${customerName},  docCode=${docCode},  url=${url}, comment=${comment}, deferCode=${deferCode}, deferStatus=${deferStatus}`
+    //);
     let mafc_api_config = config.get("mafc_api");
     // let download_config = config.get("download");
 
-    console.log("log 1");
+    //console.log("log 1");
     let result: any;
     let isError = false;
     let formData_log;
     let files = [];
     try {
-      console.log("log 2");
+      //console.log("log 2");
       formData_log = {};
       formData_log["appid"] = Number(loanNo);
       formData_log["userid"] = "EXT_FIV";
@@ -1266,25 +1266,25 @@ export class LoanProfileService extends BaseService {
       formData_log["usersname"] = "EXT_FIV";
       formData_log["password"] = "mafc123!";
       formData_log["comment"] = comment;
-      console.log("log 3");
+      //console.log("log 3");
       let formData = new FormData();
-      console.log("log 4");
+      //console.log("log 4");
       formData.append("appid", loanNo);
-      console.log("log 5");
+      //console.log("log 5");
       formData.append("userid", "EXT_FIV");
-      console.log("log 6");
+      //console.log("log 6");
       formData.append("defercode", "S1"); //deferCode;
-      console.log("log 7");
+      //console.log("log 7");
       formData.append("deferstatus", deferStatus ? deferStatus : "Y");
-      console.log("log 8");
+      //console.log("log 8");
       formData.append("usersname", "EXT_FIV");
-      console.log("log 9");
+      //console.log("log 9");
       formData.append("password", "mafc123!");
-      console.log("log 10");
+      //console.log("log 10");
       formData.append("comment", comment ? comment : "");
-      console.log("log 11");
+      //console.log("log 11");
       if (url && docCode) {
-        console.log("download file");
+        //console.log("download file");
         let ext: any = url.split(".");
         ext = ext[ext.length - 1];
         let fileName = `${loanNo}_${customerName}_${docCode}.${ext}`;
@@ -1293,12 +1293,12 @@ export class LoanProfileService extends BaseService {
           url,
           filePath
         );
-        console.log("fileStream = ", fileStream.path);
+        //console.log("fileStream = ", fileStream.path);
         files.push(fileStream.path);
         formData.append(docCode, fs.createReadStream(filePath));
         formData_log[docCode] = fileName;
       }
-      console.log("call api reply-defer-und");
+      //console.log("call api reply-defer-und");
       result = await this.requestUtil.uploadFile(
         mafc_api_config.upload.reply_defer_url,
         formData,
@@ -1308,7 +1308,7 @@ export class LoanProfileService extends BaseService {
         }
       );
 
-      console.log("call api reply-defer-und result = ", result);
+      //console.log("call api reply-defer-und result = ", result);
     } catch (e) {
       console.error("call api reply-defer-und error: " + e.message);
       result = e;
@@ -1317,7 +1317,7 @@ export class LoanProfileService extends BaseService {
       if (files && files.length) {
         files.forEach(async filePath =>
           fs.unlink(filePath, err => {
-            console.log("finally unlink ", err);
+            //console.log("finally unlink ", err);
           })
         );
       }
@@ -1564,7 +1564,7 @@ export class LoanProfileService extends BaseService {
       // if (!hasChange) {
       //   throw new BadRequestException("No data changed, cannot sent to MAFC");
       // }
-      console.log("call api MAFC: ", [
+      /*console.log("call api MAFC: ", [
         mafc_api_config.update_data_entry.url,
         inputDatatUpdateDto,
         {
@@ -1573,7 +1573,7 @@ export class LoanProfileService extends BaseService {
             password: mafc_api_config.update_data_entry.password
           }
         }
-      ]);
+      ]);*/
       updateResult = await this.requestUtil.post(
         mafc_api_config.update_data_entry.url,
         inputDatatUpdateDto,
@@ -1584,13 +1584,13 @@ export class LoanProfileService extends BaseService {
           }
         }
       );
-      console.log("updateResult = ", updateResult);
+      //console.log("updateResult = ", updateResult);
       if (!updateResult.success) {
         isError = false;
         apiError = updateResult;
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       updateResult = e;
     } finally {
       let log = new SendDataLog();
@@ -1623,12 +1623,12 @@ export class LoanProfileService extends BaseService {
   }
 
   async updateLoanProfile(dto: LoanProfileDto) {
-    console.log("updateLoanProfile id = ", dto.id);
-    console.log("updateLoanProfile loan_no = ", dto.loan_no);
+    //console.log("updateLoanProfile id = ", dto.id);
+    //console.log("updateLoanProfile loan_no = ", dto.loan_no);
     // if (!dto.id) {
     //   throw new BadRequestException("Loan profile id can be not null");
     // }
-    console.log("updateLoanProfile id = ", dto.id);
+    //console.log("updateLoanProfile id = ", dto.id);
     let entityUpdate = this.convertDto2Entity(dto, LoanProfile);
     let entityOld = await this.connection
       .getCustomRepository(LoanProfileRepository)
