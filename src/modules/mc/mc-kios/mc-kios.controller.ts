@@ -18,7 +18,7 @@ export class McKiosController {
   @Get("/")
   @ApiOperation({ summary: "Lấy danh sách kios" })
   getKios(@Headers() headers): Promise<McKiosRepository> {
-    console.log("Lấy danh sách kios");
+    // console.log("Lấy danh sách kios");
     return this.service.getKios();
   }
 }

@@ -139,20 +139,20 @@ export class McScoringTrackingService extends BaseService {
   }
 
   async createScoringTracking(dto: McScoringTrackingDto) {
-    console.log(dto);
+    // console.log(dto);
     let entity: McScoringTracking = this.convertDto2Entity(
       dto,
       McScoringTracking
     );
     entity.createdBy = dto.createdBy;
     entity.createdAt = new Date();
-    console.log(entity);
+    // console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
       .getCustomRepository(McScoringTrackingRepository)
       .save(entity);
     this.logger.verbose(`insertResult = ${result}`);
-    console.log(result);
+    // console.log(result);
     let response: McScoringTrackingDto = this.convertEntity2Dto(
       result,
       McScoringTracking,
@@ -241,9 +241,9 @@ export class McScoringTrackingService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

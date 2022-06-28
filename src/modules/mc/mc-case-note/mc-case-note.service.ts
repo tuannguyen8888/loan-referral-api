@@ -87,7 +87,7 @@ export class McCaseNoteService extends BaseService {
   }
 
   async createCaseNote(dto: McCaseNoteDto) {
-    console.log(dto);
+    // console.log(dto);
     let loanProfileService = new McLoanProfileService(
       this.request,
       this.logger,
@@ -102,13 +102,13 @@ export class McCaseNoteService extends BaseService {
     let entity: McCaseNote = this.convertDto2Entity(dto, McCaseNote);
     entity.createdBy = dto.createdBy;
     entity.createdAt = new Date();
-    console.log(entity);
+    // console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
       .getCustomRepository(McCaseNoteRepository)
       .save(entity);
     this.logger.verbose(`insertResult = ${result}`);
-    console.log(result);
+    // console.log(result);
     let response: McCaseNoteDto = this.convertEntity2Dto(
       result,
       McCaseNote,
@@ -209,9 +209,9 @@ export class McCaseNoteService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

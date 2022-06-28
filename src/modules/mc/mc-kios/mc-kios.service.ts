@@ -48,7 +48,7 @@ export class McKiosService extends BaseService {
   }
 
   async getKios() {
-    console.log("Get Kios");
+    // console.log("Get Kios");
     let mcapi = new McapiUtil(this.redisClient, this.httpService);
     var response = await mcapi.getKios();
     return response;

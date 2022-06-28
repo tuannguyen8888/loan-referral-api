@@ -26,7 +26,7 @@ export class McApiTrackingController {
     @Headers() headers,
     @Body() dto: GetMCApiTrackingRequestDto
   ): Promise<McApiTrackingsResponseDto> {
-    console.log("Lấy danh sách sản phẩm");
+    // console.log("Lấy danh sách sản phẩm");
     return this.service.getAllApiTrackings(dto);
   }
 
@@ -54,7 +54,7 @@ export class McApiTrackingController {
     @Headers() headers,
     @Body() dto: McApiTrackingUpdateDto
   ): Promise<McApiTrackingUpdateDto> {
-    console.log("Update ApiTracking");
+    // console.log("Update ApiTracking");
     return this.service.updateApiTracking(dto);
   }
 }
