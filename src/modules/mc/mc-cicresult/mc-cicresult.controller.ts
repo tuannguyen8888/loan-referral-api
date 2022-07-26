@@ -31,7 +31,7 @@ export class McCicresultController {
     @Headers() headers,
     @Body() dto: GetMCCicResultRequestDto
   ): Promise<McCicresultsResponseDto> {
-    console.log("Lấy danh sách Cic result");
+    // console.log("Lấy danh sách Cic result");
     return this.service.getAllCicResults(dto);
   }
 

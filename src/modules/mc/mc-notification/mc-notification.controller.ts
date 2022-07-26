@@ -31,7 +31,7 @@ export class McNotificationController {
     @Headers() headers,
     @Body() dto: GetMCnotificationRequestDto
   ): Promise<McNotificationsResponseDto> {
-    console.log("Lấy danh sách Notification");
+    // console.log("Lấy danh sách Notification");
     return this.service.getAllNotification(dto);
   }
 

@@ -32,13 +32,13 @@ export class McProductController {
   @Get("/")
   @ApiOperation({ summary: "Lấy danh sách sản phẩm" })
   getProducts(@Headers() headers): Promise<McProductRepository> {
-    console.log("Lấy danh sách product");
+    // console.log("Lấy danh sách product");
     return this.service.getProducts();
   }
   @Get("/update")
   @ApiOperation({ summary: "Lấy danh sách sản phẩm và câp nhật" })
   getProductsUpdate(@Headers() headers): Promise<McProductRepository> {
-    console.log("Lấy danh sách product");
+    // console.log("Lấy danh sách product");
     return this.service.getProductsUpdate();
   }
   @Get("/all")
@@ -47,7 +47,7 @@ export class McProductController {
     @Headers() headers,
     @Body() dto: GetMCProductRequestDto
   ): Promise<McProductsResponseDto> {
-    console.log("Lấy danh sách sản phẩm");
+    // console.log("Lấy danh sách sản phẩm");
     return this.service.getAllProducts(dto);
   }
 
@@ -72,7 +72,7 @@ export class McProductController {
     @Headers() headers,
     @Body() dto: McProductUpdateDto
   ): Promise<McProductUpdateDto> {
-    console.log("Update Product");
+    // console.log("Update Product");
     return this.service.updateProduct(dto);
   }
 }

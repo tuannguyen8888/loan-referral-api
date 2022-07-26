@@ -34,8 +34,6 @@ export class McCicresultService extends BaseService {
     try {
       const repo = this.connection.getCustomRepository(McCicresultRepository);
       let query = repo.createQueryBuilder().where("deleted_at is null");
-      console.log(111);
-
       if (dto.keyword)
         query = query.andWhere(
           "loan_application_id like :keyword OR loan_public_id like :keyword OR first_name like :keyword OR middle_name like :keyword OR last_name like :keyword OR id_document_number like :keyword ",
@@ -77,14 +75,14 @@ export class McCicresultService extends BaseService {
     return response;
   }
   async createCicResult(dto: McCicresultDto) {
-    console.log(dto);
+    // console.log(dto);
     let entity: McCicResult = this.convertDto2Entity(dto, McCicResult);
     entity.cicDescription = dto.description;
     if (entity.createdBy == null) {
       entity.createdBy = "MCPartner";
     }
     entity.createdAt = new Date();
-    console.log(entity);
+    // console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
       .getCustomRepository(McCicresultRepository)
@@ -96,7 +94,7 @@ export class McCicresultService extends BaseService {
       citizenId: dto.identifier
     });
     let loanProfileResponse = await query.getOne();
-    console.log(loanProfileResponse);
+    // console.log(loanProfileResponse);
     if (loanProfileResponse != undefined) {
       let queryupdate = repo
         .createQueryBuilder()
@@ -194,9 +192,9 @@ export class McCicresultService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

@@ -110,10 +110,10 @@ export class McAttachfileService extends BaseService {
   }
 
   async createAttachfile(dto: McAttachfileDto) {
-    console.log(dto);
+    // console.log(dto);
     let entity: McAttachfile = this.convertDto2Entity(dto, McAttachfile);
     entity.createdAt = new Date();
-    console.log(entity);
+    // console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
       .getCustomRepository(McAttachfileRepository)
@@ -264,9 +264,9 @@ export class McAttachfileService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

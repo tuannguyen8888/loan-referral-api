@@ -84,14 +84,14 @@ export class McNotificationService extends BaseService {
   }
 
   async createNotification(dto: McNotificationDto) {
-    console.log(dto);
+    // console.log(dto);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
     let query = repo.createQueryBuilder().where("deleted_at is null");
     query = query.andWhere("profileid = :profileid", {
       profileid: dto.id
     });
     let loanProfileResponse = await query.getOne();
-    console.log(loanProfileResponse);
+    // console.log(loanProfileResponse);
     if (loanProfileResponse != undefined) {
       let entity: McNotification = this.convertDto2Entity(dto, McNotification);
       entity.id = null;
@@ -100,7 +100,7 @@ export class McNotificationService extends BaseService {
       if (entity.createdBy == null) {
         entity.createdBy = "MCPartner";
       }
-      console.log(entity);
+      // console.log(entity);
       this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
       let result = await this.connection
         .getCustomRepository(McNotificationRepository)
@@ -228,9 +228,9 @@ export class McNotificationService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

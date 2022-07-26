@@ -106,7 +106,7 @@ export class McApiTrackingService extends BaseService {
         query = query.orderBy("id", "DESC");
       }
       if (dto.pagesize != 0) {
-        console.log(dto.pagesize);
+        // console.log(dto.pagesize);
         query = query.skip((dto.page - 1) * dto.pagesize).take(dto.pagesize);
       }
 
@@ -140,17 +140,17 @@ export class McApiTrackingService extends BaseService {
   }
 
   async createApiTracking(dto: McApiTrackingDto) {
-    console.log(dto);
+    // console.log(dto);
     let entity: McApiTracking = this.convertDto2Entity(dto, McApiTracking);
     entity.createdBy = dto.createdBy;
     entity.createdAt = new Date();
-    console.log(entity);
+    // console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
       .getCustomRepository(McApiTrackingRepository)
       .save(entity);
     this.logger.verbose(`insertResult = ${result}`);
-    console.log(result);
+    // console.log(result);
     let response: McApiTrackingDto = this.convertEntity2Dto(
       result,
       McApiTracking,
@@ -239,9 +239,9 @@ export class McApiTrackingService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

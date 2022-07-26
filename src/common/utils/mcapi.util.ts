@@ -678,7 +678,7 @@ export class McapiUtil {
       dto.status +
       "&saleCode=" +
       saleCode;
-    console.log(url);
+    //console.log(url);
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -689,13 +689,13 @@ export class McapiUtil {
       let result = await axios.get(url, {
         headers: headers
       });
-      console.log("true");
-      console.log(result);
+      //console.log("true");
+      //console.log(result);
       response = result.data;
     } catch (e) {
-      console.log("false");
+      //console.log("false");
       response = e.response.data;
-      console.log(response);
+      //console.log(response);
       if (response.returnCode == "401") {
         await this.login();
         return await this.getCases(dto);
