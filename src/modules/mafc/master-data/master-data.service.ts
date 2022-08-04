@@ -234,14 +234,14 @@ export class MasterDataService extends BaseService {
       "432",
       "433",
       "1381",
-        "1382",
-        "1461",
-        "1460",
-        "1459",
-        "1458",
-        "1457",
-        "1456",
-        "1455"
+      "1382",
+      "1461",
+      "1460",
+      "1459",
+      "1458",
+      "1457",
+      "1456",
+      "1455"
     ];
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
@@ -256,7 +256,9 @@ export class MasterDataService extends BaseService {
     //console.log(' ddddgetSchemes response = ', response);
     const schemes: SchemeMasterData[] = response.data.filter(
       (m: SchemeMasterData) => {
-        const filt = listFilter.some(x =>(m.schemeid == x || m.schemename.includes(x)));
+        const filt = listFilter.some(
+          x => m.schemeid == x || m.schemename.includes(x)
+        );
         if (filt) {
           if (
             m.schemename.startsWith("EVN") ||
@@ -290,7 +292,7 @@ export class MasterDataService extends BaseService {
         }
       }
     );
-      //console.log('getSchemes schemes = ', JSON.stringify(schemes));
+    //console.log('getSchemes schemes = ', JSON.stringify(schemes));
     const res = await this.schemeMD.save(schemes, { chunk: 500 });
     //console.log("SAVED SCHEME");
     return res;
