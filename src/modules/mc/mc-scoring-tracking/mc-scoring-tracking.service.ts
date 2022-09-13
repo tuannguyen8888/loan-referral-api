@@ -108,7 +108,10 @@ export class McScoringTrackingService extends BaseService {
       } else {
         query = query.orderBy("id", "DESC");
       }
-
+      if (dto.pagesize != 0) {
+        // console.log(dto.pagesize);
+        query = query.skip((dto.page - 1) * dto.pagesize).take(dto.pagesize);
+      }
       const result = new McScoringTrackingsResponseDto();
 
       let data, count;
