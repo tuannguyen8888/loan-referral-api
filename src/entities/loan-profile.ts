@@ -474,6 +474,20 @@ export class LoanProfile {
   inNotedetails: string | null;
 
   @Column("varchar", {
+    name: "note_notecode",
+    nullable: true,
+    length: 20
+  })
+  noteNotecode: string | null;
+
+  @Column("varchar", {
+    name: "note_notedetails",
+    nullable: true,
+    length: 3000
+  })
+  noteNotedetails: string | null;
+
+  @Column("varchar", {
     name: "econtract",
     nullable: true,
     comment: "Hợp đồng điện tử",

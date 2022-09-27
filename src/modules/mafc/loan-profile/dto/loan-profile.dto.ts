@@ -80,6 +80,12 @@ export class LoanProfileDto {
   in_notecode: string = null;
   @IsOptional()
   in_notedetails: string = null;
+
+  @IsOptional()
+  note_notecode: string = null;
+  @IsOptional()
+  note_notedetails: string = null;
+
   @IsOptional()
   @IsDateString()
   created_at: string = null;
