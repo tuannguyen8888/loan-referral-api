@@ -864,11 +864,11 @@ export class LoanProfileService extends BaseService {
       inputDdeDto.in_acctype = dto.in_acctype;
       inputDdeDto.in_accno = dto.in_accno;
       inputDdeDto.in_dueday = dto.in_dueday;
-      // inputDdeDto.in_notecode = dto.in_notecode;
-      inputDdeDto.in_notecode = "";
-      inputDdeDto.in_notedetails = {
-        in_notecode: dto.in_notecode,
-        in_notedetails: dto.in_notedetails
+      inputDdeDto.in_notecode = dto.in_notecode;
+      inputDdeDto.in_notecode = dto.in_notedetails;
+      inputDdeDto.note = {
+        in_notecode: dto.note_notecode,
+        in_notedetails: dto.note_notedetails
       };
       inputDdeDto.msgName = "inputDDE";
       /*console.log("call api MAFC: ", [
