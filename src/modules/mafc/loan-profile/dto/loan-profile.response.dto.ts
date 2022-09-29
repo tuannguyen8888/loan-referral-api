@@ -78,6 +78,8 @@ export class LoanProfileResponseDto {
   in_dueday: string = null;
   in_notecode: string = null;
   in_notedetails: string = null;
+  note_notecode: string = null;
+  note_notedetails: string = null;
   econtract: string = null;
   @IsOptional()
   @IsDateString()
