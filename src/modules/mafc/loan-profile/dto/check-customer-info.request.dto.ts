@@ -15,6 +15,9 @@ export class CheckCustomerInfoRequestDto {
   customer_national_id: string;
 
   @IsNumberString()
+  customer_name: string;
+
+  @IsNumberString()
   phone: string;
 
   @IsOptional()

@@ -63,6 +63,7 @@ export class LoanProfileController {
       dto.customer_national_id,
       dto.phone,
       dto.tax_code,
+      dto.customer_name,
       dto.user_id
     );
   }

@@ -1834,7 +1834,7 @@ export class LoanProfileService extends BaseService {
     }
   }
 
-  async checkCustomerInfo(customerNationalId, phone, taxCode = null, createBy) {
+  async checkCustomerInfo(customerNationalId, phone, taxCode = null, customerName, createBy) {
     let mafc_api_config = config.get("mafc_api");
     let response: any;
     try {
@@ -1844,6 +1844,8 @@ export class LoanProfileService extends BaseService {
           cmnd: customerNationalId,
           phone: phone,
           taxCode: taxCode,
+          customerName: customerName,
+          saleCode: "EXT_FIV",
           partner: mafc_api_config.partner_code
         },
         {
@@ -1871,6 +1873,8 @@ export class LoanProfileService extends BaseService {
           cmnd: customerNationalId,
           phone: phone,
           taxCode: taxCode,
+          customerName: customerName,
+          saleCode: "EXT_FIV",
           partner: mafc_api_config.partner_code
         },
         {
