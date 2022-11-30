@@ -35,6 +35,10 @@ export class RedisClient implements OnModuleInit {
       this.logger.error("Reconnecting to Redis server");
     });
 
+    this.client.on("end", () => {
+      this.logger.error("Redis connection has closed from server");
+    });
+
     this.client.on("error", error => {
       switch (error.command) {
         case "AUTH":

@@ -74,7 +74,7 @@ mafc_api:
     username: 'masterdatamci'
     password: 'mafc32412^&%^$'
   check_customer_info:
-    url: 'https://apigw-staging.mafc.vn/3p/v2/check-customer'
+    url: 'https://apigw-staging.mafc.vn/3p/v3/check-customer'
     username: 'mirae-3p'
     password: '123456'
   cic:
