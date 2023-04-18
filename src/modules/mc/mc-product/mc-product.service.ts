@@ -55,14 +55,14 @@ export class McProductService extends BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
     private readonly requestUtil: RequestUtil,
+    protected mcapi: McapiUtil,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
   }
   async getProductsUpdate() {
     // console.log("Get Products");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.getProducts();
+    var response = await this.mcapi.getProducts();
     for (const i in response) {
       // console.log(response[i]);
       response[i].productName = response[i].productName.trim();
@@ -83,8 +83,7 @@ export class McProductService extends BaseService {
   }
   async getProducts() {
     // console.log("Get Products");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.getProducts();
+    var response = await this.mcapi.getProducts();
     for (const i in response) {
       response[i].productName = response[i].productName.trim();
     }

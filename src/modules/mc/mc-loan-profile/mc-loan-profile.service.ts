@@ -60,6 +60,7 @@ export class McLoanProfileService extends BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
     private readonly requestUtil: RequestUtil,
+    protected mcapi: McapiUtil,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
@@ -253,8 +254,7 @@ export class McLoanProfileService extends BaseService {
     //     "returnMes": "Tham số CMND/CCCD đã tồn tại trong hệ thống"
     //   }
     // }
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCIC(citizenId, customerName);
+    var response = await this.mcapi.checkCIC(citizenId, customerName);
     let url = "mobile-4sales/check-cic/check";
     var mcApiTrackingService = new McApiTrackingService(
       this.request,
@@ -279,8 +279,7 @@ export class McLoanProfileService extends BaseService {
 
   async checkCitizenId(citizenId, productCode, user_id) {
     //console.log("Check cic citizenId: " + citizenId + " customerName: ");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCitizenId(citizenId, productCode);
+    var response = await this.mcapi.checkCitizenId(citizenId, productCode);
     let url = "mobile-4sales/check-identifier";
     var mcApiTrackingService = new McApiTrackingService(
       this.request,
@@ -305,7 +304,6 @@ export class McLoanProfileService extends BaseService {
 
   async checkInitContract(loan_profile_id) {
     //console.log("checkInitContract");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let dto = new CheckInitContractRequestDto();
     var loanProfile = await this.getLoanProfile(loan_profile_id);
     dto.productId = loanProfile.productId;
@@ -318,7 +316,7 @@ export class McLoanProfileService extends BaseService {
     dto.gender = loanProfile.gender;
     dto.issuePlace = loanProfile.issuePlace;
     dto.hasInsurance = loanProfile.hasInsurance;
-    var response = await mcapi.checkInitContract(dto);
+    var response = await this.mcapi.checkInitContract(dto);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
 
     let queryupdate;
@@ -358,8 +356,7 @@ export class McLoanProfileService extends BaseService {
 
   async checkList(dto: McCheckListrequestDto) {
     //console.log("checkList");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkList(dto);
+    var response = await this.mcapi.checkList(dto);
     return response;
   }
 
@@ -368,14 +365,14 @@ export class McLoanProfileService extends BaseService {
     //console.log(appStatus);
     let loanProfileResponseDTO = await this.getLoanProfile(id);
     //console.log(loanProfileResponseDTO);
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+
     let attachRequest = new GetMCAttachfileRequestDto();
     let attachFiles = new McAttachfilesResponseDto();
     let attachserviec = new McAttachfileService(
       this.request,
       this.logger,
       this.redisClient,
-      this.requestUtil
+      this.mcapi
     );
     if (appStatus == 1) {
       attachRequest.profileid = id;
@@ -385,12 +382,12 @@ export class McLoanProfileService extends BaseService {
         this.request,
         this.logger,
         this.redisClient,
-        this.requestUtil
+        this.mcapi
       );
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     } else {
       //Get return checklist
-      let returnchecklist = await mcapi.getReturnChecklist(
+      let returnchecklist = await this.mcapi.getReturnChecklist(
         loanProfileResponseDTO.appid
       );
       //console.log(returnchecklist);
@@ -412,7 +409,7 @@ export class McLoanProfileService extends BaseService {
 
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     }
-    var response = await mcapi.uploadDocument(
+    var response = await this.mcapi.uploadDocument(
       loanProfileResponseDTO,
       attachFiles,
       appStatus
@@ -451,41 +448,36 @@ export class McLoanProfileService extends BaseService {
 
   async checkCategory(companyTaxNumber) {
     // console.log("checkCategory");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCategory(companyTaxNumber);
+    var response = await this.mcapi.checkCategory(companyTaxNumber);
     return response;
   }
 
   async listCaseNote(id) {
     // console.log("listCaseNote");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let loanProfile = await this.getLoanProfile(id);
     // console.log(loanProfile.appNumber);
-    var response = await mcapi.listCaseNote(loanProfile.appNumber);
+    var response = await this.mcapi.listCaseNote(loanProfile.appNumber);
     return response;
   }
 
   async getReturnChecklist(id) {
     // console.log("getReturnChecklist");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
     let loanProfile = await this.getLoanProfile(id);
     // console.log(loanProfile.appid);
-    var response = await mcapi.getReturnChecklist(loanProfile.appid);
+    var response = await this.mcapi.getReturnChecklist(loanProfile.appid);
     return response;
   }
 
   async downloadPDF(fileid) {
     // console.log("downloadPDF");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.downloadPDF(fileid);
+    var response = await this.mcapi.downloadPDF(fileid);
     return response;
   }
 
   async getCases(dto: GetMcCaseRequestDto) {
     // console.log("getCases " + dto.status + " hasCourier = " + dto.hasCourier);
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
-    var response = await mcapi.getCases(dto);
+    var response = await this.mcapi.getCases(dto);
     try {
       for (const item of response) {
         // console.log(item);
@@ -520,8 +512,7 @@ export class McLoanProfileService extends BaseService {
 
   async requestSendOtp3P(dto: requestSendOtp3PDto) {
     // console.log("requestSendOtp3P");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
+    var response = await this.mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
     let scoringTrackingService = new McScoringTrackingService(
       this.request,
       this.logger,
@@ -541,8 +532,7 @@ export class McLoanProfileService extends BaseService {
 
   async requestScoring3P(dto: requestScoring3PDto) {
     // console.log("requestScoring3P");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.requestScoring3P(dto);
+    var response = await this.mcapi.requestScoring3P(dto);
     let requestScoringTracking = new GetMCScoringTrackingRequestDto();
     requestScoringTracking.primaryPhone = dto.primaryPhone;
     let scoringTrackingService = new McScoringTrackingService(
@@ -587,12 +577,12 @@ export class McLoanProfileService extends BaseService {
           this.logger,
           this.redisClient,
           this.requestUtil,
+          this.mcapi,
           this.httpService
         );
 
         serviceCaseNote.createCaseNote(dtoCaseNode);
-        let mcapi = new McapiUtil(this.redisClient, this.httpService);
-        var response = await mcapi.cancelCase(
+        var response = await this.mcapi.cancelCase(
           loanProfile.profileid,
           reason,
           comment

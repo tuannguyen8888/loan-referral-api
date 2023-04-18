@@ -1655,7 +1655,7 @@ export class LoanProfileService extends BaseService {
     let entityOld = await this.connection
       .getCustomRepository(LoanProfileRepository)
       .findOne(dto.id);
-    this.sendData_dataEntryUpdate(entityOld, entityUpdate, dto);
+    await this.sendData_dataEntryUpdate(entityOld, entityUpdate, dto);
     switch (entityOld.loanStatus) {
       case "QDE":
         let qdeChangeResult = await this.sendData_procQDEChangeState(
@@ -1852,7 +1852,13 @@ export class LoanProfileService extends BaseService {
     }
   }
 
-  async checkCustomerInfo(customerNationalId, phone, taxCode = null, customerName, createBy) {
+  async checkCustomerInfo(
+    customerNationalId,
+    phone,
+    taxCode = null,
+    customerName,
+    createBy
+  ) {
     let mafc_api_config = config.get("mafc_api");
     let response: any;
     try {

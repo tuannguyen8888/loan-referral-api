@@ -1,4 +1,4 @@
-import { HttpService, Injectable } from "@nestjs/common";
+import { HttpService, Injectable, Inject } from "@nestjs/common";
 import { RequestUtil } from "src/common/utils";
 import { Logger } from "src/common/loggers";
 import { MasterDataService } from "../modules/mafc/master-data/master-data.service";
@@ -8,13 +8,19 @@ import { McLoanProfileService } from "../modules/mc/mc-loan-profile/mc-loan-prof
 import { Request } from "express";
 import { RedisClient } from "../common/shared";
 import { GetMcCaseRequestDto } from "../modules/mc/mc-loan-profile/dto/get-mc-case.request.dto";
+import { McapiUtil } from "../common/utils/mcapi.util";
 
 @Injectable()
 export class CronService {
+  constructor(
+    @Inject(McLoanProfileService) private mcloanprofileser: McLoanProfileService
+  ) {}
+
   protected request: Request;
   private logger = new Logger();
   protected redisClient = new RedisClient(this.logger);
   private httpService = new HttpService();
+  protected mcapi: McapiUtil;
   private requestUtil = new RequestUtil(this.httpService);
 
   @Timeout(0)
@@ -53,15 +59,7 @@ export class CronService {
   async McCron() {
     console.info(`START CRON McCron AT ======= ${new Date()}`);
     console.log(`START CRON McCron AT ======= ${new Date()}`);
-    //MC
-    this.redisClient.onModuleInit();
-    let mcloanprofileser = new McLoanProfileService(
-      this.request,
-      this.logger,
-      this.redisClient,
-      this.requestUtil,
-      this.httpService
-    );
+
     let dto = new GetMcCaseRequestDto();
 
     dto.pageNumber = 1;
@@ -74,7 +72,7 @@ export class CronService {
     dto.hasCourier = 0;
     do {
       console.log("Page: " + dto.pageNumber);
-      response = await mcloanprofileser.getCases(dto);
+      response = await this.mcloanprofileser.getCases(dto);
       console.log("---------------------");
       console.log(response.length);
       console.log("---------------------");
@@ -85,7 +83,7 @@ export class CronService {
     dto.hasCourier = 1;
     do {
       console.log("Page: " + dto.pageNumber);
-      response = await mcloanprofileser.getCases(dto);
+      response = await this.mcloanprofileser.getCases(dto);
       console.log("---------------------");
       console.log(response.length);
       console.log("---------------------");
@@ -97,7 +95,7 @@ export class CronService {
     dto.hasCourier = 0;
     do {
       console.log("Page: " + dto.pageNumber);
-      response = await mcloanprofileser.getCases(dto);
+      response = await this.mcloanprofileser.getCases(dto);
       console.log("---------------------");
       console.log(response.length);
       console.log("---------------------");
@@ -108,7 +106,7 @@ export class CronService {
     dto.hasCourier = 1;
     do {
       console.log("Page: " + dto.pageNumber);
-      var response = await mcloanprofileser.getCases(dto);
+      var response = await this.mcloanprofileser.getCases(dto);
       console.log("---------------------");
       console.log(response.length);
       console.log("---------------------");

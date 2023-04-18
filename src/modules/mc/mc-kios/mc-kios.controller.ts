@@ -16,9 +16,9 @@ export class McKiosController {
   constructor(private readonly service: McKiosService) {}
 
   @Get("/")
-  @ApiOperation({ summary: "Lấy danh sách kios" })
+  @ApiOperation({ summary: "Lấy danh sách kios 111" })
   getKios(@Headers() headers): Promise<McKiosRepository> {
-    // console.log("Lấy danh sách kios");
+    // console.log("Lấy danh sách kios 2222");
     return this.service.getKios();
   }
 }

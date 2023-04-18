@@ -33,6 +33,7 @@ export class McCaseNoteService extends BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
     private readonly requestUtil: RequestUtil,
+    protected mcapi: McapiUtil,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
@@ -93,6 +94,7 @@ export class McCaseNoteService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let loanProfile = await loanProfileService.getLoanProfile(dto.profileid);
@@ -114,9 +116,9 @@ export class McCaseNoteService extends BaseService {
       McCaseNote,
       McCaseNoteDto
     );
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+
     if (dto.appNumber != null) {
-      mcapi.sendCaseNote(dto.appNumber, dto.note_content);
+      await this.mcapi.sendCaseNote(dto.appNumber, dto.note_content);
     }
 
     return response;
@@ -128,6 +130,7 @@ export class McCaseNoteService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let loanProfile = await loanProfileService.getLoanProfile(dto.profileid);

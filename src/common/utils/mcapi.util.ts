@@ -23,7 +23,7 @@ import { McCheckListrequestDto } from "../../modules/mc/mc-loan-profile/dto/mc-c
 @Injectable()
 export class McapiUtil {
   constructor(
-    protected readonly redisClient: RedisClient,
+    @Inject(RedisClient) private readonly redisClient: RedisClient,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     this.connection = getConnectionManager().get("default");
@@ -50,7 +50,7 @@ export class McapiUtil {
     let result = await axios.post(url, data, {
       headers: headers
     });
-    //console.log(result.data);
+    console.log(result.data);
     await this.redisClient.set("token", result.data.token);
     return result.data;
   }
@@ -243,6 +243,7 @@ export class McapiUtil {
 
   async getKios(): Promise<any> {
     let mckios = await this.redisClient.get("mckios");
+    console.log("mckios " + mckios);
     let response;
     if (mckios == null) {
       var axios = require("axios");
@@ -251,6 +252,7 @@ export class McapiUtil {
         let login = await this.login();
         token = login.token;
       }
+      console.log("token " + token);
       let mc_api_config = config.get("mc_api");
       let url = mc_api_config.endpoint + "mobile-4sales/kiosks";
       let headers = {

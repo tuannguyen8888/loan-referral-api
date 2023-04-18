@@ -20,6 +20,7 @@ import { McAttachfileResponseDto } from "./dto/mc-attachfile.response.dto";
 import { McAttachfileDto } from "./dto/mc-attachfile.dto";
 import { McAttachfileUpdateDto } from "./dto/mc-attachfile.update.dto";
 import { McAttachfileDeleteDto } from "./dto/mc-attachfile.delete.dto";
+import { McapiUtil } from "../../../common/utils/mcapi.util";
 
 @Injectable()
 export class McAttachfileService extends BaseService {
@@ -27,7 +28,7 @@ export class McAttachfileService extends BaseService {
     @Inject(REQUEST) protected request: Request,
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
-    private readonly requestUtil: RequestUtil
+    protected mcapi: McapiUtil
   ) {
     super(request, logger, redisClient);
   }
