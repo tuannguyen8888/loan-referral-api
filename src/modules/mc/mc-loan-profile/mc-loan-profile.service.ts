@@ -50,6 +50,8 @@ import { McScoringTrackingDto } from "../mc-scoring-tracking/dto/mc-scoring-trac
 import { GetMCScoringTrackingRequestDto } from "../mc-scoring-tracking/dto/get-scoring-tracking.request.dto";
 import { McScoringTrackingResponseDto } from "../mc-scoring-tracking/dto/mc-scoring-tracking.response.dto";
 import { McScoringTrackingUpdateDto } from "../mc-scoring-tracking/dto/mc-scoring-tracking.update.dto";
+import { McApiTrackingService } from "../mc-api-tracking/mc-api-tracking.service";
+import { McApiTrackingDto } from "../mc-api-tracking/dto/mc-api-tracking.dto";
 
 @Injectable()
 export class McLoanProfileService extends BaseService {
@@ -58,6 +60,7 @@ export class McLoanProfileService extends BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
     private readonly requestUtil: RequestUtil,
+    protected mcapi: McapiUtil,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
@@ -148,7 +151,7 @@ export class McLoanProfileService extends BaseService {
         query = query.andWhere("created_at <= :createto", {
           createto: dto.createto + " 23:59:59"
         });
-      if (dto.keyword)
+      if (dto.keyword) {
         query = query.andWhere(
           "(citizenId like :keyword " +
             "OR customerName like :keyword " +
@@ -164,6 +167,8 @@ export class McLoanProfileService extends BaseService {
             "OR compName like :keyword )",
           { keyword: "%" + dto.keyword.trim() + "%" }
         );
+      }
+
       if (dto.pagesize != 0) {
         query = query
           .orderBy("id", "DESC")
@@ -189,11 +194,13 @@ export class McLoanProfileService extends BaseService {
       throw e;
     }
   }
+
   async getbpmStatus() {
-    console.log("getbpmStatus");
+    //console.log("getbpmStatus");
     try {
       const rawData = await this.connection.query(
-        `SELECT DISTINCT bpmStatus FROM mc_loan_profile`
+        `SELECT DISTINCT bpmStatus
+                 FROM mc_loan_profile`
       );
       return rawData;
     } catch (e) {
@@ -201,11 +208,13 @@ export class McLoanProfileService extends BaseService {
       return null;
     }
   }
+
   async getSaleCode() {
-    console.log("getSaleCode");
+    // console.log("getSaleCode");
     try {
       const rawData = await this.connection.query(
-        `SELECT DISTINCT saleCode FROM mc_loan_profile`
+        `SELECT DISTINCT saleCode
+                 FROM mc_loan_profile`
       );
       return rawData;
     } catch (e) {
@@ -213,6 +222,7 @@ export class McLoanProfileService extends BaseService {
       return null;
     }
   }
+
   async getLoanProfile(loanProfileId: number) {
     let result = await this.connection
       .getCustomRepository(McLoanProfileRepository)
@@ -226,10 +236,8 @@ export class McLoanProfileService extends BaseService {
     return response;
   }
 
-  async checkCIC(citizenId, customerName) {
-    console.log(
-      "Check cic citizenId: " + citizenId + " customerName: " + customerName
-    );
+  async checkCIC(citizenId, customerName, user_id) {
+    //console.log("Check cic citizenId: " + citizenId + " customerName: " + customerName);
     // let dtoreq = new GetMCLoanProfilesRequestDto();
     // dtoreq.citizenId = citizenId;
     // dtoreq.page=1;
@@ -246,21 +254,56 @@ export class McLoanProfileService extends BaseService {
     //     "returnMes": "Tham số CMND/CCCD đã tồn tại trong hệ thống"
     //   }
     // }
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCIC(citizenId, customerName);
+    var response = await this.mcapi.checkCIC(citizenId, customerName);
+    let url = "mobile-4sales/check-cic/check";
+    var mcApiTrackingService = new McApiTrackingService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
+    );
+    let dtoApiTracking = new McApiTrackingDto();
+    dtoApiTracking.apiname = "checkCIC";
+    dtoApiTracking.url = url;
+    dtoApiTracking.method = "get";
+    dtoApiTracking.payload = JSON.stringify({
+      citizenId: citizenId,
+      customerName: customerName
+    });
+    dtoApiTracking.response = JSON.stringify(response);
+    dtoApiTracking.createdBy = user_id;
+    await mcApiTrackingService.createApiTracking(dtoApiTracking);
     return response;
   }
 
-  async checkCitizenId(citizenId) {
-    console.log("Check cic citizenId: " + citizenId + " customerName: ");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCitizenId(citizenId);
+  async checkCitizenId(citizenId, productCode, user_id) {
+    //console.log("Check cic citizenId: " + citizenId + " customerName: ");
+    var response = await this.mcapi.checkCitizenId(citizenId, productCode);
+    let url = "mobile-4sales/check-identifier";
+    var mcApiTrackingService = new McApiTrackingService(
+      this.request,
+      this.logger,
+      this.redisClient,
+      this.requestUtil,
+      this.httpService
+    );
+    let dtoApiTracking = new McApiTrackingDto();
+    dtoApiTracking.apiname = "checkCitizenId";
+    dtoApiTracking.url = url;
+    dtoApiTracking.method = "get";
+    dtoApiTracking.payload = JSON.stringify({
+      citizenId: citizenId,
+      productCode: productCode
+    });
+    dtoApiTracking.response = JSON.stringify(response);
+    dtoApiTracking.createdBy = user_id;
+    await mcApiTrackingService.createApiTracking(dtoApiTracking);
     return response;
   }
 
   async checkInitContract(loan_profile_id) {
-    console.log("checkInitContract");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    //console.log("checkInitContract");
     let dto = new CheckInitContractRequestDto();
     var loanProfile = await this.getLoanProfile(loan_profile_id);
     dto.productId = loanProfile.productId;
@@ -273,14 +316,14 @@ export class McLoanProfileService extends BaseService {
     dto.gender = loanProfile.gender;
     dto.issuePlace = loanProfile.issuePlace;
     dto.hasInsurance = loanProfile.hasInsurance;
-    var response = await mcapi.checkInitContract(dto);
+    var response = await this.mcapi.checkInitContract(dto);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
 
     let queryupdate;
     switch (response.returnCode) {
       case "200":
         let returnMes = JSON.parse(response.returnMes);
-        console.log(returnMes[0]);
+        //console.log(returnMes[0]);
         //Cập nhât Profile
         queryupdate = repo
           .createQueryBuilder()
@@ -294,7 +337,7 @@ export class McLoanProfileService extends BaseService {
         await queryupdate.execute();
         break;
       case "400":
-        console.log(response.returnMes);
+        //console.log(response.returnMes);
         //Cập nhât Profile
         queryupdate = repo
           .createQueryBuilder()
@@ -312,25 +355,24 @@ export class McLoanProfileService extends BaseService {
   }
 
   async checkList(dto: McCheckListrequestDto) {
-    console.log("checkList");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkList(dto);
+    //console.log("checkList");
+    var response = await this.mcapi.checkList(dto);
     return response;
   }
 
   async uploadDocument(id, appStatus) {
-    console.log("uploadDocument new");
-    console.log(appStatus);
+    //console.log("uploadDocument new");
+    //console.log(appStatus);
     let loanProfileResponseDTO = await this.getLoanProfile(id);
     //console.log(loanProfileResponseDTO);
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+
     let attachRequest = new GetMCAttachfileRequestDto();
     let attachFiles = new McAttachfilesResponseDto();
     let attachserviec = new McAttachfileService(
       this.request,
       this.logger,
       this.redisClient,
-      this.requestUtil
+      this.mcapi
     );
     if (appStatus == 1) {
       attachRequest.profileid = id;
@@ -340,12 +382,12 @@ export class McLoanProfileService extends BaseService {
         this.request,
         this.logger,
         this.redisClient,
-        this.requestUtil
+        this.mcapi
       );
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     } else {
       //Get return checklist
-      let returnchecklist = await mcapi.getReturnChecklist(
+      let returnchecklist = await this.mcapi.getReturnChecklist(
         loanProfileResponseDTO.appid
       );
       //console.log(returnchecklist);
@@ -354,20 +396,20 @@ export class McLoanProfileService extends BaseService {
       }
       let arr_groupid = new Array();
       for (const group of returnchecklist["checkList"]) {
-        console.log(group);
+        //console.log(group);
         arr_groupid.push(group["groupId"]);
       }
-      console.log(arr_groupid);
-      console.log("------------");
+      // console.log(arr_groupid);
+      // console.log("------------");
       attachRequest.profileid = id;
-      attachRequest.arrgroupId = arr_groupid.join(",");
+      //attachRequest.arrgroupId = arr_groupid.join(",");
       attachRequest.hassend = 0;
       attachRequest.page = 1;
       attachRequest.pagesize = 0;
 
       attachFiles = await attachserviec.getAllAttachfile(attachRequest);
     }
-    var response = await mcapi.uploadDocument(
+    var response = await this.mcapi.uploadDocument(
       loanProfileResponseDTO,
       attachFiles,
       appStatus
@@ -387,7 +429,7 @@ export class McLoanProfileService extends BaseService {
       await query.execute();
       //Cập nhật mc_attachfile.hassend = 1
       for (const attachFile of attachFiles.rows) {
-        console.log(attachFile.id);
+        //console.log(attachFile.id);
         await attachserviec.updateColAttachfile(attachFile.id, "hassend", 1);
       }
     } else {
@@ -405,52 +447,47 @@ export class McLoanProfileService extends BaseService {
   }
 
   async checkCategory(companyTaxNumber) {
-    console.log("checkCategory");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.checkCategory(companyTaxNumber);
+    // console.log("checkCategory");
+    var response = await this.mcapi.checkCategory(companyTaxNumber);
     return response;
   }
 
   async listCaseNote(id) {
-    console.log("listCaseNote");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    // console.log("listCaseNote");
     let loanProfile = await this.getLoanProfile(id);
-    console.log(loanProfile.appNumber);
-    var response = await mcapi.listCaseNote(loanProfile.appNumber);
+    // console.log(loanProfile.appNumber);
+    var response = await this.mcapi.listCaseNote(loanProfile.appNumber);
     return response;
   }
 
   async getReturnChecklist(id) {
-    console.log("getReturnChecklist");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    // console.log("getReturnChecklist");
     let loanProfile = await this.getLoanProfile(id);
-    console.log(loanProfile.appid);
-    var response = await mcapi.getReturnChecklist(loanProfile.appid);
+    // console.log(loanProfile.appid);
+    var response = await this.mcapi.getReturnChecklist(loanProfile.appid);
     return response;
   }
 
   async downloadPDF(fileid) {
-    console.log("downloadPDF");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.downloadPDF(fileid);
+    // console.log("downloadPDF");
+    var response = await this.mcapi.downloadPDF(fileid);
     return response;
   }
 
   async getCases(dto: GetMcCaseRequestDto) {
-    console.log("getCases " + dto.status + " hasCourier = " + dto.hasCourier);
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
+    // console.log("getCases " + dto.status + " hasCourier = " + dto.hasCourier);
     const repo = this.connection.getCustomRepository(McLoanProfileRepository);
-    var response = await mcapi.getCases(dto);
+    var response = await this.mcapi.getCases(dto);
     try {
       for (const item of response) {
-        console.log(item);
+        // console.log(item);
         let query = repo.createQueryBuilder().where("deleted_at is null");
         query = query.andWhere("profileid = :profileid", {
           profileid: item.id
         });
         let data;
         data = await query.getOne();
-        console.log(data);
+        // console.log(data);
         if (data != undefined) {
           //Cập nhât Profile
           let queryupdate = repo
@@ -474,9 +511,8 @@ export class McLoanProfileService extends BaseService {
   }
 
   async requestSendOtp3P(dto: requestSendOtp3PDto) {
-    console.log("requestSendOtp3P");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
+    // console.log("requestSendOtp3P");
+    var response = await this.mcapi.requestSendOtp3P(dto.phone, dto.typeScore);
     let scoringTrackingService = new McScoringTrackingService(
       this.request,
       this.logger,
@@ -495,9 +531,8 @@ export class McLoanProfileService extends BaseService {
   }
 
   async requestScoring3P(dto: requestScoring3PDto) {
-    console.log("requestScoring3P");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.requestScoring3P(dto);
+    // console.log("requestScoring3P");
+    var response = await this.mcapi.requestScoring3P(dto);
     let requestScoringTracking = new GetMCScoringTrackingRequestDto();
     requestScoringTracking.primaryPhone = dto.primaryPhone;
     let scoringTrackingService = new McScoringTrackingService(
@@ -511,7 +546,7 @@ export class McLoanProfileService extends BaseService {
     let result = await scoringTrackingService.getAllScoringTrackings(
       requestScoringTracking
     );
-    console.log(result);
+    // console.log(result);
     let responseScoringTracking = result["rows"][0];
     let dtoUpdate = new McScoringTrackingUpdateDto();
     dtoUpdate.id = responseScoringTracking.id;
@@ -527,7 +562,7 @@ export class McLoanProfileService extends BaseService {
   }
 
   async cancelCase(profileid: number, reason: number, comment: string) {
-    console.log("cancelCase");
+    // console.log("cancelCase");
     try {
       let loanProfile = await this.getLoanProfile(profileid);
       if (loanProfile.appNumber != null) {
@@ -542,12 +577,12 @@ export class McLoanProfileService extends BaseService {
           this.logger,
           this.redisClient,
           this.requestUtil,
+          this.mcapi,
           this.httpService
         );
 
         serviceCaseNote.createCaseNote(dtoCaseNode);
-        let mcapi = new McapiUtil(this.redisClient, this.httpService);
-        var response = await mcapi.cancelCase(
+        var response = await this.mcapi.cancelCase(
           loanProfile.profileid,
           reason,
           comment
@@ -573,8 +608,8 @@ export class McLoanProfileService extends BaseService {
         };
       }
     } catch (e) {
-      console.log("ERR");
-      console.log(e);
+      // console.log("ERR");
+      console.error(e);
       return {
         returnCode: "400",
         returnMes: "Không tồn tại hồ sơ"
@@ -583,7 +618,7 @@ export class McLoanProfileService extends BaseService {
   }
 
   async createLoanProfile(dto: McLoanProfileDto) {
-    console.log(dto);
+    // console.log(dto);
     let entity: McLoanProfile = this.convertDto2Entity(dto, McLoanProfile);
     entity.catType = "NEW";
     entity.mobileProductType = dto.mobileProductType;
@@ -686,9 +721,9 @@ export class McLoanProfileService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    //console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    //console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

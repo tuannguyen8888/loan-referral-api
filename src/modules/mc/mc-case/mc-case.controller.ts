@@ -32,7 +32,7 @@ export class McCaseController {
     @Headers() headers,
     @Body() dto: GetMCCaseRequestDto
   ): Promise<McCasesResponseDto> {
-    console.log("Lấy danh sách Case");
+    // console.log("Lấy danh sách Case");
     return this.service.getAllCases(dto);
   }
 

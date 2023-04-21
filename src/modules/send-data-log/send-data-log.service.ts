@@ -32,8 +32,8 @@ export class SendDataLogService extends BaseService {
       const repo = this.connection.getCustomRepository(SendDataLogRepository);
       let query = repo.createQueryBuilder();
       if (searchDto.keyword)
-        query = query.andWhere("keyword like :keyword", {
-          keyword: "%" + searchDto.keyword + "%"
+        query = query.andWhere("MATCH(keyword) AGAINST(:keyword) ", {
+          keyword: searchDto.keyword
         });
       if (searchDto.data)
         query = query.andWhere("data like :data", {

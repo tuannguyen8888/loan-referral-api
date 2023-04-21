@@ -23,7 +23,7 @@ import { McCheckListrequestDto } from "../../modules/mc/mc-loan-profile/dto/mc-c
 @Injectable()
 export class McapiUtil {
   constructor(
-    protected readonly redisClient: RedisClient,
+    @Inject(RedisClient) private readonly redisClient: RedisClient,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     this.connection = getConnectionManager().get("default");
@@ -50,7 +50,7 @@ export class McapiUtil {
     let result = await axios.post(url, data, {
       headers: headers
     });
-    //console.log(result.data);
+    console.log(result.data);
     await this.redisClient.set("token", result.data.token);
     return result.data;
   }
@@ -145,7 +145,7 @@ export class McapiUtil {
     return response;
   }
 
-  async checkCitizenId(citizenId): Promise<any> {
+  async checkCitizenId(citizenId, productCode): Promise<any> {
     var axios = require("axios");
     let token = await this.redisClient.get("token");
     if (token == null) {
@@ -157,7 +157,9 @@ export class McapiUtil {
     let url =
       mc_api_config.endpoint +
       "mobile-4sales/check-identifier?citizenId=" +
-      citizenId;
+      citizenId +
+      "&productCode=" +
+      productCode;
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -172,7 +174,7 @@ export class McapiUtil {
       response = e.response.data;
       if (response.returnCode == "401") {
         await this.login();
-        return await this.checkCitizenId(citizenId);
+        return await this.checkCitizenId(citizenId, productCode);
       }
     } finally {
       // let log = new SendDataLog();
@@ -241,6 +243,7 @@ export class McapiUtil {
 
   async getKios(): Promise<any> {
     let mckios = await this.redisClient.get("mckios");
+    console.log("mckios " + mckios);
     let response;
     if (mckios == null) {
       var axios = require("axios");
@@ -249,6 +252,7 @@ export class McapiUtil {
         let login = await this.login();
         token = login.token;
       }
+      console.log("token " + token);
       let mc_api_config = config.get("mc_api");
       let url = mc_api_config.endpoint + "mobile-4sales/kiosks";
       let headers = {
@@ -676,7 +680,7 @@ export class McapiUtil {
       dto.status +
       "&saleCode=" +
       saleCode;
-    console.log(url);
+    //console.log(url);
     let headers = {
       "Content-Type": "application/json",
       "x-security": mc_api_config.security,
@@ -687,13 +691,13 @@ export class McapiUtil {
       let result = await axios.get(url, {
         headers: headers
       });
-      console.log("true");
-      console.log(result);
+      //console.log("true");
+      //console.log(result);
       response = result.data;
     } catch (e) {
-      console.log("false");
+      //console.log("false");
       response = e.response.data;
-      console.log(response);
+      //console.log(response);
       if (response.returnCode == "401") {
         await this.login();
         return await this.getCases(dto);

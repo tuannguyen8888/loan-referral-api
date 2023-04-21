@@ -19,4 +19,12 @@ export class GetMCScoringTrackingRequestDto {
   sortcol: string;
   @IsOptional()
   sorttype: string;
+
+  @IsOptional()
+  @IsNumber()
+  page: number;
+
+  @IsOptional()
+  @IsNumber()
+  pagesize: number;
 }

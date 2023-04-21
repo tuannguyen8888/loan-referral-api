@@ -3,6 +3,7 @@ server:
 
 logs:
   directory: logs
+  writelog: false
 
 security:
   ssl:

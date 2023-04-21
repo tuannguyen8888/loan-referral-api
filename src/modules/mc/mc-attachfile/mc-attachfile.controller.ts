@@ -34,7 +34,7 @@ export class McAttachfileController {
     @Headers() headers,
     @Body() dto: GetMCAttachfileRequestDto
   ): Promise<McAttachfilesResponseDto> {
-    console.log("Lấy danh sách Attachfile");
+    // console.log("Lấy danh sách Attachfile");
     return this.service.getAllAttachfile(dto);
   }
 

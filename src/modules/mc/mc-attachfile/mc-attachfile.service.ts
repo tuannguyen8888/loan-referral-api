@@ -20,6 +20,7 @@ import { McAttachfileResponseDto } from "./dto/mc-attachfile.response.dto";
 import { McAttachfileDto } from "./dto/mc-attachfile.dto";
 import { McAttachfileUpdateDto } from "./dto/mc-attachfile.update.dto";
 import { McAttachfileDeleteDto } from "./dto/mc-attachfile.delete.dto";
+import { McapiUtil } from "../../../common/utils/mcapi.util";
 
 @Injectable()
 export class McAttachfileService extends BaseService {
@@ -27,7 +28,7 @@ export class McAttachfileService extends BaseService {
     @Inject(REQUEST) protected request: Request,
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
-    private readonly requestUtil: RequestUtil
+    protected mcapi: McapiUtil
   ) {
     super(request, logger, redisClient);
   }
@@ -110,10 +111,10 @@ export class McAttachfileService extends BaseService {
   }
 
   async createAttachfile(dto: McAttachfileDto) {
-    console.log(dto);
+    // console.log(dto);
     let entity: McAttachfile = this.convertDto2Entity(dto, McAttachfile);
     entity.createdAt = new Date();
-    console.log(entity);
+    // console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
       .getCustomRepository(McAttachfileRepository)
@@ -264,9 +265,9 @@ export class McAttachfileService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

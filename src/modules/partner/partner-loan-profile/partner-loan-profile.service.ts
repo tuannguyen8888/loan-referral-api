@@ -37,6 +37,7 @@ export class PartnerLoanProfileService extends BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
     private readonly requestUtil: RequestUtil,
+    protected mcapi: McapiUtil,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
@@ -54,6 +55,7 @@ export class PartnerLoanProfileService extends BaseService {
         this.logger,
         this.redisClient,
         this.requestUtil,
+        this.mcapi,
         this.httpService
       );
       let result = await serviceMCLoanProfile.getAllLoanProfiles(dto);
@@ -69,6 +71,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -92,6 +95,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -113,6 +117,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -135,6 +140,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -155,6 +161,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -167,17 +174,19 @@ export class PartnerLoanProfileService extends BaseService {
       response.message = "";
       response.data = await serviceMCLoanProfile.checkCIC(
         citizenId,
-        customerName
+        customerName,
+        saleCode
       );
     }
     return response;
   }
-  async checkCitizenId(saleCode, citizenId) {
+  async checkCitizenId(saleCode, citizenId, productCode) {
     let serviceMCLoanProfile = new McLoanProfileService(
       this.request,
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -188,7 +197,11 @@ export class PartnerLoanProfileService extends BaseService {
     } else {
       response.statusCode = 200;
       response.message = "";
-      response.data = await serviceMCLoanProfile.checkCitizenId(citizenId);
+      response.data = await serviceMCLoanProfile.checkCitizenId(
+        citizenId,
+        productCode,
+        saleCode
+      );
     }
     return response;
   }
@@ -198,6 +211,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -221,6 +235,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -244,6 +259,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -264,6 +280,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -284,6 +301,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let profile = await serviceMCLoanProfile.getLoanProfile(profileid);
@@ -318,6 +336,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -337,7 +356,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.request,
       this.logger,
       this.redisClient,
-      this.requestUtil
+      this.mcapi
     );
     let response = new PartnerResultResponseDto();
     if (saleCode == undefined || saleCode == "") {
@@ -356,7 +375,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.request,
       this.logger,
       this.redisClient,
-      this.requestUtil
+      this.mcapi
     );
     let response = new PartnerResultResponseDto();
     if (saleCode == undefined || saleCode == "") {
@@ -375,7 +394,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.request,
       this.logger,
       this.redisClient,
-      this.requestUtil
+      this.mcapi
     );
     let response = new PartnerResultResponseDto();
     if (saleCode == undefined || saleCode == "") {
@@ -395,7 +414,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.request,
       this.logger,
       this.redisClient,
-      this.requestUtil
+      this.mcapi
     );
     let response = new PartnerResultResponseDto();
     if (saleCode == undefined || saleCode == "") {
@@ -415,7 +434,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.request,
       this.logger,
       this.redisClient,
-      this.requestUtil
+      this.mcapi
     );
     let response = new PartnerResultResponseDto();
     if (saleCode == undefined || saleCode == "") {
@@ -436,6 +455,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -457,6 +477,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -470,6 +491,7 @@ export class PartnerLoanProfileService extends BaseService {
         this.logger,
         this.redisClient,
         this.requestUtil,
+        this.mcapi,
         this.httpService
       );
       let profile = await mcLoanProfileService.getLoanProfile(dto.profileid);
@@ -492,6 +514,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -513,6 +536,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -533,6 +557,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -557,6 +582,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();
@@ -578,6 +604,7 @@ export class PartnerLoanProfileService extends BaseService {
       this.logger,
       this.redisClient,
       this.requestUtil,
+      this.mcapi,
       this.httpService
     );
     let response = new PartnerResultResponseDto();

@@ -26,7 +26,7 @@ export class McScoringTrackingController {
     @Headers() headers,
     @Body() dto: GetMCScoringTrackingRequestDto
   ): Promise<McScoringTrackingsResponseDto> {
-    console.log("Lấy danh sách sản phẩm");
+    // console.log("Lấy danh sách sản phẩm");
     return this.service.getAllScoringTrackings(dto);
   }
 
@@ -54,7 +54,7 @@ export class McScoringTrackingController {
     @Headers() headers,
     @Body() dto: McScoringTrackingUpdateDto
   ): Promise<McScoringTrackingUpdateDto> {
-    console.log("Update ScoringTracking");
+    // console.log("Update ScoringTracking");
     return this.service.updateScoringTracking(dto);
   }
 }

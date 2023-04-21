@@ -51,7 +51,7 @@ export class McLoanProfileController {
     @Headers() headers,
     @Body() dto: GetMCLoanProfilesRequestDto
   ): Promise<LoanProfilesResponseDto> {
-    console.log("MC Lấy danh sách hồ sơ vay");
+    // console.log("MC Lấy danh sách hồ sơ vay");
     return this.service.getAllLoanProfiles(dto);
   }
 
@@ -68,14 +68,18 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "Kiểm tra thông tin CIC" })
   @HttpCode(200)
   checkCIC(@Headers() headers, @Body() dto: CheckCICRequestDto) {
-    return this.service.checkCIC(dto.citizenId, dto.customerName);
+    return this.service.checkCIC(dto.citizenId, dto.customerName, dto.user_id);
   }
 
   @Post("/checkCitizenId")
   @ApiOperation({ summary: "Kiểm tra thông tin khách hàng" })
   @HttpCode(200)
   checkCitizenId(@Headers() headers, @Body() dto: CheckCitizenidRequestDto) {
-    return this.service.checkCitizenId(dto.citizenId);
+    return this.service.checkCitizenId(
+      dto.citizenId,
+      dto.productCode,
+      dto.user_id
+    );
   }
 
   @Post("/getbpmStatus")
@@ -117,7 +121,7 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "uploadDocument" })
   @HttpCode(200)
   uploadDocument(@Headers() headers, @Param() params) {
-    console.log("uploadDocument");
+    // console.log("uploadDocument");
     return this.service.uploadDocument(params.loan_profile_id, 1);
   }
 
@@ -125,7 +129,7 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "ReuploadDocument" })
   @HttpCode(200)
   reUploadDocument(@Headers() headers, @Param() params) {
-    console.log("reUploadDocument");
+    // console.log("reUploadDocument");
     return this.service.uploadDocument(params.loan_profile_id, 2);
   }
 
@@ -142,7 +146,7 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "Kiểm tra khả năng cho vay" })
   @HttpCode(200)
   checkInitContract(@Headers() headers, @Param() params) {
-    console.log(params.loan_profile_id);
+    // console.log(params.loan_profile_id);
     return this.service.checkInitContract(params.loan_profile_id);
   }
 
@@ -150,7 +154,7 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "Kiểm tra khả năng cho vay" })
   @HttpCode(200)
   listCaseNote(@Headers() headers, @Param() params) {
-    console.log(params.loan_profile_id);
+    // console.log(params.loan_profile_id);
     return this.service.listCaseNote(params.loan_profile_id);
   }
 
@@ -158,7 +162,7 @@ export class McLoanProfileController {
   @ApiOperation({ summary: "Kiểm tra khả năng cho vay" })
   @HttpCode(200)
   getReturnChecklist(@Headers() headers, @Param() params) {
-    console.log(params.loan_profile_id);
+    // console.log(params.loan_profile_id);
     return this.service.getReturnChecklist(params.loan_profile_id);
   }
 

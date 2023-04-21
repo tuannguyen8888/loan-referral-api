@@ -51,7 +51,7 @@ export class LoanProfileChangeLog {
   @Column("int", { name: "in_downpayment", nullable: true })
   inDownpayment: number | null;
 
-  @Column("double", {
+  @Column("float", {
     name: "in_totalloanamountreq",
     nullable: true,
     comment: "Loan Amount Requested trên Finnone",
@@ -81,7 +81,7 @@ export class LoanProfileChangeLog {
     name: "in_loanpurpose",
     nullable: true,
     comment:
-      "API nhận Code (A,M,H,V,P)\nA\t:APPLIANCE/FURNITURE/ELECTRONICS\nM\t:MEDICAL EXPENSE\nH\t:IMPROVEMENT/LOT DOWNPAYMENT\nV\t:VACATION/TRAVEL EXPENSE\nP\t:MULTIPURPOSE\n",
+      "API nhận Code (A,M,H,V,P)  A   :APPLIANCE/FURNITURE/ELECTRONICS  M   :MEDICAL EXPENSE  H   :IMPROVEMENT/LOT DOWNPAYMENT  V   :VACATION/TRAVEL EXPENSE  P   :MULTIPURPOSE  ",
     length: 8
   })
   inLoanpurpose: string | null;
@@ -89,7 +89,7 @@ export class LoanProfileChangeLog {
   @Column("varchar", {
     name: "in_creditofficercode",
     comment:
-      "Credit Officer Code trên Finnone (Master data): Default value: EXT_FIV\n",
+      "Credit Officer Code trên Finnone (Master data): Default value: EXT_FIV  ",
     length: 20,
     default: () => "'EXT_FIV'"
   })
@@ -123,7 +123,7 @@ export class LoanProfileChangeLog {
     name: "in_priority_c",
     nullable: true,
     comment:
-      "Priority trên Finnone : \n•\tBank Statement\n•\tBusiness License\n•\tNo Business License\n•\tNone\n•\tPay Slip",
+      "Priority trên Finnone :  Bank Statement Business License No Business License None Pay Slip",
     length: 50
   })
   inPriorityC: string | null;
@@ -138,14 +138,14 @@ export class LoanProfileChangeLog {
 
   @Column("varchar", {
     name: "in_title",
-    comment: "Title trên Finnone\n•\tMR.\n•\tMRS.\n•\tMS.\n",
+    comment: "Title trên Finnone MR. MRS. MS.  ",
     length: 4
   })
   inTitle: string;
 
   @Column("varchar", {
     name: "in_fname",
-    comment: "Family Name trên Finnone\n",
+    comment: "Family Name trên Finnone  ",
     length: 30
   })
   inFname: string;
@@ -184,7 +184,7 @@ export class LoanProfileChangeLog {
   @Column("varchar", {
     name: "in_constid",
     comment:
-      "Constitution trên Finnone  (Master data) \n5 – SALARIED \n8 – SELF EMPLOYED \nAPI nhận code 5 - 8",
+      "Constitution trên Finnone  (Master data)   5 – SALARIED   8 – SELF EMPLOYED   API nhận code 5 - 8",
     length: 2
   })
   inConstid: string;
@@ -215,7 +215,7 @@ export class LoanProfileChangeLog {
   @Column("varchar", {
     name: "in_referalgroup",
     nullable: true,
-    comment: "3 – THIRD PARTY \n4 – NORMAL\n",
+    comment: "3 – THIRD PARTY   4 – NORMAL  ",
     length: 20
   })
   inReferalgroup: string | null;
@@ -223,7 +223,7 @@ export class LoanProfileChangeLog {
   @Column("varchar", {
     name: "in_addresstype",
     nullable: true,
-    comment: "•\tHEADOFF - HEAD OFFICE\n•\tBCHOFF - BRANCH OFFICE\n",
+    comment: "•   HEADOFF - HEAD OFFICE BCHOFF - BRANCH OFFICE  ",
     length: 20
   })
   inAddresstype: string | null;
@@ -240,7 +240,7 @@ export class LoanProfileChangeLog {
     name: "in_country",
     nullable: true,
     comment:
-      "Country trên Finnone (Master data)\nDefault value: Code 189 – Việt Nam – API nhận code 189\n",
+      "Country trên Finnone (Master data)  Default value: Code 189 – Việt Nam – API nhận code 189  ",
     length: 8,
     default: () => "'189'"
   })
@@ -307,7 +307,7 @@ export class LoanProfileChangeLog {
   @Column("varchar", {
     name: "in_head",
     comment:
-      "Head trên Finnone (Master data)\nDefault value: NETINCOM = NET INCOME  - API nhận code NETINCOM",
+      "Head trên Finnone (Master data)  Default value: NETINCOM = NET INCOME  - API nhận code NETINCOM",
     length: 8,
     default: () => "'NETINCOM'"
   })
@@ -316,18 +316,18 @@ export class LoanProfileChangeLog {
   @Column("varchar", {
     name: "in_frequency",
     nullable: true,
-    comment: "Frequency trên Finnone\nDefault : MONTHLY",
+    comment: "Frequency trên Finnone  Default : MONTHLY",
     length: 7,
     default: () => "'MONTHLY'"
   })
   inFrequency: string | null;
 
-  @Column("double", { name: "in_amount", precision: 22 })
+  @Column("float", { name: "in_amount", precision: 22 })
   inAmount: number;
 
   @Column("varchar", {
     name: "in_accountbank",
-    comment: "Salary Account With Bank trên Finnone \n•\tY  \n•\tN ",
+    comment: "Salary Account With Bank trên Finnone  Y   N ",
     length: 1,
     default: () => "'Y'"
   })
@@ -353,7 +353,7 @@ export class LoanProfileChangeLog {
     name: "in_maritalstatus",
     nullable: true,
     comment:
-      "Trường Marital Status trên F1 \n•\tDivorced/Widow/Separated   - \tW \n•\tMarried\t-\t\tM \n•\tSingle\t-\t\tS \nAPI nhận code W- M-S ",
+      "Trường Marital Status trên F1  Divorced/Widow/Separated   -    W  Married   -      M  Single   -      S   API nhận code W- M-S ",
     length: 1
   })
   inMaritalstatus: string | null;
@@ -370,7 +370,7 @@ export class LoanProfileChangeLog {
     name: "in_eduqualify",
     nullable: true,
     comment:
-      "Trường Educational Qualification trên F1 \n•\tCE  - COLLEGE OR EQUIVALENT    \n•\tHG  - HIGH SCHOOL    \n•\tLG  - LOWER HIGH SCHOOL    \n•\tU   - UNIVERSITY     \n•\tUU  - UPPER UNIVERSITY   \nAPI nhận code CE – HG – LG - U – UU. ",
+      "Trường Educational Qualification trên F1  CE  - COLLEGE OR EQUIVALENT     HG  - HIGH SCHOOL     LG  - LOWER HIGH SCHOOL     U   - UNIVERSITY      UU  - UPPER UNIVERSITY     API nhận code CE – HG – LG - U – UU. ",
     length: 24
   })
   inEduqualify: string | null;
@@ -387,7 +387,7 @@ export class LoanProfileChangeLog {
     name: "in_paymentchannel",
     nullable: true,
     comment:
-      "Trường Payment Channel trên F1 \n•\tO – SALARY DEDUCTION \n•\tC -  NORMAL \n•\tT – Auto Tranfer \nAPI nhận code T- C – O ",
+      "Trường Payment Channel trên F1  O – SALARY DEDUCTION  C -  NORMAL  T – Auto Tranfer   API nhận code T- C – O ",
     length: 1
   })
   inPaymentchannel: string | null;
@@ -426,7 +426,7 @@ export class LoanProfileChangeLog {
 
   @Column("varchar", {
     name: "in_spouse_id_c",
-    comment: "Trường Loan Category trên F1 – Master data \nDefault: FIV",
+    comment: "Trường Loan Category trên F1 – Master data   Default: FIV",
     length: 30,
     default: () => "'FIV'"
   })
@@ -452,7 +452,7 @@ export class LoanProfileChangeLog {
     name: "in_acctype",
     nullable: true,
     comment:
-      "Trường Account Type trên F1  \n•\tSAVINGS - SAVINGS ACCOUNT \n•\tCURRENT - CURRENT ACCOUNT \n•\tOVRDRAFT - OVRDRAFT ACCOUNT \n•\tJOINT\t- JOINT ACCOUNT \nAPI nhận Code: SAVINGS  - CURRENT – OVRDRAFT - JOINT ",
+      "Trường Account Type trên F1   SAVINGS - SAVINGS ACCOUNT  CURRENT - CURRENT ACCOUNT  OVRDRAFT - OVRDRAFT ACCOUNT  JOINT   - JOINT ACCOUNT   API nhận Code: SAVINGS  - CURRENT – OVRDRAFT - JOINT ",
     length: 24
   })
   inAcctype: string | null;
@@ -477,7 +477,7 @@ export class LoanProfileChangeLog {
     name: "in_notecode",
     nullable: true,
     comment:
-      'Trường Note Code trên F1 – Master data\ndùng code "DE_MOBILE" cho trường CMND cũ trên mobile',
+      'Trường Note Code trên F1 – Master data  dùng code "DE_MOBILE" cho trường CMND cũ trên mobile',
     length: 20
   })
   inNotecode: string | null;
@@ -490,6 +490,19 @@ export class LoanProfileChangeLog {
   })
   inNotedetails: string | null;
 
+  @Column("varchar", {
+    name: "note_notecode",
+    nullable: true,
+    length: 20
+  })
+  noteNotecode: string | null;
+
+  @Column("varchar", {
+    name: "note_notedetails",
+    nullable: true,
+    length: 3000
+  })
+  noteNotedetails: string | null;
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP"

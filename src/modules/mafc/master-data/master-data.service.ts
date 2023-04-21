@@ -199,7 +199,7 @@ export class MasterDataService extends BaseService {
     });
     const banks: BankMasterData[] = response.data;
     const res = await this.bankMD.save(banks);
-    console.log("SAVED BANK");
+    //console.log("SAVED BANK");
     return res;
   }
 
@@ -228,7 +228,22 @@ export class MasterDataService extends BaseService {
       "321",
       "311",
       "322",
-      "335"
+      "335",
+      "430",
+      "431",
+      "432",
+      "433",
+      "1381",
+      "1382",
+      "1461",
+      "1460",
+      "1459",
+      "1458",
+      "1457",
+      "1456",
+      "1455",
+      "1462",
+      "1463"
     ];
     let response = await this.requestUtil.post(
       mafc_api_config.master_data.url,
@@ -240,9 +255,12 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    //console.log(' ddddgetSchemes response = ', response);
     const schemes: SchemeMasterData[] = response.data.filter(
       (m: SchemeMasterData) => {
-        const filt = listFilter.some(x => m.schemename.includes(x));
+        const filt = listFilter.some(
+          x => m.schemeid == x || m.schemename.includes(x)
+        );
         if (filt) {
           if (
             m.schemename.startsWith("EVN") ||
@@ -276,8 +294,9 @@ export class MasterDataService extends BaseService {
         }
       }
     );
+    //console.log('getSchemes schemes = ', JSON.stringify(schemes));
     const res = await this.schemeMD.save(schemes, { chunk: 500 });
-    console.log("SAVED SCHEME");
+    //console.log("SAVED SCHEME");
     return res;
   }
 
@@ -300,7 +319,7 @@ export class MasterDataService extends BaseService {
     });
     const secusers: SecUserMasterData[] = response.data;
     const res = await this.secMD.save(secusers, { chunk: 500 });
-    console.log("SAVED SEC USER");
+    //console.log("SAVED SEC USER");
     return res;
   }
 
@@ -323,7 +342,7 @@ export class MasterDataService extends BaseService {
     });
     const cities: CityMasterData[] = response.data;
     const res = await this.cityMD.save(cities);
-    console.log("SAVED CITY");
+    //console.log("SAVED CITY");
     return res;
   }
 
@@ -345,7 +364,7 @@ export class MasterDataService extends BaseService {
     });
     const districts: DistrictMasterData[] = response.data;
     const res = await this.districtMD.save(districts);
-    console.log("SAVED DISTRICT");
+    //console.log("SAVED DISTRICT");
     return res;
   }
 
@@ -367,7 +386,7 @@ export class MasterDataService extends BaseService {
     });
     const wards: WardMasterData[] = response.data;
     const res = await this.wardMD.save(wards, { chunk: 500 });
-    console.log("SAVED WARD");
+    //console.log("SAVED WARD");
     return res;
   }
 
@@ -389,7 +408,7 @@ export class MasterDataService extends BaseService {
     });
     const loanCategories: LoanCategoryMasterData[] = response.data;
     const res = await this.loanCateMD.save(loanCategories);
-    console.log("SAVED LOAN CATEGORY");
+    //console.log("SAVED LOAN CATEGORY");
     return res;
   }
 
@@ -417,7 +436,7 @@ export class MasterDataService extends BaseService {
       this.mafcFetchDistrict(),
       this.mafcFetchWard()
     ]);
-    console.log("FETCH AND SAVE MASTER DATA COMPLETED !!!!!");
+    //console.log("FETCH AND SAVE MASTER DATA COMPLETED !!!!!");
     return success;
   }
 }

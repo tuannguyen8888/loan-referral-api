@@ -67,24 +67,24 @@ export class McCaseService extends BaseService {
     try {
       response.reasons = JSON.parse(response.reasons);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     try {
       response.pdfFiles = JSON.parse(response.pdfFiles);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     return response;
   }
 
   async createCase(dto: McCaseDto) {
-    console.log(dto);
+    // console.log(dto);
     let entity: McCase = this.convertDto2Entity(dto, McCase);
     entity.reasons = JSON.stringify(dto.reasons);
     entity.pdfFiles = JSON.stringify(dto.pdfFiles);
     entity.createdAt = new Date();
-    console.log(entity);
+    // console.log(entity);
     this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
     let result = await this.connection
       .getCustomRepository(McCaseRepository)
@@ -174,9 +174,9 @@ export class McCaseService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

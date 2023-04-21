@@ -14,12 +14,15 @@ export class CheckCustomerInfoRequestDto {
   @IsNumberString()
   customer_national_id: string;
 
+  @IsString()
+  @IsNotEmpty()
+  customer_name: string;
+
   @IsNumberString()
   phone: string;
 
   @IsOptional()
   tax_code?: string;
-
 
   user_id: string;
 }

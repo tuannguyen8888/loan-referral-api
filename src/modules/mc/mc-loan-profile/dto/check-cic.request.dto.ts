@@ -15,4 +15,6 @@ export class CheckCICRequestDto {
 
   @IsString()
   customerName: string;
+
+  user_id: string;
 }

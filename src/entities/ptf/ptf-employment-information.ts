@@ -44,10 +44,10 @@ export class PtfEmploymentInformation {
   })
   employedAtLastWork: string | null;
 
-  @Column("double", { name: "income", nullable: true, precision: 22 })
+  @Column("float", { name: "income", nullable: true, precision: 22 })
   income: number | null;
 
-  @Column("double", {
+  @Column("float", {
     name: "monthly_payments_other_loans",
     nullable: true,
     precision: 22

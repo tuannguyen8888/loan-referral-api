@@ -55,16 +55,16 @@ export class McProductService extends BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
     private readonly requestUtil: RequestUtil,
+    protected mcapi: McapiUtil,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
   }
   async getProductsUpdate() {
-    console.log("Get Products");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.getProducts();
+    // console.log("Get Products");
+    var response = await this.mcapi.getProducts();
     for (const i in response) {
-      console.log(response[i]);
+      // console.log(response[i]);
       response[i].productName = response[i].productName.trim();
       //Cập nhat product code
       const repo = this.connection.getCustomRepository(McProductRepository);
@@ -82,9 +82,8 @@ export class McProductService extends BaseService {
     return response;
   }
   async getProducts() {
-    console.log("Get Products");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.getProducts();
+    // console.log("Get Products");
+    var response = await this.mcapi.getProducts();
     for (const i in response) {
       response[i].productName = response[i].productName.trim();
     }
@@ -140,18 +139,18 @@ export class McProductService extends BaseService {
     let reqDto = new GetMCProductRequestDto();
     reqDto.productid = dto.productid;
     let dtoProductResponses = await this.getAllProducts(reqDto);
-    console.log(dtoProductResponses);
+    // console.log(dtoProductResponses);
     if (dtoProductResponses.count == 0) {
       let entity: McProduct = this.convertDto2Entity(dto, McProduct);
       entity.createdBy = dto.createdBy;
       entity.createdAt = new Date();
-      console.log(entity);
+      // console.log(entity);
       this.logger.verbose(`entity = ${JSON.stringify(entity)}`);
       let result = await this.connection
         .getCustomRepository(McProductRepository)
         .save(entity);
       this.logger.verbose(`insertResult = ${result}`);
-      console.log(result);
+      // console.log(result);
       let response: McProductDto = this.convertEntity2Dto(
         result,
         McProduct,
@@ -243,9 +242,9 @@ export class McProductService extends BaseService {
     let entityKeys = this.connection
       .getMetadata(entityClass)
       .ownColumns.map(column => column.propertyName); //Object.getOwnPropertyNames(entityModelObject);
-    console.log("entityKeys = ", entityKeys);
+    // console.log("entityKeys = ", entityKeys);
     let dtoKeys = Object.getOwnPropertyNames(dto);
-    console.log("dtoKeys = ", dtoKeys);
+    // console.log("dtoKeys = ", dtoKeys);
     for (let entityKey of entityKeys) {
       for (let dtoKey of dtoKeys) {
         if (

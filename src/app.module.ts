@@ -3,7 +3,8 @@ import {
   Module,
   NestModule,
   MiddlewareConsumer,
-  RequestMethod
+  RequestMethod,
+  HttpModule
 } from "@nestjs/common";
 import { RouterModule } from "nest-router";
 import { ROUTES } from "src/app.route";
@@ -40,11 +41,16 @@ import { TtfcLoanProfileModule } from "./modules/ttfc/ttfc-loan-profile/ttfc-loa
 import { PartnerLoanProfileModule } from "./modules/partner/partner-loan-profile/partner-loan-profile.module";
 import { McScoringTrackingModule } from "./modules/mc/mc-scoring-tracking/mc-scoring-tracking.module";
 import { VibIntroduceModule } from "./modules/vib/vib-introduce/vib-introduce.module";
+import { McApiTrackingModule } from "./modules/mc/mc-api-tracking/mc-api-tracking.module";
+import { McLoanProfileService } from "./modules/mc/mc-loan-profile/mc-loan-profile.service";
+import { RequestUtil } from "./common/utils";
+import { McapiUtil } from "./common/utils/mcapi.util";
 
 const addonConfig = config.get("addon");
 const databaseConfig = config.get("database");
 console.log("databaseConfig", databaseConfig);
 const imports = [
+  HttpModule,
   RouterModule.forRoutes(ROUTES),
   LoanProfileModule,
   MasterDataModule,
@@ -63,6 +69,7 @@ const imports = [
   McNotificationModule,
   McAttachfileModule,
   McScoringTrackingModule,
+  McApiTrackingModule,
   PartnerLoanProfileModule,
   VibIntroduceModule
 ];
@@ -79,7 +86,10 @@ databaseConfig.forEach(db => {
     CheckPartnerService,
     BaseService,
     SaleGroupService,
-    CronService
+    CronService,
+    McLoanProfileService,
+    RequestUtil,
+    McapiUtil
   ],
   controllers: [SaleGroupController]
 })

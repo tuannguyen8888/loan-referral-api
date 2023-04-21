@@ -10,7 +10,7 @@ export class Address {
 
   @Column("varchar", {
     name: "address_type",
-    comment: "PERMNENT, CURRES\n",
+    comment: "PERMNENT, CURRES  ",
     length: 45
   })
   addressType: string;
@@ -31,7 +31,7 @@ export class Address {
     name: "country",
     nullable: true,
     comment:
-      "Country trên Finnone (Master data)\nDefault value: Code 189 – Việt Nam – API nhận code 189",
+      "Country trên Finnone (Master data)  Default value: Code 189 – Việt Nam – API nhận code 189",
     length: 8
   })
   country: string | null;
@@ -71,7 +71,7 @@ export class Address {
     name: "mailing_address",
     nullable: true,
     comment:
-      "Mailing Address trên Finnone: \nY  (Đối với addresstype là CURRES), \nN  (Đối với addresstype là PERMNENT)",
+      "Mailing Address trên Finnone:   Y  (Đối với addresstype là CURRES),   N  (Đối với addresstype là PERMNENT)",
     length: 1
   })
   mailingAddress: string | null;

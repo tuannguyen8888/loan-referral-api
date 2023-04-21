@@ -27,7 +27,7 @@ export class Reference {
     name: "referee_relation",
     nullable: true,
     comment:
-      "Referee Relation  trên Finnone\n•\tR  - Relative\n•\tCA – CO Applicant\n•\tWH  - Wife/Husband\n•\tF – Friend\n•\tC - Colleague\n",
+      "Referee Relation  trên Finnone R  - Relative CA – CO Applicant WH  - Wife/Husband F – Friend C - Colleague  ",
     length: 8
   })
   refereeRelation: string | null;

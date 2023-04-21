@@ -20,31 +20,37 @@ export class RedisClient implements OnModuleInit {
   constructor(private readonly loggerUtil: LoggerUtil) {}
 
   onModuleInit() {
-    this.logger = new Logger("Redis");
-    this.client = redis.createClient({
-      host,
-      port,
-      password
-    });
+    if (!this.client) {
+      this.logger = new Logger("Redis");
+      this.client = redis.createClient({
+        host,
+        port,
+        password
+      });
 
-    this.client.on("connect", () => {
-      this.logger.log("Connected to Redis server");
-    });
+      this.client.on("connect", () => {
+        this.logger.log("Connected to Redis server");
+      });
 
-    this.client.on("reconnecting", () => {
-      this.logger.error("Reconnecting to Redis server");
-    });
+      this.client.on("reconnecting", () => {
+        this.logger.error("Reconnecting to Redis server");
+      });
 
-    this.client.on("error", error => {
-      switch (error.command) {
-        case "AUTH":
-          this.logger.error("Authentication error");
-          break;
+      this.client.on("end", () => {
+        this.logger.error("Redis connection has closed from server");
+      });
 
-        default:
-          this.logger.error("redis client error = ", error);
-      }
-    });
+      this.client.on("error", error => {
+        switch (error.command) {
+          case "AUTH":
+            this.logger.error("Authentication error");
+            break;
+
+          default:
+            this.logger.error("redis client error = ", error);
+        }
+      });
+    }
   }
 
   private logger: Logger;

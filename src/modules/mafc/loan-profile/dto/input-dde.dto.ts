@@ -19,6 +19,6 @@ export class InputDdeDto {
   in_accno?: string = null;
   in_dueday?: string = null;
   in_notecode?: string = null;
-  in_notedetails?: string = null;
+  note?: any = null;
   msgName: string = "inputDDE";
 }

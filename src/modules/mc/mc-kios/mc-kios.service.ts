@@ -42,15 +42,15 @@ export class McKiosService extends BaseService {
     protected readonly logger: Logger,
     protected readonly redisClient: RedisClient,
     private readonly requestUtil: RequestUtil,
+    protected mcapi: McapiUtil,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {
     super(request, logger, redisClient);
   }
 
   async getKios() {
-    console.log("Get Kios");
-    let mcapi = new McapiUtil(this.redisClient, this.httpService);
-    var response = await mcapi.getKios();
+    // console.log("Get Kios");
+    var response = await this.mcapi.getKios();
     return response;
   }
 }
